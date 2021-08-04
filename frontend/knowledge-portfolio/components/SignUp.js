@@ -27,7 +27,7 @@ export default function SignUp() {
 		email: '',
 		password: '',
 	});
-	const [signup, { data, loading, error }] = useMutation(SIGNUP_MUTATION, {
+	const [signUp, { data, loading, error }] = useMutation(SIGNUP_MUTATION, {
 		variables: inputs,
 	});
 
@@ -72,7 +72,7 @@ export default function SignUp() {
 						placeholder="Your Name"
 						autoComplete="name"
 						value={inputs.name}
-						onChange={handleChange}
+						onChange={(e) => handleChange(e)}
 					/>
 				</label>
 				<label htmlFor="email">
@@ -83,7 +83,7 @@ export default function SignUp() {
 						placeholder="Your Email Address"
 						autoComplete="email"
 						value={inputs.email}
-						onChange={handleChange}
+						onChange={(e) => handleChange(e)}
 					/>
 				</label>
 				<label htmlFor="password">
@@ -94,7 +94,7 @@ export default function SignUp() {
 						placeholder="Password"
 						autoComplete="password"
 						value={inputs.password}
-						onChange={handleChange}
+						onChange={(e) => handleChange(e)}
 					/>
 				</label>
 				<button type="submit">Sign In!</button>

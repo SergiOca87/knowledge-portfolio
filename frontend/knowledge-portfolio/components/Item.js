@@ -1,6 +1,11 @@
 import styled from 'styled-components';
+import React from 'react';
 
-const StyledItem = styled.div``;
+const StyledItem = styled.div`
+	padding: 2rem;
+	border-radius: 8px;
+	box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+`;
 
 // The Item is the knowledge block
 // Title
@@ -14,7 +19,17 @@ const StyledItem = styled.div``;
 export default function Item({ item }) {
 	return (
 		<StyledItem>
-			<p>{item.title}</p>
+			<h4>{item.title}</h4>
+			<p>{item.description}</p>
+			<p>Status: {item.status}</p>
+			<div class="categories">
+				{item.categories.map((category) => {
+					return (
+						//TODO: Each category should be a link to a page with posts from that category
+						<p key={category.id}>{category.name}</p>
+					);
+				})}
+			</div>
 		</StyledItem>
 	);
 }

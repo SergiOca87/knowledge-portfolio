@@ -3,6 +3,7 @@ import { useMutation } from '@apollo/client';
 // import Form from './styles/Form';
 // import useForm from '../lib/useForm';
 import { CURRENT_USER_QUERY } from './User';
+import React, { useState } from 'react';
 // import Error from './ErrorMessage';
 
 const SIGNIN_MUTATION = gql`
@@ -24,7 +25,7 @@ const SIGNIN_MUTATION = gql`
 `;
 
 export default function SignIn() {
-	const { inputs, handleChange, resetForm } = useForm({
+	const [inputs, setInputs] = useState({
 		email: '',
 		password: '',
 	});
@@ -33,12 +34,22 @@ export default function SignIn() {
 		// refetch the currently logged in user
 		refetchQueries: [{ query: CURRENT_USER_QUERY }],
 	});
+
+	const handleChange = (e) => {
+		let { value, name } = e.target;
+
+		setInputs({
+			...inputs,
+			[name]: value,
+		});
+	};
+
 	async function handleSubmit(e) {
 		e.preventDefault(); // stop the form from submitting
 		console.log(inputs);
 		const res = await signin();
 		console.log(res);
-		resetForm();
+		// resetForm();
 		// Send the email and password to the graphqlAPI
 	}
 	const error =
@@ -47,9 +58,9 @@ export default function SignIn() {
 			? data?.authenticateUserWithPassword
 			: undefined;
 	return (
-		<Form method="POST" onSubmit={handleSubmit}>
+		<form method="POST" onSubmit={handleSubmit}>
 			<h2>Sign Into Your Account</h2>
-			<Error error={error} />
+			{error && <p>{error}</p>}
 			<fieldset>
 				<label htmlFor="email">
 					Email
@@ -59,7 +70,7 @@ export default function SignIn() {
 						placeholder="Your Email Address"
 						autoComplete="email"
 						value={inputs.email}
-						onChange={handleChange}
+						onChange={(e) => handleChange(e)}
 					/>
 				</label>
 				<label htmlFor="password">
@@ -70,11 +81,11 @@ export default function SignIn() {
 						placeholder="Password"
 						autoComplete="password"
 						value={inputs.password}
-						onChange={handleChange}
+						onChange={(e) => handleChange(e)}
 					/>
 				</label>
 				<button type="submit">Sign In!</button>
 			</fieldset>
-		</Form>
+		</form>
 	);
 }

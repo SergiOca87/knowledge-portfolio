@@ -9,16 +9,17 @@ const StyledItemGrid = styled.div`
 	grid-gap: 40px;
 `;
 
-export const ALL_ITEMS_QUERY = gql`
-	query ALL_ITEMS_QUERY {
+const ALL_ITEMS_QUERY = gql`
+	query {
 		allItems {
 			id
 			title
-			# description
-			# category
-			# url
-			# user
-			# completed
+			description
+			status
+			categories {
+				id
+				name
+			}
 		}
 	}
 `;

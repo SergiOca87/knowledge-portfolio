@@ -1,6 +1,9 @@
-// TODO: The item should be asigned directly to the logged in User
+//TODO: The item should be asigned directly to the logged in User
 //TODO: Get the current user
 //TODO: To get the current user we have to sign in first (sign in component)
+//TODO: How to assign the item to a choosen category
+//TODO: Add the URL field
+//TODO: Clear the form on submit
 import { CURRENT_USER_QUERY, useUser } from './User';
 import { USER_CATEGORIES_QUERY, getCategories } from './UserCategories';
 import { useMutation, useQuery } from '@apollo/client';
@@ -11,17 +14,16 @@ const CREATE_ITEM_MUTATION = gql`
 	mutation CreateItem(
 		$title: String!
 		$description: String
-		# $category: Category
-		$url: String # $user: User # $completed: Boolean
+		$status: String # $categories: # $url: String # $user: User # $completed: Boolean
 	) {
 		createItem(
 			data: {
 				title: $title
 				description: $description
-				category: $category
-				url: $url
-				user: $user
-				completed: $completed
+				# category: $category
+				# url: $url
+				# user: $user
+				status: $status
 			}
 		) {
 			# Do we need to return more things?
@@ -32,17 +34,14 @@ const CREATE_ITEM_MUTATION = gql`
 	}
 `;
 
-
-
-
 export default function CreateItem() {
 	const [inputs, setInputs] = useState({
 		title: '',
 		description: '',
-		category: '',
-		url: '',
-		user: '',
-		completed: false,
+		// category: '',
+		// url: '',
+		// user: '',
+		status: '',
 	});
 
 	const userCategories = getCategories();
@@ -56,8 +55,6 @@ export default function CreateItem() {
 		}
 	);
 
-
-
 	// const clearForm = () => {
 	// 	const blankState = Object.fromEntries(
 	// 		Object.entries(inputs).map(([key, value]) => [key, ''])
@@ -68,12 +65,7 @@ export default function CreateItem() {
 	// Handle changes on form inputs
 	// Adds changes to state
 	const handleChange = (e) => {
-		let { value, name, type } = e.target;
-
-		// use type for conditionals if we add files for example?
-		type === 'checkbox'
-			? (value = e.target.checked)
-			: (value = e.target.value);
+		let { value, name } = e.target;
 
 		setInputs({
 			...inputs,
@@ -93,7 +85,15 @@ export default function CreateItem() {
 			console.log(err);
 		}
 
-		// clearForm();
+		// Clear form on submit
+		setInputs({
+			title: '',
+			description: '',
+			// category: '',
+			// url: '',
+			// user: '',
+			status: '',
+		});
 
 		//Redirect should happen here
 	};
@@ -114,26 +114,25 @@ export default function CreateItem() {
 				<textarea name="description" onChange={handleChange} />
 			</label>
 
-
 			{userCategories && (
 				<label htmlFor="category">
 					<select name="category">
 						{userCategories.allCategories.map((category) => {
 							return (
-								<option key="category.id">{category.title}</option>
+								<option key="category.id">
+									{category.title}
+								</option>
 							);
 						})}
 					</select>
 				</label>
 			)}
-			{/* <label htmlFor="completed">
-				<span>Completed?</span>
-				<input
-					type="checkbox"
-					name="completed"
-					onChange={handleChange}
-				/>
-			</label> */}
+			<label htmlFor="status">
+				<select name="status" onChange={handleChange}>
+					<option value="finished">Finished</option>
+					<option value="unfinished">Finished</option>
+				</select>
+			</label>
 			<input type="submit" value="submit" />
 		</form>
 	);

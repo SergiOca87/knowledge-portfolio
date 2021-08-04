@@ -1,32 +1,39 @@
 import '../styles/globals.css';
 import Layout from '../components/Layout';
-// import { ApolloProvider } from '@apollo/client';
-// import withData from '../lib/withData';
-// import { ApolloClient } from '@apollo/client/core';
-// import { InMemoryCache } from '@apollo/client/cache';
-// import { HttpLink } from '@apollo/client';
+import React from 'react';
 
-// What's the corret URI?
-// const client = new ApolloClient({
-// 	cache: new InMemoryCache(),
-// 	uri: 'http://localhost:3000/graphql',
-// });
+import {
+	ApolloClient,
+	InMemoryCache,
+	ApolloProvider,
+	useQuery,
+	gql,
+} from '@apollo/client';
 
-import withApollo from 'next-with-apollo';
-import { ApolloProvider } from '@apollo/react-hooks';
-import ApolloClient, { InMemoryCache } from 'apollo-boost';
+const client = new ApolloClient({
+	uri: 'http://localhost:3000/api/graphql',
+	cache: new InMemoryCache(),
+});
 
-const App = ({ Component, pageProps, apollo }) => (
-	<ApolloProvider client={apollo}>
-		<Layout>
-			<Component {...pageProps} />
-		</Layout>
-	</ApolloProvider>
-);
+console.log(client);
 
-export default withApollo(({ initialState }) => {
-	return new ApolloClient({
-		uri: 'http://localhost:5000/admin/api',
-		cache: new InMemoryCache().restore(initialState || {}),
-	});
-})(App);
+function MyApp({ Component, pageProps, apollo }) {
+	return (
+		<ApolloProvider client={client}>
+			<Layout>
+				<Component {...pageProps} />
+			</Layout>
+		</ApolloProvider>
+	);
+}
+
+// MyApp.getInitialProps = async function ({ Component, ctx }) {
+// 	let pageProps = {};
+// 	if (Component.getInitialProps) {
+// 		pageProps = await Component.getInitialProps(ctx);
+// 	}
+// 	pageProps.query = ctx.query;
+// 	return { pageProps };
+// };
+
+export default MyApp;

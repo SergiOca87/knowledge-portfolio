@@ -4,10 +4,11 @@ import SignIn from '../components/SignIn';
 import SignUp from '../components/SignUp';
 import styles from '../styles/Home.module.css';
 import styled from 'styled-components';
+import gql from 'graphql-tag';
 
 const StyledGrid = styled.div`
 	display: grid;
-	grid-template-columns: repeate(auto-fill, minmax(300px, 1fr));
+	grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
 	grid-gap: 2rem;
 `;
 
@@ -33,7 +34,7 @@ export default function Home() {
 					<div className={styles.grid}>
 						<a className={styles.card}>
 							<h2>Sign In</h2>
-							{/* <SignIn /> */}
+							<SignIn />
 						</a>
 					</div>
 
@@ -44,6 +45,8 @@ export default function Home() {
 						</a>
 					</div>
 				</StyledGrid>
+
+				<p>Temporary item grid</p>
 			</main>
 
 			<footer className={styles.footer}>
