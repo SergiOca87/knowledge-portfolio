@@ -15,6 +15,7 @@ const GlobalStyles = createGlobalStyle`
 
         p {
             font-size: 1.8rem;
+	
         } 
        
     }
@@ -22,7 +23,7 @@ const GlobalStyles = createGlobalStyle`
 `;
 
 const StyledWrapper = styled.div`
-	max-width: 1200px;
+	max-width: 120rem;
 	margin: 0 auto;
 	padding: 0 2rem;
 `;

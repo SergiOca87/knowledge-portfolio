@@ -15,8 +15,6 @@ const client = new ApolloClient({
 	cache: new InMemoryCache(),
 });
 
-console.log(client);
-
 function MyApp({ Component, pageProps, apollo }) {
 	return (
 		<ApolloProvider client={client}>
@@ -26,14 +24,5 @@ function MyApp({ Component, pageProps, apollo }) {
 		</ApolloProvider>
 	);
 }
-
-// MyApp.getInitialProps = async function ({ Component, ctx }) {
-// 	let pageProps = {};
-// 	if (Component.getInitialProps) {
-// 		pageProps = await Component.getInitialProps(ctx);
-// 	}
-// 	pageProps.query = ctx.query;
-// 	return { pageProps };
-// };
 
 export default MyApp;

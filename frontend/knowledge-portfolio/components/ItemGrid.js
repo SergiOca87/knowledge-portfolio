@@ -1,3 +1,5 @@
+//TODO: On the grid, description should be an excerpt
+
 import { useQuery } from '@apollo/client';
 import gql from 'graphql-tag';
 import styled from 'styled-components';
@@ -9,7 +11,8 @@ const StyledItemGrid = styled.div`
 	grid-gap: 40px;
 `;
 
-const ALL_ITEMS_QUERY = gql`
+// Exported because it is reused (createItem) to refetch after successfull item creation
+export const ALL_ITEMS_QUERY = gql`
 	query {
 		allItems {
 			id

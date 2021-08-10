@@ -3,18 +3,21 @@
 //TODO: To get the current user we have to sign in first (sign in component)
 //TODO: How to assign the item to a choosen category
 //TODO: Add the URL field
-//TODO: Clear the form on submit
+//TODO: Add Toast for errors
 import { CURRENT_USER_QUERY, useUser } from './User';
 import { USER_CATEGORIES_QUERY, getCategories } from './UserCategories';
 import { useMutation, useQuery } from '@apollo/client';
 import gql from 'graphql-tag';
 import { useState } from 'react';
+import { ALL_ITEMS_QUERY } from './ItemGrid';
+import Router from 'next/router';
 
 const CREATE_ITEM_MUTATION = gql`
-	mutation CreateItem(
+	mutation CREATE_ITEM_MUTATION(
 		$title: String!
 		$description: String
 		$status: String # $categories: # $url: String # $user: User # $completed: Boolean
+		$category: String
 	) {
 		createItem(
 			data: {
@@ -24,6 +27,8 @@ const CREATE_ITEM_MUTATION = gql`
 				# url: $url
 				# user: $user
 				status: $status
+				# This creates a category as well
+				category: { create: { category: $category } }
 			}
 		) {
 			# Do we need to return more things?
@@ -42,16 +47,17 @@ export default function CreateItem() {
 		// url: '',
 		// user: '',
 		status: '',
+		category: '',
 	});
 
+	//TODO: Maybe we need to import the Apollo query like ALL_ITEMS_QUERY?
 	const userCategories = getCategories();
 
 	const [createItem, { loading, error, data }] = useMutation(
 		CREATE_ITEM_MUTATION,
 		{
 			variables: inputs,
-			// Do we need to refetch?
-			// refetchQueries: [{ query: ALL_ITEMS_QUERY }],
+			refetchQueries: [{ query: ALL_ITEMS_QUERY }],
 		}
 	);
 
@@ -78,62 +84,73 @@ export default function CreateItem() {
 		e.preventDefault();
 		console.log('submit', inputs);
 
+		//TODO: Can use try/catch?
 		try {
-			const res = await createItem();
-			console.log('res', res);
-		} catch (err) {
-			console.log(err);
-		}
+			await createItem();
 
-		// Clear form on submit
-		setInputs({
-			title: '',
-			description: '',
-			// category: '',
-			// url: '',
-			// user: '',
-			status: '',
-		});
+			// Clear form on submit
+			setInputs({
+				title: '',
+				description: '',
+				// category: '',
+				// url: '',
+				// user: '',
+				status: '',
+				category: '',
+			});
+
+			//TODO: Do we need to redirect? Decide what's the best user experience here
+			//Redirect the user
+			Router.push({
+				pathname: `/portfolio/${data.createItem.id}`,
+			});
+		} catch (err) {
+			//TODO: Use React Toasts for errors
+			console.log(error);
+		}
 
 		//Redirect should happen here
 	};
 
 	return (
 		<form method="POST" onSubmit={handleSubmit}>
-			<label htmlFor="title">
-				<span>Title</span>
-				<input
-					required
-					type="text"
-					name="title"
-					onChange={handleChange}
-				/>
-			</label>
-			<label htmlFor="description">
-				<span>Description</span>
-				<textarea name="description" onChange={handleChange} />
-			</label>
+			<fieldset disabled={loading} aria-busy={loading}>
+				<label htmlFor="title">
+					<span>Title</span>
+					<input
+						required
+						type="text"
+						name="title"
+						onChange={handleChange}
+					/>
+				</label>
+				<label htmlFor="description">
+					<span>Description</span>
+					<textarea name="description" onChange={handleChange} />
+				</label>
 
-			{userCategories && (
-				<label htmlFor="category">
-					<select name="category">
-						{userCategories.allCategories.map((category) => {
-							return (
-								<option key="category.id">
-									{category.title}
-								</option>
-							);
-						})}
+				{userCategories && (
+					<label htmlFor="category">
+						<select name="category">
+							{userCategories.allCategories.map((category) => {
+								return (
+									<option key="category.id">
+										{category.title}
+									</option>
+								);
+							})}
+						</select>
+					</label>
+				)}
+
+				<label htmlFor="status">
+					<select name="status" onChange={handleChange}>
+						<option value="finished">Finished</option>
+						<option value="unfinished">Finished</option>
 					</select>
 				</label>
-			)}
-			<label htmlFor="status">
-				<select name="status" onChange={handleChange}>
-					<option value="finished">Finished</option>
-					<option value="unfinished">Finished</option>
-				</select>
-			</label>
-			<input type="submit" value="submit" />
+				<input type="submit" value="submit" />
+			</fieldset>
 		</form>
 	);
 }

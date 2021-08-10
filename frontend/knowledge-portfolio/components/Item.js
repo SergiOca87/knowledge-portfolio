@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import React from 'react';
+import Link from 'next/link';
 
 const StyledItem = styled.div`
 	padding: 2rem;
@@ -29,6 +30,19 @@ export default function Item({ item }) {
 						<p key={category.id}>{category.name}</p>
 					);
 				})}
+			</div>
+			<Link href={`/items/${item.id}`}>More Details</Link>
+			<div className="buttons">
+				<Link
+					href={{
+						pathname: 'update',
+						query: {
+							id: item.id,
+						},
+					}}
+				>
+					Edit Item
+				</Link>
 			</div>
 		</StyledItem>
 	);
