@@ -1,9 +1,11 @@
+//TODO: Add error as a Toast
+
 import gql from 'graphql-tag';
 import { useMutation } from '@apollo/client';
 // import Form from './styles/Form';
 // import useForm from '../lib/useForm';
 import { CURRENT_USER_QUERY } from './User';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 // import Error from './ErrorMessage';
 
 const SIGNIN_MUTATION = gql`
@@ -29,6 +31,7 @@ export default function SignIn() {
 		email: '',
 		password: '',
 	});
+
 	const [signin, { data, loading }] = useMutation(SIGNIN_MUTATION, {
 		variables: inputs,
 		// refetch the currently logged in user
@@ -49,14 +52,23 @@ export default function SignIn() {
 		console.log(inputs);
 		const res = await signin();
 		console.log(res);
-		// resetForm();
-		// Send the email and password to the graphqlAPI
+
+		console.log(res.data.authenticateUserWithPassword);
+		// resetForm
+
+		setInputs({
+			email: '',
+			password: '',
+		});
+
+		//TODO: Redirect user to portfolio or User Dashboard
 	}
 	const error =
 		data?.authenticateUserWithPassword.__typename ===
 		'UserAuthenticationWithPasswordFailure'
 			? data?.authenticateUserWithPassword
 			: undefined;
+
 	return (
 		<form method="POST" onSubmit={handleSubmit}>
 			<h2>Sign Into Your Account</h2>

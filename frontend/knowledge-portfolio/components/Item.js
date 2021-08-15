@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import React from 'react';
 import Link from 'next/link';
+import DeleteItem from './DeleteItem';
 
 const StyledItem = styled.div`
 	padding: 2rem;
@@ -43,6 +44,8 @@ export default function Item({ item }) {
 				>
 					Edit Item
 				</Link>
+				<DeleteItem id={item.id}>Delete Item</DeleteItem>
+				<p>{item.id}</p>
 			</div>
 		</StyledItem>
 	);

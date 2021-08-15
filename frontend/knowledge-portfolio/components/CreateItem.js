@@ -4,7 +4,7 @@
 //TODO: How to assign the item to a choosen category
 //TODO: Add the URL field
 //TODO: Add Toast for errors
-import { CURRENT_USER_QUERY, useUser } from './User';
+import { CURRENT_USER_QUERY } from './User';
 import { USER_CATEGORIES_QUERY, getCategories } from './UserCategories';
 import { useMutation, useQuery } from '@apollo/client';
 import gql from 'graphql-tag';

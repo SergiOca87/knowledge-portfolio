@@ -1,20 +1,23 @@
 import { gql, useQuery } from '@apollo/client';
+import userEvent from '@testing-library/user-event';
+import { useEffect, useState } from 'react';
 
-export const CURRENT_USER_QUERY = gql`
+const CURRENT_USER_QUERY = gql`
 	query {
 		authenticatedItem {
 			... on User {
 				id
 				name
 				email
-				items
-				categories
 			}
 		}
 	}
 `;
 
 export function useUser() {
-	const { data } = useQuery(CURRENT_USER_QUERY);
+	const { data, loading, error } = useQuery(CURRENT_USER_QUERY);
+
 	return data?.authenticatedItem;
 }
+
+export { CURRENT_USER_QUERY };

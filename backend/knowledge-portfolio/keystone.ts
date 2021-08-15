@@ -1,3 +1,4 @@
+
 import 'dotenv/config';
 import { config } from '@keystone-next/keystone/schema';
 import { statelessSessions } from '@keystone-next/keystone/session';
@@ -12,17 +13,15 @@ if (!sessionSecret) {
       'The SESSION_SECRET environment variable must be set in production'
     );
   } else {
-    sessionSecret = '-- DEV COOKIE SECRET; CHANGE ME --';
+    sessionSecret = sessionSecret;
   }
 }
-
-let sessionMaxAge = 60 * 60 * 24 * 30; // 30 days
 
 const { withAuth } = createAuth({
   listKey: 'User',
   identityField: 'email',
   secretField: 'password',
-  sessionData: 'name',
+  sessionData: 'id name email',
   initFirstItem: {
     fields: ['name', 'email', 'password'],
   },
@@ -32,6 +31,7 @@ const session = statelessSessions({
   maxAge: sessionMaxAge,
   secret: sessionSecret,
 });
+
 
 export default withAuth(
   config({
@@ -50,6 +50,7 @@ export default withAuth(
       isAccessAllowed: (context) => !!context.session?.data,
     },
     lists,
-    session,
+    session
   })
+
 );

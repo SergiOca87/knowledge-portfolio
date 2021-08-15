@@ -1,6 +1,7 @@
 import styled, { createGlobalStyle } from 'styled-components';
 // import Header from './Header';
 import Head from 'next/head';
+import Nav from './Nav';
 
 const GlobalStyles = createGlobalStyle`
 
@@ -38,6 +39,7 @@ export default function Layout({ title, keywords, description, children }) {
 			</Head>
 			{/* <Header/> */}
 			<GlobalStyles />
+			<Nav />
 			<main>
 				<StyledWrapper>{children}</StyledWrapper>
 			</main>
