@@ -17,20 +17,22 @@ if (!sessionSecret) {
   }
 }
 
+const sessionConfig = {
+  maxAge: 60 * 60 * 24 * 360, // How long they stay signed in?
+  secret: process.env.COOKIE_SECRET,
+};
+
 const { withAuth } = createAuth({
   listKey: 'User',
   identityField: 'email',
   secretField: 'password',
-  sessionData: 'id name email',
+  sessionData: 'name',
   initFirstItem: {
     fields: ['name', 'email', 'password'],
   },
 });
 
-const session = statelessSessions({
-  maxAge: sessionMaxAge,
-  secret: sessionSecret,
-});
+
 
 
 export default withAuth(
@@ -50,7 +52,7 @@ export default withAuth(
       isAccessAllowed: (context) => !!context.session?.data,
     },
     lists,
-    session
+    session: sessionConfig
   })
 
 );
