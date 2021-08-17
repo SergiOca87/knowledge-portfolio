@@ -1,39 +1,41 @@
 
 import 'dotenv/config';
 import { config } from '@keystone-next/keystone/schema';
-import { statelessSessions } from '@keystone-next/keystone/session';
+import { statelessSessions, withAuthData  } from '@keystone-next/keystone/session';
 import { createAuth } from '@keystone-next/auth';
 import { lists } from './schema';
 
-let sessionSecret = process.env.SESSION_SECRET;
+// let sessionSecret = process.env.SESSION_SECRET;
 
-if (!sessionSecret) {
-  if (process.env.NODE_ENV === 'production') {
-    throw new Error(
-      'The SESSION_SECRET environment variable must be set in production'
-    );
-  } else {
-    sessionSecret = sessionSecret;
-  }
-}
-
-const sessionConfig = {
-  maxAge: 60 * 60 * 24 * 360, // How long they stay signed in?
-  secret: process.env.COOKIE_SECRET,
-};
+// if (!sessionSecret) {
+//   if (process.env.NODE_ENV === 'production') {
+//     throw new Error(
+//       'The SESSION_SECRET environment variable must be set in production'
+//     );
+//   } else {
+//     sessionSecret = sessionSecret;
+//   }
+// }
 
 const { withAuth } = createAuth({
   listKey: 'User',
   identityField: 'email',
   secretField: 'password',
-  sessionData: 'name',
+  sessionData: 'id name email',
   initFirstItem: {
-    fields: ['name', 'email', 'password'],
+    fields: ['email', 'password'],
+    itemData: { isAdmin: true },
+    skipKeystoneWelcome: false,
   },
+  // passwordResetLink: {
+  //   sendToken: async ({ itemId, identity, token, context }) => { /* ... */ },
+  //   tokensValidForMins: 60,
+  // },
+  // magicAuthLink: {
+  //   sendToken: async ({ itemId, identity, token, context }) => { /* ... */ },
+  //   tokensValidForMins: 60,
+  // },
 });
-
-
-
 
 export default withAuth(
   config({
@@ -52,7 +54,14 @@ export default withAuth(
       isAccessAllowed: (context) => !!context.session?.data,
     },
     lists,
-    session: sessionConfig
+    session: statelessSessions({
+      secret: 'ABCDEFGH1234567887654321HGFEDCBA',
+      maxAge: 60 * 60 * 24,
+      secure: true,
+      path: '/',
+      domain: 'localhost',
+      sameSite: 'lax',
+    }),
   })
 
 );

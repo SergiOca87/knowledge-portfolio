@@ -1,10 +1,10 @@
 //TODO: Add error as a Toast
 
 import gql from 'graphql-tag';
-import { useMutation } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 // import Form from './styles/Form';
 // import useForm from '../lib/useForm';
-import { CURRENT_USER_QUERY } from './User';
+import { CURRENT_USER_QUERY, useUser } from './User';
 import React, { useEffect, useState } from 'react';
 // import Error from './ErrorMessage';
 
@@ -27,6 +27,10 @@ const SIGNIN_MUTATION = gql`
 `;
 
 export default function SignIn() {
+	const user = useUser();
+
+	console.log(user);
+
 	const [inputs, setInputs] = useState({
 		email: '',
 		password: '',
@@ -34,7 +38,6 @@ export default function SignIn() {
 
 	const [signin, { data, loading }] = useMutation(SIGNIN_MUTATION, {
 		variables: inputs,
-		// refetch the currently logged in user
 		refetchQueries: [{ query: CURRENT_USER_QUERY }],
 	});
 
@@ -49,11 +52,8 @@ export default function SignIn() {
 
 	async function handleSubmit(e) {
 		e.preventDefault(); // stop the form from submitting
-		console.log(inputs);
 		const res = await signin();
 		console.log(res);
-
-		console.log(res.data.authenticateUserWithPassword);
 		// resetForm
 
 		setInputs({

@@ -450,7 +450,6 @@ enum PasswordAuthErrorCode {
 }
 
 input CreateInitialUserInput {
-  name: String
   email: String
   password: String
 }

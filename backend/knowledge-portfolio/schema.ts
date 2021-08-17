@@ -23,6 +23,7 @@ export const lists = createSchema({
       password: password({ isRequired: true }),
       items: relationship({ ref: 'Item.author', many: true }),
     },
+    access: true,
   }),
   Item: list({
     fields: {
