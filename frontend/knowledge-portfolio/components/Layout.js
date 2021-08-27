@@ -18,6 +18,13 @@ const GlobalStyles = createGlobalStyle`
             font-size: 1.8rem;
 	
         } 
+
+		.container {
+			max-width: 1400px;
+			margin: 0 auto;
+			padding: 0 2rem;
+			width: 100%;
+		}
        
     }
  

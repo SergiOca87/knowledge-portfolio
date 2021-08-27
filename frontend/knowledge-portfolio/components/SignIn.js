@@ -1,4 +1,5 @@
 //TODO: Add error as a Toast
+//TODO: Non-breaking error handling
 
 import gql from 'graphql-tag';
 import { useMutation, useQuery } from '@apollo/client';
@@ -29,14 +30,12 @@ const SIGNIN_MUTATION = gql`
 export default function SignIn() {
 	const user = useUser();
 
-	console.log(user);
-
 	const [inputs, setInputs] = useState({
 		email: '',
 		password: '',
 	});
 
-	const [signin, { data, loading }] = useMutation(SIGNIN_MUTATION, {
+	const [signin, { data, loading, error }] = useMutation(SIGNIN_MUTATION, {
 		variables: inputs,
 		refetchQueries: [{ query: CURRENT_USER_QUERY }],
 	});
@@ -52,22 +51,27 @@ export default function SignIn() {
 
 	async function handleSubmit(e) {
 		e.preventDefault(); // stop the form from submitting
-		const res = await signin();
-		console.log(res);
-		// resetForm
 
-		setInputs({
-			email: '',
-			password: '',
-		});
+		if (error) {
+			console.log(error);
+		} else {
+			const res = await signin();
+			console.log(res);
+			// resetForm
+
+			setInputs({
+				email: '',
+				password: '',
+			});
+		}
 
 		//TODO: Redirect user to portfolio or User Dashboard
 	}
-	const error =
-		data?.authenticateUserWithPassword.__typename ===
-		'UserAuthenticationWithPasswordFailure'
-			? data?.authenticateUserWithPassword
-			: undefined;
+	// const error =
+	// 	data?.authenticateUserWithPassword.__typename ===
+	// 	'UserAuthenticationWithPasswordFailure'
+	// 		? data?.authenticateUserWithPassword
+	// 		: undefined;
 
 	return (
 		<form method="POST" onSubmit={handleSubmit}>

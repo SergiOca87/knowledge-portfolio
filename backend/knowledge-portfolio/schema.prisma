@@ -9,27 +9,39 @@ generator client {
 }
 
 model User {
-  id       String  @id @default(cuid())
-  name     String?
-  email    String? @unique
-  password String?
-  items    Item[]  @relation("Item_author")
+  id                      String     @id @default(cuid())
+  name                    String?
+  email                   String?    @unique
+  password                String?
+  items                   Item[]     @relation("Item_author")
+  categories              Category[] @relation("Category_author")
+  passwordResetToken      String?
+  passwordResetIssuedAt   DateTime?
+  passwordResetRedeemedAt DateTime?
 }
 
 model Item {
-  id          String     @id @default(cuid())
-  title       String?
-  status      String?
-  description String?
-  author      User?      @relation("Item_author", fields: [authorId], references: [id])
-  authorId    String?    @map("author")
-  categories  Category[] @relation("Category_items_Item_categories")
+  id                String    @id @default(cuid())
+  title             String?
+  status            String?
+  description       String?
+  singlePage        String?
+  singlePageContent Json?
+  author            User?     @relation("Item_author", fields: [authorId], references: [id])
+  authorId          String?   @map("author")
+  category          Category? @relation("Item_category", fields: [categoryId], references: [id])
+  categoryId        String?   @map("category")
 
   @@index([authorId])
+  @@index([categoryId])
 }
 
 model Category {
-  id    String  @id @default(cuid())
-  name  String?
-  items Item[]  @relation("Category_items_Item_categories")
+  id       String  @id @default(cuid())
+  name     String?
+  items    Item[]  @relation("Item_category")
+  author   User?   @relation("Category_author", fields: [authorId], references: [id])
+  authorId String? @map("author")
+
+  @@index([authorId])
 }

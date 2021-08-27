@@ -8,30 +8,26 @@ import { CURRENT_USER_QUERY } from './User';
 import styled from 'styled-components';
 import { useState } from 'react';
 
-const SIGNUP_MUTATION = gql`
-	mutation SIGNUP_MUTATION(
-		$name: String!
-		$email: String!
-		$password: String!
-	) {
-		createUser(data: { name: $name, email: $email, password: $password }) {
-			id
-			name
-			email
+const REQUEST_RESET_MUTATION = gql`
+	mutation REQUEST_RESET_MUTATION($email: String!) {
+		sendUserPasswordResetLink(email: $email) {
+			message
+			code
 		}
 	}
 `;
 
-export default function SignUp() {
+export default function RequestReset() {
 	const [inputs, setInputs] = useState({
-		name: '',
 		email: '',
-		password: '',
 	});
 
-	const [signUp, { data, loading, error }] = useMutation(SIGNUP_MUTATION, {
-		variables: inputs,
-	});
+	const [signUp, { data, loading, error }] = useMutation(
+		REQUEST_RESET_MUTATION,
+		{
+			variables: inputs,
+		}
+	);
 
 	const handleChange = (e) => {
 		let { value, name } = e.target;
@@ -57,27 +53,13 @@ export default function SignUp() {
 	// 		: undefined;
 	return (
 		<form method="POST" onSubmit={handleSubmit}>
-			<h2>Register an Account</h2>
+			<h2>Request Password Reset</h2>
 			{/* //TODO: This error should be a toast */}
 			{data?.error && <p>data.error</p>}
 			<fieldset>
-				{data?.createUser && (
-					<p>
-						Account created with {data.createUser.email} - You can
-						now Log In.
-					</p>
+				{data?.sendUserPasswordResetLink === null && (
+					<p>Success! Check your email for a link.</p>
 				)}
-				<label htmlFor="name">
-					Your Name
-					<input
-						type="name"
-						name="name"
-						placeholder="Your Name"
-						autoComplete="name"
-						value={inputs.name}
-						onChange={(e) => handleChange(e)}
-					/>
-				</label>
 				<label htmlFor="email">
 					Email
 					<input
@@ -89,18 +71,8 @@ export default function SignUp() {
 						onChange={(e) => handleChange(e)}
 					/>
 				</label>
-				<label htmlFor="password">
-					Password
-					<input
-						type="password"
-						name="password"
-						placeholder="Password"
-						autoComplete="password"
-						value={inputs.password}
-						onChange={(e) => handleChange(e)}
-					/>
-				</label>
-				<button type="submit">Sign In!</button>
+
+				<button type="submit">Request Reset</button>
 			</fieldset>
 		</form>
 	);

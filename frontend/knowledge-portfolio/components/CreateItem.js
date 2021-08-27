@@ -1,14 +1,16 @@
 //TODO: The item should be asigned directly to the logged in User
 //TODO: Get the current user
-//TODO: To get the current user we have to sign in first (sign in component)
+//TODO: For the category, load user categories or create a new one (and assign it to the current user)
 //TODO: How to assign the item to a choosen category
 //TODO: Add the URL field
 //TODO: Add Toast for errors
-import { CURRENT_USER_QUERY } from './User';
+//TODO: At the moment we can connect existing categories, but may be useful to be able to create them ehre as well
+import { CURRENT_USER_QUERY, useUser } from './User';
 import { USER_CATEGORIES_QUERY, getCategories } from './UserCategories';
+import Link from 'next/link';
 import { useMutation, useQuery } from '@apollo/client';
 import gql from 'graphql-tag';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ALL_ITEMS_QUERY } from './ItemGrid';
 import Router from 'next/router';
 
@@ -17,7 +19,9 @@ const CREATE_ITEM_MUTATION = gql`
 		$title: String!
 		$description: String
 		$status: String # $categories: # $url: String # $user: User # $completed: Boolean
-		$category: String
+		$author: ID!
+		# $category: ID
+		$category: ID
 	) {
 		createItem(
 			data: {
@@ -25,10 +29,12 @@ const CREATE_ITEM_MUTATION = gql`
 				description: $description
 				# category: $category
 				# url: $url
-				# user: $user
+				author: { connect: { id: $author } }
 				status: $status
 				# This creates a category as well
-				category: { create: { category: $category } }
+				# category: { create: { category: $category } }
+				# category: { connect: { id: $category } }
+				category: { connect: { id: $category } }
 			}
 		) {
 			# Do we need to return more things?
@@ -40,18 +46,23 @@ const CREATE_ITEM_MUTATION = gql`
 `;
 
 export default function CreateItem() {
+	const user = useUser();
+	const userCategories = getCategories();
+
 	const [inputs, setInputs] = useState({
 		title: '',
 		description: '',
-		// category: '',
-		// url: '',
-		// user: '',
-		status: '',
+		author: user ? user?.id : '',
+		status: 'finished',
 		category: '',
 	});
 
-	//TODO: Maybe we need to import the Apollo query like ALL_ITEMS_QUERY?
-	const userCategories = getCategories();
+	useEffect(() => {
+		setInputs({
+			...inputs,
+			author: user?.id,
+		});
+	}, [user]);
 
 	const [createItem, { loading, error, data }] = useMutation(
 		CREATE_ITEM_MUTATION,
@@ -61,14 +72,6 @@ export default function CreateItem() {
 		}
 	);
 
-	// const clearForm = () => {
-	// 	const blankState = Object.fromEntries(
-	// 		Object.entries(inputs).map(([key, value]) => [key, ''])
-	// 	);
-	// 	setInputs(blankState);
-	// };
-
-	// Handle changes on form inputs
 	// Adds changes to state
 	const handleChange = (e) => {
 		let { value, name } = e.target;
@@ -85,30 +88,33 @@ export default function CreateItem() {
 		console.log('submit', inputs);
 
 		//TODO: Can use try/catch?
-		try {
-			await createItem();
+
+		if (error) {
+			console.log(error);
+		} else {
+			const res = await createItem();
+
+			console.log('success', res);
+
+			//TODO: Successfull Toast
 
 			// Clear form on submit
 			setInputs({
 				title: '',
 				description: '',
-				// category: '',
-				// url: '',
-				// user: '',
-				status: '',
+				status: 'finished',
 				category: '',
 			});
-
-			//TODO: Do we need to redirect? Decide what's the best user experience here
-			//Redirect the user
-			Router.push({
-				pathname: `/portfolio/${data.createItem.id}`,
-			});
-		} catch (err) {
-			//TODO: Use React Toasts for errors
-			console.log(error);
 		}
 
+		//TODO: Redirect to single item page?
+		//Redirect the user
+		// Router.push({
+		// 	pathname: `/portfolio/${data.createItem.id}`,
+		// });
+
+		//TODO: Use React Toasts for errors
+		// console.log(error);
 		//Redirect should happen here
 	};
 
@@ -121,21 +127,29 @@ export default function CreateItem() {
 						required
 						type="text"
 						name="title"
+						value={inputs.title}
 						onChange={handleChange}
 					/>
 				</label>
 				<label htmlFor="description">
 					<span>Description</span>
-					<textarea name="description" onChange={handleChange} />
+					<textarea
+						name="description"
+						value={inputs.description}
+						onChange={handleChange}
+					/>
 				</label>
 
 				{userCategories && (
 					<label htmlFor="category">
-						<select name="category">
-							{userCategories.allCategories.map((category) => {
+						<select name="category" onChange={handleChange}>
+							{userCategories?.allCategories?.map((category) => {
 								return (
-									<option key="category.id">
-										{category.title}
+									<option
+										key={category.id}
+										value={category.id}
+									>
+										{category.name}
 									</option>
 								);
 							})}
@@ -146,7 +160,7 @@ export default function CreateItem() {
 				<label htmlFor="status">
 					<select name="status" onChange={handleChange}>
 						<option value="finished">Finished</option>
-						<option value="unfinished">Finished</option>
+						<option value="unfinished">Unfinished</option>
 					</select>
 				</label>
 				<input type="submit" value="submit" />

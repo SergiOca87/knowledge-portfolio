@@ -1,42 +1,47 @@
+/* eslint-disable react/react-in-jsx-scope */
 import { CURRENT_USER_QUERY, useUser } from './User';
 import { USER_CATEGORIES_QUERY, getCategories } from './UserCategories';
 import { useMutation, useQuery } from '@apollo/client';
 import gql from 'graphql-tag';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import Link from 'next/link';
 
 const CREATE_CATEGORY_MUTATION = gql`
-	mutation CreateCategory(
-		$title: String!
-		$user: User!
-	) {
+	mutation CREATE_CATEGORY_MUTATION($name: String!, $author: ID!) {
 		createCategory(
-			data: {
-				title: $title
-				user: $user
-			}
+			data: { name: $name, author: { connect: { id: $author } } }
 		) {
 			id
-			title
+			name
 		}
 	}
 `;
 
 export default function CreateCategory() {
+	const user = useUser();
+	const userCategories = getCategories();
+
 	const [inputs, setInputs] = useState({
-		title: '',
-		user: '',
+		name: '',
+		author: user ? user : '',
 	});
 
-    const [createCategory, { loading, error, data }] = useMutation(
+	useEffect(() => {
+		setInputs({
+			...inputs,
+			author: user?.id,
+		});
+	}, [user]);
+
+	console.log('inputs', inputs);
+
+	const [createCategory, { loading, error, data }] = useMutation(
 		CREATE_CATEGORY_MUTATION,
 		{
 			variables: inputs,
-			// Do we need to refetch?
-			// refetchQueries: [{ query: ALL_ITEMS_QUERY }],
+			refetchQueries: [{ query: USER_CATEGORIES_QUERY }],
 		}
 	);
-
-	const userCategories = getCategories();
 
 	const handleChange = (e) => {
 		let { value, name } = e.target;
@@ -51,38 +56,32 @@ export default function CreateCategory() {
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 
-        //TODO: With Authentication, add user to existing inputs
-        // Add Current User
-        setInputs({
-			...inputs,
-			user: "60aa472c93309922d83e8f92",
+		console.log('submit', inputs);
+
+		const res = await createCategory();
+		console.log(res);
+
+		// Clear Form
+		setInputs({
+			name: '',
+			author: user ? user : '',
 		});
-	
-		try {
-			const res = await createCategory();
-		} catch (err) {
-			console.log(err);
-		}
-
-		// clearForm();
-
-		//Redirect, if any, should happen here
 	};
 
 	return (
-        <>
-		<form method="POST" onSubmit={handleSubmit}>
-			<label htmlFor="title">
-				<span>Title</span>
-				<input
-					required
-					type="text"
-					name="title"
-					onChange={handleChange}
-				/>
-			</label>
-			
-			{/* <label htmlFor="completed">
+		<>
+			<form method="POST" onSubmit={handleSubmit}>
+				<label htmlFor="title">
+					<span>Title</span>
+					<input
+						required
+						type="text"
+						name="name"
+						onChange={handleChange}
+					/>
+				</label>
+
+				{/* <label htmlFor="completed">
 				<span>Completed?</span>
 				<input
 					type="checkbox"
@@ -90,19 +89,20 @@ export default function CreateCategory() {
 					onChange={handleChange}
 				/>
 			</label> */}
-			<input type="submit" value="submit" />
-		</form>
+				<input type="submit" value="submit" />
+			</form>
 
-        <p>List of existing user categories (tag cloud)</p>
-        {userCategories && (
-      
-                    userCategories.allCategories.map((category) => {
-                        return (
-                            <p key="category.id">{category.title}</p>
-                        );
-                    })
-             
-        )}
-        </>
+			<p>Existing Categories: </p>
+			{userCategories &&
+				userCategories?.allCategories?.map((category) => {
+					return (
+						<p key={category.id}>
+							<Link href={`/categories/${category.id}`}>
+								{category.name}
+							</Link>
+						</p>
+					);
+				})}
+		</>
 	);
 }

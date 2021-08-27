@@ -14,7 +14,7 @@ export const lists = createSchema({
   User: list({
     ui: {
       listView: {
-        initialColumns: ['name', 'posts'],
+        initialColumns: ['name'],
       },
     },
     fields: {
@@ -22,49 +22,54 @@ export const lists = createSchema({
       email: text({ isRequired: true, isUnique: true }),
       password: password({ isRequired: true }),
       items: relationship({ ref: 'Item.author', many: true }),
+      categories: relationship({ ref: 'Category.author', many: true }),
     },
     access: true,
   }),
   Item: list({
     fields: {
       title: text(),
-      status: select({
-        options: [
-          { label: 'Finished', value: 'finished' },
-          { label: 'Unfinished', value: 'unfinished' },
-        ],
-        ui: {
-          displayMode: 'segmented-control',
-        },
-      }),
-      //TODO: Restrict this? Maybe just a textarea.
-      // content: document({
-      //   formatting: true,
-      //   layouts: [
-      //     [1, 1],
-      //     [1, 1, 1],
-      //     [2, 1],
-      //     [1, 2],
-      //     [1, 2, 1],
-      //   ],
-      //   links: true,
-      //   dividers: true,
-      // }),
+      status: text(), 
+    
       description: text({
         ui: {
           displayMode: 'textarea'
         }
       }),
+      //TODO: Restrict this? Maybe just a textarea.
+      singlePage: select({
+        options: [
+          { label: 'Yes', value: 'true'},
+          { label: 'No', value: 'false'},
+        ],
+        ui: {
+          displayMode: 'segmented-control',
+        },
+      }),
+      singlePageContent: document({
+        formatting: true,
+        layouts: [
+          [1, 1],
+          [1, 1, 1],
+          [2, 1],
+          [1, 2],
+          [1, 2, 1],
+        ],
+        links: true,
+        dividers: true,
+      }),
+   
       // publishDate: timestamp(),
       author: relationship({
         ref: 'User.items',
-        ui: {
-          displayMode: 'cards',
-          cardFields: ['name', 'email'],
-          inlineEdit: { fields: ['name', 'email'] },
-          linkToItem: true,
-          inlineCreate: { fields: ['name', 'email'] },
-        },
+        many: false,
+        // ui: {
+        //   displayMode: 'cards',
+        //   cardFields: ['name', 'email'],
+        //   inlineEdit: { fields: ['name', 'email'] },
+        //   linkToItem: true,
+        //   inlineCreate: { fields: ['name', 'email'] },
+        // },
       }),
       // image: relationship({
       //   ref: 'Image.item',
@@ -75,17 +80,17 @@ export const lists = createSchema({
       //     inlineEdit: {fields: ['image']}
       //   }
       // }),
-      categories: relationship({
+      category: relationship({
         ref: 'Category.items',
-        ui: {
-          displayMode: 'cards',
-          cardFields: ['name'],
-          inlineEdit: { fields: ['name'] },
-          linkToItem: true,
-          inlineConnect: true,
-          inlineCreate: { fields: ['name'] },
-        },
-        many: true,
+        many: false,
+        // ui: {
+        //   displayMode: 'cards',
+        //   cardFields: ['name'],
+        //   inlineEdit: { fields: ['name'] },
+        //   linkToItem: true,
+        //   inlineConnect: true,
+        //   inlineCreate: { fields: ['name'] },
+        // },
       }),
     },
   }),
@@ -115,13 +120,24 @@ export const lists = createSchema({
   // }),
   Category: list({
     ui: {
-      isHidden: true,
+      isHidden: false,
     },
     fields: {
       name: text(),
       items: relationship({
-        ref: 'Item.categories',
+        ref: 'Item.category',
         many: true,
+      }),
+      author: relationship({
+        ref: 'User.categories',
+        many: false
+        // ui: {
+        //   displayMode: 'cards',
+        //   cardFields: ['name', 'email'],
+        //   inlineEdit: { fields: ['name', 'email'] },
+        //   linkToItem: true,
+        //   inlineCreate: { fields: ['name', 'email'] },
+        // },
       }),
     },
   }),

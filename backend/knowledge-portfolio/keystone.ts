@@ -4,6 +4,7 @@ import { config } from '@keystone-next/keystone/schema';
 import { statelessSessions, withAuthData  } from '@keystone-next/keystone/session';
 import { createAuth } from '@keystone-next/auth';
 import { lists } from './schema';
+import { sendPasswordResetEmail } from './mail';
 
 // let sessionSecret = process.env.SESSION_SECRET;
 
@@ -27,10 +28,11 @@ const { withAuth } = createAuth({
     itemData: { isAdmin: true },
     skipKeystoneWelcome: false,
   },
-  // passwordResetLink: {
-  //   sendToken: async ({ itemId, identity, token, context }) => { /* ... */ },
-  //   tokensValidForMins: 60,
-  // },
+  passwordResetLink: {
+   async sendToken(args) {
+     await sendPasswordResetEmail(args.token, args.identity);
+   }
+  },
   // magicAuthLink: {
   //   sendToken: async ({ itemId, identity, token, context }) => { /* ... */ },
   //   tokensValidForMins: 60,

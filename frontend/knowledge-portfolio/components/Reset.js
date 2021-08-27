@@ -8,28 +8,31 @@ import { CURRENT_USER_QUERY } from './User';
 import styled from 'styled-components';
 import { useState } from 'react';
 
-const SIGNUP_MUTATION = gql`
-	mutation SIGNUP_MUTATION(
-		$name: String!
+const RESET_MUTATION = gql`
+	mutation RESET_MUTATION(
 		$email: String!
+		$token: String!
 		$password: String!
 	) {
-		createUser(data: { name: $name, email: $email, password: $password }) {
-			id
-			name
-			email
+		redeemUserPasswordResetToken(
+			email: $email
+			token: $token
+			password: $password
+		) {
+			message
+			code
 		}
 	}
 `;
 
-export default function SignUp() {
+export default function Reset({ token }) {
 	const [inputs, setInputs] = useState({
-		name: '',
 		email: '',
 		password: '',
+		token: token,
 	});
 
-	const [signUp, { data, loading, error }] = useMutation(SIGNUP_MUTATION, {
+	const [reset, { data, loading, error }] = useMutation(RESET_MUTATION, {
 		variables: inputs,
 	});
 
@@ -45,39 +48,25 @@ export default function SignUp() {
 	async function handleSubmit(e) {
 		e.preventDefault(); // stop the form from submitting
 		console.log(inputs);
-		const res = await signUp();
+		const res = await reset();
 		console.log(res);
 		// resetForm();
 		// Send the email and password to the graphqlAPI
 	}
-	// const error =
-	// 	data?.authenticateUserWithPassword.__typename ===
-	// 	'UserAuthenticationWithPasswordFailure'
-	// 		? data?.authenticateUserWithPassword
-	// 		: undefined;
+	const successError = data?.redeemUserPasswordResetToken?.code
+		? data?.redeemUserPasswordResetToken
+		: undefined;
+
 	return (
 		<form method="POST" onSubmit={handleSubmit}>
-			<h2>Register an Account</h2>
-			{/* //TODO: This error should be a toast */}
-			{data?.error && <p>data.error</p>}
+			<h2>Reset Your Password</h2>
 			<fieldset>
-				{data?.createUser && (
-					<p>
-						Account created with {data.createUser.email} - You can
-						now Log In.
-					</p>
+				{data?.redeemUserPasswordResetToken === null && (
+					<p>Success! You can now use your new password.</p>
 				)}
-				<label htmlFor="name">
-					Your Name
-					<input
-						type="name"
-						name="name"
-						placeholder="Your Name"
-						autoComplete="name"
-						value={inputs.name}
-						onChange={(e) => handleChange(e)}
-					/>
-				</label>
+
+				{/* //TODO: Pass the error to a Toast! */}
+				{console.log(error || successError)}
 				<label htmlFor="email">
 					Email
 					<input
@@ -90,7 +79,7 @@ export default function SignUp() {
 					/>
 				</label>
 				<label htmlFor="password">
-					Password
+					New Password
 					<input
 						type="password"
 						name="password"
@@ -100,7 +89,8 @@ export default function SignUp() {
 						onChange={(e) => handleChange(e)}
 					/>
 				</label>
-				<button type="submit">Sign In!</button>
+
+				<button type="submit">Request Reset</button>
 			</fieldset>
 		</form>
 	);
