@@ -1,7 +1,8 @@
-import '../styles/globals.css';
 import Layout from '../components/Layout';
 import React from 'react';
-
+import NProgress from 'nprogress';
+import Router from 'next/router';
+import Page from '../components/Page';
 import {
 	ApolloClient,
 	InMemoryCache,
@@ -10,6 +11,10 @@ import {
 	gql,
 	createHttpLink,
 } from '@apollo/client';
+
+Router.events.on('routeChangeStart', () => NProgress.start());
+Router.events.on('routeChangeComplete', () => NProgress.done());
+Router.events.on('routeChangeError', () => NProgress.done());
 
 const link = createHttpLink({
 	uri: 'http://localhost:3000/api/graphql',
@@ -24,11 +29,13 @@ const client = new ApolloClient({
 
 function MyApp({ Component, pageProps }) {
 	return (
-		<ApolloProvider client={client}>
-			<Layout>
-				<Component {...pageProps} />
-			</Layout>
-		</ApolloProvider>
+		<>
+			<ApolloProvider client={client}>
+				<Page>
+					<Component {...pageProps} />
+				</Page>
+			</ApolloProvider>
+		</>
 	);
 }
 

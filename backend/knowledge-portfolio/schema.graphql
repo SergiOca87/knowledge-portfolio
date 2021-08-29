@@ -216,8 +216,10 @@ type Item {
   description: String
   singlePage: String
   singlePageContent: Item_singlePageContent_DocumentField
+  image: String
   author: User
   category: Category
+  url: String
 }
 
 type Item_singlePageContent_DocumentField {
@@ -291,12 +293,62 @@ input ItemWhereInput {
   description_not_in: [String]
   singlePage: String
   singlePage_not: String
+  singlePage_contains: String
+  singlePage_not_contains: String
+  singlePage_starts_with: String
+  singlePage_not_starts_with: String
+  singlePage_ends_with: String
+  singlePage_not_ends_with: String
+  singlePage_i: String
+  singlePage_not_i: String
+  singlePage_contains_i: String
+  singlePage_not_contains_i: String
+  singlePage_starts_with_i: String
+  singlePage_not_starts_with_i: String
+  singlePage_ends_with_i: String
+  singlePage_not_ends_with_i: String
   singlePage_in: [String]
   singlePage_not_in: [String]
+  image: String
+  image_not: String
+  image_contains: String
+  image_not_contains: String
+  image_starts_with: String
+  image_not_starts_with: String
+  image_ends_with: String
+  image_not_ends_with: String
+  image_i: String
+  image_not_i: String
+  image_contains_i: String
+  image_not_contains_i: String
+  image_starts_with_i: String
+  image_not_starts_with_i: String
+  image_ends_with_i: String
+  image_not_ends_with_i: String
+  image_in: [String]
+  image_not_in: [String]
   author: UserWhereInput
   author_is_null: Boolean
   category: CategoryWhereInput
   category_is_null: Boolean
+  url: String
+  url_not: String
+  url_contains: String
+  url_not_contains: String
+  url_starts_with: String
+  url_not_starts_with: String
+  url_ends_with: String
+  url_not_ends_with: String
+  url_i: String
+  url_not_i: String
+  url_contains_i: String
+  url_not_contains_i: String
+  url_starts_with_i: String
+  url_not_starts_with_i: String
+  url_ends_with_i: String
+  url_not_ends_with_i: String
+  url_in: [String]
+  url_not_in: [String]
 }
 
 input ItemWhereUniqueInput {
@@ -314,6 +366,10 @@ enum SortItemsBy {
   description_DESC
   singlePage_ASC
   singlePage_DESC
+  image_ASC
+  image_DESC
+  url_ASC
+  url_DESC
 }
 
 input ItemOrderByInput {
@@ -322,6 +378,8 @@ input ItemOrderByInput {
   status: OrderDirection
   description: OrderDirection
   singlePage: OrderDirection
+  image: OrderDirection
+  url: OrderDirection
 }
 
 input ItemUpdateInput {
@@ -330,8 +388,10 @@ input ItemUpdateInput {
   description: String
   singlePage: String
   singlePageContent: JSON
+  image: String
   author: UserRelateToOneInput
   category: CategoryRelateToOneInput
+  url: String
 }
 
 input UserRelateToOneInput {
@@ -359,8 +419,10 @@ input ItemCreateInput {
   description: String
   singlePage: String
   singlePageContent: JSON
+  image: String
   author: UserRelateToOneInput
   category: CategoryRelateToOneInput
+  url: String
 }
 
 input ItemsCreateInput {

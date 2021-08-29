@@ -1,3 +1,4 @@
+//TODO: Image should be cloudinaryimage when supported
 import { createSchema, list } from '@keystone-next/keystone/schema';
 import {
   text,
@@ -5,7 +6,8 @@ import {
   password,
   timestamp,
   select,
-  image 
+  image, 
+  checkbox
 } from '@keystone-next/fields';
 // import { cloudinaryImage } from '@keystone-next/cloudinary';
 import { document } from '@keystone-next/fields-document';
@@ -30,22 +32,17 @@ export const lists = createSchema({
     fields: {
       title: text(),
       status: text(), 
-    
       description: text({
         ui: {
           displayMode: 'textarea'
         }
       }),
-      //TODO: Restrict this? Maybe just a textarea.
-      singlePage: select({
-        options: [
-          { label: 'Yes', value: 'true'},
-          { label: 'No', value: 'false'},
-        ],
-        ui: {
-          displayMode: 'segmented-control',
-        },
-      }),
+      // singlePage: checkbox({
+      //   defaultValue: false,
+      //   isRequired: true,
+      // }),
+      //This is true or false but a string
+      singlePage: text(),
       singlePageContent: document({
         formatting: true,
         layouts: [
@@ -58,7 +55,7 @@ export const lists = createSchema({
         links: true,
         dividers: true,
       }),
-   
+      image: text(),
       // publishDate: timestamp(),
       author: relationship({
         ref: 'User.items',
@@ -71,15 +68,6 @@ export const lists = createSchema({
         //   inlineCreate: { fields: ['name', 'email'] },
         // },
       }),
-      // image: relationship({
-      //   ref: 'Image.item',
-      //   ui: {
-      //     displayMode: 'cards',
-      //     cardFields: ['image'],
-      //     inlineCreate: { fields: ['image']},
-      //     inlineEdit: {fields: ['image']}
-      //   }
-      // }),
       category: relationship({
         ref: 'Category.items',
         many: false,
@@ -92,6 +80,7 @@ export const lists = createSchema({
         //   inlineCreate: { fields: ['name'] },
         // },
       }),
+      url: text()
     },
   }),
 

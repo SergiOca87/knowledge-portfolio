@@ -1,3 +1,4 @@
+/* eslint-disable react/react-in-jsx-scope */
 //TODO: The item should be asigned directly to the logged in User
 //TODO: Get the current user
 //TODO: For the category, load user categories or create a new one (and assign it to the current user)
@@ -20,8 +21,10 @@ const CREATE_ITEM_MUTATION = gql`
 		$description: String
 		$status: String # $categories: # $url: String # $user: User # $completed: Boolean
 		$author: ID!
-		# $category: ID
+		$singlePage: String
+		$image: String
 		$category: ID
+		$url: String
 	) {
 		createItem(
 			data: {
@@ -31,10 +34,13 @@ const CREATE_ITEM_MUTATION = gql`
 				# url: $url
 				author: { connect: { id: $author } }
 				status: $status
+				singlePage: $singlePage
+				image: $image
 				# This creates a category as well
 				# category: { create: { category: $category } }
 				# category: { connect: { id: $category } }
 				category: { connect: { id: $category } }
+				url: $url
 			}
 		) {
 			# Do we need to return more things?
@@ -54,7 +60,10 @@ export default function CreateItem() {
 		description: '',
 		author: user ? user?.id : '',
 		status: 'finished',
+		singlePage: 'false',
+		image: '',
 		category: '',
+		url: '',
 	});
 
 	useEffect(() => {
@@ -139,7 +148,16 @@ export default function CreateItem() {
 						onChange={handleChange}
 					/>
 				</label>
-
+				<label htmlFor="image">
+					<span>Image</span>
+					<input
+						type="file"
+						id="image"
+						name="image"
+						onChange={handleChange}
+						accept="image/png, image/jpeg"
+					/>
+				</label>
 				{userCategories && (
 					<label htmlFor="category">
 						<select name="category" onChange={handleChange}>
@@ -156,12 +174,35 @@ export default function CreateItem() {
 						</select>
 					</label>
 				)}
-
 				<label htmlFor="status">
 					<select name="status" onChange={handleChange}>
 						<option value="finished">Finished</option>
 						<option value="unfinished">Unfinished</option>
 					</select>
+				</label>
+				<p>
+					If "Single Page" is enabled your portfolio items will be
+					clickable and will redirect the user to a detail page with a
+					more detailed view of your portfolio item.
+				</p>
+				<label htmlFor="singlepage">
+					Single Page
+					<input
+						type="checkbox"
+						id="singlePage"
+						name="singlePage"
+						value={inputs.singlePage}
+						onChange={handleChange}
+					/>
+				</label>
+				<label htmlFor="url">
+					<span>URL</span>
+					<input
+						type="url"
+						name="url"
+						value={inputs.url}
+						onChange={handleChange}
+					/>
 				</label>
 				<input type="submit" value="submit" />
 			</fieldset>

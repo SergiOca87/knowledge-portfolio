@@ -55,6 +55,13 @@ export default withAuth(
       //Users should not have UI access
       isAccessAllowed: (context) => !!context.session?.data,
     },
+    images: {
+      upload: 'local',
+      local: {
+        storagePath: 'public/images',
+        baseUrl: '/images',
+      },
+    },
     lists,
     session: statelessSessions({
       secret: 'ABCDEFGH1234567887654321HGFEDCBA',

@@ -27,10 +27,12 @@ model Item {
   description       String?
   singlePage        String?
   singlePageContent Json?
+  image             String?
   author            User?     @relation("Item_author", fields: [authorId], references: [id])
   authorId          String?   @map("author")
   category          Category? @relation("Item_category", fields: [categoryId], references: [id])
   categoryId        String?   @map("category")
+  url               String?
 
   @@index([authorId])
   @@index([categoryId])
