@@ -1,19 +1,30 @@
 /* eslint-disable react/react-in-jsx-scope */
-//TODO: The item should be asigned directly to the logged in User
-//TODO: Get the current user
+
 //TODO: For the category, load user categories or create a new one (and assign it to the current user)
 //TODO: How to assign the item to a choosen category
-//TODO: Add the URL field
 //TODO: Add Toast for errors
 //TODO: At the moment we can connect existing categories, but may be useful to be able to create them ehre as well
-import { CURRENT_USER_QUERY, useUser } from './User';
 import { USER_CATEGORIES_QUERY, getCategories } from './UserCategories';
 import Link from 'next/link';
 import { useMutation, useQuery } from '@apollo/client';
 import gql from 'graphql-tag';
-import { useEffect, useState } from 'react';
-import { ALL_ITEMS_QUERY } from './ItemGrid';
+import { useContext, useEffect, useState } from 'react';
+import { USER_ITEMS_QUERY } from './ItemGrid';
 import Router from 'next/router';
+import UserContext from '../context/UserContext';
+import styled, { css } from 'styled-components';
+import { Button } from 'react-bootstrap';
+
+const StyledForm = styled.form`
+	max-width: 70rem;
+	margin: 4rem auto;
+	padding: 2rem;
+	background-color: var(--tertiary);
+
+	.tip {
+		font-size: 1.4rem;
+	}
+`;
 
 const CREATE_ITEM_MUTATION = gql`
 	mutation CREATE_ITEM_MUTATION(
@@ -52,7 +63,7 @@ const CREATE_ITEM_MUTATION = gql`
 `;
 
 export default function CreateItem() {
-	const user = useUser();
+	const { user } = useContext(UserContext);
 	const userCategories = getCategories();
 
 	const [inputs, setInputs] = useState({
@@ -77,7 +88,9 @@ export default function CreateItem() {
 		CREATE_ITEM_MUTATION,
 		{
 			variables: inputs,
-			refetchQueries: [{ query: ALL_ITEMS_QUERY }],
+			refetchQueries: [
+				{ query: USER_ITEMS_QUERY, variables: { id: user?.id } },
+			],
 		}
 	);
 
@@ -94,9 +107,6 @@ export default function CreateItem() {
 	// Submit current state to create a new Item
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-		console.log('submit', inputs);
-
-		//TODO: Can use try/catch?
 
 		if (error) {
 			console.log(error);
@@ -128,84 +138,128 @@ export default function CreateItem() {
 	};
 
 	return (
-		<form method="POST" onSubmit={handleSubmit}>
+		<StyledForm method="POST" onSubmit={handleSubmit}>
 			<fieldset disabled={loading} aria-busy={loading}>
-				<label htmlFor="title">
-					<span>Title</span>
-					<input
-						required
-						type="text"
-						name="title"
-						value={inputs.title}
-						onChange={handleChange}
-					/>
-				</label>
-				<label htmlFor="description">
-					<span>Description</span>
-					<textarea
-						name="description"
-						value={inputs.description}
-						onChange={handleChange}
-					/>
-				</label>
-				<label htmlFor="image">
-					<span>Image</span>
-					<input
-						type="file"
-						id="image"
-						name="image"
-						onChange={handleChange}
-						accept="image/png, image/jpeg"
-					/>
-				</label>
-				{userCategories && (
-					<label htmlFor="category">
-						<select name="category" onChange={handleChange}>
-							{userCategories?.allCategories?.map((category) => {
-								return (
-									<option
-										key={category.id}
-										value={category.id}
-									>
-										{category.name}
-									</option>
-								);
-							})}
+				<div className="input-wrap text">
+					<label htmlFor="title">
+						<span>Title</span>
+						<input
+							required
+							type="text"
+							name="title"
+							value={inputs.title}
+							onChange={handleChange}
+						/>
+					</label>
+				</div>
+				<div className="input-wrap text">
+					<label htmlFor="description">
+						<span>Description</span>
+						<textarea
+							name="description"
+							maxLength="300"
+							value={inputs.description}
+							onChange={handleChange}
+						/>
+					</label>
+				</div>
+				<div className="input-wrap">
+					<label htmlFor="image">
+						<span>Image</span>
+						<input
+							type="file"
+							id="image"
+							name="image"
+							onChange={handleChange}
+							accept="image/png, image/jpeg"
+						/>
+					</label>
+				</div>
+				<div className="input-wrap">
+					{userCategories && (
+						<label htmlFor="category">
+							<span>Category</span>
+							<p className="tip">
+								If you need a new category you can create it{' '}
+								<Link href="/create-category"> here</Link>
+							</p>
+							<select name="category" onChange={handleChange}>
+								<option value="Uncategorized">
+									Uncategorized
+								</option>
+								{userCategories?.allCategories?.map(
+									(category) => {
+										return (
+											<option
+												key={category.id}
+												value={category.id}
+											>
+												{category.name}
+											</option>
+										);
+									}
+								)}
+							</select>
+						</label>
+					)}
+				</div>
+				<div className="input-wrap">
+					<label htmlFor="status">
+						<span>Status</span>
+						<select name="status" onChange={handleChange}>
+							<option value="finished">Finished</option>
+							<option value="unfinished">Unfinished</option>
 						</select>
 					</label>
-				)}
-				<label htmlFor="status">
-					<select name="status" onChange={handleChange}>
-						<option value="finished">Finished</option>
-						<option value="unfinished">Unfinished</option>
-					</select>
-				</label>
-				<p>
-					If "Single Page" is enabled your portfolio items will be
-					clickable and will redirect the user to a detail page with a
-					more detailed view of your portfolio item.
-				</p>
-				<label htmlFor="singlepage">
-					Single Page
-					<input
-						type="checkbox"
-						id="singlePage"
-						name="singlePage"
-						value={inputs.singlePage}
-						onChange={handleChange}
-					/>
-				</label>
-				<label htmlFor="url">
-					<span>URL</span>
-					<input
-						type="url"
-						name="url"
-						value={inputs.url}
-						onChange={handleChange}
-					/>
-				</label>
-				<input type="submit" value="submit" />
+				</div>
+				<div className="input-wrap">
+					<label htmlFor="singlePage">
+						<span>Single Page</span>
+						<p className="tip">
+							If "Single Page" is enabled your portfolio items
+							will be clickable and will redirect the user to a
+							detail page with a more detailed view of your
+							portfolio item.
+						</p>
+						<div className="d-flex align-center">
+							<span
+								css={css`
+									margin: 0;
+									font-size: 1.4rem;
+									margin-right: 1.5rem;
+								`}
+							>
+								Enable
+							</span>
+							<input
+								type="checkbox"
+								id="singlePage"
+								name="singlePage"
+								value={inputs.singlePage}
+								onChange={handleChange}
+							/>
+						</div>
+					</label>
+				</div>
+				<div className="input-wrap text">
+					<label htmlFor="url">
+						<span>URL</span>
+						<input
+							type="url"
+							name="url"
+							value={inputs.url}
+							onChange={handleChange}
+						/>
+					</label>
+				</div>
+				<Button
+					type="submit"
+					value="submit"
+					variant="transparent-secondary"
+				>
+					Add
+				</Button>
 			</fieldset>
-		</form>
+		</StyledForm>
 	);
 }

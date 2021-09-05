@@ -1,12 +1,13 @@
 //TODO: Figure out the categories
 
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import { USER_CATEGORIES_QUERY, getCategories } from './UserCategories';
 import { useState } from 'react';
 import gql from 'graphql-tag';
 import Router from 'next/router';
-import { ALL_ITEMS_QUERY } from './ItemGrid';
+import { USER_ITEMS_QUERY } from './ItemGrid';
+import UserContext from '../context/UserContext';
 
 const DELETE_ITEM_MUTATION = gql`
 	mutation DELETE_ITEM_MUTATION($id: ID!) {
@@ -17,6 +18,7 @@ const DELETE_ITEM_MUTATION = gql`
 `;
 
 export default function DeleteItem({ id, children }) {
+	const { user } = useContext(UserContext);
 	// So that the user has to click twice to delete an Item
 	const [deleteConfirm, setDeleteConfirm] = useState({
 		counter: 0,
@@ -27,7 +29,10 @@ export default function DeleteItem({ id, children }) {
 		variables: {
 			id,
 		},
-		refetchQueries: [{ query: ALL_ITEMS_QUERY }],
+
+		refetchQueries: [
+			{ query: USER_ITEMS_QUERY, variables: { id: user?.id } },
+		],
 	});
 
 	const handleDelete = async (e) => {
@@ -40,6 +45,7 @@ export default function DeleteItem({ id, children }) {
 
 		if (deleteConfirm.counter >= 2) {
 			deleteItem();
+			console.log('deleted', user.id);
 		}
 	};
 

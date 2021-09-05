@@ -1,3 +1,4 @@
+import React, { useContext } from 'react';
 import { gql, useQuery } from '@apollo/client';
 
 export const CURRENT_USER_QUERY = gql`
@@ -13,9 +14,7 @@ export const CURRENT_USER_QUERY = gql`
 `;
 
 export function useUser() {
-	const { data } = useQuery(CURRENT_USER_QUERY);
-
-	console.log('user data', data);
-
-	return data?.authenticatedItem;
+	// const { data } = useQuery(CURRENT_USER_QUERY);
+	// const { user, setUser } = useContext(UserContext);
+	// data && setUser(data?.authenticatedItem);
 }

@@ -5,8 +5,11 @@ import gql from 'graphql-tag';
 import { useMutation, useQuery } from '@apollo/client';
 // import Form from './styles/Form';
 // import useForm from '../lib/useForm';
-import { CURRENT_USER_QUERY, useUser } from './User';
-import React, { useEffect, useState } from 'react';
+
+import React, { useContext, useEffect, useState } from 'react';
+import Router from 'next/router';
+import UserContext from '../context/UserContext';
+
 // import Error from './ErrorMessage';
 
 const SIGNIN_MUTATION = gql`
@@ -27,18 +30,43 @@ const SIGNIN_MUTATION = gql`
 	}
 `;
 
+const CURRENT_USER_QUERY = gql`
+	query {
+		authenticatedItem {
+			... on User {
+				id
+				name
+				email
+			}
+		}
+	}
+`;
+
 export default function SignIn() {
-	const user = useUser();
+	const { user, setUser } = useContext(UserContext);
+
+	// If there is a logged in user, redirect to its page:
+	useEffect(() => {
+		if (user) {
+			Router.push({
+				pathname: `/portfolio/${user.id}`,
+			});
+		}
+	}, [user]);
+	//////////////////////////////////////////////////
 
 	const [inputs, setInputs] = useState({
 		email: '',
 		password: '',
 	});
 
-	const [signin, { data, loading, error }] = useMutation(SIGNIN_MUTATION, {
-		variables: inputs,
-		refetchQueries: [{ query: CURRENT_USER_QUERY }],
-	});
+	const [signin, { data: signInData, loading, error }] = useMutation(
+		SIGNIN_MUTATION,
+		{
+			variables: inputs,
+			refetchQueries: [{ query: CURRENT_USER_QUERY }],
+		}
+	);
 
 	const handleChange = (e) => {
 		let { value, name } = e.target;
@@ -56,16 +84,14 @@ export default function SignIn() {
 			console.log(error);
 		} else {
 			const res = await signin();
-			console.log(res);
-			// resetForm
 
 			setInputs({
 				email: '',
 				password: '',
 			});
-		}
 
-		//TODO: Redirect user to portfolio or User Dashboard
+			setUser(res?.signInData?.authenticateUserWithPassword.item);
+		}
 	}
 	// const error =
 	// 	data?.authenticateUserWithPassword.__typename ===
@@ -75,31 +101,36 @@ export default function SignIn() {
 
 	return (
 		<form method="POST" onSubmit={handleSubmit}>
-			<h2>Sign Into Your Account</h2>
+			<h2>Sign In</h2>
 			{error && <p>{error}</p>}
 			<fieldset>
-				<label htmlFor="email">
-					Email
-					<input
-						type="email"
-						name="email"
-						placeholder="Your Email Address"
-						autoComplete="email"
-						value={inputs.email}
-						onChange={(e) => handleChange(e)}
-					/>
-				</label>
-				<label htmlFor="password">
-					Password
-					<input
-						type="password"
-						name="password"
-						placeholder="Password"
-						autoComplete="password"
-						value={inputs.password}
-						onChange={(e) => handleChange(e)}
-					/>
-				</label>
+				<div className="input-wrap">
+					<label htmlFor="email">
+						<span>Email</span>
+						<input
+							type="email"
+							name="email"
+							autoComplete="email"
+							value={inputs.email}
+							onChange={(e) => handleChange(e)}
+						/>
+					</label>
+				</div>
+				<div className="input-wrap">
+					<label
+						htmlFor="password"
+						onFocus={() => console.log('focus')}
+					>
+						<span>Password</span>
+						<input
+							type="password"
+							name="password"
+							autoComplete="password"
+							value={inputs.password}
+							onChange={(e) => handleChange(e)}
+						/>
+					</label>
+				</div>
 				<button type="submit">Sign In!</button>
 			</fieldset>
 		</form>

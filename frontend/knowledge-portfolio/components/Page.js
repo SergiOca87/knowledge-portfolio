@@ -2,6 +2,10 @@ import PropTypes from 'prop-types';
 import styled, { createGlobalStyle } from 'styled-components';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Nav from './Nav';
+import gql from 'graphql-tag';
+import { useContext } from 'react';
+import UserContext from '../context/UserContext';
+import { useQuery } from '@apollo/client';
 
 const GlobalStyles = createGlobalStyle`
   @font-face {
@@ -38,7 +42,7 @@ const GlobalStyles = createGlobalStyle`
     margin: 0;
     font-size: 1.8rem;
     line-height:1.2;
-    color: var(--black);
+    color: #fff;
   }
   a {
     text-decoration: none;
@@ -92,6 +96,90 @@ const GlobalStyles = createGlobalStyle`
   .padding-6 {
     padding: 6rem: 0;
   }
+
+  .btn {
+    text-transform: uppercase;
+    padding: 1.5rem 2.5rem;
+    font-size: 1.8rem;
+    border-radius: 0;
+    color: #fff;
+    border: none;
+   
+    &-transparent-secondary {
+      background-color: transparent;
+      border: 2px solid var(--secondary);
+  
+      &:hover {
+        background-color: var(--secondary);
+        color: var(--primary);
+      }
+    }
+  }
+
+  label {
+
+    span {
+      display: block;
+      margin-bottom: 1.5rem;
+    }
+  }
+
+  .input-wrap {
+    margin-bottom: 3rem;
+
+    &.text {
+      label {
+        position: relative;
+        width: 100%;
+        
+    
+        &:after {
+          content: "";
+          position: absolute;
+          transition: all 300ms;
+          bottom: 0;
+          left: 0;
+          width: 0;
+          height: 2px;
+          background-color: var(--secondary);
+        }
+    
+    
+        span {
+          transform: translateY(4rem);
+          display: block;
+          transition: all 300ms;
+          pointer-events: none;
+          margin: 0
+        }
+    
+        &:focus, &:active, &:focus-within {
+          span {
+            transform: translateY(0);
+          }
+    
+          &:after {
+            width: 100%;
+          }
+        }
+      }
+    }
+  }
+
+  input[type=text], input[type=email], input[type=password], input[type=url], textarea {
+    position: relative;
+    background-color: transparent;
+    border: none;
+    color: #fff;
+    height: 5rem;
+    border-bottom: 1px solid #fff;
+    width: 100%;
+    outline: none;
+
+    ::placeholder {
+      color: #fff;
+    }
+  }
 `;
 
 const InnerStyles = styled.div`
@@ -100,7 +188,35 @@ const InnerStyles = styled.div`
 	// padding: 2rem;
 `;
 
+// Find if there is a logged in User at this high level in the App
+const CURRENT_USER_QUERY = gql`
+	query {
+		authenticatedItem {
+			... on User {
+				id
+				name
+				email
+			}
+		}
+	}
+`;
+
 export default function Page({ children }) {
+	const { user, setUser } = useContext(UserContext);
+	const { data, loading, error } = useQuery(CURRENT_USER_QUERY);
+
+	if (data) {
+		setUser(data?.authenticatedItem);
+	}
+
+	if (loading) {
+		return <p>Loading...</p>;
+	}
+
+	if (error) {
+		console.log(error);
+	}
+
 	return (
 		<div>
 			<GlobalStyles />

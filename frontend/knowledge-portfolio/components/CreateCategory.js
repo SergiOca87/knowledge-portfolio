@@ -1,5 +1,5 @@
 /* eslint-disable react/react-in-jsx-scope */
-import { CURRENT_USER_QUERY, useUser } from './User';
+// import { CURRENT_USER_QUERY, useUser } from './User';
 import { USER_CATEGORIES_QUERY, getCategories } from './UserCategories';
 import { useMutation, useQuery } from '@apollo/client';
 import gql from 'graphql-tag';
@@ -18,7 +18,7 @@ const CREATE_CATEGORY_MUTATION = gql`
 `;
 
 export default function CreateCategory() {
-	const user = useUser();
+	// const user = useUser();
 	const userCategories = getCategories();
 
 	const [inputs, setInputs] = useState({

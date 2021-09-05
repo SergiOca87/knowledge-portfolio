@@ -57,7 +57,7 @@ export default function SignUp() {
 	// 		: undefined;
 	return (
 		<form method="POST" onSubmit={handleSubmit}>
-			<h2>Register an Account</h2>
+			<h2>Register</h2>
 			{/* //TODO: This error should be a toast */}
 			{data?.error && <p>data.error</p>}
 			<fieldset>

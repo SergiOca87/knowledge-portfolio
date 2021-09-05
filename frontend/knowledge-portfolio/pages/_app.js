@@ -1,6 +1,7 @@
 import Layout from '../components/Layout';
-import React from 'react';
+import React, { useContext } from 'react';
 import NProgress from 'nprogress';
+import '../components/styles/nprogress.css';
 import Router from 'next/router';
 import Page from '../components/Page';
 import {
@@ -11,6 +12,7 @@ import {
 	gql,
 	createHttpLink,
 } from '@apollo/client';
+import UserContext, { UserProvider } from '../context/UserContext';
 
 Router.events.on('routeChangeStart', () => NProgress.start());
 Router.events.on('routeChangeComplete', () => NProgress.done());
@@ -31,9 +33,11 @@ function MyApp({ Component, pageProps }) {
 	return (
 		<>
 			<ApolloProvider client={client}>
-				<Page>
-					<Component {...pageProps} />
-				</Page>
+				<UserProvider>
+					<Page>
+						<Component {...pageProps} />
+					</Page>
+				</UserProvider>
 			</ApolloProvider>
 		</>
 	);
