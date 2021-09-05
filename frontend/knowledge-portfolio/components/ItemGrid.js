@@ -32,7 +32,7 @@ export const USER_ITEMS_QUERY = gql`
 				title
 				description
 				status
-				category {
+				categories {
 					id
 					name
 				}

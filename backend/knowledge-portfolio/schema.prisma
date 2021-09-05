@@ -21,27 +21,25 @@ model User {
 }
 
 model Item {
-  id                String    @id @default(cuid())
+  id                String     @id @default(cuid())
   title             String?
   status            String?
   description       String?
   singlePage        String?
   singlePageContent Json?
   image             String?
-  author            User?     @relation("Item_author", fields: [authorId], references: [id])
-  authorId          String?   @map("author")
-  category          Category? @relation("Item_category", fields: [categoryId], references: [id])
-  categoryId        String?   @map("category")
+  author            User?      @relation("Item_author", fields: [authorId], references: [id])
+  authorId          String?    @map("author")
+  categories        Category[] @relation("Category_items_Item_categories")
   url               String?
 
   @@index([authorId])
-  @@index([categoryId])
 }
 
 model Category {
   id       String  @id @default(cuid())
   name     String?
-  items    Item[]  @relation("Item_category")
+  items    Item[]  @relation("Category_items_Item_categories")
   author   User?   @relation("Category_author", fields: [authorId], references: [id])
   authorId String? @map("author")
 

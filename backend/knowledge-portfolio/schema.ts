@@ -68,9 +68,9 @@ export const lists = createSchema({
         //   inlineCreate: { fields: ['name', 'email'] },
         // },
       }),
-      category: relationship({
+      categories: relationship({
         ref: 'Category.items',
-        many: false,
+        many: true,
         // ui: {
         //   displayMode: 'cards',
         //   cardFields: ['name'],
@@ -114,7 +114,7 @@ export const lists = createSchema({
     fields: {
       name: text(),
       items: relationship({
-        ref: 'Item.category',
+        ref: 'Item.categories',
         many: true,
       }),
       author: relationship({

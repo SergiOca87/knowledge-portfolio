@@ -218,7 +218,28 @@ type Item {
   singlePageContent: Item_singlePageContent_DocumentField
   image: String
   author: User
-  category: Category
+  categories(
+    where: CategoryWhereInput! = {}
+    search: String
+    sortBy: [SortCategoriesBy!]
+      @deprecated(reason: "sortBy has been deprecated in favour of orderBy")
+    orderBy: [CategoryOrderByInput!]! = []
+    first: Int
+    skip: Int! = 0
+  ): [Category!]
+  _categoriesMeta(
+    where: CategoryWhereInput! = {}
+    search: String
+    sortBy: [SortCategoriesBy!]
+      @deprecated(reason: "sortBy has been deprecated in favour of orderBy")
+    orderBy: [CategoryOrderByInput!]! = []
+    first: Int
+    skip: Int! = 0
+  ): _QueryMeta
+    @deprecated(
+      reason: "This query will be removed in a future version. Please use categoriesCount instead."
+    )
+  categoriesCount(where: CategoryWhereInput! = {}): Int
   url: String
 }
 
@@ -329,8 +350,9 @@ input ItemWhereInput {
   image_not_in: [String]
   author: UserWhereInput
   author_is_null: Boolean
-  category: CategoryWhereInput
-  category_is_null: Boolean
+  categories_every: CategoryWhereInput
+  categories_some: CategoryWhereInput
+  categories_none: CategoryWhereInput
   url: String
   url_not: String
   url_contains: String
@@ -390,7 +412,7 @@ input ItemUpdateInput {
   singlePageContent: JSON
   image: String
   author: UserRelateToOneInput
-  category: CategoryRelateToOneInput
+  categories: CategoryRelateToManyInput
   url: String
 }
 
@@ -398,13 +420,6 @@ input UserRelateToOneInput {
   create: UserCreateInput
   connect: UserWhereUniqueInput
   disconnect: UserWhereUniqueInput
-  disconnectAll: Boolean
-}
-
-input CategoryRelateToOneInput {
-  create: CategoryCreateInput
-  connect: CategoryWhereUniqueInput
-  disconnect: CategoryWhereUniqueInput
   disconnectAll: Boolean
 }
 
@@ -421,7 +436,7 @@ input ItemCreateInput {
   singlePageContent: JSON
   image: String
   author: UserRelateToOneInput
-  category: CategoryRelateToOneInput
+  categories: CategoryRelateToManyInput
   url: String
 }
 

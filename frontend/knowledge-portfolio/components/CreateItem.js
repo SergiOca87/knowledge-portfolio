@@ -30,33 +30,32 @@ const CREATE_ITEM_MUTATION = gql`
 	mutation CREATE_ITEM_MUTATION(
 		$title: String!
 		$description: String
-		$status: String # $categories: # $url: String # $user: User # $completed: Boolean
+		$status: String
 		$author: ID!
 		$singlePage: String
 		$image: String
-		$category: ID
+		$categories: [CategoryWhereUniqueInput]
 		$url: String
 	) {
 		createItem(
 			data: {
 				title: $title
 				description: $description
-				# category: $category
-				# url: $url
 				author: { connect: { id: $author } }
 				status: $status
 				singlePage: $singlePage
 				image: $image
-				# This creates a category as well
-				# category: { create: { category: $category } }
-				# category: { connect: { id: $category } }
-				category: { connect: { id: $category } }
+				# categories: { connect: { id: $categories } }
+				categories: { connect: $categories }
 				url: $url
 			}
 		) {
 			# Do we need to return more things?
 			id
 			title
+			categories {
+				name
+			}
 			# description
 		}
 	}
@@ -73,7 +72,7 @@ export default function CreateItem() {
 		status: 'finished',
 		singlePage: 'false',
 		image: '',
-		category: '',
+		categories: [],
 		url: '',
 	});
 
@@ -96,24 +95,35 @@ export default function CreateItem() {
 
 	// Adds changes to state
 	const handleChange = (e) => {
-		let { value, name } = e.target;
+		let { value, name, selectedOptions } = e.target;
 
-		setInputs({
-			...inputs,
-			[name]: value,
-		});
+		if (name === 'categories') {
+			let values = Array.from(selectedOptions).map((option) => {
+				return { id: option.value };
+			});
+
+			setInputs({
+				...inputs,
+				categories: [...values],
+			});
+		} else {
+			setInputs({
+				...inputs,
+				[name]: value,
+			});
+		}
 	};
 
 	// Submit current state to create a new Item
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 
+		console.log(inputs);
+
 		if (error) {
 			console.log(error);
 		} else {
 			const res = await createItem();
-
-			console.log('success', res);
 
 			//TODO: Successfull Toast
 
@@ -122,7 +132,7 @@ export default function CreateItem() {
 				title: '',
 				description: '',
 				status: 'finished',
-				category: '',
+				categories: '',
 			});
 		}
 
@@ -177,13 +187,17 @@ export default function CreateItem() {
 				</div>
 				<div className="input-wrap">
 					{userCategories && (
-						<label htmlFor="category">
-							<span>Category</span>
+						<label htmlFor="categories">
+							<span>Categories</span>
 							<p className="tip">
 								If you need a new category you can create it{' '}
 								<Link href="/create-category"> here</Link>
 							</p>
-							<select name="category" onChange={handleChange}>
+							<select
+								name="categories"
+								multiple={true}
+								onChange={handleChange}
+							>
 								<option value="Uncategorized">
 									Uncategorized
 								</option>

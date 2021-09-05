@@ -23,6 +23,21 @@ const StyledItem = styled.div`
 
 	.details {
 		padding: 2rem;
+
+		.categories {
+			display: flex;
+			flex-wrap: wrap;
+
+			div {
+				border: 1px solid var(--secondary);
+				font-size: 1.2rem;
+				text-transform: uppercase;
+				padding: 0.8rem 1.5rem;
+				letter-spacing: 1px;
+				font-family: 'Montserrat-Medium';
+				margin-right: 0.5rem;
+			}
+		}
 	}
 `;
 
@@ -36,6 +51,7 @@ const StyledItem = styled.div`
 // Completed?
 
 export default function Item({ item }) {
+	console.log(item);
 	return (
 		<StyledItem>
 			<div className="title">
@@ -44,16 +60,28 @@ export default function Item({ item }) {
 			<div className="details">
 				<p>{item.description}</p>
 				<p>Status: {item.status}</p>
-				<p>Category: {item.category.name}</p>
-				{/* <div class="categories">
-				{item.category.map((singleCategory) => {
-					return (
-						<p key={singleCategory.id}>{singleCategory.name}</p>
-					);
-				})}
-			</div> */}
+				{/* <p>Category: {item.category.name}</p> */}
+				{item.categories.length ? (
+					<>
+						<p>
+							{item.categories.length > 1
+								? 'Categories'
+								: 'Category'}
+						</p>
+						<div class="categories">
+							{item.categories.map((category) => {
+								return (
+									<div key={category.id}>
+										<span>{category.name}</span>
+									</div>
+								);
+							})}
+						</div>
+					</>
+				) : (
+					''
+				)}
 				<Link href={`/items/${item.id}`}>More Details</Link>
-				//TODO: Is the owner of the item and is private page? Show
 				<div className="buttons">
 					<Link
 						href={{
