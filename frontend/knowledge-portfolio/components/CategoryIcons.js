@@ -15,11 +15,22 @@ const StyledIcons = styled.div`
 		display: flex;
 		justify-content: center;
 		align-items: center;
+		cursor: pointer;
+
+		svg {
+			transition: all 200ms;
+		}
+
+		&:hover {
+			svg {
+				fill: var(--secondary);
+			}
+		}
 	}
 `;
 
-export default function CategoryIcons() {
-	const iconsArr = [];
+export default function CategoryIcons({ search }) {
+	let iconsArr = [];
 
 	for (let icon in FontAwesome) {
 		if (icon.includes('Fa')) {
@@ -27,17 +38,49 @@ export default function CategoryIcons() {
 		}
 	}
 
-	return (
-		<div className="icons-wrap">
-			{iconsArr.map((icon) => {
-				const IconName = FontAwesome[icon];
+	// if (search.length) {
+	// 	iconsArr = iconsArr.filter((icon) =>
+	// 		icon.toLowerCase().includes(search)
+	// 	);
+	// }
 
-				return (
-					<div className="icon" data-name={icon} key={icon}>
-						<IconName />
-					</div>
-				);
-			})}
-		</div>
+	return (
+		<StyledIcons>
+			<div className="icons-wrap">
+				{search.length
+					? iconsArr
+							.filter((icon) =>
+								icon
+									.toLowerCase()
+									.includes(search.toLowerCase())
+							)
+							.map((icon) => {
+								const IconName = FontAwesome[icon];
+
+								return (
+									<div
+										className="icon"
+										data-name={icon}
+										key={icon}
+									>
+										<IconName />
+									</div>
+								);
+							})
+					: iconsArr.map((icon) => {
+							const IconName = FontAwesome[icon];
+
+							return (
+								<div
+									className="icon"
+									data-name={icon}
+									key={icon}
+								>
+									<IconName />
+								</div>
+							);
+					  })}
+			</div>
+		</StyledIcons>
 	);
 }

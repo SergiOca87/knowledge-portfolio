@@ -40,7 +40,7 @@ const CREATE_CATEGORY_MUTATION = gql`
 	mutation CREATE_CATEGORY_MUTATION(
 		$name: String!
 		$author: ID!
-		$name: String
+		$icon: String
 	) {
 		createCategory(
 			data: {
@@ -58,20 +58,14 @@ const CREATE_CATEGORY_MUTATION = gql`
 export default function CreateCategory() {
 	const { user } = useContext(UserContext);
 	const userCategories = getCategories();
-	const { icon, setIcon } = useState(null);
+	const [iconSearch, setIconSearch] = useState('');
 
-	//TODO: This should be a separate component where the icons are also rendered in a grid
-	const iconsArr = [];
-
-	for (let icon in FontAwesome) {
-		if (icon.includes('Fa')) {
-			iconsArr.push(icon);
-		}
-	}
+	console.log(iconSearch);
 
 	const [inputs, setInputs] = useState({
 		name: '',
 		author: user ? user : '',
+		icon: '',
 	});
 
 	useEffect(() => {
@@ -98,18 +92,27 @@ export default function CreateCategory() {
 		});
 	};
 
-	//TODO: Add this icon to the category inputs
 	const handleIconClick = (e) => {
 		const iconName = e.target.closest('DIV').dataset.name;
-		setIcon(iconName);
+
+		setInputs({
+			...inputs,
+			icon: iconName,
+		});
+	};
+
+	const handleIconSearch = (e) => {
+		setIconSearch(e.target.value);
+		console.log(iconSearch);
 	};
 
 	// Submit current state to create a new Item
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 
+		//TODO: Success or error? Add toasts
+		//TODO: Show the selected Icon, only 1 at a time, the one on state
 		const res = await createCategory();
-		console.log(res);
 	};
 
 	return (
@@ -128,12 +131,20 @@ export default function CreateCategory() {
 						</label>
 					</div>
 					<div className="input-wrap text">
-						<span>Category Icon</span>
-						<p>Category Icon Toggler</p>
 						<Container>
-							<p>Icons</p>
+							<div className="icons-top-bar">
+								<p>Icons</p>
+								<input
+									type="text"
+									value={iconSearch}
+									placeholder="Search Icon"
+									onChange={(e) =>
+										setIconSearch(e.target.value)
+									}
+								/>
+							</div>
 							<div onClick={handleIconClick}>
-								<CategoryIcons />
+								<CategoryIcons search={iconSearch} />
 							</div>
 						</Container>
 					</div>
