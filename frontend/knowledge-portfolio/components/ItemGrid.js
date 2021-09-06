@@ -66,7 +66,7 @@ export default function ItemGrid({ id }) {
 				{data.User.items.map((item) => {
 					console.log('itemGrid', item);
 					return (
-						<Col lg={6}>
+						<Col lg={6} className="mb-4">
 							<Item key={item.id} item={item} />
 						</Col>
 					);

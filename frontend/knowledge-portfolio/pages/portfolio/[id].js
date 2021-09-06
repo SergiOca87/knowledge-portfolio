@@ -117,9 +117,20 @@ export default function UserPortfolioPage() {
 		<Main>
 			<Container>
 				<StyledUserCard>
-					<div className="avatar">
-						<FaUser />
-					</div>
+					{/* //TODO: ADD this functionality when Cloudinary support is
+					enabled in Keystone 6 */}
+					{user?.image ? (
+						<div
+							className="avatar"
+							css={`
+								background-image: ${user.image};
+							`}
+						></div>
+					) : (
+						<div className="avatar">
+							<FaUser />
+						</div>
+					)}
 					<h1>Welcome to your portfolio, {user?.name}</h1>
 				</StyledUserCard>
 				<UserControls>

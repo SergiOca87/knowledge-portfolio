@@ -2,31 +2,69 @@ import styled from 'styled-components';
 import React from 'react';
 import Link from 'next/link';
 import DeleteItem from './DeleteItem';
+import { Button } from 'react-bootstrap';
 
 const StyledItem = styled.div`
-	// padding: 2rem;
-	// box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+	height: 100%;
 	background-color: var(--tertiary);
-	margin-bottom: 1.5rem;
+	display: flex;
+	flex-direction: column;
 
 	.title {
 		padding: 2rem;
-		background-color: var(--secondary);
+		background-color: var(--tertiary);
+		border-bottom: 1px solid var(--secondary);
 
 		h4 {
 			margin: 0;
 			color: var(--primary);
+			color: #fff;
 			font-family: 'Montserrat-Medium';
 			font-size: 2.2rem;
+		}
+	}
+
+	.buttons {
+		display: flex;
+		padding: 2rem;
+		margin-top: auto;
+		background-color: var(--primary);
+
+		.btn {
+			margin-right: 0.5rem;
 		}
 	}
 
 	.details {
 		padding: 2rem;
 
+		.separator {
+			display: flex;
+			justify-content: center;
+			flex-direction: column;
+			padding: 2rem 0;
+			align-items: flex-start;
+
+			&:not(:last-child) {
+				border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+			}
+
+			h5 {
+				text-transform: uppercase;
+				letter-spacing: 1px;
+				margin-bottom: 0.5rem;
+				color: var(--secondary);
+			}
+
+			p {
+				margin: 0;
+			}
+		}
+
 		.categories {
 			display: flex;
 			flex-wrap: wrap;
+			margin-top: 0.5rem;
 
 			div {
 				border: 1px solid var(--secondary);
@@ -58,16 +96,29 @@ export default function Item({ item }) {
 				<h4>{item.title}</h4>
 			</div>
 			<div className="details">
-				<p>{item.description}</p>
-				<p>Status: {item.status}</p>
+				<div className="separator">
+					<h5>Description:</h5>
+					<p>{item.description}</p>
+				</div>
+
+				<div className="separator">
+					<h5>Status:</h5>
+					<p
+						css={css`
+							text-transform: capitalize;
+						`}
+					>
+						{item.status}
+					</p>
+				</div>
 				{/* <p>Category: {item.category.name}</p> */}
 				{item.categories.length ? (
-					<>
-						<p>
+					<div className="separator">
+						<h5>
 							{item.categories.length > 1
-								? 'Categories'
-								: 'Category'}
-						</p>
+								? 'Categories:'
+								: 'Category:'}
+						</h5>
 						<div class="categories">
 							{item.categories.map((category) => {
 								return (
@@ -77,24 +128,33 @@ export default function Item({ item }) {
 								);
 							})}
 						</div>
-					</>
+					</div>
 				) : (
 					''
 				)}
-				<Link href={`/items/${item.id}`}>More Details</Link>
-				<div className="buttons">
-					<Link
-						href={{
-							pathname: 'update',
-							query: {
-								id: item.id,
-							},
-						}}
-					>
-						Edit Item
+				<div className="separator">
+					<Link href={`/items/${item.id}`}>
+						<Button variant="transparent-secondary">
+							More Details
+						</Button>
 					</Link>
-					<DeleteItem id={item.id}>Delete Item</DeleteItem>
 				</div>
+			</div>
+			<div className="buttons">
+				<Link
+					href={{
+						pathname: '/update',
+						query: {
+							id: item.id,
+						},
+					}}
+				>
+					<Button variant="secondary">Edit Item</Button>
+				</Link>
+				<DeleteItem id={item.id} className="btn">
+					{' '}
+					Delete Item
+				</DeleteItem>
 			</div>
 		</StyledItem>
 	);

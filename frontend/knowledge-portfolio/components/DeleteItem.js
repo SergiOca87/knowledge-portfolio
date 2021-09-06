@@ -8,6 +8,7 @@ import gql from 'graphql-tag';
 import Router from 'next/router';
 import { USER_ITEMS_QUERY } from './ItemGrid';
 import UserContext from '../context/UserContext';
+import { Button } from 'react-bootstrap';
 
 const DELETE_ITEM_MUTATION = gql`
 	mutation DELETE_ITEM_MUTATION($id: ID!) {
@@ -50,8 +51,8 @@ export default function DeleteItem({ id, children }) {
 	};
 
 	return (
-		<button onClick={handleDelete} disabled={loading}>
+		<Button variant="secondary" onClick={handleDelete} disabled={loading}>
 			{deleteConfirm.counter === 0 ? children : deleteConfirm.message}
-		</button>
+		</Button>
 	);
 }

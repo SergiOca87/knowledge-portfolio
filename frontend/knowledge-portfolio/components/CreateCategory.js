@@ -3,13 +3,51 @@
 import { USER_CATEGORIES_QUERY, getCategories } from './UserCategories';
 import { useMutation, useQuery } from '@apollo/client';
 import gql from 'graphql-tag';
-import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { useContext, useEffect, useState } from 'react';
+import UserContext from '../context/UserContext';
+import styled from 'styled-components';
+import { Col, Container, Row } from 'react-bootstrap';
+import * as FontAwesome from 'react-icons/fa';
+import CategoryIcons from './CategoryIcons';
+
+const StyledForm = styled.form`
+	max-width: 70rem;
+	margin: 4rem auto;
+	padding: 2rem;
+	background-color: var(--tertiary);
+
+	.tip {
+		font-size: 1.4rem;
+	}
+
+	.icons-wrap {
+		display: flex;
+		flex-wrap: wrap;
+	}
+
+	.icon {
+		font-size: 3rem;
+		width: 5rem;
+		height: 5rem;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+`;
 
 const CREATE_CATEGORY_MUTATION = gql`
-	mutation CREATE_CATEGORY_MUTATION($name: String!, $author: ID!) {
+	mutation CREATE_CATEGORY_MUTATION(
+		$name: String!
+		$author: ID!
+		$name: String
+	) {
 		createCategory(
-			data: { name: $name, author: { connect: { id: $author } } }
+			data: {
+				name: $name
+				author: { connect: { id: $author } }
+				icon: $icon
+			}
 		) {
 			id
 			name
@@ -18,8 +56,18 @@ const CREATE_CATEGORY_MUTATION = gql`
 `;
 
 export default function CreateCategory() {
-	// const user = useUser();
+	const { user } = useContext(UserContext);
 	const userCategories = getCategories();
+	const { icon, setIcon } = useState(null);
+
+	//TODO: This should be a separate component where the icons are also rendered in a grid
+	const iconsArr = [];
+
+	for (let icon in FontAwesome) {
+		if (icon.includes('Fa')) {
+			iconsArr.push(icon);
+		}
+	}
 
 	const [inputs, setInputs] = useState({
 		name: '',
@@ -32,8 +80,6 @@ export default function CreateCategory() {
 			author: user?.id,
 		});
 	}, [user]);
-
-	console.log('inputs', inputs);
 
 	const [createCategory, { loading, error, data }] = useMutation(
 		CREATE_CATEGORY_MUTATION,
@@ -52,36 +98,47 @@ export default function CreateCategory() {
 		});
 	};
 
+	//TODO: Add this icon to the category inputs
+	const handleIconClick = (e) => {
+		const iconName = e.target.closest('DIV').dataset.name;
+		setIcon(iconName);
+	};
+
 	// Submit current state to create a new Item
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 
-		console.log('submit', inputs);
-
 		const res = await createCategory();
 		console.log(res);
-
-		// Clear Form
-		setInputs({
-			name: '',
-			author: user ? user : '',
-		});
 	};
 
 	return (
 		<>
-			<form method="POST" onSubmit={handleSubmit}>
-				<label htmlFor="title">
-					<span>Title</span>
-					<input
-						required
-						type="text"
-						name="name"
-						onChange={handleChange}
-					/>
-				</label>
+			<StyledForm method="POST" onSubmit={handleSubmit}>
+				<fieldset disabled={loading} aria-busy={loading}>
+					<div className="input-wrap text">
+						<label htmlFor="title">
+							<span>Category Name</span>
+							<input
+								required
+								type="text"
+								name="name"
+								onChange={handleChange}
+							/>
+						</label>
+					</div>
+					<div className="input-wrap text">
+						<span>Category Icon</span>
+						<p>Category Icon Toggler</p>
+						<Container>
+							<p>Icons</p>
+							<div onClick={handleIconClick}>
+								<CategoryIcons />
+							</div>
+						</Container>
+					</div>
 
-				{/* <label htmlFor="completed">
+					{/* <label htmlFor="completed">
 				<span>Completed?</span>
 				<input
 					type="checkbox"
@@ -89,20 +146,20 @@ export default function CreateCategory() {
 					onChange={handleChange}
 				/>
 			</label> */}
-				<input type="submit" value="submit" />
-			</form>
+					<input type="submit" value="submit" />
+				</fieldset>
+			</StyledForm>
 
-			<p>Existing Categories: </p>
-			{userCategories &&
-				userCategories?.allCategories?.map((category) => {
-					return (
-						<p key={category.id}>
-							<Link href={`/categories/${category.id}`}>
-								{category.name}
-							</Link>
-						</p>
-					);
-				})}
+			{userCategories && <p>Existing Categories: </p>}
+			{userCategories?.allCategories?.map((category) => {
+				return (
+					<p key={category.id}>
+						<Link href={`/categories/${category.id}`}>
+							{category.name}
+						</Link>
+					</p>
+				);
+			})}
 		</>
 	);
 }

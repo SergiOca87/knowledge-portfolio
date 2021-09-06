@@ -128,6 +128,7 @@ export const lists = createSchema({
         //   inlineCreate: { fields: ['name', 'email'] },
         // },
       }),
+      icon: text()
     },
   }),
 });

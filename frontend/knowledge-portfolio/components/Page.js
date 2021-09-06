@@ -99,15 +99,16 @@ const GlobalStyles = createGlobalStyle`
 
   .btn {
     text-transform: uppercase;
-    padding: 1.5rem 2.5rem;
-    font-size: 1.8rem;
+    padding: 1.2rem 2rem;
+    font-size: 1.4rem;
     border-radius: 0;
+    letter-spacing: 1px;
     color: #fff;
     border: none;
    
     &-transparent-secondary {
       background-color: transparent;
-      border: 2px solid var(--secondary);
+      border: 1px solid var(--secondary);
   
       &:hover {
         background-color: var(--secondary);

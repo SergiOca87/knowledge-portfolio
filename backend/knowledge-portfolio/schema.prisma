@@ -42,6 +42,7 @@ model Category {
   items    Item[]  @relation("Category_items_Item_categories")
   author   User?   @relation("Category_author", fields: [authorId], references: [id])
   authorId String? @map("author")
+  icon     String?
 
   @@index([authorId])
 }

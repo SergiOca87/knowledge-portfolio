@@ -470,6 +470,7 @@ type Category {
     )
   itemsCount(where: ItemWhereInput! = {}): Int
   author: User
+  icon: String
 }
 
 input CategoryWhereInput {
@@ -506,6 +507,24 @@ input CategoryWhereInput {
   items_none: ItemWhereInput
   author: UserWhereInput
   author_is_null: Boolean
+  icon: String
+  icon_not: String
+  icon_contains: String
+  icon_not_contains: String
+  icon_starts_with: String
+  icon_not_starts_with: String
+  icon_ends_with: String
+  icon_not_ends_with: String
+  icon_i: String
+  icon_not_i: String
+  icon_contains_i: String
+  icon_not_contains_i: String
+  icon_starts_with_i: String
+  icon_not_starts_with_i: String
+  icon_ends_with_i: String
+  icon_not_ends_with_i: String
+  icon_in: [String]
+  icon_not_in: [String]
 }
 
 input CategoryWhereUniqueInput {
@@ -517,17 +536,21 @@ enum SortCategoriesBy {
   id_DESC
   name_ASC
   name_DESC
+  icon_ASC
+  icon_DESC
 }
 
 input CategoryOrderByInput {
   id: OrderDirection
   name: OrderDirection
+  icon: OrderDirection
 }
 
 input CategoryUpdateInput {
   name: String
   items: ItemRelateToManyInput
   author: UserRelateToOneInput
+  icon: String
 }
 
 input CategoriesUpdateInput {
@@ -539,6 +562,7 @@ input CategoryCreateInput {
   name: String
   items: ItemRelateToManyInput
   author: UserRelateToOneInput
+  icon: String
 }
 
 input CategoriesCreateInput {
