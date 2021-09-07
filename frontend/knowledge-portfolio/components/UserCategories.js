@@ -9,11 +9,11 @@ export const USER_CATEGORIES_QUERY = gql`
 		allCategories(where: { author: { id: $id } }) {
 			id
 			name
+			icon
 		}
 	}
 `;
 
-//TODO: Once authentication is set, this should be the current user
 export function getCategories() {
 	const { user } = useContext(UserContext);
 

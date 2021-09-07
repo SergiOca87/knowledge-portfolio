@@ -125,6 +125,10 @@ const GlobalStyles = createGlobalStyle`
     }
   }
 
+  .flex-fields {
+    display: flex;
+  }
+
   .input-wrap {
     margin-bottom: 3rem;
 

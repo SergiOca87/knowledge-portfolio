@@ -35,6 +35,7 @@ export const USER_ITEMS_QUERY = gql`
 				categories {
 					id
 					name
+					icon
 				}
 			}
 		}

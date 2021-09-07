@@ -13,7 +13,8 @@ import { USER_ITEMS_QUERY } from './ItemGrid';
 import Router from 'next/router';
 import UserContext from '../context/UserContext';
 import styled, { css } from 'styled-components';
-import { Button } from 'react-bootstrap';
+import { Accordion, Button, useAccordionButton } from 'react-bootstrap';
+import DraftEditor from './DraftEditor';
 
 const StyledForm = styled.form`
 	max-width: 70rem;
@@ -35,6 +36,7 @@ const CREATE_ITEM_MUTATION = gql`
 		$singlePage: String
 		$image: String
 		$categories: [CategoryWhereUniqueInput]
+		$urlTitle: String
 		$url: String
 	) {
 		createItem(
@@ -47,6 +49,7 @@ const CREATE_ITEM_MUTATION = gql`
 				image: $image
 				# categories: { connect: { id: $categories } }
 				categories: { connect: $categories }
+				urlTitle: $urlTitle
 				url: $url
 			}
 		) {
@@ -55,6 +58,8 @@ const CREATE_ITEM_MUTATION = gql`
 			title
 			categories {
 				name
+				id
+				icon
 			}
 			# description
 		}
@@ -73,6 +78,7 @@ export default function CreateItem() {
 		singlePage: 'false',
 		image: '',
 		categories: [],
+		urlTitle: '',
 		url: '',
 	});
 
@@ -114,6 +120,23 @@ export default function CreateItem() {
 		}
 	};
 
+	//Single Page Details Drawer
+	function CustomToggle({ children, eventKey }) {
+		const decoratedOnClick = useAccordionButton(eventKey, () =>
+			console.log('totally custom!')
+		);
+
+		return (
+			<button
+				type="button"
+				style={{ backgroundColor: 'pink' }}
+				onClick={decoratedOnClick}
+			>
+				{children}
+			</button>
+		);
+	}
+
 	// Submit current state to create a new Item
 	const handleSubmit = async (e) => {
 		e.preventDefault();
@@ -135,12 +158,6 @@ export default function CreateItem() {
 				categories: '',
 			});
 		}
-
-		//TODO: Redirect to single item page?
-		//Redirect the user
-		// Router.push({
-		// 	pathname: `/portfolio/${data.createItem.id}`,
-		// });
 
 		//TODO: Use React Toasts for errors
 		// console.log(error);
@@ -226,7 +243,12 @@ export default function CreateItem() {
 						</select>
 					</label>
 				</div>
-				<div className="input-wrap">
+				<div
+					className="input-wrap"
+					onClick={() => {
+						console.log('open drawer');
+					}}
+				>
 					<label htmlFor="singlePage">
 						<span>Single Page</span>
 						<p className="tip">
@@ -255,16 +277,35 @@ export default function CreateItem() {
 						</div>
 					</label>
 				</div>
-				<div className="input-wrap text">
-					<label htmlFor="url">
-						<span>URL</span>
-						<input
-							type="url"
-							name="url"
-							value={inputs.url}
-							onChange={handleChange}
-						/>
-					</label>
+				<Accordion defaultActiveKey="0">
+					<CustomToggle eventKey="0">Click me!</CustomToggle>
+					<Accordion.Collapse eventKey="0">
+						<DraftEditor />
+					</Accordion.Collapse>
+				</Accordion>
+				<div className="flex-fields">
+					<div className="input-wrap text">
+						<label htmlFor="url">
+							<span>URL Title</span>
+							<input
+								type="text"
+								name="urlTitle"
+								value={inputs.urlTitle}
+								onChange={handleChange}
+							/>
+						</label>
+					</div>
+					<div className="input-wrap text">
+						<label htmlFor="url">
+							<span>URL</span>
+							<input
+								type="url"
+								name="url"
+								value={inputs.url}
+								onChange={handleChange}
+							/>
+						</label>
+					</div>
 				</div>
 				<Button
 					type="submit"

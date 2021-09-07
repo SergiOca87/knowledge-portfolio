@@ -80,6 +80,7 @@ export const lists = createSchema({
         //   inlineCreate: { fields: ['name'] },
         // },
       }),
+      urlTitle: text(),
       url: text()
     },
   }),

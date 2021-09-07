@@ -38,12 +38,6 @@ export default function CategoryIcons({ search }) {
 		}
 	}
 
-	// if (search.length) {
-	// 	iconsArr = iconsArr.filter((icon) =>
-	// 		icon.toLowerCase().includes(search)
-	// 	);
-	// }
-
 	return (
 		<StyledIcons>
 			<div className="icons-wrap">

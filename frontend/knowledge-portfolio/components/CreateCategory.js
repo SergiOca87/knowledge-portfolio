@@ -51,6 +51,7 @@ const CREATE_CATEGORY_MUTATION = gql`
 		) {
 			id
 			name
+			icon
 		}
 	}
 `;
@@ -113,6 +114,8 @@ export default function CreateCategory() {
 		//TODO: Success or error? Add toasts
 		//TODO: Show the selected Icon, only 1 at a time, the one on state
 		const res = await createCategory();
+
+		console.log(res);
 	};
 
 	return (
