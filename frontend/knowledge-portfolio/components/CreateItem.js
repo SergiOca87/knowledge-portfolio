@@ -14,7 +14,8 @@ import Router from 'next/router';
 import UserContext from '../context/UserContext';
 import styled, { css } from 'styled-components';
 import { Accordion, Button, useAccordionButton } from 'react-bootstrap';
-import DraftEditor from './DraftEditor';
+
+import Editor from './Editor';
 
 const StyledForm = styled.form`
 	max-width: 70rem;
@@ -243,46 +244,55 @@ export default function CreateItem() {
 						</select>
 					</label>
 				</div>
-				<div
-					className="input-wrap"
-					onClick={() => {
-						console.log('open drawer');
-					}}
-				>
-					<label htmlFor="singlePage">
-						<span>Single Page</span>
-						<p className="tip">
-							If "Single Page" is enabled your portfolio items
-							will be clickable and will redirect the user to a
-							detail page with a more detailed view of your
-							portfolio item.
-						</p>
-						<div className="d-flex align-center">
-							<span
-								css={css`
-									margin: 0;
-									font-size: 1.4rem;
-									margin-right: 1.5rem;
-								`}
-							>
-								Enable
-							</span>
-							<input
-								type="checkbox"
-								id="singlePage"
-								name="singlePage"
-								value={inputs.singlePage}
-								onChange={handleChange}
-							/>
-						</div>
-					</label>
-				</div>
-				<Accordion defaultActiveKey="0">
-					<CustomToggle eventKey="0">Click me!</CustomToggle>
+				<Accordion>
+					<div
+						className="input-wrap"
+						onClick={() => {
+							console.log('open drawer');
+						}}
+					>
+						<label>
+							<span>Single Page</span>
+							<p className="tip">
+								Enable "Single Page" to use the advanced editor
+								and create content for a single page that the
+								user will be able to access via a "More Details"
+								button that will be added to your portfolio
+								item.
+							</p>
+							<div className="d-flex align-center">
+								<span
+									css={css`
+										margin: 0;
+										font-size: 1.4rem;
+										margin-right: 1.5rem;
+									`}
+								>
+									Enable
+								</span>
+								<CustomToggle eventKey="0">
+									<input
+										type="checkbox"
+										id="singlePage"
+										name="singlePage"
+										value={inputs.singlePage}
+										onChange={handleChange}
+									/>
+								</CustomToggle>
+							</div>
+						</label>
+					</div>
+
 					<Accordion.Collapse eventKey="0">
-						<DraftEditor />
+						<Editor />
 					</Accordion.Collapse>
 				</Accordion>
+
+				<p className="tip">
+					Use the URL field to direct the user to an external URL
+					where you can show more of your portfolio item. URL Title is
+					the clickable text that the user will see.
+				</p>
 				<div className="flex-fields">
 					<div className="input-wrap text">
 						<label htmlFor="url">

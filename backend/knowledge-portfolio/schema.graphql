@@ -240,6 +240,7 @@ type Item {
       reason: "This query will be removed in a future version. Please use categoriesCount instead."
     )
   categoriesCount(where: CategoryWhereInput! = {}): Int
+  urlTitle: String
   url: String
 }
 
@@ -353,6 +354,24 @@ input ItemWhereInput {
   categories_every: CategoryWhereInput
   categories_some: CategoryWhereInput
   categories_none: CategoryWhereInput
+  urlTitle: String
+  urlTitle_not: String
+  urlTitle_contains: String
+  urlTitle_not_contains: String
+  urlTitle_starts_with: String
+  urlTitle_not_starts_with: String
+  urlTitle_ends_with: String
+  urlTitle_not_ends_with: String
+  urlTitle_i: String
+  urlTitle_not_i: String
+  urlTitle_contains_i: String
+  urlTitle_not_contains_i: String
+  urlTitle_starts_with_i: String
+  urlTitle_not_starts_with_i: String
+  urlTitle_ends_with_i: String
+  urlTitle_not_ends_with_i: String
+  urlTitle_in: [String]
+  urlTitle_not_in: [String]
   url: String
   url_not: String
   url_contains: String
@@ -390,6 +409,8 @@ enum SortItemsBy {
   singlePage_DESC
   image_ASC
   image_DESC
+  urlTitle_ASC
+  urlTitle_DESC
   url_ASC
   url_DESC
 }
@@ -401,6 +422,7 @@ input ItemOrderByInput {
   description: OrderDirection
   singlePage: OrderDirection
   image: OrderDirection
+  urlTitle: OrderDirection
   url: OrderDirection
 }
 
@@ -413,6 +435,7 @@ input ItemUpdateInput {
   image: String
   author: UserRelateToOneInput
   categories: CategoryRelateToManyInput
+  urlTitle: String
   url: String
 }
 
@@ -437,6 +460,7 @@ input ItemCreateInput {
   image: String
   author: UserRelateToOneInput
   categories: CategoryRelateToManyInput
+  urlTitle: String
   url: String
 }
 

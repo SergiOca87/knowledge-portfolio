@@ -14,6 +14,7 @@ import { FaUser, FaPlus, FaEye, FaPencilAlt } from 'react-icons/fa';
 import Link from 'next/link';
 import ItemGrid from '../../components/ItemGrid';
 import Main from '../../components/Main';
+import PortfolioEdit from '../../components/PortfolioEdit';
 
 const StyledUserCard = styled.div`
 	display: flex;
@@ -177,7 +178,7 @@ export default function UserPortfolioPage() {
 						>
 							<Button>
 								<Link href={'/'}>
-									<FaPencilAlt />
+									<PortfolioEdit placement={'end'} />
 								</Link>
 							</Button>
 						</OverlayTrigger>

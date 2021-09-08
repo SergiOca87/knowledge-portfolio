@@ -31,6 +31,7 @@ model Item {
   author            User?      @relation("Item_author", fields: [authorId], references: [id])
   authorId          String?    @map("author")
   categories        Category[] @relation("Category_items_Item_categories")
+  urlTitle          String?
   url               String?
 
   @@index([authorId])
