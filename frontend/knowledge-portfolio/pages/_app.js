@@ -13,6 +13,9 @@ import {
 	createHttpLink,
 } from '@apollo/client';
 import UserContext, { UserProvider } from '../context/UserContext';
+import PortfolioOptionsContext, {
+	OptionsProvider,
+} from '../context/PortfolioOptionsContext';
 
 Router.events.on('routeChangeStart', () => NProgress.start());
 Router.events.on('routeChangeComplete', () => NProgress.done());
@@ -34,9 +37,11 @@ function MyApp({ Component, pageProps }) {
 		<>
 			<ApolloProvider client={client}>
 				<UserProvider>
-					<Page>
-						<Component {...pageProps} />
-					</Page>
+					<OptionsProvider>
+						<Page>
+							<Component {...pageProps} />
+						</Page>
+					</OptionsProvider>
 				</UserProvider>
 			</ApolloProvider>
 		</>

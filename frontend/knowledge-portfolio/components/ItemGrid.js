@@ -4,8 +4,10 @@
 
 import { useQuery } from '@apollo/client';
 import gql from 'graphql-tag';
+import { useContext } from 'react';
 import { Col, Row } from 'react-bootstrap';
 import styled from 'styled-components';
+import PortfolioOptionsContext from '../context/PortfolioOptionsContext';
 import Item from './Item';
 
 // Exported because it is reused (createItem) to refetch after successfull item creation
@@ -51,6 +53,8 @@ const StyledEmptyCard = styled.div`
 `;
 
 export default function ItemGrid({ id }) {
+	const { options } = useContext(PortfolioOptionsContext);
+
 	const { data, loading, error } = useQuery(USER_ITEMS_QUERY, {
 		variables: { id },
 	});
@@ -64,15 +68,17 @@ export default function ItemGrid({ id }) {
 	} else {
 		return (
 			<Row>
-				{data.User.items.map((item) => {
-					console.log('itemGrid', item);
-					return (
-						<Col lg={6} className="mb-4">
-							<Item key={item.id} item={item} />
-						</Col>
-					);
-				})}
-				<Col lg={6}>
+				{data.User.items &&
+					data.User.items?.map((item) => {
+						console.log('itemGrid', item);
+						return (
+							<Col lg={options.cols} className="mb-4">
+								<Item key={item.id} item={item} />
+							</Col>
+						);
+					})}
+
+				<Col lg={options.cols}>
 					<StyledEmptyCard>Add</StyledEmptyCard>
 				</Col>
 			</Row>

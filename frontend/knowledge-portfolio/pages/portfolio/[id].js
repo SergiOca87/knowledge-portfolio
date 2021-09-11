@@ -1,6 +1,6 @@
 import React, { useContext, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import {
 	Container,
 	Row,
@@ -15,6 +15,9 @@ import Link from 'next/link';
 import ItemGrid from '../../components/ItemGrid';
 import Main from '../../components/Main';
 import PortfolioEdit from '../../components/PortfolioEdit';
+import PortfolioOptionsContext, {
+	OptionsProvider,
+} from '../../context/PortfolioOptionsContext';
 
 const StyledUserCard = styled.div`
 	display: flex;
@@ -114,81 +117,122 @@ export default function UserPortfolioPage() {
 
 	const { user } = useContext(UserContext);
 
+	const { options } = useContext(PortfolioOptionsContext);
+
 	return (
 		<Main>
-			<Container>
-				<StyledUserCard>
-					{/* //TODO: ADD this functionality when Cloudinary support is
-					enabled in Keystone 6 */}
-					{user?.image ? (
-						<div
-							className="avatar"
-							css={`
-								background-image: ${user.image};
-							`}
-						></div>
-					) : (
-						<div className="avatar">
-							<FaUser />
-						</div>
-					)}
-					<h1>Welcome to your portfolio, {user?.name}</h1>
-				</StyledUserCard>
-				<UserControls>
-					<div>
-						<OverlayTrigger
-							placement={'top'}
-							overlay={
-								<Tooltip id={`tooltip-top}`}>
-									Add New Portfolio Item
-								</Tooltip>
-							}
-						>
-							<Button>
-								<Link href={'/add-item'}>
-									<FaPlus />
-								</Link>
-							</Button>
-						</OverlayTrigger>
-					</div>
-					<div>
-						<OverlayTrigger
-							placement={'top'}
-							overlay={
-								<Tooltip id={`tooltip-top}`}>
-									Toggle Public View
-								</Tooltip>
-							}
-						>
-							<Button>
-								<Link href={'/'}>
-									<FaEye />
-								</Link>
-							</Button>
-						</OverlayTrigger>
-					</div>
-					<div>
-						<OverlayTrigger
-							placement={'top'}
-							overlay={
-								<Tooltip id={`tooltip-top}`}>
-									Edit Portfolio
-								</Tooltip>
-							}
-						>
-							<Button>
-								<Link href={'/'}>
-									<PortfolioEdit placement={'end'} />
-								</Link>
-							</Button>
-						</OverlayTrigger>
-					</div>
-				</UserControls>
+			<div
+				css={css`
+					${options.mode === 'dark' &&
+					`
+					--primary: ${options.darkPalette.primary};
+					--secondary: ${options.darkPalette.secondary};
+					--tertiary: ${options.darkPalette.tertiary};
+					`}
 
-				<StyledGridWrap>
-					<ItemGrid id={user?.id} />
-				</StyledGridWrap>
-			</Container>
+					${options.mode === 'light' &&
+					`
+					--primary: ${options.lightPalette.primary};
+					--secondary: ${options.lightPalette.secondary};
+					--tertiary: ${options.lightPalette.tertiary};
+					`}
+
+					p {
+						font-family: ${options.fontFamily}-Regular;
+					}
+
+					h1,
+					h2,
+					h3,
+					h4,
+					h5,
+					h6,
+					.btn {
+						font-family: ${options.fontFamily}-Medium !important;
+					}
+
+					${options.roundEdges &&
+					`
+							div{
+								border-radius: 8px;
+							}
+						`}
+				`}
+			>
+				<Container>
+					<StyledUserCard>
+						{/* //TODO: ADD this functionality when Cloudinary support is
+					enabled in Keystone 6 */}
+						{user?.image ? (
+							<div
+								className="avatar"
+								css={`
+									background-image: ${user.image};
+								`}
+							></div>
+						) : (
+							<div className="avatar">
+								<FaUser />
+							</div>
+						)}
+						<h1>Welcome to your portfolio, {user?.name}</h1>
+					</StyledUserCard>
+					<UserControls>
+						<div>
+							<OverlayTrigger
+								placement={'top'}
+								overlay={
+									<Tooltip id={`tooltip-top}`}>
+										Add New Portfolio Item
+									</Tooltip>
+								}
+							>
+								<Button>
+									<Link href={'/add-item'}>
+										<FaPlus />
+									</Link>
+								</Button>
+							</OverlayTrigger>
+						</div>
+						<div>
+							<OverlayTrigger
+								placement={'top'}
+								overlay={
+									<Tooltip id={`tooltip-top}`}>
+										Toggle Public View
+									</Tooltip>
+								}
+							>
+								<Button>
+									<Link href={'/'}>
+										<FaEye />
+									</Link>
+								</Button>
+							</OverlayTrigger>
+						</div>
+						<div>
+							<OverlayTrigger
+								placement={'top'}
+								overlay={
+									<Tooltip id={`tooltip-top}`}>
+										Edit Portfolio
+									</Tooltip>
+								}
+							>
+								<Button>
+									<Link href={'/'}>
+										<PortfolioEdit placement={'end'} />
+									</Link>
+								</Button>
+							</OverlayTrigger>
+						</div>
+					</UserControls>
+
+					<StyledGridWrap>
+						<ItemGrid id={user?.id} />
+					</StyledGridWrap>
+				</Container>
+			</div>
 		</Main>
 	);
 }

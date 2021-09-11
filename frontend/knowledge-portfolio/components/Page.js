@@ -20,6 +20,18 @@ const GlobalStyles = createGlobalStyle`
     font-family: 'Montserrat-Medium';
     src: url('/static/Montserrat-Medium.woff2') format('woff2');
   }
+  @font-face {
+    font-family: 'Roboto-Regular';
+    src: url('/static/Roboto-Regular.woff2') format('woff2');
+  }
+  @font-face {
+    font-family: 'Roboto-Light';
+    src: url('/static/Roboto-Light.woff2') format('woff2');
+  }
+  @font-face {
+    font-family: 'Roboto-Medium';
+    src: url('/static/Roboto-Medium.woff2') format('woff2');
+  }
   html {
     --black: #242424;
     --primary: #14213dff;
@@ -43,6 +55,7 @@ const GlobalStyles = createGlobalStyle`
     font-size: 1.8rem;
     line-height:1.2;
     color: #fff;
+    font-weight: 400;
   }
   a {
     text-decoration: none;
@@ -53,10 +66,12 @@ const GlobalStyles = createGlobalStyle`
   }
   button {
     font-family: 'Montserrat-Medium', --apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-weight: 500;
   }
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Montserrat-Medium';
     margin-bottom: 2rem;
+    font-weight: 500;
   }
 
   h1 {
