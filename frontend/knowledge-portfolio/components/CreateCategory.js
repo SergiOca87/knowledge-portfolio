@@ -61,8 +61,6 @@ export default function CreateCategory() {
 	const userCategories = getCategories();
 	const [iconSearch, setIconSearch] = useState('');
 
-	console.log(iconSearch);
-
 	const [inputs, setInputs] = useState({
 		name: '',
 		author: user ? user : '',
@@ -104,7 +102,6 @@ export default function CreateCategory() {
 
 	const handleIconSearch = (e) => {
 		setIconSearch(e.target.value);
-		console.log(iconSearch);
 	};
 
 	// Submit current state to create a new Item
@@ -114,8 +111,6 @@ export default function CreateCategory() {
 		//TODO: Success or error? Add toasts
 		//TODO: Show the selected Icon, only 1 at a time, the one on state
 		const res = await createCategory();
-
-		console.log(res);
 	};
 
 	return (

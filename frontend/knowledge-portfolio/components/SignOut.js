@@ -15,9 +15,9 @@ export default function SignOut() {
 	});
 
 	const handleSignOut = async () => {
-		console.log('click');
+		('click');
 		const res = await signOut();
-		console.log(res);
+		res;
 	};
 
 	return (

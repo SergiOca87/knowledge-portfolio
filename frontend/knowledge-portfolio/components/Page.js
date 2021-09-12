@@ -74,6 +74,9 @@ const GlobalStyles = createGlobalStyle`
     font-weight: 500;
   }
 
+
+
+
   h1 {
     font-size: 6rem;
   }
@@ -234,7 +237,7 @@ export default function Page({ children }) {
 	}
 
 	if (error) {
-		console.log(error);
+		error;
 	}
 
 	return (

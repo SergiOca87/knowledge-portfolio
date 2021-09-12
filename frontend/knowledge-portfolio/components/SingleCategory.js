@@ -33,7 +33,7 @@ export default function SingleCategory({ id }) {
 	//TODO: Toast
 	if (error) return <p>error {error.message}</p>;
 
-	console.log(data);
+	data;
 
 	return (
 		<>

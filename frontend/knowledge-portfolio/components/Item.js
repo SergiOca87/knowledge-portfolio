@@ -97,7 +97,7 @@ const StyledItem = styled.div`
 // Completed?
 
 export default function Item({ item }) {
-	console.log('item', item);
+	'item', item;
 	return (
 		<StyledItem>
 			<div className="title">
@@ -129,7 +129,7 @@ export default function Item({ item }) {
 						</h5>
 						<div className="categories">
 							{item.categories.map((category) => {
-								console.log('category', category);
+								'category', category;
 								let IconName = '';
 
 								if (category.icon) {

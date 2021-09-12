@@ -215,7 +215,7 @@ type Item {
   status: String
   description: String
   singlePage: String
-  singlePageContent: Item_singlePageContent_DocumentField
+  singlePageContent: JSON
   image: String
   author: User
   categories(
@@ -242,10 +242,6 @@ type Item {
   categoriesCount(where: CategoryWhereInput! = {}): Int
   urlTitle: String
   url: String
-}
-
-type Item_singlePageContent_DocumentField {
-  document(hydrateRelationships: Boolean! = false): JSON!
 }
 
 input ItemWhereInput {

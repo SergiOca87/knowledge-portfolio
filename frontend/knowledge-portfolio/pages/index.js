@@ -1,9 +1,11 @@
+import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
 import SignIn from '../components/SignIn';
 import SignUp from '../components/SignUp';
+import { CSSTransition, Transition } from 'react-transition-group';
 
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import Link from 'next/link';
 import gql from 'graphql-tag';
 import Hero from '../components/Hero';
@@ -36,6 +38,25 @@ const StyledMain = styled.main`
 			font-size: 6rem;
 			margin-bottom: 2rem;
 		}
+
+		h2 {
+			display: flex;
+			align-items: center;
+		}
+
+		.title-fade {
+			transition: all 300ms;
+
+			&.in {
+				opacity: 1;
+				transform: translateX(0);
+			}
+
+			&.out {
+				opacity: 0;
+				transform: translateX(-5rem);
+			}
+		}
 	}
 
 	img {
@@ -46,9 +67,9 @@ const StyledMain = styled.main`
 	.inner-grid {
 		margin-bottom: 12rem;
 
-		h2 {
+		h3 {
 			position: relative;
-			padding: 1rem 2rem;
+			padding: 0.5rem 1.5rem;
 			color: var(--primary);
 
 			&:after {
@@ -78,7 +99,67 @@ const StyledMain = styled.main`
 	}
 `;
 
+const ChangingWord = styled.div`
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition: all 300ms;
+	width: 16rem;
+	margin-right: 1.3rem;
+	position: relative;
+	text-align: center;
+	padding: 1rem 2rem;
+
+	span {
+		position: relative;
+		z-index: 10;
+		text-transform: uppercase;
+		color: var(--primary);
+	}
+
+	&:after {
+		content: '';
+		background-color: var(--secondary);
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		transform: skew(3deg, 3deg);
+	}
+`;
+
 export default function Home() {
+	const words = ['Share', 'Own', 'Use'];
+	const [currentIndex, setCurrentIndex] = useState(0);
+	const [fade, setFade] = useState('in');
+
+	useEffect(() => {
+		setTimeout(() => {
+			setFade('out');
+		}, 3500);
+	}, []);
+
+	useEffect(() => {
+		const interval = setInterval(() => {
+			//TODO: Set a fade out class here
+			setFade('in');
+
+			currentIndex >= 2
+				? setCurrentIndex(0)
+				: setCurrentIndex((currentIndex) => currentIndex + 1);
+
+			setTimeout(() => {
+				setFade('out');
+			}, 3500);
+
+			//TODO: Wait half a second and set a fade in class here?
+		}, 4000);
+		return () => clearInterval(interval);
+	}, [currentIndex]);
+
+	console.log(currentIndex);
+
 	return (
 		<>
 			<Head>
@@ -95,7 +176,10 @@ export default function Home() {
 					<div className="titles">
 						<h1>Your Knowledge Portfolio</h1>
 						<h2>
-							<span>Share</span> Your Knowledge
+							<ChangingWord className={`title-fade ${fade}`}>
+								<span>{words[currentIndex]}</span>
+							</ChangingWord>{' '}
+							Your Knowledge
 						</h2>
 					</div>
 
@@ -105,9 +189,9 @@ export default function Home() {
 								lg={5}
 								className="d-flex flex-column justify-content-center align-items-start"
 							>
-								<h2>
+								<h3>
 									<span>What</span>
-								</h2>
+								</h3>
 								<p>
 									A place where you can quickly share your
 									knowledge, in a format of your choice.
@@ -134,9 +218,9 @@ export default function Home() {
 								lg={{ span: 6, offset: 1 }}
 								className="d-flex flex-column justify-content-center align-items-start"
 							>
-								<h2>
+								<h3>
 									<span>Why</span>
-								</h2>
+								</h3>
 								<p>
 									In a quickly changing world where fields
 									that require a higher level of

@@ -33,7 +33,7 @@ export default function SingleItem({ id }) {
 	//TODO: Toast
 	if (error) return <p>error {error.message}</p>;
 
-	console.log(data);
+	data;
 
 	return (
 		<>

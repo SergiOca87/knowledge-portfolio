@@ -7,7 +7,10 @@ import {
   timestamp,
   select,
   image, 
+  json,
   checkbox
+
+  
 } from '@keystone-next/fields';
 // import { cloudinaryImage } from '@keystone-next/cloudinary';
 import { document } from '@keystone-next/fields-document';
@@ -43,18 +46,19 @@ export const lists = createSchema({
       // }),
       //This is true or false but a string
       singlePage: text(),
-      singlePageContent: document({
-        formatting: true,
-        layouts: [
-          [1, 1],
-          [1, 1, 1],
-          [2, 1],
-          [1, 2],
-          [1, 2, 1],
-        ],
-        links: true,
-        dividers: true,
-      }),
+      // singlePageContent: document({
+      //   formatting: true,
+      //   layouts: [
+      //     [1, 1],
+      //     [1, 1, 1],
+      //     [2, 1],
+      //     [1, 2],
+      //     [1, 2, 1],
+      //   ],
+      //   links: true,
+      //   dividers: true,
+      // }),
+      singlePageContent: json(),
       image: text(),
       // publishDate: timestamp(),
       author: relationship({

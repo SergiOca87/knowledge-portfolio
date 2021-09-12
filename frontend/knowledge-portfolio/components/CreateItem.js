@@ -4,14 +4,16 @@
 //TODO: How to assign the item to a choosen category
 //TODO: Add Toast for errors
 //TODO: At the moment we can connect existing categories, but may be useful to be able to create them ehre as well
-import { USER_CATEGORIES_QUERY, getCategories } from './UserCategories';
-import Link from 'next/link';
+import { useContext, useEffect, useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import gql from 'graphql-tag';
-import { useContext, useEffect, useState } from 'react';
+import { USER_CATEGORIES_QUERY, getCategories } from './UserCategories';
+import Link from 'next/link';
 import { USER_ITEMS_QUERY } from './ItemGrid';
 import Router from 'next/router';
 import UserContext from '../context/UserContext';
+import { EditorState, convertFromRaw } from 'draft-js';
+
 import styled, { css } from 'styled-components';
 import { Accordion, Button, useAccordionButton } from 'react-bootstrap';
 
@@ -35,6 +37,7 @@ const CREATE_ITEM_MUTATION = gql`
 		$status: String
 		$author: ID!
 		$singlePage: String
+		$singlePageContent: JSON
 		$image: String
 		$categories: [CategoryWhereUniqueInput]
 		$urlTitle: String
@@ -47,6 +50,7 @@ const CREATE_ITEM_MUTATION = gql`
 				author: { connect: { id: $author } }
 				status: $status
 				singlePage: $singlePage
+				singlePageContent: $singlePageContent
 				image: $image
 				# categories: { connect: { id: $categories } }
 				categories: { connect: $categories }
@@ -77,11 +81,14 @@ export default function CreateItem() {
 		author: user ? user?.id : '',
 		status: 'finished',
 		singlePage: 'false',
+		singlePageContent: '',
 		image: '',
 		categories: [],
 		urlTitle: '',
 		url: '',
 	});
+
+	console.log('create on mount', inputs);
 
 	useEffect(() => {
 		setInputs({
@@ -89,6 +96,33 @@ export default function CreateItem() {
 			author: user?.id,
 		});
 	}, [user]);
+
+	const content = {
+		entityMap: {},
+		blocks: [
+			{
+				key: '637gr',
+				text: 'Initialized from content state.',
+				type: 'unstyled',
+				depth: 0,
+				inlineStyleRanges: [],
+				entityRanges: [],
+				data: {},
+			},
+		],
+	};
+
+	//WYSYWYG State
+	const [contentState, setContentState] = useState(convertFromRaw(content));
+
+	const onContentStateChange = (contentState) => {
+		setContentState(contentState);
+		setInputs({
+			...inputs,
+			singlePageContent: JSON.stringify(contentState, null, 4),
+		});
+	};
+	//////////////////////////////////////////////////////////
 
 	const [createItem, { loading, error, data }] = useMutation(
 		CREATE_ITEM_MUTATION,
@@ -123,8 +157,9 @@ export default function CreateItem() {
 
 	//Single Page Details Drawer
 	function CustomToggle({ children, eventKey }) {
-		const decoratedOnClick = useAccordionButton(eventKey, () =>
-			console.log('totally custom!')
+		const decoratedOnClick = useAccordionButton(
+			eventKey,
+			() => 'totally custom!'
 		);
 
 		return (
@@ -142,10 +177,8 @@ export default function CreateItem() {
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 
-		console.log(inputs);
-
 		if (error) {
-			console.log(error);
+			error;
 		} else {
 			const res = await createItem();
 
@@ -161,7 +194,7 @@ export default function CreateItem() {
 		}
 
 		//TODO: Use React Toasts for errors
-		// console.log(error);
+		// (error);
 		//Redirect should happen here
 	};
 
@@ -248,7 +281,7 @@ export default function CreateItem() {
 					<div
 						className="input-wrap"
 						onClick={() => {
-							console.log('open drawer');
+							('open drawer');
 						}}
 					>
 						<label>
@@ -284,7 +317,16 @@ export default function CreateItem() {
 					</div>
 
 					<Accordion.Collapse eventKey="0">
-						<Editor />
+						<>
+							<Editor
+								// editorState={editorState}
+								onContentStateChange={onContentStateChange}
+							/>
+							<textarea
+								disabled
+								value={inputs.singlePageContent}
+							/>
+						</>
 					</Accordion.Collapse>
 				</Accordion>
 

@@ -46,7 +46,7 @@ export default function DeleteItem({ id, children }) {
 
 		if (deleteConfirm.counter >= 2) {
 			deleteItem();
-			console.log('deleted', user.id);
+			'deleted', user.id;
 		}
 	};
 

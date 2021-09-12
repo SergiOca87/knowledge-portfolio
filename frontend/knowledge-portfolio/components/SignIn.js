@@ -81,7 +81,7 @@ export default function SignIn() {
 		e.preventDefault(); // stop the form from submitting
 
 		if (error) {
-			console.log(error);
+			error;
 		} else {
 			const res = await signin();
 
@@ -117,10 +117,7 @@ export default function SignIn() {
 					</label>
 				</div>
 				<div className="input-wrap">
-					<label
-						htmlFor="password"
-						onFocus={() => console.log('focus')}
-					>
+					<label htmlFor="password" onFocus={() => 'focus'}>
 						<span>Password</span>
 						<input
 							type="password"

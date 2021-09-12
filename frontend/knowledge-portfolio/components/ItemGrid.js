@@ -70,7 +70,7 @@ export default function ItemGrid({ id }) {
 			<Row>
 				{data.User.items &&
 					data.User.items?.map((item) => {
-						console.log('itemGrid', item);
+						'itemGrid', item;
 						return (
 							<Col lg={options.cols} className="mb-4">
 								<Item key={item.id} item={item} />
