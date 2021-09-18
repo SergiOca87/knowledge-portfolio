@@ -9,8 +9,6 @@ import {
   image, 
   json,
   checkbox
-
-  
 } from '@keystone-next/fields';
 // import { cloudinaryImage } from '@keystone-next/cloudinary';
 import { document } from '@keystone-next/fields-document';
@@ -45,7 +43,7 @@ export const lists = createSchema({
       //   isRequired: true,
       // }),
       //This is true or false but a string
-      singlePage: text(),
+      // singlePage: text(),
       // singlePageContent: document({
       //   formatting: true,
       //   layouts: [

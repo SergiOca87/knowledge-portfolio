@@ -73,10 +73,6 @@ const GlobalStyles = createGlobalStyle`
     margin-bottom: 2rem;
     font-weight: 500;
   }
-
-
-
-
   h1 {
     font-size: 6rem;
   }
@@ -202,6 +198,13 @@ const GlobalStyles = createGlobalStyle`
     ::placeholder {
       color: #fff;
     }
+  }
+
+  .primary-bg {
+    background-color: var(--primary);
+  }
+  .secondary-bg {
+    background-color: var(--secondary);
   }
 `;
 

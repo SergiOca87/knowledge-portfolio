@@ -3,16 +3,20 @@ import React from 'react';
 import Link from 'next/link';
 import DeleteItem from './DeleteItem';
 import { Button } from 'react-bootstrap';
-import * as FontAwesome from 'react-icons/fa';
+import Categories from './Categories';
+import { FaPencilAlt } from 'react-icons/fa';
+import { FaTrashAlt } from 'react-icons/fa';
 
 const StyledItem = styled.div`
 	height: 100%;
 	background-color: var(--tertiary);
 	display: flex;
 	flex-direction: column;
+	border: 1px solid var(--tertiary);
 
 	.title {
 		padding: 2rem;
+		text-align: center;
 		background-color: var(--tertiary);
 		border-bottom: 1px solid var(--secondary);
 
@@ -27,6 +31,7 @@ const StyledItem = styled.div`
 
 	.buttons {
 		display: flex;
+		justify-content: flex-end;
 		padding: 2rem;
 		margin-top: auto;
 		background-color: var(--primary);
@@ -59,6 +64,7 @@ const StyledItem = styled.div`
 
 			p {
 				margin: 0;
+				padding-left: 2rem;
 			}
 		}
 
@@ -66,6 +72,7 @@ const StyledItem = styled.div`
 			display: flex;
 			flex-wrap: wrap;
 			margin-top: 0.5rem;
+			padding-left: 2rem;
 
 			.category {
 				font-size: 1.8rem;
@@ -97,7 +104,6 @@ const StyledItem = styled.div`
 // Completed?
 
 export default function Item({ item }) {
-	'item', item;
 	return (
 		<StyledItem>
 			<div className="title">
@@ -120,45 +126,18 @@ export default function Item({ item }) {
 					</p>
 				</div>
 				{/* <p>Category: {item.category.name}</p> */}
-				{item.categories.length ? (
-					<div className="separator">
-						<h5>
-							{item.categories.length > 1
-								? 'Categories:'
-								: 'Category:'}
-						</h5>
-						<div className="categories">
-							{item.categories.map((category) => {
-								'category', category;
-								let IconName = '';
-
-								if (category.icon) {
-									IconName = FontAwesome[category.icon];
-								}
-
-								return (
-									<div key={category.id}>
-										{IconName && (
-											<span className="category">
-												<IconName />
-											</span>
-										)}
-										<span>{category.name}</span>
-									</div>
-								);
-							})}
-						</div>
-					</div>
-				) : (
-					''
+				{item.categories && (
+					<Categories categories={item?.categories} />
 				)}
-				<div className="separator">
-					<Link href={`/items/${item.id}`}>
-						<Button variant="transparent-secondary">
-							More Details
-						</Button>
-					</Link>
-				</div>
+				{item.singlePageContent && (
+					<div className="separator">
+						<Link href={`/items/${item.id}`}>
+							<Button variant="transparent-secondary">
+								More Details
+							</Button>
+						</Link>
+					</div>
+				)}
 			</div>
 			<div className="buttons">
 				<Link
@@ -169,11 +148,13 @@ export default function Item({ item }) {
 						},
 					}}
 				>
-					<Button variant="secondary">Edit Item</Button>
+					<Button variant="secondary">
+						<FaPencilAlt />
+					</Button>
 				</Link>
 				<DeleteItem id={item.id} className="btn">
 					{' '}
-					Delete Item
+					<FaTrashAlt />
 				</DeleteItem>
 			</div>
 		</StyledItem>

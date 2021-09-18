@@ -38,6 +38,10 @@ export const OptionsProvider = ({ children }) => {
 		darkPalette: palettes.darkPalette1,
 		lightPalette: palettes.lightPalette1,
 		roundEdges: false,
+		userImage: true,
+		public: true,
+		userTitle: '',
+		userIntroText: '',
 	});
 	return (
 		<PortfolioOptionsContext.Provider value={{ options, setOptions }}>

@@ -33,12 +33,75 @@ export default function PortfolioEdit({ children }) {
 				<FaPencilAlt />
 			</Button>
 			<StyledCanvas show={show} onHide={handleClose}>
-				<Offcanvas.Header closeButton>
-					<Offcanvas.Title>Offcanvas</Offcanvas.Title>
+				<Offcanvas.Header closeButton className="secondary-bg">
+					<Offcanvas.Title>Portfolio Options</Offcanvas.Title>
 				</Offcanvas.Header>
 				<Offcanvas.Body>
 					<StyledFormWrap>
 						<Form>
+							<Form.Group controlId="exampleForm.SelectCustom">
+								<Form.Label>
+									Tile/Text for the public portfolio
+								</Form.Label>
+								<StyledButtonGroup>
+									<OverlayTrigger
+										placement="top"
+										delay={{ show: 250, hide: 400 }}
+										overlay={
+											<Tooltip id="button-tooltip">
+												Title
+											</Tooltip>
+										}
+									>
+										<div className="input-wrap text">
+											<label htmlFor="userTitle">
+												<span>Portfolio Title</span>
+												<input
+													type="text"
+													name="userTitle"
+													value={options.userTitle}
+													onChange={(e) =>
+														setOptions({
+															...options,
+															userTitle:
+																e.target.value,
+														})
+													}
+												/>
+											</label>
+										</div>
+									</OverlayTrigger>
+									<OverlayTrigger
+										placement="top"
+										delay={{ show: 250, hide: 400 }}
+										overlay={
+											<Tooltip id="button-tooltip">
+												Intro Paragraph
+											</Tooltip>
+										}
+									>
+										<div className="input-wrap text">
+											<label htmlFor="introText">
+												<span>Intro Text</span>
+												<textarea
+													name="introText"
+													value={
+														options.userIntroText
+													}
+													onChange={(e) =>
+														setOptions({
+															...options,
+															userIntroText:
+																e.target.value,
+														})
+													}
+												/>
+											</label>
+										</div>
+									</OverlayTrigger>
+								</StyledButtonGroup>
+							</Form.Group>
+
 							<Form.Group controlId="exampleForm.SelectCustom">
 								<Form.Label>Columns</Form.Label>
 								<StyledButtonGroup>
@@ -118,6 +181,64 @@ export default function PortfolioEdit({ children }) {
 											}
 										>
 											<span>3</span>
+										</Button>
+									</OverlayTrigger>
+								</StyledButtonGroup>
+							</Form.Group>
+
+							<Form.Group controlId="exampleForm.SelectCustom">
+								<Form.Label>Show/Hide User Image</Form.Label>
+								<StyledButtonGroup>
+									<OverlayTrigger
+										placement="top"
+										delay={{ show: 250, hide: 400 }}
+										overlay={
+											<Tooltip id="button-tooltip">
+												True
+											</Tooltip>
+										}
+									>
+										<Button
+											variant="outline-secondary"
+											className={
+												options.userImage
+													? 'active'
+													: ''
+											}
+											onClick={(e) =>
+												setOptions({
+													...options,
+													userImage: true,
+												})
+											}
+										>
+											<span>True</span>
+										</Button>
+									</OverlayTrigger>
+									<OverlayTrigger
+										placement="top"
+										delay={{ show: 250, hide: 400 }}
+										overlay={
+											<Tooltip id="button-tooltip">
+												False
+											</Tooltip>
+										}
+									>
+										<Button
+											variant="outline-secondary"
+											className={
+												options.userImage === false
+													? 'active'
+													: ''
+											}
+											onClick={(e) =>
+												setOptions({
+													...options,
+													userImage: false,
+												})
+											}
+										>
+											<span>False</span>
 										</Button>
 									</OverlayTrigger>
 								</StyledButtonGroup>

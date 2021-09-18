@@ -25,7 +25,6 @@ model Item {
   title             String?
   status            String?
   description       String?
-  singlePage        String?
   singlePageContent Json?
   image             String?
   author            User?      @relation("Item_author", fields: [authorId], references: [id])

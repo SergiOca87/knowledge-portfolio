@@ -214,7 +214,6 @@ type Item {
   title: String
   status: String
   description: String
-  singlePage: String
   singlePageContent: JSON
   image: String
   author: User
@@ -309,24 +308,6 @@ input ItemWhereInput {
   description_not_ends_with_i: String
   description_in: [String]
   description_not_in: [String]
-  singlePage: String
-  singlePage_not: String
-  singlePage_contains: String
-  singlePage_not_contains: String
-  singlePage_starts_with: String
-  singlePage_not_starts_with: String
-  singlePage_ends_with: String
-  singlePage_not_ends_with: String
-  singlePage_i: String
-  singlePage_not_i: String
-  singlePage_contains_i: String
-  singlePage_not_contains_i: String
-  singlePage_starts_with_i: String
-  singlePage_not_starts_with_i: String
-  singlePage_ends_with_i: String
-  singlePage_not_ends_with_i: String
-  singlePage_in: [String]
-  singlePage_not_in: [String]
   image: String
   image_not: String
   image_contains: String
@@ -401,8 +382,6 @@ enum SortItemsBy {
   status_DESC
   description_ASC
   description_DESC
-  singlePage_ASC
-  singlePage_DESC
   image_ASC
   image_DESC
   urlTitle_ASC
@@ -416,7 +395,6 @@ input ItemOrderByInput {
   title: OrderDirection
   status: OrderDirection
   description: OrderDirection
-  singlePage: OrderDirection
   image: OrderDirection
   urlTitle: OrderDirection
   url: OrderDirection
@@ -426,7 +404,6 @@ input ItemUpdateInput {
   title: String
   status: String
   description: String
-  singlePage: String
   singlePageContent: JSON
   image: String
   author: UserRelateToOneInput
@@ -451,7 +428,6 @@ input ItemCreateInput {
   title: String
   status: String
   description: String
-  singlePage: String
   singlePageContent: JSON
   image: String
   author: UserRelateToOneInput

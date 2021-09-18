@@ -1,3 +1,4 @@
+/* eslint-disable react/react-in-jsx-scope */
 //TODO: Add a "back to all items"
 //TODO: Add the rest of the fields to the single item component
 
@@ -6,6 +7,15 @@ import gql from 'graphql-tag';
 import styled from 'styled-components';
 import Head from 'next/head';
 import Layout from './Layout';
+import Categories from './Categories';
+import draftToHtml from 'draftjs-to-html';
+import parse from 'html-react-parser';
+
+const StyledSingleItem = styled.div`
+	background-color: var(--tertiary);
+	padding: 4rem 2rem;
+	height: 100%;
+`;
 
 const SINGLE_ITEM_QUERY = gql`
 	query SINGLE_ITEM_QUERY($id: ID!) {
@@ -13,9 +23,15 @@ const SINGLE_ITEM_QUERY = gql`
 			title
 			description
 			status
+			singlePageContent
+			author {
+				name
+				# image
+			}
 			categories {
 				id
 				name
+				icon
 			}
 		}
 	}
@@ -33,16 +49,28 @@ export default function SingleItem({ id }) {
 	//TODO: Toast
 	if (error) return <p>error {error.message}</p>;
 
-	data;
+	// const rawContentState = convertToRaw(
+	// 	JSON.parse(data.Item.singlePageContent)
+	// );
+
+	const markup = draftToHtml(JSON.parse(data.Item.singlePageContent));
 
 	return (
 		<>
-			<Layout>
-				<p>Single item Component</p>
-				<div>
-					<p>{data.Item.title}</p>
+			<StyledSingleItem>
+				<h1>{data.Item.title}</h1>
+				<div className="meta">
+					<p>By: {data.Item.author.name}</p>
+					{data.Item.categories && (
+						<Categories categories={data.Item.categories} />
+					)}
 				</div>
-			</Layout>
+				<hr />
+				<div className="content">
+					{console.log(JSON.parse(data.Item.singlePageContent))}
+					{parse(`${markup}`)}
+				</div>
+			</StyledSingleItem>
 		</>
 	);
 }

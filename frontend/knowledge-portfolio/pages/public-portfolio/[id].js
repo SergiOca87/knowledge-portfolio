@@ -10,19 +10,10 @@ import {
 	Tooltip,
 } from 'react-bootstrap';
 import UserContext from '../../context/UserContext';
-import {
-	FaUser,
-	FaPlus,
-	FaEye,
-	FaPencilAlt,
-	FaFileDownload,
-	FaQrcode,
-} from 'react-icons/fa';
 import Link from 'next/link';
 
 import ItemGrid from '../../components/ItemGrid';
 import Main from '../../components/Main';
-import PortfolioEdit from '../../components/PortfolioEdit';
 import PortfolioOptionsContext, {
 	OptionsProvider,
 } from '../../context/PortfolioOptionsContext';
@@ -168,6 +159,7 @@ export default function UserPortfolioPage() {
 				`}
 			>
 				<Container>
+					<p>** PUBLIC PAGE **</p>
 					<StyledUserCard>
 						{/* //TODO: ADD this functionality when Cloudinary support is
 					enabled in Keystone 6 */}
@@ -184,7 +176,8 @@ export default function UserPortfolioPage() {
 									<FaUser />
 								</div>
 							))}
-						<h1>Welcome to your portfolio, {user?.name}</h1>
+						{options.userTitle && <h1>{options.userTitle}</h1>}
+						{options.userIntro && <p>{options.userIntro}</p>}
 					</StyledUserCard>
 
 					<UserControls>
@@ -272,7 +265,6 @@ export default function UserPortfolioPage() {
 							</OverlayTrigger>
 						</div>
 					</UserControls>
-
 					<StyledGridWrap>
 						<ItemGrid id={user?.id} />
 					</StyledGridWrap>

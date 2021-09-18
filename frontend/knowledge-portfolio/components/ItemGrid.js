@@ -34,6 +34,7 @@ export const USER_ITEMS_QUERY = gql`
 				title
 				description
 				status
+				singlePageContent
 				categories {
 					id
 					name
@@ -70,10 +71,13 @@ export default function ItemGrid({ id }) {
 			<Row>
 				{data.User.items &&
 					data.User.items?.map((item) => {
-						'itemGrid', item;
 						return (
-							<Col lg={options.cols} className="mb-4">
-								<Item key={item.id} item={item} />
+							<Col
+								lg={options.cols}
+								className="mb-4"
+								key={item.id}
+							>
+								<Item item={item} />
 							</Col>
 						);
 					})}
