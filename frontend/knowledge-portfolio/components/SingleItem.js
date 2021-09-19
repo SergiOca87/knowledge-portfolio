@@ -49,10 +49,6 @@ export default function SingleItem({ id }) {
 	//TODO: Toast
 	if (error) return <p>error {error.message}</p>;
 
-	// const rawContentState = convertToRaw(
-	// 	JSON.parse(data.Item.singlePageContent)
-	// );
-
 	const markup = draftToHtml(JSON.parse(data.Item.singlePageContent));
 
 	return (

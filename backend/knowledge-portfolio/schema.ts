@@ -26,6 +26,7 @@ export const lists = createSchema({
       password: password({ isRequired: true }),
       items: relationship({ ref: 'Item.author', many: true }),
       categories: relationship({ ref: 'Category.author', many: true }),
+      options: json()
     },
     access: true,
   }),
@@ -33,6 +34,9 @@ export const lists = createSchema({
     fields: {
       title: text(),
       status: text(), 
+      visibility: checkbox({
+        defaultValue: true,
+      }),
       description: text({
         ui: {
           displayMode: 'textarea'

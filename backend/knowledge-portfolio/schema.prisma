@@ -15,6 +15,7 @@ model User {
   password                String?
   items                   Item[]     @relation("Item_author")
   categories              Category[] @relation("Category_author")
+  options                 Json?
   passwordResetToken      String?
   passwordResetIssuedAt   DateTime?
   passwordResetRedeemedAt DateTime?
@@ -24,6 +25,7 @@ model Item {
   id                String     @id @default(cuid())
   title             String?
   status            String?
+  visibility        Boolean?
   description       String?
   singlePageContent Json?
   image             String?

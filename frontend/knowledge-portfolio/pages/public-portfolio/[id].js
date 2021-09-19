@@ -10,6 +10,14 @@ import {
 	Tooltip,
 } from 'react-bootstrap';
 import UserContext from '../../context/UserContext';
+import {
+	FaUser,
+	FaPlus,
+	FaEye,
+	FaPencilAlt,
+	FaFileDownload,
+	FaQrcode,
+} from 'react-icons/fa';
 import Link from 'next/link';
 
 import ItemGrid from '../../components/ItemGrid';
@@ -17,6 +25,7 @@ import Main from '../../components/Main';
 import PortfolioOptionsContext, {
 	OptionsProvider,
 } from '../../context/PortfolioOptionsContext';
+import Search from '../../components/Search';
 
 const StyledUserCard = styled.div`
 	display: flex;
@@ -107,6 +116,9 @@ const UserControls = styled.div`
 `;
 
 export default function UserPortfolioPage() {
+	//TODO: Here we probably can do a lot knowing the user ID
+	//TODO: But we need to save details oike user avatar on the user item?
+	//TODO: So that any user or visitor can se that info.
 	const router = useRouter();
 	const { id } = router.query;
 
@@ -179,94 +191,9 @@ export default function UserPortfolioPage() {
 						{options.userTitle && <h1>{options.userTitle}</h1>}
 						{options.userIntro && <p>{options.userIntro}</p>}
 					</StyledUserCard>
-
-					<UserControls>
-						<div>
-							<OverlayTrigger
-								placement={'top'}
-								overlay={
-									<Tooltip id={`tooltip-top}`}>
-										Add New Portfolio Item
-									</Tooltip>
-								}
-							>
-								<Button>
-									<Link href={'/add-item'}>
-										<FaPlus />
-									</Link>
-								</Button>
-							</OverlayTrigger>
-						</div>
-						<div>
-							<OverlayTrigger
-								placement={'top'}
-								overlay={
-									<Tooltip id={`tooltip-top}`}>
-										Toggle Public View
-									</Tooltip>
-								}
-							>
-								<Button>
-									<Link href={'/'}>
-										<FaEye />
-									</Link>
-								</Button>
-							</OverlayTrigger>
-						</div>
-						<div>
-							<OverlayTrigger
-								placement={'top'}
-								overlay={
-									<Tooltip id={`tooltip-top}`}>
-										Edit Portfolio
-									</Tooltip>
-								}
-							>
-								<Button>
-									<Link href={'/'}>
-										<PortfolioEdit placement={'end'} />
-									</Link>
-								</Button>
-							</OverlayTrigger>
-						</div>
-						<div>
-							<OverlayTrigger
-								placement={'top'}
-								overlay={
-									<Tooltip id="tooltip-top">
-										Download as a PDF
-									</Tooltip>
-								}
-							>
-								<Button>
-									<Link href={'/'}>
-										<FaFileDownload />
-									</Link>
-								</Button>
-							</OverlayTrigger>
-						</div>
-						<div>
-							<OverlayTrigger
-								placement={'top'}
-								overlay={
-									<Tooltip id="tooltip-top">
-										Generate QR Code
-									</Tooltip>
-								}
-							>
-								<Button>
-									<Link
-										href={`/qr/${user?.id}`}
-										query={`${router.pathname}`}
-									>
-										<FaQrcode />
-									</Link>
-								</Button>
-							</OverlayTrigger>
-						</div>
-					</UserControls>
+					<Search />
 					<StyledGridWrap>
-						<ItemGrid id={user?.id} />
+						<ItemGrid id={id} isPublic={true} />
 					</StyledGridWrap>
 				</Container>
 			</div>

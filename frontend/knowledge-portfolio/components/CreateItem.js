@@ -36,7 +36,7 @@ const CREATE_ITEM_MUTATION = gql`
 		$description: String
 		$status: String
 		$author: ID!
-		$singlePage: String
+		$visibility: Checkbox
 		$singlePageContent: JSON
 		$image: String
 		$categories: [CategoryWhereUniqueInput]
@@ -49,7 +49,7 @@ const CREATE_ITEM_MUTATION = gql`
 				description: $description
 				author: { connect: { id: $author } }
 				status: $status
-				singlePage: $singlePage
+				visibility: $visibility
 				singlePageContent: $singlePageContent
 				image: $image
 				# categories: { connect: { id: $categories } }
@@ -80,7 +80,7 @@ export default function CreateItem() {
 		description: '',
 		author: user ? user?.id : '',
 		status: 'finished',
-		singlePage: 'false',
+		visibility: 'true',
 		singlePageContent: '',
 		image: '',
 		categories: [],
@@ -178,7 +178,8 @@ export default function CreateItem() {
 		e.preventDefault();
 
 		if (error) {
-			error;
+			//TODO: Toast
+			console.log('error on create', error);
 		} else {
 			const res = await createItem();
 
@@ -277,6 +278,15 @@ export default function CreateItem() {
 						</select>
 					</label>
 				</div>
+				<div className="input-wrap">
+					<label htmlFor="visibility">
+						<span>Visibility (public or private)</span>
+						<select name="visibility" onChange={handleChange}>
+							<option value="true">Public</option>
+							<option value="false">Private</option>
+						</select>
+					</label>
+				</div>
 				<Accordion>
 					<div
 						className="input-wrap"
@@ -285,13 +295,14 @@ export default function CreateItem() {
 						}}
 					>
 						<label>
-							<span>Single Page</span>
+							<span>Single Page Content</span>
 							<p className="tip">
-								Enable "Single Page" to use the advanced editor
-								and create content for a single page that the
-								user will be able to access via a "More Details"
-								button that will be added to your portfolio
-								item.
+								Adding single page content will enable a "More
+								Details" buttonon your portfolio item. This
+								button will redirect the user to a page with the
+								content that you add here. Use this feature if
+								you need to create a detailed view of your item
+								with long text, images or video.
 							</p>
 							<div className="d-flex align-center">
 								<span
@@ -301,7 +312,7 @@ export default function CreateItem() {
 										margin-right: 1.5rem;
 									`}
 								>
-									Enable
+									Add
 								</span>
 								<CustomToggle eventKey="0">
 									<input

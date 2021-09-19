@@ -214,7 +214,7 @@ export default function UserPortfolioPage() {
 								}
 							>
 								<Button>
-									<Link href={'/'}>
+									<Link href={`/public-portfolio/${id}`}>
 										<FaEye />
 									</Link>
 								</Button>
@@ -263,7 +263,7 @@ export default function UserPortfolioPage() {
 							>
 								<Button>
 									<Link
-										href={`/qr/${user?.id}`}
+										href={`/qr/${id}`}
 										query={`${router.pathname}`}
 									>
 										<FaQrcode />

@@ -1,3 +1,7 @@
+//TODO: USer options should be selected by default (access user options JSON).
+
+import { useMutation } from '@apollo/client';
+import gql from 'graphql-tag';
 import React, { useContext, useState } from 'react';
 import {
 	Offcanvas,
@@ -9,23 +13,55 @@ import {
 import { FaPencilAlt } from 'react-icons/fa';
 import styled from 'styled-components';
 import PortfolioOptionsContext from '../context/PortfolioOptionsContext';
+import UserContext from '../context/UserContext';
 
 const StyledFormWrap = styled.div``;
-
 const StyledButtonGroup = styled.div``;
-
 const StyledCanvas = styled(Offcanvas)`
 	background-color: var(--primary);
 	border-right: 3px solid var(--secondary);
 `;
 
-export default function PortfolioEdit({ children }) {
-	const [show, setShow] = useState(false);
+const UPDATE_USER_MUTATION = gql`
+	mutation UPDATE_USER_MUTATION($id: ID!, $options: JSON) {
+		updateUser(id: $id, data: { options: $options }) {
+			id
+			name
+			options
+		}
+	}
+`;
 
+export default function PortfolioEdit({ children }) {
+	const { user } = useContext(UserContext);
+	const { options, setOptions } = useContext(PortfolioOptionsContext);
+
+	const [show, setShow] = useState(false);
 	const handleClose = () => setShow(false);
 	const handleShow = () => setShow(true);
 
-	const { options, setOptions } = useContext(PortfolioOptionsContext);
+	let optionsObject = {
+		options: {},
+	};
+
+	const [updateUser, { loading, error, data }] = useMutation(
+		UPDATE_USER_MUTATION,
+		{
+			variables: {
+				id: user?.id,
+				options: optionsObject,
+			},
+		}
+	);
+
+	async function handleSubmit(e) {
+		e.preventDefault();
+
+		optionsObject.options = { ...options };
+		optionsObject = JSON.stringify(optionsObject);
+
+		const res = await updateUser().then(console.log(user));
+	}
 
 	return (
 		<>
@@ -38,7 +74,7 @@ export default function PortfolioEdit({ children }) {
 				</Offcanvas.Header>
 				<Offcanvas.Body>
 					<StyledFormWrap>
-						<Form>
+						<Form onSubmit={handleSubmit}>
 							<Form.Group controlId="exampleForm.SelectCustom">
 								<Form.Label>
 									Tile/Text for the public portfolio
@@ -579,6 +615,7 @@ export default function PortfolioEdit({ children }) {
 									/>
 								</OverlayTrigger>
 							</Form.Group> */}
+							<input type="submit" value="Save Changes" />
 						</Form>
 					</StyledFormWrap>
 				</Offcanvas.Body>

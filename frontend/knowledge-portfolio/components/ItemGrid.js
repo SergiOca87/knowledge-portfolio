@@ -53,7 +53,7 @@ const StyledEmptyCard = styled.div`
 	margin-bottom: 1.5rem;
 `;
 
-export default function ItemGrid({ id }) {
+export default function ItemGrid({ id, isPublic }) {
 	const { options } = useContext(PortfolioOptionsContext);
 
 	const { data, loading, error } = useQuery(USER_ITEMS_QUERY, {
@@ -77,7 +77,7 @@ export default function ItemGrid({ id }) {
 								className="mb-4"
 								key={item.id}
 							>
-								<Item item={item} />
+								<Item item={item} isPublic={isPublic} />
 							</Col>
 						);
 					})}

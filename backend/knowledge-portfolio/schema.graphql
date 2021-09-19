@@ -47,6 +47,7 @@ type User {
       reason: "This query will be removed in a future version. Please use categoriesCount instead."
     )
   categoriesCount(where: CategoryWhereInput! = {}): Int
+  options: JSON
   passwordResetToken: PasswordState
   passwordResetIssuedAt: String
   passwordResetRedeemedAt: String
@@ -170,6 +171,7 @@ input UserUpdateInput {
   password: String
   items: ItemRelateToManyInput
   categories: CategoryRelateToManyInput
+  options: JSON
   passwordResetToken: String
   passwordResetIssuedAt: String
   passwordResetRedeemedAt: String
@@ -200,6 +202,7 @@ input UserCreateInput {
   password: String
   items: ItemRelateToManyInput
   categories: CategoryRelateToManyInput
+  options: JSON
   passwordResetToken: String
   passwordResetIssuedAt: String
   passwordResetRedeemedAt: String
@@ -213,6 +216,7 @@ type Item {
   id: ID!
   title: String
   status: String
+  visibility: Boolean
   description: String
   singlePageContent: JSON
   image: String
@@ -290,6 +294,8 @@ input ItemWhereInput {
   status_not_ends_with_i: String
   status_in: [String]
   status_not_in: [String]
+  visibility: Boolean
+  visibility_not: Boolean
   description: String
   description_not: String
   description_contains: String
@@ -380,6 +386,8 @@ enum SortItemsBy {
   title_DESC
   status_ASC
   status_DESC
+  visibility_ASC
+  visibility_DESC
   description_ASC
   description_DESC
   image_ASC
@@ -394,6 +402,7 @@ input ItemOrderByInput {
   id: OrderDirection
   title: OrderDirection
   status: OrderDirection
+  visibility: OrderDirection
   description: OrderDirection
   image: OrderDirection
   urlTitle: OrderDirection
@@ -403,6 +412,7 @@ input ItemOrderByInput {
 input ItemUpdateInput {
   title: String
   status: String
+  visibility: Boolean
   description: String
   singlePageContent: JSON
   image: String
@@ -427,6 +437,7 @@ input ItemsUpdateInput {
 input ItemCreateInput {
   title: String
   status: String
+  visibility: Boolean
   description: String
   singlePageContent: JSON
   image: String

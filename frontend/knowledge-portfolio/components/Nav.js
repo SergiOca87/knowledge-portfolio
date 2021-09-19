@@ -31,8 +31,9 @@ export default function Nav() {
 				<div className="d-flex justify-content-end">
 					{user ? (
 						<>
-							<Link href="/add-item">Create Item</Link>
-							<Link href="/">Dashboard</Link>
+							<Link href={`/portfolio/${user.id}`}>
+								Portfolio
+							</Link>
 							<SignOut />
 						</>
 					) : (

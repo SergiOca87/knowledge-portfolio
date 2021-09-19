@@ -103,7 +103,7 @@ const StyledItem = styled.div`
 // Url
 // Completed?
 
-export default function Item({ item }) {
+export default function Item({ item, isPublic }) {
 	return (
 		<StyledItem>
 			<div className="title">
@@ -139,24 +139,26 @@ export default function Item({ item }) {
 					</div>
 				)}
 			</div>
-			<div className="buttons">
-				<Link
-					href={{
-						pathname: '/update',
-						query: {
-							id: item.id,
-						},
-					}}
-				>
-					<Button variant="secondary">
-						<FaPencilAlt />
-					</Button>
-				</Link>
-				<DeleteItem id={item.id} className="btn">
-					{' '}
-					<FaTrashAlt />
-				</DeleteItem>
-			</div>
+			{!isPublic && (
+				<div className="buttons">
+					<Link
+						href={{
+							pathname: '/update',
+							query: {
+								id: item.id,
+							},
+						}}
+					>
+						<Button variant="secondary">
+							<FaPencilAlt />
+						</Button>
+					</Link>
+					<DeleteItem id={item.id} className="btn">
+						{' '}
+						<FaTrashAlt />
+					</DeleteItem>
+				</div>
+			)}
 		</StyledItem>
 	);
 }
