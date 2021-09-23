@@ -26,6 +26,7 @@ import PortfolioEdit from '../../components/PortfolioEdit';
 import PortfolioOptionsContext, {
 	OptionsProvider,
 } from '../../context/PortfolioOptionsContext';
+import UserStyleOptions from '../../components/UserStyleOptions';
 
 const StyledUserCard = styled.div`
 	display: flex;
@@ -122,68 +123,27 @@ export default function UserPortfolioPage() {
 	//Tooltip
 	const [show, setShow] = useState(false);
 	const target = useRef(null);
-
 	const { user } = useContext(UserContext);
-
-	const { options } = useContext(PortfolioOptionsContext);
+	// const { options } = useContext(PortfolioOptionsContext);
+	const userOptions = user.options.options;
 
 	return (
 		<Main>
-			<div
-				css={css`
-					${options.mode === 'dark' &&
-					`
-					--primary: ${options.darkPalette.primary};
-					--secondary: ${options.darkPalette.secondary};
-					--tertiary: ${options.darkPalette.tertiary};
-					`}
-
-					${options.mode === 'light' &&
-					`
-					--primary: ${options.lightPalette.primary};
-					--secondary: ${options.lightPalette.secondary};
-					--tertiary: ${options.lightPalette.tertiary};
-					`}
-
-					p {
-						font-family: ${options.fontFamily}-Regular;
-					}
-
-					h1,
-					h2,
-					h3,
-					h4,
-					h5,
-					h6,
-					.btn {
-						font-family: ${options.fontFamily}-Medium !important;
-					}
-
-					${options.roundEdges &&
-					`
-							div{
-								border-radius: 8px;
-							}
-						`}
-				`}
-			>
+			<UserStyleOptions user={user}>
 				<Container>
 					<StyledUserCard>
-						{/* //TODO: ADD this functionality when Cloudinary support is
-					enabled in Keystone 6 */}
-						{options.userImage &&
-							(user?.image ? (
-								<div
-									className="avatar"
-									css={`
-										background-image: ${user.image};
-									`}
-								></div>
-							) : (
-								<div className="avatar">
-									<FaUser />
-								</div>
-							))}
+						{userOptions.userImage ? (
+							<div
+								className="avatar"
+								css={`
+									background-image: ${user.image};
+								`}
+							></div>
+						) : (
+							<div className="avatar">
+								<FaUser />
+							</div>
+						)}
 						<h1>Welcome to your portfolio, {user?.name}</h1>
 					</StyledUserCard>
 
@@ -274,10 +234,10 @@ export default function UserPortfolioPage() {
 					</UserControls>
 
 					<StyledGridWrap>
-						<ItemGrid id={user?.id} />
+						<ItemGrid user={user} options={user?.options} />
 					</StyledGridWrap>
 				</Container>
-			</div>
+			</UserStyleOptions>
 		</Main>
 	);
 }

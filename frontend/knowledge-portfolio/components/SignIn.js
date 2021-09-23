@@ -5,10 +5,11 @@ import gql from 'graphql-tag';
 import { useMutation, useQuery } from '@apollo/client';
 // import Form from './styles/Form';
 // import useForm from '../lib/useForm';
-
 import React, { useContext, useEffect, useState } from 'react';
 import Router from 'next/router';
 import UserContext from '../context/UserContext';
+import { CURRENT_USER_QUERY } from './User';
+// import { CURRENT_USER_QUERY } from './User';
 
 // import Error from './ErrorMessage';
 
@@ -18,8 +19,21 @@ const SIGNIN_MUTATION = gql`
 			... on UserAuthenticationWithPasswordSuccess {
 				item {
 					id
-					email
 					name
+					email
+					options
+					items {
+						id
+						title
+						description
+						status
+						singlePageContent
+						categories {
+							id
+							name
+							icon
+						}
+					}
 				}
 			}
 			... on UserAuthenticationWithPasswordFailure {
@@ -30,17 +44,19 @@ const SIGNIN_MUTATION = gql`
 	}
 `;
 
-const CURRENT_USER_QUERY = gql`
-	query {
-		authenticatedItem {
-			... on User {
-				id
-				name
-				email
-			}
-		}
-	}
-`;
+// const CURRENT_USER_QUERY = gql`
+// 	query {
+// 		authenticatedItem {
+// 			... on User {
+// 				id
+// 				name
+// 				email
+// 				options
+// 				items
+// 			}
+// 		}
+// 	}
+// `;
 
 export default function SignIn() {
 	const { user, setUser } = useContext(UserContext);
@@ -102,7 +118,7 @@ export default function SignIn() {
 	return (
 		<form method="POST" onSubmit={handleSubmit}>
 			<h2>Sign In</h2>
-			{error && <p>{error}</p>}
+			{error && <p>{error.message}</p>}
 			<fieldset>
 				<div className="input-wrap">
 					<label htmlFor="email">

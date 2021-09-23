@@ -1,5 +1,6 @@
 import React, { useContext, useRef, useState } from 'react';
 import { Router, useRouter } from 'next/router';
+import gql from 'graphql-tag';
 import styled, { css } from 'styled-components';
 import {
 	Container,
@@ -19,18 +20,23 @@ import {
 	FaQrcode,
 } from 'react-icons/fa';
 import Link from 'next/link';
-
+import { USER_CATEGORIES_QUERY } from '../../components/UserCategories';
 import ItemGrid from '../../components/ItemGrid';
 import Main from '../../components/Main';
 import PortfolioOptionsContext, {
 	OptionsProvider,
 } from '../../context/PortfolioOptionsContext';
 import Search from '../../components/Search';
+import { useQuery } from '@apollo/client';
+import UserStyleOptions from '../../components/UserStyleOptions';
+import CategoryFilter from '../../components/CategoryFilter';
 
 const StyledUserCard = styled.div`
-	display: flex;
-	align-items: center;
 	margin-bottom: 6rem;
+	.flex-wrap {
+		display: flex;
+		align-items: center;
+	}
 
 	.avatar {
 		width: 10rem;
@@ -115,88 +121,123 @@ const UserControls = styled.div`
 	}
 `;
 
+const USER_QUERY = gql`
+	query USER_QUERY($id: ID!) {
+		User(where: { id: $id }) {
+			name
+			options
+			items {
+				id
+				title
+				description
+				status
+				singlePageContent
+				categories {
+					id
+					name
+					icon
+				}
+			}
+		}
+	}
+`;
+
 export default function UserPortfolioPage() {
-	//TODO: Here we probably can do a lot knowing the user ID
+	//TODO: The user id could be in the options? Somehow, we need to create the public portfolio with a set id, and use that id in the ItemGrid Component, read next
+	//TODO: PROBABLY THE URL WITH THE QUERY ID WOULD WORK!
 	//TODO: But we need to save details oike user avatar on the user item?
 	//TODO: So that any user or visitor can se that info.
 	const router = useRouter();
 	const { id } = router.query;
 
+	const [chosenCategory, setChosenCategory] = useState(null);
+
 	//Tooltip
 	const [show, setShow] = useState(false);
 	const target = useRef(null);
+	// const { user } = useContext(UserContext);
+	// const { options } = useContext(PortfolioOptionsContext);
 
-	const { user } = useContext(UserContext);
+	const { data, loading, error } = useQuery(USER_QUERY, {
+		variables: { id },
+	});
 
-	const { options } = useContext(PortfolioOptionsContext);
+	const {
+		data: categoriesData,
+		error: categoriesError,
+		loading: categoriesLoading,
+	} = useQuery(USER_CATEGORIES_QUERY, {
+		variables: { id },
+	});
 
-	return (
-		<Main>
-			<div
-				css={css`
-					${options.mode === 'dark' &&
-					`
-					--primary: ${options.darkPalette.primary};
-					--secondary: ${options.darkPalette.secondary};
-					--tertiary: ${options.darkPalette.tertiary};
-					`}
+	if (loading) {
+		return <p>Loading...</p>;
+	}
 
-					${options.mode === 'light' &&
-					`
-					--primary: ${options.lightPalette.primary};
-					--secondary: ${options.lightPalette.secondary};
-					--tertiary: ${options.lightPalette.tertiary};
-					`}
+	console.log('categoriesData', categoriesData);
 
-					p {
-						font-family: ${options.fontFamily}-Regular;
-					}
-
-					h1,
-					h2,
-					h3,
-					h4,
-					h5,
-					h6,
-					.btn {
-						font-family: ${options.fontFamily}-Medium !important;
-					}
-
-					${options.roundEdges &&
-					`
-							div{
-								border-radius: 8px;
-							}
-						`}
-				`}
-			>
-				<Container>
-					<p>** PUBLIC PAGE **</p>
-					<StyledUserCard>
-						{/* //TODO: ADD this functionality when Cloudinary support is
+	if (error) {
+		return <p>There was a problem, {error.message}</p>;
+	} else {
+		console.log('user', data.User);
+		return (
+			<Main>
+				<UserStyleOptions user={data.User}>
+					<Container>
+						<StyledUserCard>
+							{/* //TODO: ADD this functionality when Cloudinary support is
 					enabled in Keystone 6 */}
-						{options.userImage &&
-							(user?.image ? (
-								<div
-									className="avatar"
-									css={`
-										background-image: ${user.image};
-									`}
-								></div>
-							) : (
-								<div className="avatar">
-									<FaUser />
-								</div>
-							))}
-						{options.userTitle && <h1>{options.userTitle}</h1>}
-						{options.userIntro && <p>{options.userIntro}</p>}
-					</StyledUserCard>
-					<Search />
-					<StyledGridWrap>
-						<ItemGrid id={id} isPublic={true} />
-					</StyledGridWrap>
-				</Container>
-			</div>
-		</Main>
-	);
+							<div className="flex-wrap">
+								{data?.User?.options?.userImage &&
+									(data.data?.User?.image ? (
+										<div
+											className="avatar"
+											css={`
+												background-image: ${data?.User
+													?.image};
+											`}
+										></div>
+									) : (
+										<div className="avatar">
+											<FaUser />
+										</div>
+									))}
+								{data?.User?.options?.options?.userTitle && (
+									<h1>
+										{
+											data?.User?.options?.options
+												?.userTitle
+										}
+									</h1>
+								)}
+							</div>
+							{data?.User?.options?.options?.userIntroText && (
+								<p>
+									{
+										data?.User?.options?.options
+											?.userIntroText
+									}
+								</p>
+							)}
+						</StyledUserCard>
+
+						<Search />
+						<CategoryFilter
+							//TODO: Send down a state setter to pass to ItemGrid
+							categories={categoriesData?.allCategories}
+							filterByCategory={setChosenCategory}
+						/>
+						<StyledGridWrap>
+							<ItemGrid
+								user={data.User}
+								isPublic={true}
+								isPublicPage={true}
+								chosenCategory={chosenCategory}
+							/>
+						</StyledGridWrap>
+					</Container>
+				</UserStyleOptions>
+			</Main>
+		);
+	}
 }

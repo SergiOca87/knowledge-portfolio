@@ -8,6 +8,19 @@ export const CURRENT_USER_QUERY = gql`
 				id
 				name
 				email
+				options
+				items {
+					id
+					title
+					description
+					status
+					singlePageContent
+					categories {
+						id
+						name
+						icon
+					}
+				}
 			}
 		}
 	}

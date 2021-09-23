@@ -8,6 +8,7 @@ import { useContext } from 'react';
 import { Col, Row } from 'react-bootstrap';
 import styled from 'styled-components';
 import PortfolioOptionsContext from '../context/PortfolioOptionsContext';
+import UserContext from '../context/UserContext';
 import Item from './Item';
 
 // Exported because it is reused (createItem) to refetch after successfull item creation
@@ -26,24 +27,28 @@ import Item from './Item';
 // 	}
 // `;
 
-export const USER_ITEMS_QUERY = gql`
-	query USER_ITEMS_QUERY($id: ID!) {
-		User(where: { id: $id }) {
-			items {
-				id
-				title
-				description
-				status
-				singlePageContent
-				categories {
-					id
-					name
-					icon
-				}
-			}
-		}
-	}
-`;
+//TODO: This query may be unnecessary, user already has items queried
+//TODO: this Component may need some refactor when used in the public portfolio, maybe grab the id from the URL param
+//TODO: Same with the user options.
+// export const USER_ITEMS_QUERY = gql`
+// 	query USER_ITEMS_QUERY($id: ID!) {
+// 		User(where: { id: $id }) {
+// 			options
+// 			items {
+// 				id
+// 				title
+// 				description
+// 				status
+// 				singlePageContent
+// 				categories {
+// 					id
+// 					name
+// 					icon
+// 				}
+// 			}
+// 		}
+// 	}
+// `;
 
 const StyledEmptyCard = styled.div`
 	padding: 2rem;
@@ -53,39 +58,38 @@ const StyledEmptyCard = styled.div`
 	margin-bottom: 1.5rem;
 `;
 
-export default function ItemGrid({ id, isPublic }) {
-	const { options } = useContext(PortfolioOptionsContext);
+export default function ItemGrid({
+	user,
+	isPublic,
+	options,
+	isPublicPage = false,
+	chosenCategory,
+}) {
+	//TODO: Filter by ChosenCategory
+	return (
+		<>
+			{user && (
+				<Row>
+					{user.items &&
+						user.items?.map((item) => {
+							return (
+								<Col
+									lg={user?.options?.options?.cols}
+									className="mb-4"
+									key={item.id}
+								>
+									<Item item={item} isPublic={isPublic} />
+								</Col>
+							);
+						})}
 
-	const { data, loading, error } = useQuery(USER_ITEMS_QUERY, {
-		variables: { id },
-	});
-
-	if (loading) {
-		return <p>Loading...</p>;
-	}
-
-	if (error) {
-		return <p>There was a problem, {error.message}</p>;
-	} else {
-		return (
-			<Row>
-				{data.User.items &&
-					data.User.items?.map((item) => {
-						return (
-							<Col
-								lg={options.cols}
-								className="mb-4"
-								key={item.id}
-							>
-								<Item item={item} isPublic={isPublic} />
-							</Col>
-						);
-					})}
-
-				<Col lg={options.cols}>
-					<StyledEmptyCard>Add</StyledEmptyCard>
-				</Col>
-			</Row>
-		);
-	}
+					{!isPublicPage && (
+						<Col lg={user?.options?.options?.cols}>
+							<StyledEmptyCard>Add</StyledEmptyCard>
+						</Col>
+					)}
+				</Row>
+			)}
+		</>
+	);
 }

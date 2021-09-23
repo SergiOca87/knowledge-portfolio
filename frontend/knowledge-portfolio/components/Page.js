@@ -6,6 +6,7 @@ import gql from 'graphql-tag';
 import { useContext } from 'react';
 import UserContext from '../context/UserContext';
 import { useQuery } from '@apollo/client';
+import { CURRENT_USER_QUERY } from './User';
 
 const GlobalStyles = createGlobalStyle`
   @font-face {
@@ -215,23 +216,24 @@ const InnerStyles = styled.div`
 `;
 
 // Find if there is a logged in User at this high level in the App
-const CURRENT_USER_QUERY = gql`
-	query {
-		authenticatedItem {
-			... on User {
-				id
-				name
-				email
-			}
-		}
-	}
-`;
+// const CURRENT_USER_QUERY = gql`
+// 	query {
+// 		authenticatedItem {
+// 			... on User {
+// 				id
+// 				name
+// 				email
+// 			}
+// 		}
+// 	}
+// `;
 
 export default function Page({ children }) {
 	const { user, setUser } = useContext(UserContext);
 	const { data, loading, error } = useQuery(CURRENT_USER_QUERY);
 
 	if (data) {
+		console.log('there is data', data);
 		setUser(data?.authenticatedItem);
 	}
 
