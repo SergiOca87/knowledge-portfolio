@@ -8,6 +8,10 @@ export default function createItems() {
 			<Container>
 				<div className="titles">
 					<h1>Add a Category</h1>
+					<p>
+						Categories allow you to group your data and also allow
+						visitors to filter your items.
+					</p>
 				</div>
 				<div>
 					<CreateCategory />

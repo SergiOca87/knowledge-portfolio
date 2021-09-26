@@ -216,7 +216,7 @@ type Item {
   id: ID!
   title: String
   status: String
-  visibility: Boolean
+  visibility: String
   description: String
   singlePageContent: JSON
   image: String
@@ -294,8 +294,24 @@ input ItemWhereInput {
   status_not_ends_with_i: String
   status_in: [String]
   status_not_in: [String]
-  visibility: Boolean
-  visibility_not: Boolean
+  visibility: String
+  visibility_not: String
+  visibility_contains: String
+  visibility_not_contains: String
+  visibility_starts_with: String
+  visibility_not_starts_with: String
+  visibility_ends_with: String
+  visibility_not_ends_with: String
+  visibility_i: String
+  visibility_not_i: String
+  visibility_contains_i: String
+  visibility_not_contains_i: String
+  visibility_starts_with_i: String
+  visibility_not_starts_with_i: String
+  visibility_ends_with_i: String
+  visibility_not_ends_with_i: String
+  visibility_in: [String]
+  visibility_not_in: [String]
   description: String
   description_not: String
   description_contains: String
@@ -412,7 +428,7 @@ input ItemOrderByInput {
 input ItemUpdateInput {
   title: String
   status: String
-  visibility: Boolean
+  visibility: String
   description: String
   singlePageContent: JSON
   image: String
@@ -437,7 +453,7 @@ input ItemsUpdateInput {
 input ItemCreateInput {
   title: String
   status: String
-  visibility: Boolean
+  visibility: String
   description: String
   singlePageContent: JSON
   image: String

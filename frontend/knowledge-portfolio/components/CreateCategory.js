@@ -10,6 +10,8 @@ import styled from 'styled-components';
 import { Col, Container, Row } from 'react-bootstrap';
 import * as FontAwesome from 'react-icons/fa';
 import CategoryIcons from './CategoryIcons';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const StyledForm = styled.form`
 	max-width: 70rem;
@@ -78,7 +80,11 @@ export default function CreateCategory() {
 		CREATE_CATEGORY_MUTATION,
 		{
 			variables: inputs,
-			refetchQueries: [{ query: USER_CATEGORIES_QUERY }],
+
+			//TODO: THis need the ID!
+			refetchQueries: [
+				{ query: USER_CATEGORIES_QUERY, variables: { id: user?.id } },
+			],
 		}
 	);
 
@@ -94,10 +100,18 @@ export default function CreateCategory() {
 	const handleIconClick = (e) => {
 		const iconName = e.target.closest('DIV').dataset.name;
 
-		setInputs({
-			...inputs,
-			icon: iconName,
-		});
+		// If the icon is already selected, remove it, else add it
+		if (inputs.icon === iconName) {
+			setInputs({
+				...inputs,
+				icon: '',
+			});
+		} else {
+			setInputs({
+				...inputs,
+				icon: iconName,
+			});
+		}
 	};
 
 	const handleIconSearch = (e) => {
@@ -109,12 +123,28 @@ export default function CreateCategory() {
 		e.preventDefault();
 
 		//TODO: Success or error? Add toasts
-		//TODO: Show the selected Icon, only 1 at a time, the one on state
-		const res = await createCategory();
+
+		if (error) {
+			toast.error(error.message);
+		} else {
+			const res = await createCategory().catch((err) => toast.error(err));
+
+			setInputs({
+				name: '',
+				author: user ? user : '',
+				icon: '',
+			});
+
+			res?.data?.createCategory &&
+				toast.success(
+					`Created the ${res.data.createCategory.name} category`
+				);
+		}
 	};
 
 	return (
 		<>
+			<ToastContainer />
 			<StyledForm method="POST" onSubmit={handleSubmit}>
 				<fieldset disabled={loading} aria-busy={loading}>
 					<div className="input-wrap text">
@@ -124,6 +154,8 @@ export default function CreateCategory() {
 								required
 								type="text"
 								name="name"
+								value={inputs.name}
+								required
 								onChange={handleChange}
 							/>
 						</label>
@@ -131,7 +163,7 @@ export default function CreateCategory() {
 					<div className="input-wrap text">
 						<Container>
 							<div className="icons-top-bar">
-								<p>Icons</p>
+								<p>Add an Icon</p>
 								<input
 									type="text"
 									value={iconSearch}
@@ -142,7 +174,10 @@ export default function CreateCategory() {
 								/>
 							</div>
 							<div onClick={handleIconClick}>
-								<CategoryIcons search={iconSearch} />
+								<CategoryIcons
+									search={iconSearch}
+									selectedIcon={inputs.icon}
+								/>
 							</div>
 						</Container>
 					</div>

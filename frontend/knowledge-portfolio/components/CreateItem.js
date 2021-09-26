@@ -36,7 +36,7 @@ const CREATE_ITEM_MUTATION = gql`
 		$description: String
 		$status: String
 		$author: ID!
-		$visibility: Checkbox
+		$visibility: String
 		$singlePageContent: JSON
 		$image: String
 		$categories: [CategoryWhereUniqueInput]

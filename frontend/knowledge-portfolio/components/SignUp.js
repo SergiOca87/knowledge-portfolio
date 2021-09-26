@@ -4,7 +4,8 @@ import { useMutation } from '@apollo/client';
 // import Form from './styles/Form';
 // import useForm from '../lib/useForm';
 import { CURRENT_USER_QUERY } from './User';
-// import Error from './ErrorMessage';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import styled from 'styled-components';
 import { useState } from 'react';
 
@@ -42,11 +43,47 @@ export default function SignUp() {
 		});
 	};
 
+	const clearInputs = () => {
+		setInputs({
+			name: '',
+			email: '',
+			password: '',
+		});
+	};
+
 	async function handleSubmit(e) {
 		e.preventDefault(); // stop the form from submitting
-		inputs;
-		const res = await signUp();
-		res;
+
+		if (error) {
+			toast.error(
+				`Failed to create a new account. Please check the register form for errors`
+			);
+
+			clearInputs();
+		}
+
+		if (inputs.password.length < 7) {
+			toast.error(`Password should be at least 8 characters long`);
+			clearInputs();
+		} else {
+			try {
+				const res = await signUp();
+
+				res?.data?.createUser &&
+					toast.success(`Account created with ${res?.data?.createUser.email} - You can
+						now Log In`);
+
+				clearInputs();
+			} catch (err) {
+				console.log(err);
+
+				//TODO: THis is not always the case? Weird prisma error handling
+				toast.error('Email is already in use');
+
+				clearInputs();
+			}
+		}
+
 		// resetForm();
 		// Send the email and password to the graphqlAPI
 	}
@@ -61,12 +98,12 @@ export default function SignUp() {
 			{/* //TODO: This error should be a toast */}
 			{data?.error && <p>data.error</p>}
 			<fieldset>
-				{data?.createUser && (
+				{/* {data?.createUser && (
 					<p>
 						Account created with {data.createUser.email} - You can
 						now Log In.
 					</p>
-				)}
+				)} */}
 				<label htmlFor="name">
 					Your Name
 					<input
@@ -75,6 +112,7 @@ export default function SignUp() {
 						placeholder="Your Name"
 						autoComplete="name"
 						value={inputs.name}
+						required
 						onChange={(e) => handleChange(e)}
 					/>
 				</label>
@@ -85,6 +123,7 @@ export default function SignUp() {
 						name="email"
 						placeholder="Your Email Address"
 						autoComplete="email"
+						required
 						value={inputs.email}
 						onChange={(e) => handleChange(e)}
 					/>
@@ -96,6 +135,7 @@ export default function SignUp() {
 						name="password"
 						placeholder="Password"
 						autoComplete="password"
+						required
 						value={inputs.password}
 						onChange={(e) => handleChange(e)}
 					/>

@@ -34,9 +34,7 @@ export const lists = createSchema({
     fields: {
       title: text(),
       status: text(), 
-      visibility: checkbox({
-        defaultValue: true,
-      }),
+      visibility: text(),
       description: text({
         ui: {
           displayMode: 'textarea'

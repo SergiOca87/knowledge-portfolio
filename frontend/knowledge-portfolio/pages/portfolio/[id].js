@@ -234,7 +234,10 @@ export default function UserPortfolioPage() {
 					</UserControls>
 
 					<StyledGridWrap>
-						<ItemGrid user={user} options={user?.options} />
+						<ItemGrid
+							user={user}
+							options={user?.options ? user.options : ''}
+						/>
 					</StyledGridWrap>
 				</Container>
 			</UserStyleOptions>

@@ -9,6 +9,8 @@ import React, { useContext, useEffect, useState } from 'react';
 import Router from 'next/router';
 import UserContext from '../context/UserContext';
 import { CURRENT_USER_QUERY } from './User';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 // import { CURRENT_USER_QUERY } from './User';
 
 // import Error from './ErrorMessage';
@@ -94,10 +96,10 @@ export default function SignIn() {
 	};
 
 	async function handleSubmit(e) {
-		e.preventDefault(); // stop the form from submitting
+		e.preventDefault();
 
 		if (error) {
-			error;
+			toast.error(error.message);
 		} else {
 			const res = await signin();
 
@@ -106,7 +108,11 @@ export default function SignIn() {
 				password: '',
 			});
 
-			setUser(res?.signInData?.authenticateUserWithPassword.item);
+			if (res.data.authenticateUserWithPassword.code === 'FAILURE') {
+				toast.error(res.data.authenticateUserWithPassword.message);
+			} else {
+				setUser(res?.signInData?.authenticateUserWithPassword.item);
+			}
 		}
 	}
 	// const error =
@@ -116,36 +122,39 @@ export default function SignIn() {
 	// 		: undefined;
 
 	return (
-		<form method="POST" onSubmit={handleSubmit}>
-			<h2>Sign In</h2>
-			{error && <p>{error.message}</p>}
-			<fieldset>
-				<div className="input-wrap">
-					<label htmlFor="email">
-						<span>Email</span>
-						<input
-							type="email"
-							name="email"
-							autoComplete="email"
-							value={inputs.email}
-							onChange={(e) => handleChange(e)}
-						/>
-					</label>
-				</div>
-				<div className="input-wrap">
-					<label htmlFor="password" onFocus={() => 'focus'}>
-						<span>Password</span>
-						<input
-							type="password"
-							name="password"
-							autoComplete="password"
-							value={inputs.password}
-							onChange={(e) => handleChange(e)}
-						/>
-					</label>
-				</div>
-				<button type="submit">Sign In!</button>
-			</fieldset>
-		</form>
+		<>
+			<ToastContainer />
+			<form method="POST" onSubmit={handleSubmit}>
+				<h2>Sign In</h2>
+				{error && <p>{error.message}</p>}
+				<fieldset>
+					<div className="input-wrap">
+						<label htmlFor="email">
+							<span>Email</span>
+							<input
+								type="email"
+								name="email"
+								autoComplete="email"
+								value={inputs.email}
+								onChange={(e) => handleChange(e)}
+							/>
+						</label>
+					</div>
+					<div className="input-wrap">
+						<label htmlFor="password" onFocus={() => 'focus'}>
+							<span>Password</span>
+							<input
+								type="password"
+								name="password"
+								autoComplete="password"
+								value={inputs.password}
+								onChange={(e) => handleChange(e)}
+							/>
+						</label>
+					</div>
+					<button type="submit">Sign In!</button>
+				</fieldset>
+			</form>
+		</>
 	);
 }

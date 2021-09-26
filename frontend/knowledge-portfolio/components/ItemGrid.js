@@ -4,6 +4,7 @@
 
 import { useQuery } from '@apollo/client';
 import gql from 'graphql-tag';
+import Link from 'next/link';
 import { useContext, useEffect, useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
 import styled from 'styled-components';
@@ -144,9 +145,18 @@ export default function ItemGrid({
 							);
 						})}
 
-					{visibleItems <= 0 && (
+					{isPublicPage && visibleItems <= 0 && (
 						<h3>No results match your search criteria</h3>
 					)}
+
+					{!isPublicPage && visibleItems <= 0 && (
+						<p>
+							You can now start adding items to your portfolio or
+							you create a few categories first{' '}
+							<Link href="/add-category">Here</Link>
+						</p>
+					)}
+
 					{!isPublicPage && (
 						<Col lg={user?.options?.options?.cols}>
 							<StyledEmptyCard>Add</StyledEmptyCard>

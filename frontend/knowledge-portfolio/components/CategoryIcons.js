@@ -1,6 +1,9 @@
+//TODO: There's some DRY to do here, lot of repeated code.
+
 import React from 'react';
 import styled from 'styled-components';
 import * as FontAwesome from 'react-icons/fa';
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 const StyledIcons = styled.div`
 	.icons-wrap {
@@ -21,7 +24,8 @@ const StyledIcons = styled.div`
 			transition: all 200ms;
 		}
 
-		&:hover {
+		&:hover,
+		&.active {
 			svg {
 				fill: var(--secondary);
 			}
@@ -29,9 +33,12 @@ const StyledIcons = styled.div`
 	}
 `;
 
-export default function CategoryIcons({ search }) {
+export default function CategoryIcons({ search, selectedIcon }) {
 	let iconsArr = [];
 
+	console.log('inside icons component', selectedIcon);
+
+	// Exclude no "Fa" icons
 	for (let icon in FontAwesome) {
 		if (icon.includes('Fa')) {
 			iconsArr.push(icon);
@@ -52,26 +59,52 @@ export default function CategoryIcons({ search }) {
 								const IconName = FontAwesome[icon];
 
 								return (
-									<div
-										className="icon"
-										data-name={icon}
-										key={icon}
+									<OverlayTrigger
+										placement={'top'}
+										overlay={
+											<Tooltip id={`tooltip-top}`}>
+												{icon.substring(2)}
+											</Tooltip>
+										}
 									>
-										<IconName />
-									</div>
+										<div
+											className={`icon ${
+												icon === selectedIcon
+													? 'active'
+													: ''
+											}`}
+											data-name={icon}
+											key={icon}
+										>
+											<IconName />
+										</div>
+									</OverlayTrigger>
 								);
 							})
 					: iconsArr.map((icon) => {
 							const IconName = FontAwesome[icon];
 
 							return (
-								<div
-									className="icon"
-									data-name={icon}
-									key={icon}
+								<OverlayTrigger
+									placement={'top'}
+									overlay={
+										<Tooltip id={`tooltip-top}`}>
+											{icon.substring(2)}
+										</Tooltip>
+									}
 								>
-									<IconName />
-								</div>
+									<div
+										className={`icon ${
+											icon === selectedIcon
+												? 'active'
+												: ''
+										}`}
+										data-name={icon}
+										key={icon}
+									>
+										<IconName />
+									</div>
+								</OverlayTrigger>
 							);
 					  })}
 			</div>
