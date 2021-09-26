@@ -105,7 +105,7 @@ const StyledItem = styled.div`
 
 export default function Item({ item, isPublic }) {
 	return (
-		<StyledItem>
+		<StyledItem className="portfolio-item">
 			<div className="title">
 				<h4>{item.title}</h4>
 			</div>

@@ -30,5 +30,8 @@
     "react-toastify": "^8.0.1",
     "react-transition-group": "^4.4.2",
     "styled-components": "^5.3.0"
+  },
+  "devDependencies": {
+    "eslint-plugin-react-hooks": "^4.2.0"
   }
 }

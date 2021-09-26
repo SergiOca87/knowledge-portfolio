@@ -1,4 +1,5 @@
 import React from 'react';
+import { Button } from 'react-bootstrap';
 import styled from 'styled-components';
 import * as FontAwesome from 'react-icons/fa';
 
@@ -28,18 +29,51 @@ const StyledCategories = styled.div`
 	}
 `;
 
-export default function Categories({ categories }) {
+export default function Categories({
+	categories,
+	asButtons = false,
+	activeCategories,
+}) {
 	return (
 		<StyledCategories>
 			<p>{categories.length > 1 ? 'Categories:' : 'Category:'}</p>
 			<div className="categories">
+				{asButtons && (
+					<Button
+						size="sm"
+						className={
+							activeCategories.includes('All') ? 'active' : ''
+						}
+						data-category="All"
+					>
+						<span>All</span>
+					</Button>
+				)}
 				{categories.map((category) => {
 					let IconName = '';
 
 					if (category.icon) {
 						IconName = FontAwesome[category.icon];
 					}
-					return (
+					return asButtons ? (
+						<Button
+							size="sm"
+							data-category={`${category.name}`}
+							className={
+								activeCategories.includes(category.name)
+									? 'active'
+									: ''
+							}
+						>
+							{IconName && (
+								<span className="category">
+									<IconName />
+								</span>
+							)}
+
+							<span>{category.name}</span>
+						</Button>
+					) : (
 						<div>
 							{IconName && (
 								<span className="category">

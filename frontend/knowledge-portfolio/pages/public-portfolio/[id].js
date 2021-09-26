@@ -30,6 +30,8 @@ import Search from '../../components/Search';
 import { useQuery } from '@apollo/client';
 import UserStyleOptions from '../../components/UserStyleOptions';
 import CategoryFilter from '../../components/CategoryFilter';
+import SearchFilter from '../../components/SearchFilter';
+import CategoryCloudFilter from '../../components/CategoryCloudFilter';
 
 const StyledUserCard = styled.div`
 	margin-bottom: 6rem;
@@ -147,19 +149,24 @@ export default function UserPortfolioPage() {
 	//TODO: PROBABLY THE URL WITH THE QUERY ID WOULD WORK!
 	//TODO: But we need to save details oike user avatar on the user item?
 	//TODO: So that any user or visitor can se that info.
+	//TODO: The user HAs to have items for this page to work
 	const router = useRouter();
 	const { id } = router.query;
 
 	const [chosenCategory, setChosenCategory] = useState(null);
+	const [text, setText] = useState('');
+	const [activeCategories, setActiveCategories] = useState(['All']);
 
 	//Tooltip
 	const [show, setShow] = useState(false);
 	const target = useRef(null);
-	// const { user } = useContext(UserContext);
+	const { user } = useContext(UserContext);
 	// const { options } = useContext(PortfolioOptionsContext);
 
 	const { data, loading, error } = useQuery(USER_QUERY, {
-		variables: { id },
+		variables: {
+			id: user?.id,
+		},
 	});
 
 	const {
@@ -174,70 +181,62 @@ export default function UserPortfolioPage() {
 		return <p>Loading...</p>;
 	}
 
-	console.log('categoriesData', categoriesData);
-
-	if (error) {
-		return <p>There was a problem, {error.message}</p>;
-	} else {
-		console.log('user', data.User);
-		return (
-			<Main>
-				<UserStyleOptions user={data.User}>
-					<Container>
-						<StyledUserCard>
-							{/* //TODO: ADD this functionality when Cloudinary support is
+	return (
+		<Main>
+			<UserStyleOptions user={user}>
+				<Container>
+					<StyledUserCard>
+						{/* //TODO: ADD this functionality when Cloudinary support is
 					enabled in Keystone 6 */}
-							<div className="flex-wrap">
-								{data?.User?.options?.userImage &&
-									(data.data?.User?.image ? (
-										<div
-											className="avatar"
-											css={`
-												background-image: ${data?.User
-													?.image};
-											`}
-										></div>
-									) : (
-										<div className="avatar">
-											<FaUser />
-										</div>
-									))}
-								{data?.User?.options?.options?.userTitle && (
-									<h1>
-										{
-											data?.User?.options?.options
-												?.userTitle
-										}
-									</h1>
-								)}
-							</div>
-							{data?.User?.options?.options?.userIntroText && (
-								<p>
-									{
-										data?.User?.options?.options
-											?.userIntroText
-									}
-								</p>
+						<div className="flex-wrap">
+							{data?.User?.options?.userImage &&
+								(data.data?.User?.image ? (
+									<div
+										className="avatar"
+										css={`
+											background-image: ${data?.User
+												?.image};
+										`}
+									></div>
+								) : (
+									<div className="avatar">
+										<FaUser />
+									</div>
+								))}
+							{data?.User?.options?.options?.userTitle && (
+								<h1>
+									{data?.User?.options?.options?.userTitle}
+								</h1>
 							)}
-						</StyledUserCard>
+						</div>
+						{data?.User?.options?.options?.userIntroText && (
+							<p>{data?.User?.options?.options?.userIntroText}</p>
+						)}
+					</StyledUserCard>
 
-						<Search />
-						<CategoryFilter
-							//TODO: Send down a state setter to pass to ItemGrid
-							categories={categoriesData?.allCategories}
-							filterByCategory={setChosenCategory}
+					{/* Send down state setters, which ar epassed up, set as
+					state and passed down to ItemGrid */}
+					<SearchFilter filterByText={setText} />
+					<CategoryFilter
+						categories={categoriesData?.allCategories}
+						filterByCategory={setChosenCategory}
+					/>
+					<CategoryCloudFilter
+						activeCategories={activeCategories}
+						setActiveCategories={setActiveCategories}
+					/>
+					<StyledGridWrap>
+						<ItemGrid
+							user={user}
+							isPublic={true}
+							isPublicPage={true}
+							chosenCategory={chosenCategory}
+							chosenText={text}
+							activeCategories={activeCategories}
 						/>
-						<StyledGridWrap>
-							<ItemGrid
-								user={data.User}
-								isPublic={true}
-								isPublicPage={true}
-								chosenCategory={chosenCategory}
-							/>
-						</StyledGridWrap>
-					</Container>
-				</UserStyleOptions>
-			</Main>
-		);
-	}
+					</StyledGridWrap>
+				</Container>
+			</UserStyleOptions>
+		</Main>
+	);
 }

@@ -8,7 +8,8 @@ export default function CategoryFilter({ categories, filterByCategory }) {
 
 	return (
 		<Form.Select onChange={(e) => setChosenCategory(e.target.value)}>
-			{categories.map((category) => {
+			<option value="All">All</option>
+			{categories?.map((category) => {
 				return <option value={category.name}>{category.name}</option>;
 			})}
 		</Form.Select>

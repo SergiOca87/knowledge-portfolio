@@ -125,14 +125,14 @@ export default function UserPortfolioPage() {
 	const target = useRef(null);
 	const { user } = useContext(UserContext);
 	// const { options } = useContext(PortfolioOptionsContext);
-	const userOptions = user.options.options;
+	const userOptions = user?.options?.options;
 
 	return (
 		<Main>
 			<UserStyleOptions user={user}>
 				<Container>
 					<StyledUserCard>
-						{userOptions.userImage ? (
+						{userOptions?.userImage ? (
 							<div
 								className="avatar"
 								css={`

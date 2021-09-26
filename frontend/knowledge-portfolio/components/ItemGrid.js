@@ -4,7 +4,7 @@
 
 import { useQuery } from '@apollo/client';
 import gql from 'graphql-tag';
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
 import styled from 'styled-components';
 import PortfolioOptionsContext from '../context/PortfolioOptionsContext';
@@ -64,25 +64,89 @@ export default function ItemGrid({
 	options,
 	isPublicPage = false,
 	chosenCategory,
+	chosenText,
+	activeCategories,
 }) {
-	//TODO: Filter by ChosenCategory
+	//Number of items that are rendered
+	const [visibleItems, setVisibleItems] = useState(0);
+
+	const isAll = activeCategories?.includes('All') ? true : false;
+
+	const itemsToRender = () => {
+		if (isPublicPage && user.items && chosenText !== '' && !isAll) {
+			return user.items.filter((item) => {
+				return (
+					item.title
+						.toLowerCase()
+						.includes(chosenText.toLowerCase()) &&
+					activeCategories.every((activeCategory) => {
+						if (
+							item.categories.find(
+								(itemCategory) =>
+									itemCategory.name === activeCategory
+							) !== undefined
+						)
+							return true;
+					})
+				);
+			});
+			// Else If there are user.items and the chosenCategory is not "All", undefined or null and chosenText is empty
+		} else if (isPublicPage && user.items && chosenText === '' && !isAll) {
+			return user.items.filter((item) => {
+				return activeCategories.every((activeCategory) => {
+					if (
+						item.categories.find(
+							(itemCategory) =>
+								itemCategory.name === activeCategory
+						) !== undefined
+					)
+						return true;
+				});
+			});
+			// Else If there are user.items and the chosenCategory is "All", undefined or null and chosenText is not empty
+		} else if (isPublicPage && user.items && chosenText !== '' && isAll) {
+			return user.items.filter((item) =>
+				item.title.toLowerCase().includes(chosenText.toLowerCase())
+			);
+			//Else return all items
+		} else {
+			return user.items;
+		}
+	};
+
+	// On Page load, how many visible items are there?
+	useEffect(() => {
+		setVisibleItems(itemsToRender().length);
+	}, []);
+
+	// On filters change
+	useEffect(() => {
+		setVisibleItems(itemsToRender().length);
+	}, [chosenCategory, chosenText, activeCategories]);
+
 	return (
 		<>
 			{user && (
 				<Row>
 					{user.items &&
-						user.items?.map((item) => {
+						itemsToRender().map((item, index) => {
 							return (
-								<Col
-									lg={user?.options?.options?.cols}
-									className="mb-4"
-									key={item.id}
-								>
-									<Item item={item} isPublic={isPublic} />
-								</Col>
+								<>
+									<Col
+										lg={user?.options?.options?.cols}
+										className="mb-4"
+										key={item.id}
+									>
+										<Item item={item} isPublic={isPublic} />
+									</Col>
+									{console.log('index', index)}
+								</>
 							);
 						})}
 
+					{visibleItems <= 0 && (
+						<h3>No results match your search criteria</h3>
+					)}
 					{!isPublicPage && (
 						<Col lg={user?.options?.options?.cols}>
 							<StyledEmptyCard>Add</StyledEmptyCard>
