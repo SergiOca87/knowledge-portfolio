@@ -73,9 +73,39 @@ export default function ItemGrid({
 
 	const isAll = activeCategories?.includes('All') ? true : false;
 
+	const orderUserItemsArray = () => {
+		//TODO: Add the rest of sorting functions
+		let sortedArray = [...user.items];
+
+		// Descending
+		if (user.options?.options?.ordering === 'ascending') {
+			sortedArray.reverse();
+		}
+
+		// alphabetical
+		if (user.options?.options?.ordering === 'alphabetical') {
+			sortedArray.sort((a, b) => a.title.localeCompare(b.title));
+		}
+
+		// Date
+		if (user.options?.options?.ordering === 'date') {
+			console.log('date ordering');
+			sortedArray.sort((a, b) => {
+				return new Date(b.date) - new Date(a.date);
+			});
+		}
+
+		return sortedArray;
+	};
+
+	// if (options.options.ordering === 'descending') {
+	// 	console.log('ordering is descending');
+	// 	user.items.reverse();
+	// }
+
 	const itemsToRender = () => {
 		if (isPublicPage && user.items && chosenText !== '' && !isAll) {
-			return user.items.filter((item) => {
+			return orderUserItemsArray().filter((item) => {
 				return (
 					item.title
 						.toLowerCase()
@@ -93,7 +123,7 @@ export default function ItemGrid({
 			});
 			// Else If there are user.items and the chosenCategory is not "All", undefined or null and chosenText is empty
 		} else if (isPublicPage && user.items && chosenText === '' && !isAll) {
-			return user.items.filter((item) => {
+			return orderUserItemsArray().filter((item) => {
 				return activeCategories.every((activeCategory) => {
 					if (
 						item.categories.find(
@@ -106,12 +136,12 @@ export default function ItemGrid({
 			});
 			// Else If there are user.items and the chosenCategory is "All", undefined or null and chosenText is not empty
 		} else if (isPublicPage && user.items && chosenText !== '' && isAll) {
-			return user.items.filter((item) =>
+			return orderUserItemsArray().filter((item) =>
 				item.title.toLowerCase().includes(chosenText.toLowerCase())
 			);
 			//Else return all items
 		} else {
-			return user.items;
+			return orderUserItemsArray();
 		}
 	};
 
@@ -140,7 +170,6 @@ export default function ItemGrid({
 									>
 										<Item item={item} isPublic={isPublic} />
 									</Col>
-									{console.log('index', index)}
 								</>
 							);
 						})}

@@ -25,6 +25,7 @@ model Item {
   id                String     @id @default(cuid())
   title             String?
   status            String?
+  date              String?
   visibility        String?
   description       String?
   singlePageContent Json?

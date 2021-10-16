@@ -193,17 +193,6 @@ export default function CreateCategory() {
 					<input type="submit" value="submit" />
 				</fieldset>
 			</StyledForm>
-
-			{userCategories && <p>Existing Categories: </p>}
-			{userCategories?.allCategories?.map((category) => {
-				return (
-					<p key={category.id}>
-						<Link href={`/categories/${category.id}`}>
-							{category.name}
-						</Link>
-					</p>
-				);
-			})}
 		</>
 	);
 }

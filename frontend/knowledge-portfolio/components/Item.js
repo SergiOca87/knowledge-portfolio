@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import React from 'react';
 import Link from 'next/link';
 import DeleteItem from './DeleteItem';
@@ -26,6 +26,10 @@ const StyledItem = styled.div`
 			color: #fff;
 			font-family: 'Montserrat-Medium';
 			font-size: 2.2rem;
+		}
+
+		p {
+			margin-bottom: 0;
 		}
 	}
 
@@ -103,11 +107,19 @@ const StyledItem = styled.div`
 // Url
 // Completed?
 
+//TODO: Add Date
 export default function Item({ item, isPublic }) {
 	return (
 		<StyledItem className="portfolio-item">
-			<div className="title">
+			<div
+				className="title"
+				css={css`
+					display: flex;
+					justify-content: ${item.date ? 'space-between' : 'center'};
+				`}
+			>
 				<h4>{item.title}</h4>
+				{item.date && <p>{item.date}</p>}
 			</div>
 			<div className="details">
 				<div className="separator">

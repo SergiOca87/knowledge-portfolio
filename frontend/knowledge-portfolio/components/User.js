@@ -12,6 +12,7 @@ export const CURRENT_USER_QUERY = gql`
 				items {
 					id
 					title
+					date
 					description
 					status
 					singlePageContent

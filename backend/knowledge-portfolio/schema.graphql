@@ -216,6 +216,7 @@ type Item {
   id: ID!
   title: String
   status: String
+  date: String
   visibility: String
   description: String
   singlePageContent: JSON
@@ -294,6 +295,24 @@ input ItemWhereInput {
   status_not_ends_with_i: String
   status_in: [String]
   status_not_in: [String]
+  date: String
+  date_not: String
+  date_contains: String
+  date_not_contains: String
+  date_starts_with: String
+  date_not_starts_with: String
+  date_ends_with: String
+  date_not_ends_with: String
+  date_i: String
+  date_not_i: String
+  date_contains_i: String
+  date_not_contains_i: String
+  date_starts_with_i: String
+  date_not_starts_with_i: String
+  date_ends_with_i: String
+  date_not_ends_with_i: String
+  date_in: [String]
+  date_not_in: [String]
   visibility: String
   visibility_not: String
   visibility_contains: String
@@ -402,6 +421,8 @@ enum SortItemsBy {
   title_DESC
   status_ASC
   status_DESC
+  date_ASC
+  date_DESC
   visibility_ASC
   visibility_DESC
   description_ASC
@@ -418,6 +439,7 @@ input ItemOrderByInput {
   id: OrderDirection
   title: OrderDirection
   status: OrderDirection
+  date: OrderDirection
   visibility: OrderDirection
   description: OrderDirection
   image: OrderDirection
@@ -428,6 +450,7 @@ input ItemOrderByInput {
 input ItemUpdateInput {
   title: String
   status: String
+  date: String
   visibility: String
   description: String
   singlePageContent: JSON
@@ -453,6 +476,7 @@ input ItemsUpdateInput {
 input ItemCreateInput {
   title: String
   status: String
+  date: String
   visibility: String
   description: String
   singlePageContent: JSON

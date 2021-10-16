@@ -29,6 +29,16 @@ const StyledCategories = styled.div`
 	}
 `;
 
+const categoriesTitle = (categories) => {
+	if (categories.length === 0) {
+		return;
+	} else if (categories.length > 1) {
+		return <p>Categories:</p>;
+	} else {
+		return <p>Category:</p>;
+	}
+};
+
 export default function Categories({
 	categories,
 	asButtons = false,
@@ -36,7 +46,7 @@ export default function Categories({
 }) {
 	return (
 		<StyledCategories>
-			<p>{categories.length > 1 ? 'Categories:' : 'Category:'}</p>
+			{categoriesTitle(categories)}
 			<div className="categories">
 				{asButtons && (
 					<Button
@@ -49,7 +59,8 @@ export default function Categories({
 						<span>All</span>
 					</Button>
 				)}
-				{categories.map((category) => {
+
+				{categories?.map((category) => {
 					let IconName = '';
 
 					if (category.icon) {
@@ -58,6 +69,7 @@ export default function Categories({
 					return asButtons ? (
 						<Button
 							size="sm"
+							key={category.id}
 							data-category={`${category.name}`}
 							className={
 								activeCategories.includes(category.name)
@@ -74,7 +86,7 @@ export default function Categories({
 							<span>{category.name}</span>
 						</Button>
 					) : (
-						<div>
+						<div key={category.id}>
 							{IconName && (
 								<span className="category">
 									<IconName />

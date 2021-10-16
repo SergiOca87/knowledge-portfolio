@@ -139,6 +139,119 @@ export default function PortfolioEdit({ children }) {
 							</Form.Group>
 
 							<Form.Group controlId="exampleForm.SelectCustom">
+								<Form.Label>Ordering</Form.Label>
+								<StyledButtonGroup>
+									<OverlayTrigger
+										placement="top"
+										delay={{ show: 250, hide: 400 }}
+										overlay={
+											<Tooltip id="button-tooltip">
+												Ascending
+											</Tooltip>
+										}
+									>
+										<Button
+											variant="outline-secondary"
+											className={
+												options.ordering === 'ascending'
+													? 'active'
+													: ''
+											}
+											onClick={(e) =>
+												setOptions({
+													...options,
+													ordering: 'ascending',
+												})
+											}
+										>
+											<span>Ascending</span>
+										</Button>
+									</OverlayTrigger>
+									<OverlayTrigger
+										placement="top"
+										delay={{ show: 250, hide: 400 }}
+										overlay={
+											<Tooltip id="button-tooltip">
+												Descending
+											</Tooltip>
+										}
+									>
+										<Button
+											variant="outline-secondary"
+											className={
+												options.ordering ===
+												'descending'
+													? 'active'
+													: ''
+											}
+											onClick={(e) =>
+												setOptions({
+													...options,
+													ordering: 'descending',
+												})
+											}
+										>
+											<span>Descending</span>
+										</Button>
+									</OverlayTrigger>
+
+									<OverlayTrigger
+										placement="top"
+										delay={{ show: 250, hide: 400 }}
+										overlay={
+											<Tooltip id="button-tooltip">
+												By Date
+											</Tooltip>
+										}
+									>
+										<Button
+											variant="outline-secondary"
+											className={
+												options.ordering === 'date'
+													? 'active'
+													: ''
+											}
+											onClick={(e) =>
+												setOptions({
+													...options,
+													ordering: 'date',
+												})
+											}
+										>
+											<span>By Date</span>
+										</Button>
+									</OverlayTrigger>
+									<OverlayTrigger
+										placement="top"
+										delay={{ show: 250, hide: 400 }}
+										overlay={
+											<Tooltip id="button-tooltip">
+												Alphabetical
+											</Tooltip>
+										}
+									>
+										<Button
+											variant="outline-secondary"
+											className={
+												options.ordering ===
+												'alphabetical'
+													? 'active'
+													: ''
+											}
+											onClick={(e) =>
+												setOptions({
+													...options,
+													ordering: 'alphabetical',
+												})
+											}
+										>
+											<span>Alphabetical</span>
+										</Button>
+									</OverlayTrigger>
+								</StyledButtonGroup>
+							</Form.Group>
+
+							<Form.Group controlId="exampleForm.SelectCustom">
 								<Form.Label>Columns</Form.Label>
 								<StyledButtonGroup>
 									<OverlayTrigger

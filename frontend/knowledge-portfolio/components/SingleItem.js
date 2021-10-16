@@ -15,6 +15,25 @@ const StyledSingleItem = styled.div`
 	background-color: var(--tertiary);
 	padding: 4rem 2rem;
 	height: 100%;
+
+	.content {
+		max-width: 80rem;
+		margin: 0 auto;
+		padding: 2rem 0;
+	}
+
+	iframe,
+	img {
+		width: 100% !important;
+	}
+
+	p,
+	li,
+	span {
+		color: #fff;
+		font-size: 1.8rem;
+		background-color: transparent;
+	}
 `;
 
 const SINGLE_ITEM_QUERY = gql`

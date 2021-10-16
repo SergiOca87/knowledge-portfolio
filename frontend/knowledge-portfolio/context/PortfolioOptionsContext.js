@@ -42,6 +42,7 @@ export const OptionsProvider = ({ children }) => {
 		public: true,
 		userTitle: '',
 		userIntroText: '',
+		ordering: 'ascending',
 	});
 	return (
 		<PortfolioOptionsContext.Provider value={{ options, setOptions }}>

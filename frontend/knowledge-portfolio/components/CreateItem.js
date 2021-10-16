@@ -40,6 +40,7 @@ const CREATE_ITEM_MUTATION = gql`
 		$singlePageContent: JSON
 		$image: String
 		$categories: [CategoryWhereUniqueInput]
+		$date: String
 		$urlTitle: String
 		$url: String
 	) {
@@ -53,6 +54,7 @@ const CREATE_ITEM_MUTATION = gql`
 				singlePageContent: $singlePageContent
 				image: $image
 				# categories: { connect: { id: $categories } }
+				date: $date
 				categories: { connect: $categories }
 				urlTitle: $urlTitle
 				url: $url
@@ -85,6 +87,7 @@ export default function CreateItem() {
 		image: '',
 		categories: [],
 		urlTitle: '',
+		date: '',
 		url: '',
 	});
 
@@ -156,6 +159,7 @@ export default function CreateItem() {
 	};
 
 	//Single Page Details Drawer
+	//TODO: We can get rid of this or customize
 	function CustomToggle({ children, eventKey }) {
 		const decoratedOnClick = useAccordionButton(
 			eventKey,
@@ -210,6 +214,17 @@ export default function CreateItem() {
 							type="text"
 							name="title"
 							value={inputs.title}
+							onChange={handleChange}
+						/>
+					</label>
+				</div>
+				<div className="input-wrap text">
+					<label htmlFor="date">
+						<span>Date</span>
+						<input
+							type="date"
+							name="date"
+							value={inputs.date}
 							onChange={handleChange}
 						/>
 					</label>

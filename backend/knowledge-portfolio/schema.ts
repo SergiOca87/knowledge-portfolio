@@ -26,7 +26,11 @@ export const lists = createSchema({
       password: password({ isRequired: true }),
       items: relationship({ ref: 'Item.author', many: true }),
       categories: relationship({ ref: 'Category.author', many: true }),
-      options: json()
+      options: json(),
+
+      // role: relationship({
+      //   ref: 'Role.assignedTo', 
+      // })
     },
     access: true,
   }),
@@ -34,6 +38,8 @@ export const lists = createSchema({
     fields: {
       title: text(),
       status: text(), 
+      //TODO: Date can be text or must be a timestamp? If it can be sorted being just text...
+      date: text(),
       visibility: text(),
       description: text({
         ui: {
@@ -136,4 +142,15 @@ export const lists = createSchema({
       icon: text()
     },
   }),
+
+  //TODO: Do we need roles or just logged and not logged is enough?
+  // Role: list({
+  //   fields: {
+  //     name: text({ isRequired: true }),
+  //     assignedTo: relationship({
+  //       ref: 'User.role', //TODO: Add this to user (two way),
+  //       many: true
+  //     })
+  //   }
+  // })
 });

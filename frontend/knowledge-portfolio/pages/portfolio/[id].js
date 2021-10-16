@@ -233,6 +233,7 @@ export default function UserPortfolioPage() {
 						</div>
 					</UserControls>
 
+					{/* {loop throug map} */}
 					<StyledGridWrap>
 						<ItemGrid
 							user={user}

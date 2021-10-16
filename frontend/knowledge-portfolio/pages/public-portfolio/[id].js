@@ -217,10 +217,10 @@ export default function UserPortfolioPage() {
 					{/* Send down state setters, which ar epassed up, set as
 					state and passed down to ItemGrid */}
 					<SearchFilter filterByText={setText} />
-					<CategoryFilter
+					{/* <CategoryFilter
 						categories={categoriesData?.allCategories}
 						filterByCategory={setChosenCategory}
-					/>
+					/> */}
 					<CategoryCloudFilter
 						activeCategories={activeCategories}
 						setActiveCategories={setActiveCategories}
