@@ -48,6 +48,7 @@ type User {
     )
   categoriesCount(where: CategoryWhereInput! = {}): Int
   options: JSON
+  public: Boolean
   passwordResetToken: PasswordState
   passwordResetIssuedAt: String
   passwordResetRedeemedAt: String
@@ -115,6 +116,8 @@ input UserWhereInput {
   categories_every: CategoryWhereInput
   categories_some: CategoryWhereInput
   categories_none: CategoryWhereInput
+  public: Boolean
+  public_not: Boolean
   passwordResetToken_is_set: Boolean
   passwordResetIssuedAt: String
   passwordResetIssuedAt_not: String
@@ -146,6 +149,8 @@ enum SortUsersBy {
   name_DESC
   email_ASC
   email_DESC
+  public_ASC
+  public_DESC
   passwordResetIssuedAt_ASC
   passwordResetIssuedAt_DESC
   passwordResetRedeemedAt_ASC
@@ -156,6 +161,7 @@ input UserOrderByInput {
   id: OrderDirection
   name: OrderDirection
   email: OrderDirection
+  public: OrderDirection
   passwordResetIssuedAt: OrderDirection
   passwordResetRedeemedAt: OrderDirection
 }
@@ -172,6 +178,7 @@ input UserUpdateInput {
   items: ItemRelateToManyInput
   categories: CategoryRelateToManyInput
   options: JSON
+  public: Boolean
   passwordResetToken: String
   passwordResetIssuedAt: String
   passwordResetRedeemedAt: String
@@ -203,6 +210,7 @@ input UserCreateInput {
   items: ItemRelateToManyInput
   categories: CategoryRelateToManyInput
   options: JSON
+  public: Boolean
   passwordResetToken: String
   passwordResetIssuedAt: String
   passwordResetRedeemedAt: String

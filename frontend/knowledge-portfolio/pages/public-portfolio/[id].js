@@ -123,8 +123,8 @@ const UserControls = styled.div`
 	}
 `;
 
-const USER_QUERY = gql`
-	query USER_QUERY($id: ID!) {
+const SINGLE_USER_QUERY = gql`
+	query SINGLE_USER_QUERY($id: ID!) {
 		User(where: { id: $id }) {
 			name
 			options
@@ -160,12 +160,12 @@ export default function UserPortfolioPage() {
 	//Tooltip
 	const [show, setShow] = useState(false);
 	const target = useRef(null);
-	const { user } = useContext(UserContext);
+	// const { user } = useContext(UserContext);
 	// const { options } = useContext(PortfolioOptionsContext);
 
-	const { data, loading, error } = useQuery(USER_QUERY, {
+	const { data, loading, error } = useQuery(SINGLE_USER_QUERY, {
 		variables: {
-			id: user?.id,
+			id,
 		},
 	});
 
@@ -181,9 +181,11 @@ export default function UserPortfolioPage() {
 		return <p>Loading...</p>;
 	}
 
+	console.log('public...', data);
+
 	return (
 		<Main>
-			<UserStyleOptions user={user}>
+			<UserStyleOptions user={data?.User}>
 				<Container>
 					<StyledUserCard>
 						{/* //TODO: ADD this functionality when Cloudinary support is
@@ -227,7 +229,7 @@ export default function UserPortfolioPage() {
 					/>
 					<StyledGridWrap>
 						<ItemGrid
-							user={user}
+							user={data?.User}
 							isPublic={true}
 							isPublicPage={true}
 							chosenCategory={chosenCategory}

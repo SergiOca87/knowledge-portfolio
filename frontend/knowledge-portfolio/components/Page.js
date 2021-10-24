@@ -3,7 +3,7 @@ import styled, { createGlobalStyle } from 'styled-components';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Nav from './Nav';
 import gql from 'graphql-tag';
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import UserContext from '../context/UserContext';
 import { useQuery } from '@apollo/client';
 import { CURRENT_USER_QUERY } from './User';
@@ -233,7 +233,6 @@ export default function Page({ children }) {
 	const { data, loading, error } = useQuery(CURRENT_USER_QUERY);
 
 	if (data) {
-		console.log('there is data', data);
 		setUser(data?.authenticatedItem);
 	}
 

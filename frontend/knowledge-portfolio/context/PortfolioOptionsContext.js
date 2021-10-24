@@ -32,7 +32,8 @@ export const OptionsProvider = ({ children }) => {
 	const [options, setOptions] = useState({
 		// patterns: patterns,
 		palettes: palettes,
-		cols: 6,
+		cols: 2,
+		gap: '1rem',
 		fontFamily: 'Montserrat',
 		mode: 'dark',
 		darkPalette: palettes.darkPalette1,
@@ -43,6 +44,7 @@ export const OptionsProvider = ({ children }) => {
 		userTitle: '',
 		userIntroText: '',
 		ordering: 'ascending',
+		reorderedItems: [],
 	});
 	return (
 		<PortfolioOptionsContext.Provider value={{ options, setOptions }}>

@@ -27,6 +27,7 @@ import PortfolioOptionsContext, {
 	OptionsProvider,
 } from '../../context/PortfolioOptionsContext';
 import UserStyleOptions from '../../components/UserStyleOptions';
+import OrderingModal from '../../components/OrderingModal';
 
 const StyledUserCard = styled.div`
 	display: flex;
@@ -191,7 +192,11 @@ export default function UserPortfolioPage() {
 							>
 								<Button>
 									<Link href={'/'}>
-										<PortfolioEdit placement={'end'} />
+										<PortfolioEdit
+											placement={'end'}
+											// setOpenModal={setOpenModal}
+											// openModal={openModal}
+										/>
 									</Link>
 								</Button>
 							</OverlayTrigger>
@@ -237,7 +242,7 @@ export default function UserPortfolioPage() {
 					<StyledGridWrap>
 						<ItemGrid
 							user={user}
-							options={user?.options ? user.options : ''}
+							// options={user?.options ? user.options : ''}
 						/>
 					</StyledGridWrap>
 				</Container>

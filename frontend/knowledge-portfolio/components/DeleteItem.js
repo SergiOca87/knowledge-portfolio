@@ -3,6 +3,7 @@
 import React, { useContext, useEffect } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import { USER_CATEGORIES_QUERY, getCategories } from './UserCategories';
+import { CURRENT_USER_QUERY, useUser } from './User';
 import { useState } from 'react';
 import gql from 'graphql-tag';
 import Router from 'next/router';
@@ -31,9 +32,7 @@ export default function DeleteItem({ id, children }) {
 			id,
 		},
 
-		refetchQueries: [
-			{ query: USER_ITEMS_QUERY, variables: { id: user?.id } },
-		],
+		refetchQueries: [{ query: CURRENT_USER_QUERY }],
 	});
 
 	const handleDelete = async (e) => {

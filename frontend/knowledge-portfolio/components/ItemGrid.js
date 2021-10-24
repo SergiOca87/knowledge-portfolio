@@ -7,49 +7,15 @@ import gql from 'graphql-tag';
 import Link from 'next/link';
 import { useContext, useEffect, useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import PortfolioOptionsContext from '../context/PortfolioOptionsContext';
 import UserContext from '../context/UserContext';
 import Item from './Item';
 
-// Exported because it is reused (createItem) to refetch after successfull item creation
-// export const ALL_ITEMS_QUERY = gql`
-// 	query {
-// 		allItems {
-// 			id
-// 			title
-// 			description
-// 			status
-// 			category {
-// 				id
-// 				name
-// 			}
-// 		}
-// 	}
-// `;
-
-//TODO: This query may be unnecessary, user already has items queried
-//TODO: this Component may need some refactor when used in the public portfolio, maybe grab the id from the URL param
-//TODO: Same with the user options.
-// export const USER_ITEMS_QUERY = gql`
-// 	query USER_ITEMS_QUERY($id: ID!) {
-// 		User(where: { id: $id }) {
-// 			options
-// 			items {
-// 				id
-// 				title
-// 				description
-// 				status
-// 				singlePageContent
-// 				categories {
-// 					id
-// 					name
-// 					icon
-// 				}
-// 			}
-// 		}
-// 	}
-// `;
+const StyledItemGrid = styled.ul`
+	display: grid;
+	list-style: none;
+`;
 
 const StyledEmptyCard = styled.div`
 	padding: 2rem;
@@ -62,7 +28,7 @@ const StyledEmptyCard = styled.div`
 export default function ItemGrid({
 	user,
 	isPublic,
-	options,
+	// options,
 	isPublicPage = false,
 	chosenCategory,
 	chosenText,
@@ -70,13 +36,16 @@ export default function ItemGrid({
 }) {
 	//Number of items that are rendered
 	const [visibleItems, setVisibleItems] = useState(0);
-
 	const isAll = activeCategories?.includes('All') ? true : false;
+	const { options, setOptions } = useContext(PortfolioOptionsContext);
 
+	let sortedArray = [...user.items];
+
+	// Drag and Drop
+	// const [itemsPosition, setItemsPosition] = useState();
+
+	//TODO: This ordering needs to mutate the user options object (portfolioEdit)
 	const orderUserItemsArray = () => {
-		//TODO: Add the rest of sorting functions
-		let sortedArray = [...user.items];
-
 		// Descending
 		if (user.options?.options?.ordering === 'ascending') {
 			sortedArray.reverse();
@@ -89,11 +58,23 @@ export default function ItemGrid({
 
 		// Date
 		if (user.options?.options?.ordering === 'date') {
-			console.log('date ordering');
-			sortedArray.sort((a, b) => {
-				return new Date(b.date) - new Date(a.date);
-			});
+			sortedArray.sort((a, b) => new Date(b.date) - new Date(a.date));
 		}
+
+		//TODO, not working because well, this never mutates the user
+		if (user.options?.options?.ordering === 'drag') {
+			sortedArray = user.options?.options?.reorderedItems;
+		}
+
+		// if (user.options?.options?.ordering === 'drag') {
+		// 	handleOnDragEnd = (result) => {
+		// 		const [reorderedItem] = sortedArray.splice(
+		// 			result.source.index,
+		// 			1
+		// 		);
+		// 		sortedArray.splice(result.destination.index, 0, reorderedItem);
+		// 	};
+		// }
 
 		return sortedArray;
 	};
@@ -158,40 +139,44 @@ export default function ItemGrid({
 	return (
 		<>
 			{user && (
-				<Row>
-					{user.items &&
-						itemsToRender().map((item, index) => {
-							return (
-								<>
-									<Col
-										lg={user?.options?.options?.cols}
-										className="mb-4"
-										key={item.id}
-									>
-										<Item item={item} isPublic={isPublic} />
-									</Col>
-								</>
+				<>
+					<StyledItemGrid
+						css={css`
+							grid-template-columns: repeat(
+								${user.options?.options.cols},
+								1fr
 							);
-						})}
+							gap: ${user.options?.options.gap};
+						`}
+					>
+						{user.items &&
+							itemsToRender().map((item, index) => {
+								return (
+									<li key={item.id}>
+										<Item item={item} isPublic={isPublic} />
+									</li>
+								);
+							})}
 
-					{isPublicPage && visibleItems <= 0 && (
-						<h3>No results match your search criteria</h3>
-					)}
+						{isPublicPage && visibleItems <= 0 && (
+							<h3>No results match your search criteria</h3>
+						)}
 
-					{!isPublicPage && visibleItems <= 0 && (
-						<p>
-							You can now start adding items to your portfolio or
-							you create a few categories first{' '}
-							<Link href="/add-category">Here</Link>
-						</p>
-					)}
+						{!isPublicPage && visibleItems <= 0 && (
+							<p>
+								You can now start adding items to your portfolio
+								or you create a few categories first{' '}
+								<Link href="/add-category">Here</Link>
+							</p>
+						)}
 
-					{!isPublicPage && (
-						<Col lg={user?.options?.options?.cols}>
-							<StyledEmptyCard>Add</StyledEmptyCard>
-						</Col>
-					)}
-				</Row>
+						{!isPublicPage && (
+							<li lg={user?.options?.options?.cols}>
+								<StyledEmptyCard>Add</StyledEmptyCard>
+							</li>
+						)}
+					</StyledItemGrid>
+				</>
 			)}
 		</>
 	);

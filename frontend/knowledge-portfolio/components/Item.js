@@ -9,6 +9,8 @@ import { FaTrashAlt } from 'react-icons/fa';
 
 const StyledItem = styled.div`
 	height: 100%;
+	width: 100%;
+	flex: 1;
 	background-color: var(--tertiary);
 	display: flex;
 	flex-direction: column;

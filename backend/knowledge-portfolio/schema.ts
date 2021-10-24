@@ -27,6 +27,7 @@ export const lists = createSchema({
       items: relationship({ ref: 'Item.author', many: true }),
       categories: relationship({ ref: 'Category.author', many: true }),
       options: json(),
+      public: checkbox({ defaultValue: true })
 
       // role: relationship({
       //   ref: 'Role.assignedTo', 

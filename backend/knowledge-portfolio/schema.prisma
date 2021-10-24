@@ -16,6 +16,7 @@ model User {
   items                   Item[]     @relation("Item_author")
   categories              Category[] @relation("Category_author")
   options                 Json?
+  public                  Boolean?
   passwordResetToken      String?
   passwordResetIssuedAt   DateTime?
   passwordResetRedeemedAt DateTime?

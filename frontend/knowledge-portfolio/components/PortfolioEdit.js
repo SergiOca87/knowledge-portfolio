@@ -2,7 +2,7 @@
 
 import { useMutation } from '@apollo/client';
 import gql from 'graphql-tag';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import {
 	Offcanvas,
 	Button,
@@ -14,6 +14,8 @@ import { FaPencilAlt } from 'react-icons/fa';
 import styled from 'styled-components';
 import PortfolioOptionsContext from '../context/PortfolioOptionsContext';
 import UserContext from '../context/UserContext';
+import OrderingModal from './OrderingModal';
+import { CURRENT_USER_QUERY } from './User';
 
 const StyledFormWrap = styled.div``;
 const StyledButtonGroup = styled.div``;
@@ -35,8 +37,10 @@ const UPDATE_USER_MUTATION = gql`
 export default function PortfolioEdit({ children }) {
 	const { user } = useContext(UserContext);
 	const { options, setOptions } = useContext(PortfolioOptionsContext);
-
+	const [openModal, setOpenModal] = useState(false);
 	const [show, setShow] = useState(false);
+	const [reorderedItems, setReorderedItems] = useState(null);
+
 	const handleClose = () => setShow(false);
 	const handleShow = () => setShow(true);
 
@@ -51,17 +55,29 @@ export default function PortfolioEdit({ children }) {
 				id: user?.id,
 				options: optionsObject,
 			},
+			refetchQueries: [{ query: CURRENT_USER_QUERY }],
 		}
 	);
 
 	async function handleSubmit(e) {
-		e.preventDefault();
+		e ? e.preventDefault() : '';
 
 		optionsObject.options = { ...options };
 		optionsObject = JSON.stringify(optionsObject);
 
-		const res = await updateUser().then(console.log(user));
+		const res = await updateUser().then(
+			console.log('user was updated', user, 'with options', options)
+		);
 	}
+
+	//TODO: How can we "handleSubmit" after adding this orderedItems Array to options
+	//TODO. Would be better not to have to save changes after saving order...
+	useEffect(() => {
+		console.log('on load, user options are', user.options);
+		if (reorderedItems && reorderedItems.length) {
+			setOptions({ ...options, reorderedItems: reorderedItems });
+		}
+	}, [reorderedItems]);
 
 	return (
 		<>
@@ -146,6 +162,43 @@ export default function PortfolioEdit({ children }) {
 										delay={{ show: 250, hide: 400 }}
 										overlay={
 											<Tooltip id="button-tooltip">
+												Drag & Drop
+											</Tooltip>
+										}
+									>
+										<Button
+											variant="primary"
+											onClick={() =>
+												openModal
+													? setOpenModal(false)
+													: setOpenModal(true)
+											}
+										>
+											Launch static backdrop modal
+										</Button>
+										{/* 
+										<Button
+											variant="outline-secondary"
+											className={
+												options.ordering === 'drag'
+													? 'active'
+													: ''
+											}
+											onClick={(e) =>
+												setOptions({
+													...options,
+													ordering: 'drag',
+												})
+											}
+										>
+											<span>Drag & Drop</span>
+										</Button> */}
+									</OverlayTrigger>
+									<OverlayTrigger
+										placement="top"
+										delay={{ show: 250, hide: 400 }}
+										overlay={
+											<Tooltip id="button-tooltip">
 												Ascending
 											</Tooltip>
 										}
@@ -161,6 +214,7 @@ export default function PortfolioEdit({ children }) {
 												setOptions({
 													...options,
 													ordering: 'ascending',
+													orderedItems: [],
 												})
 											}
 										>
@@ -188,6 +242,7 @@ export default function PortfolioEdit({ children }) {
 												setOptions({
 													...options,
 													ordering: 'descending',
+													orderedItems: [],
 												})
 											}
 										>
@@ -215,6 +270,7 @@ export default function PortfolioEdit({ children }) {
 												setOptions({
 													...options,
 													ordering: 'date',
+													orderedItems: [],
 												})
 											}
 										>
@@ -242,6 +298,7 @@ export default function PortfolioEdit({ children }) {
 												setOptions({
 													...options,
 													ordering: 'alphabetical',
+													orderedItems: [],
 												})
 											}
 										>
@@ -266,14 +323,14 @@ export default function PortfolioEdit({ children }) {
 										<Button
 											variant="outline-secondary"
 											className={
-												options.cols === 12
+												options.cols === 1
 													? 'active'
 													: ''
 											}
 											onClick={(e) =>
 												setOptions({
 													...options,
-													cols: 12,
+													cols: 1,
 												})
 											}
 										>
@@ -292,14 +349,14 @@ export default function PortfolioEdit({ children }) {
 										<Button
 											variant="outline-secondary"
 											className={
-												options.cols === 6
+												options.cols === 2
 													? 'active'
 													: ''
 											}
 											onClick={(e) =>
 												setOptions({
 													...options,
-													cols: 6,
+													cols: 2,
 												})
 											}
 										>
@@ -318,14 +375,14 @@ export default function PortfolioEdit({ children }) {
 										<Button
 											variant="outline-secondary"
 											className={
-												options.cols === 4
+												options.cols === 3
 													? 'active'
 													: ''
 											}
 											onClick={(e) =>
 												setOptions({
 													...options,
-													cols: 4,
+													cols: 3,
 												})
 											}
 										>
@@ -732,6 +789,13 @@ export default function PortfolioEdit({ children }) {
 						</Form>
 					</StyledFormWrap>
 				</Offcanvas.Body>
+
+				<OrderingModal
+					itemList={user?.items}
+					openModal={openModal}
+					setOpenModal={setOpenModal}
+					setReorderedItems={setReorderedItems}
+				/>
 			</StyledCanvas>
 		</>
 	);
