@@ -30,9 +30,9 @@ const StyledCategories = styled.div`
 `;
 
 const categoriesTitle = (categories) => {
-	if (categories.length === 0) {
+	if (categories && categories.length === 0) {
 		return;
-	} else if (categories.length > 1) {
+	} else if (categories && categories.length > 1) {
 		return <p>Categories:</p>;
 	} else {
 		return <p>Category:</p>;

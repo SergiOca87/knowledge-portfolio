@@ -20,7 +20,7 @@ import {
 	FaQrcode,
 } from 'react-icons/fa';
 import Link from 'next/link';
-import { USER_CATEGORIES_QUERY } from '../../components/UserCategories';
+// import { USER_CATEGORIES_QUERY } from '../../components/UserCategories';
 import ItemGrid from '../../components/ItemGrid';
 import Main from '../../components/Main';
 import PortfolioOptionsContext, {
@@ -32,6 +32,7 @@ import UserStyleOptions from '../../components/UserStyleOptions';
 import CategoryFilter from '../../components/CategoryFilter';
 import SearchFilter from '../../components/SearchFilter';
 import CategoryCloudFilter from '../../components/CategoryCloudFilter';
+import UserCard from '../../components/UserCard';
 
 const StyledUserCard = styled.div`
 	margin-bottom: 6rem;
@@ -128,6 +129,9 @@ const SINGLE_USER_QUERY = gql`
 		User(where: { id: $id }) {
 			name
 			options
+			categories {
+				id
+			}
 			items {
 				id
 				title
@@ -169,42 +173,27 @@ export default function UserPortfolioPage() {
 		},
 	});
 
-	const {
-		data: categoriesData,
-		error: categoriesError,
-		loading: categoriesLoading,
-	} = useQuery(USER_CATEGORIES_QUERY, {
-		variables: { id },
-	});
+	console.log('user id on public portfolio page is...', id);
+
+	// const {
+	// 	data: categoriesData,
+	// 	error: categoriesError,
+	// 	loading: categoriesLoading,
+	// } = useQuery(USER_CATEGORIES_QUERY, {
+	// 	variables: { id },
+	// });
 
 	if (loading) {
 		return <p>Loading...</p>;
 	}
 
-	console.log('public...', data);
-
 	return (
 		<Main>
 			<UserStyleOptions user={data?.User}>
 				<Container>
+					<UserCard userId={id} />
 					<StyledUserCard>
-						{/* //TODO: ADD this functionality when Cloudinary support is
-					enabled in Keystone 6 */}
 						<div className="flex-wrap">
-							{data?.User?.options?.userImage &&
-								(data.data?.User?.image ? (
-									<div
-										className="avatar"
-										css={`
-											background-image: ${data?.User
-												?.image};
-										`}
-									></div>
-								) : (
-									<div className="avatar">
-										<FaUser />
-									</div>
-								))}
 							{data?.User?.options?.options?.userTitle && (
 								<h1>
 									{data?.User?.options?.options?.userTitle}
@@ -226,6 +215,7 @@ export default function UserPortfolioPage() {
 					<CategoryCloudFilter
 						activeCategories={activeCategories}
 						setActiveCategories={setActiveCategories}
+						userId={id}
 					/>
 					<StyledGridWrap>
 						<ItemGrid

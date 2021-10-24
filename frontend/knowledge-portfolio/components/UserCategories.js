@@ -4,6 +4,8 @@ import gql from 'graphql-tag';
 import UserContext from '../context/UserContext';
 import { useContext } from 'react';
 
+//TODO: Do We even need this? We have it all on the user...
+
 export const USER_CATEGORIES_QUERY = gql`
 	query USER_CATEGORIES_QUERY($id: ID!) {
 		allCategories(where: { author: { id: $id } }) {
@@ -14,12 +16,12 @@ export const USER_CATEGORIES_QUERY = gql`
 	}
 `;
 
-export function getCategories() {
-	const { user } = useContext(UserContext);
+export function getCategories(userId) {
+	// const { user } = useContext(UserContext);
 
 	const { data, error, loading } = useQuery(USER_CATEGORIES_QUERY, {
 		variables: {
-			id: user?.id,
+			id: userId,
 		},
 	});
 

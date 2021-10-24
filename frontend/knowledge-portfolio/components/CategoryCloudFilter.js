@@ -6,10 +6,9 @@ import { USER_CATEGORIES_QUERY, getCategories } from './UserCategories';
 export default function CategoryCloudFilter({
 	activeCategories,
 	setActiveCategories,
+	userId,
 }) {
-	const { user } = useContext(UserContext);
-	const userCategories = getCategories();
-	// const [activeCategories, setActiveCategories] = useState([]);
+	const userCategories = getCategories(userId);
 
 	//TODO: Handle the "All" case
 	const handleButtonClick = (e) => {

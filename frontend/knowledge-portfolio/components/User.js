@@ -27,6 +27,14 @@ export const CURRENT_USER_QUERY = gql`
 	}
 `;
 
+export const SINGLE_USER_QUERY = gql`
+	query SINGLE_USER_QUERY($id: ID!) {
+		User(where: { id: $id }) {
+			name
+		}
+	}
+`;
+
 export function useUser() {
 	// const { data } = useQuery(CURRENT_USER_QUERY);
 	// const { user, setUser } = useContext(UserContext);
