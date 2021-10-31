@@ -4,15 +4,19 @@
 //TODO: How to assign the item to a choosen category
 //TODO: Add Toast for errors
 //TODO: At the moment we can connect existing categories, but may be useful to be able to create them ehre as well
+//TODO: Refetch the logged in user (the only poissible user that should be able to create items)
 import { useContext, useEffect, useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import gql from 'graphql-tag';
 import { USER_CATEGORIES_QUERY, getCategories } from './UserCategories';
 import Link from 'next/link';
-import { USER_ITEMS_QUERY } from './ItemGrid';
+// import { USER_ITEMS_QUERY } from './ItemGrid';
+import { CURRENT_USER_QUERY } from '../components/User';
 import Router from 'next/router';
 import UserContext from '../context/UserContext';
 import { EditorState, convertFromRaw } from 'draft-js';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import styled, { css } from 'styled-components';
 import { Accordion, Button, useAccordionButton } from 'react-bootstrap';
@@ -77,6 +81,8 @@ export default function CreateItem() {
 	const { user } = useContext(UserContext);
 	const userCategories = getCategories();
 
+	console.log('current user', user);
+
 	const [inputs, setInputs] = useState({
 		title: '',
 		description: '',
@@ -90,8 +96,6 @@ export default function CreateItem() {
 		date: '',
 		url: '',
 	});
-
-	console.log('create on mount', inputs);
 
 	useEffect(() => {
 		setInputs({
@@ -131,9 +135,7 @@ export default function CreateItem() {
 		CREATE_ITEM_MUTATION,
 		{
 			variables: inputs,
-			refetchQueries: [
-				{ query: USER_ITEMS_QUERY, variables: { id: user?.id } },
-			],
+			refetchQueries: [{ query: CURRENT_USER_QUERY }],
 		}
 	);
 
@@ -182,19 +184,19 @@ export default function CreateItem() {
 		e.preventDefault();
 
 		if (error) {
-			//TODO: Toast
-			console.log('error on create', error);
+			toast.error(error);
 		} else {
 			const res = await createItem();
 
-			//TODO: Successfull Toast
+			res?.data?.createItem &&
+				toast.success(`${res.data.createItem.title} has been created`);
 
 			// Clear form on submit
 			setInputs({
 				title: '',
 				description: '',
 				status: 'finished',
-				categories: '',
+				categories: [],
 			});
 		}
 

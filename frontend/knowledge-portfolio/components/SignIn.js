@@ -123,7 +123,6 @@ export default function SignIn() {
 
 	return (
 		<>
-			<ToastContainer />
 			<form method="POST" onSubmit={handleSubmit}>
 				<h2>Sign In</h2>
 				{error && <p>{error.message}</p>}

@@ -1,7 +1,7 @@
 import React from 'react';
 import QRCode from 'qrcode.react';
 import Main from '../../components/Main';
-import { Container } from 'react-bootstrap';
+import { Container, Modal } from 'react-bootstrap';
 import router, { useRouter } from 'next/router';
 import Link from 'next/link';
 

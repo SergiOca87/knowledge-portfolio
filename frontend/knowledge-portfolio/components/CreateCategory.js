@@ -12,6 +12,7 @@ import * as FontAwesome from 'react-icons/fa';
 import CategoryIcons from './CategoryIcons';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { CURRENT_USER_QUERY } from './User';
 
 const StyledForm = styled.form`
 	max-width: 70rem;
@@ -65,7 +66,7 @@ export default function CreateCategory() {
 
 	const [inputs, setInputs] = useState({
 		name: '',
-		author: user ? user : '',
+		author: user ? user.id : '',
 		icon: '',
 	});
 
@@ -82,9 +83,7 @@ export default function CreateCategory() {
 			variables: inputs,
 
 			//TODO: THis need the ID!
-			refetchQueries: [
-				{ query: USER_CATEGORIES_QUERY, variables: { id: user?.id } },
-			],
+			refetchQueries: [{ query: CURRENT_USER_QUERY }],
 		}
 	);
 
@@ -131,7 +130,7 @@ export default function CreateCategory() {
 
 			setInputs({
 				name: '',
-				author: user ? user : '',
+				author: user ? user.id : '',
 				icon: '',
 			});
 

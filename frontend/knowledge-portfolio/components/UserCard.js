@@ -1,10 +1,13 @@
 import { useQuery } from '@apollo/client';
 import React from 'react';
 import styled, { css } from 'styled-components';
-import { SINGLE_USER_QUERY } from '../components/User';
+import { FaEnvelope, FaLinkedin, FaUser } from 'react-icons/fa';
+
+//TODO: The user card needs to have the buttons to follow/unfollow.
+//TODO: Just pass the user Object? So no need to query again?
+//TODO: BONUS -  The usr card need to  have the button to send a message.
 
 const StyledUserCard = styled.div`
-	height: 100%;
 	width: 100%;
 	flex: 1;
 	background-color: var(--tertiary);
@@ -96,21 +99,19 @@ const StyledUserCard = styled.div`
 	}
 `;
 
-export default function UserCard({ userId }) {
-	const { data, error, loading } = useQuery(SINGLE_USER_QUERY, {
-		variables: {
-			id: userId,
-		},
-	});
+export default function UserCard({ user }) {
+	// const { data, error, loading } = useQuery(SINGLE_USER_QUERY, {
+	// 	variables: {
+	// 		id: userId,
+	// 	},
+	// });
 
-	const user = data.User;
-
-	return loading ? (
-		<p>Loading...</p>
-	) : (
+	// const user = data.User;
+	console.log('user card', user);
+	return (
 		<StyledUserCard>
 			<div className="title">
-				{user.options?.userImage &&
+				{user?.options?.userImage &&
 					(data.user.image ? (
 						<div
 							className="avatar"
@@ -125,6 +126,34 @@ export default function UserCard({ userId }) {
 					))}
 				<div>User Image</div>
 				<h3>{user.name}</h3>
+				<p>
+					{user.publicEmail && (
+						<a href={`mailto:${user.email}`}>
+							<FaEnvelope />
+						</a>
+					)}
+					{user.linkedin && (
+						<a href={user.linkedin} target="_blank">
+							<FaLinkedin />
+						</a>
+					)}
+					{user.instagram && (
+						<a href={user.instagram} target="_blank">
+							<FaInstagram />
+						</a>
+					)}
+					{user.youtube && (
+						<a href={user.youtube} target="_blank">
+							<FaLinkedin />
+						</a>
+					)}
+					//TODO: Replace this icon
+					{user.website && (
+						<a href={user.website} target="_blank">
+							<FaUser />
+						</a>
+					)}
+				</p>
 			</div>
 		</StyledUserCard>
 	);

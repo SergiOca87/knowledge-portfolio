@@ -12,14 +12,26 @@ model User {
   id                      String     @id @default(cuid())
   name                    String?
   email                   String?    @unique
+  publicEmail             Boolean?
   password                String?
+  specialization          String?
   items                   Item[]     @relation("Item_author")
+  sent                    Message?   @relation("Message_sender")
+  received                Message[]  @relation("Message_receiver_User_received")
   categories              Category[] @relation("Category_author")
   options                 Json?
+  following               User[]     @relation("User_following_many")
+  followers               User[]     @relation("User_followers_many")
   public                  Boolean?
+  linkedin                String?
+  instagram               String?
+  youtube                 String?
+  website                 String?
   passwordResetToken      String?
   passwordResetIssuedAt   DateTime?
   passwordResetRedeemedAt DateTime?
+  from_User_following     User[]     @relation("User_following_many")
+  from_User_followers     User[]     @relation("User_followers_many")
 }
 
 model Item {
@@ -49,4 +61,12 @@ model Category {
   icon     String?
 
   @@index([authorId])
+}
+
+model Message {
+  id       String  @id @default(cuid())
+  text     String?
+  sender   User?   @relation("Message_sender", fields: [senderId], references: [id])
+  senderId String? @unique @map("sender")
+  receiver User[]  @relation("Message_receiver_User_received")
 }

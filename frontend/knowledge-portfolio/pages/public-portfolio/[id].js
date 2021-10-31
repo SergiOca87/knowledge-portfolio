@@ -33,6 +33,7 @@ import CategoryFilter from '../../components/CategoryFilter';
 import SearchFilter from '../../components/SearchFilter';
 import CategoryCloudFilter from '../../components/CategoryCloudFilter';
 import UserCard from '../../components/UserCard';
+import { SINGLE_USER_QUERY } from '../../components/User';
 
 const StyledUserCard = styled.div`
 	margin-bottom: 6rem;
@@ -124,29 +125,31 @@ const UserControls = styled.div`
 	}
 `;
 
-const SINGLE_USER_QUERY = gql`
-	query SINGLE_USER_QUERY($id: ID!) {
-		User(where: { id: $id }) {
-			name
-			options
-			categories {
-				id
-			}
-			items {
-				id
-				title
-				description
-				status
-				singlePageContent
-				categories {
-					id
-					name
-					icon
-				}
-			}
-		}
-	}
-`;
+// const SINGLE_USER_QUERY = gql`
+// 	query SINGLE_USER_QUERY($id: ID!) {
+// 		User(where: { id: $id }) {
+// 			name
+// 			email
+// 			publicEmail
+// 			options
+// 			categories {
+// 				id
+// 			}
+// 			items {
+// 				id
+// 				title
+// 				description
+// 				status
+// 				singlePageContent
+// 				categories {
+// 					id
+// 					name
+// 					icon
+// 				}
+// 			}
+// 		}
+// 	}
+// `;
 
 export default function UserPortfolioPage() {
 	//TODO: The user id could be in the options? Somehow, we need to create the public portfolio with a set id, and use that id in the ItemGrid Component, read next
@@ -187,21 +190,21 @@ export default function UserPortfolioPage() {
 		return <p>Loading...</p>;
 	}
 
+	const user = data?.User;
+
 	return (
 		<Main>
-			<UserStyleOptions user={data?.User}>
+			<UserStyleOptions user={user}>
 				<Container>
-					<UserCard userId={id} />
+					<UserCard user={user} />
 					<StyledUserCard>
 						<div className="flex-wrap">
-							{data?.User?.options?.options?.userTitle && (
-								<h1>
-									{data?.User?.options?.options?.userTitle}
-								</h1>
+							{user?.options?.options?.userTitle && (
+								<h1>{user?.options?.options?.userTitle}</h1>
 							)}
 						</div>
-						{data?.User?.options?.options?.userIntroText && (
-							<p>{data?.User?.options?.options?.userIntroText}</p>
+						{user?.options?.options?.userIntroText && (
+							<p>{user?.options?.options?.userIntroText}</p>
 						)}
 					</StyledUserCard>
 
@@ -219,7 +222,7 @@ export default function UserPortfolioPage() {
 					/>
 					<StyledGridWrap>
 						<ItemGrid
-							user={data?.User}
+							user={user}
 							isPublic={true}
 							isPublicPage={true}
 							chosenCategory={chosenCategory}

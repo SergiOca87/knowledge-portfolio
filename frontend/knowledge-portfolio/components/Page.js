@@ -7,6 +7,7 @@ import { useContext, useEffect } from 'react';
 import UserContext from '../context/UserContext';
 import { useQuery } from '@apollo/client';
 import { CURRENT_USER_QUERY } from './User';
+import { ToastContainer, toast } from 'react-toastify';
 
 const GlobalStyles = createGlobalStyle`
   @font-face {
@@ -241,13 +242,14 @@ export default function Page({ children }) {
 	}
 
 	if (error) {
-		error;
+		toast.error(error);
 	}
 
 	return (
 		<div>
 			<GlobalStyles />
 			<Nav />
+			<ToastContainer />
 			<InnerStyles>{children}</InnerStyles>
 		</div>
 	);

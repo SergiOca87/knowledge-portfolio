@@ -8,7 +8,28 @@ export const CURRENT_USER_QUERY = gql`
 				id
 				name
 				email
+				publicEmail
 				options
+				linkedin
+				instagram
+				youtube
+				website
+				sent {
+					id
+					text
+					receiver {
+						id
+						name
+					}
+				}
+				received {
+					id
+					text
+					sender {
+						id
+						name
+					}
+				}
 				items {
 					id
 					title
@@ -27,10 +48,33 @@ export const CURRENT_USER_QUERY = gql`
 	}
 `;
 
+//TODO: single user query need to have the social media data in order to display it on its card.
+//TODO: BONUS - Do we need to query the options for personalized user card on the public profiles page?
 export const SINGLE_USER_QUERY = gql`
 	query SINGLE_USER_QUERY($id: ID!) {
 		User(where: { id: $id }) {
 			name
+			email
+			publicEmail
+			options
+			instagram
+			youtube
+			website
+			categories {
+				id
+			}
+			items {
+				id
+				title
+				description
+				status
+				singlePageContent
+				categories {
+					id
+					name
+					icon
+				}
+			}
 		}
 	}
 `;

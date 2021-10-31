@@ -9,6 +9,7 @@ const StyledCategories = styled.div`
 		flex-wrap: wrap;
 		margin-top: 0.5rem;
 		padding-left: 2rem;
+		gap: 0.5rem;
 
 		.category {
 			font-size: 1.8rem;
@@ -24,7 +25,6 @@ const StyledCategories = styled.div`
 			padding: 0.8rem 1.5rem;
 			letter-spacing: 1px;
 			font-family: 'Montserrat-Medium';
-			margin-right: 0.5rem;
 		}
 	}
 `;

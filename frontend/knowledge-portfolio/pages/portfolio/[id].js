@@ -6,6 +6,7 @@ import {
 	Row,
 	Col,
 	Button,
+	Modal,
 	OverlayTrigger,
 	Tooltip,
 } from 'react-bootstrap';
@@ -28,6 +29,7 @@ import PortfolioOptionsContext, {
 } from '../../context/PortfolioOptionsContext';
 import UserStyleOptions from '../../components/UserStyleOptions';
 import OrderingModal from '../../components/OrderingModal';
+import QrModal from '../../components/QrModal';
 
 const StyledUserCard = styled.div`
 	display: flex;
@@ -120,13 +122,20 @@ const UserControls = styled.div`
 export default function UserPortfolioPage() {
 	const router = useRouter();
 	const { id } = router.query;
-
+	const [openModal, setOpenModal] = useState(false);
+	const [showQrModal, setShowQrModal] = useState(false);
 	//Tooltip
 	const [show, setShow] = useState(false);
 	const target = useRef(null);
 	const { user } = useContext(UserContext);
 	// const { options } = useContext(PortfolioOptionsContext);
 	const userOptions = user?.options?.options;
+
+	console.log('user portfolio?', user);
+
+	const handleClose = () => {
+		setShow(false);
+	};
 
 	return (
 		<Main>
@@ -226,13 +235,19 @@ export default function UserPortfolioPage() {
 									</Tooltip>
 								}
 							>
-								<Button>
-									<Link
+								<Button
+									onClick={() =>
+										showQrModal
+											? setShowQrModal(false)
+											: setShowQrModal(true)
+									}
+								>
+									{/* <Link
 										href={`/qr/${id}`}
 										query={`${router.pathname}`}
-									>
-										<FaQrcode />
-									</Link>
+									> */}
+									<FaQrcode />
+									{/* </Link> */}
 								</Button>
 							</OverlayTrigger>
 						</div>
@@ -247,6 +262,10 @@ export default function UserPortfolioPage() {
 					</StyledGridWrap>
 				</Container>
 			</UserStyleOptions>
+			<QrModal
+				showQrModal={showQrModal}
+				setShowQrModal={setShowQrModal}
+			/>
 		</Main>
 	);
 }

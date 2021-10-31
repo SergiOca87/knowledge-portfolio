@@ -23,11 +23,23 @@ export const lists = createSchema({
     fields: {
       name: text({ isRequired: true }),
       email: text({ isRequired: true, isUnique: true }),
+      publicEmail: checkbox({ defaultValue: true }),
       password: password({ isRequired: true }),
+      specialization: text(),
       items: relationship({ ref: 'Item.author', many: true }),
+      sent: relationship({ ref: 'Message.sender', many: false}),
+      received: relationship({ ref: 'Message.receiver', many: true}),
       categories: relationship({ ref: 'Category.author', many: true }),
       options: json(),
-      public: checkbox({ defaultValue: true })
+      following: relationship({ ref: 'User', many: true }),
+      followers: relationship({ ref: 'User', many: true }),
+      public: checkbox({ defaultValue: true }),
+      linkedin: text(),
+      instagram: text(),
+      youtube: text(),
+      website: text()
+
+
 
       // role: relationship({
       //   ref: 'Role.assignedTo', 
@@ -143,6 +155,20 @@ export const lists = createSchema({
       icon: text()
     },
   }),
+
+  Message: list({
+    fields: {
+      text: text(),
+      sender: relationship({
+        ref: 'User.sent',
+        many: false
+      }),
+      receiver: relationship({
+        ref: 'User.received',
+        many: true
+      })
+    }
+  })
 
   //TODO: Do we need roles or just logged and not logged is enough?
   // Role: list({

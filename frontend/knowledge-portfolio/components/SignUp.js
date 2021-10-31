@@ -13,12 +13,24 @@ const SIGNUP_MUTATION = gql`
 	mutation SIGNUP_MUTATION(
 		$name: String!
 		$email: String!
+		$publicEmail: Boolean!
+		$specialization: String!
 		$password: String!
 	) {
-		createUser(data: { name: $name, email: $email, password: $password }) {
+		createUser(
+			data: {
+				name: $name
+				email: $email
+				publicEmail: $publicEmail
+				specialization: $specialization
+				password: $password
+			}
+		) {
 			id
 			name
 			email
+			specialization
+			publicEmail
 		}
 	}
 `;
@@ -27,6 +39,8 @@ export default function SignUp() {
 	const [inputs, setInputs] = useState({
 		name: '',
 		email: '',
+		publicEmail: true,
+		specialization: '',
 		password: '',
 	});
 
@@ -47,6 +61,7 @@ export default function SignUp() {
 		setInputs({
 			name: '',
 			email: '',
+			specialization: '',
 			password: '',
 		});
 	};
@@ -128,6 +143,16 @@ export default function SignUp() {
 						onChange={(e) => handleChange(e)}
 					/>
 				</label>
+				{/* <label htmlFor="publicEmail">
+					Public Email? (users/visitors can see your e-mail)
+					<input
+						type="checkbox"
+						name="publicEmail"
+						required
+						value={inputs.publicEmail}
+						onChange={(e) => handleChange(e)}
+					/>
+				</label> */}
 				<label htmlFor="password">
 					Password
 					<input

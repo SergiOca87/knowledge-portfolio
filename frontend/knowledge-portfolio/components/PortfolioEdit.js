@@ -174,7 +174,7 @@ export default function PortfolioEdit({ children }) {
 													: setOpenModal(true)
 											}
 										>
-											Launch static backdrop modal
+											Set manual order
 										</Button>
 										{/* 
 										<Button

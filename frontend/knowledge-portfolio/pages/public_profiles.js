@@ -1,17 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
 import gql from 'graphql-tag';
 import styled, { css } from 'styled-components';
 import { useQuery } from '@apollo/client';
 import Main from '../components/Main';
-import { Container, Button, Row, Col } from 'react-bootstrap';
+import { Container, Button, Row, Col, Modal } from 'react-bootstrap';
 import Link from 'next/link';
 import Categories from '../components/Categories';
+import UserCard from '../components/UserCard';
+import MessageModal from '../components/MessageModal';
 
 const ALL_USER_QUERY = gql`
 	query {
 		allUsers(where: { public: true }) {
 			id
 			name
+			email
+			publicEmail
 			items {
 				id
 			}
@@ -25,7 +29,6 @@ const ALL_USER_QUERY = gql`
 `;
 
 const StyledUserCard = styled.div`
-	height: 100%;
 	width: 100%;
 	flex: 1;
 	background-color: var(--tertiary);
@@ -119,56 +122,76 @@ const StyledUserCard = styled.div`
 
 export default function publicProfiles() {
 	const { data, error, loading } = useQuery(ALL_USER_QUERY);
+	const [showMessageModal, setShowMessageModal] = useState(false);
+	const [receiverId, setReceiverId] = useState(null);
 
 	if (loading) {
 		return <p>Loading...</p>;
 	} else {
-		console.log('public profile', data);
-	}
+		return (
+			<Main>
+				<Container>
+					<h1>Public Portfolios</h1>
+					<Row>
+						{data &&
+							data.allUsers.map((singleUser) => {
+								const userId = singleUser.id;
+								return (
+									<>
+										{singleUser.items.length > 0 && (
+											<Col md={6}>
+												<UserCard user={singleUser} />
+												<StyledUserCard>
+													{/* <p>Category: {item.category.name}</p> */}
+													{singleUser.categories && (
+														<Categories
+															categories={
+																singleUser?.categories
+															}
+														/>
+													)}
 
-	return (
-		<Main>
-			<Container>
-				<h1>Public Portfolios</h1>
-				<Row>
-					{data &&
-						data.allUsers.map((user) => {
-							return (
-								<>
-									{user.items.length > 0 && (
-										<Col md={6}>
-											<StyledUserCard>
-												<div className="title">
-													<div>User Image</div>
-													<h3>{user.name}</h3>
-												</div>
-												<div className="details">
-													Small Description?
-												</div>
-												{/* <p>Category: {item.category.name}</p> */}
-												{user.categories && (
-													<Categories
-														categories={
-															user?.categories
-														}
-													/>
-												)}
-
-												<Link
-													href={`/public-portfolio/${user.id}`}
+													<Link
+														href={`/public-portfolio/${singleUser.id}`}
+													>
+														<Button variant="transparent-secondary">
+															View Portfolio
+														</Button>
+													</Link>
+												</StyledUserCard>
+												<Button
+													onClick={(e) => {
+														showMessageModal
+															? setShowMessageModal(
+																	false
+															  )
+															: setShowMessageModal(
+																	true
+															  );
+														setReceiverId(
+															singleUser.id
+														);
+													}}
 												>
-													<Button variant="transparent-secondary">
-														View Portfolio
-													</Button>
-												</Link>
-											</StyledUserCard>
-										</Col>
-									)}
-								</>
-							);
-						})}
-				</Row>
-			</Container>
-		</Main>
-	);
+													Send a Message
+												</Button>
+												<MessageModal
+													showMessageModal={
+														showMessageModal
+													}
+													setShowMessageModal={
+														setShowMessageModal
+													}
+													receiverId={receiverId}
+												/>
+											</Col>
+										)}
+									</>
+								);
+							})}
+					</Row>
+				</Container>
+			</Main>
+		);
+	}
 }

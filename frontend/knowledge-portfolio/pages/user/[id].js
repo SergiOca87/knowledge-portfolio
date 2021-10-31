@@ -5,6 +5,7 @@ import { Container, Row, Col, Button } from 'react-bootstrap';
 import UserContext from '../../context/UserContext';
 import { FaUser } from 'react-icons/fa';
 import Link from 'next/link';
+import UserCard from '../../components/UserCard';
 
 const StyledMain = styled.main`
 	min-height: 100vh;
@@ -48,23 +49,38 @@ const UserControls = styled.div`
 	}
 `;
 
-export default function SingleItemPage() {
-	const router = useRouter();
-	const { id } = router.query;
+const UPDATE_USER_MUTATION = gql`
+	mutation UPDATE_USER_MUTATION(
+		$id: ID!
+	) {
+		updateUser(
+			id: $id
+			//TODO: Add data here, publicEmail, social amedia, etc.
+			# data: { title: $title, status: $status, description: $description }
+		) {
+			id
+		}
+	}
+`;
 
+export default function UserPage() {
+	const router = useRouter();
+	// const { id } = router.query;
 	const { user } = useContext(UserContext);
 
 	return (
 		<StyledMain>
 			<Container>
 				<Row>
-					<StyledUserCard>
-						<p>Draft/Page to delete account if necessary</p>
-						<div className="avatar">
-							<FaUser />
-						</div>
-						<h1>Hello, {user?.name}</h1>
-					</StyledUserCard>
+					<p>Edit User Settings</p>
+					<div className="avatar">
+						<FaUser />
+					</div>
+					{user && <UserCard user={user} />}
+					{/* <UserCard user={user} /> */}
+					{/* <h1>Hello, {user?.name}</h1> */}
+					//TODO Form here to edit social media and public e-mail
+					settings, updateUserQuery? Or user options?
 					<UserControls></UserControls>
 				</Row>
 			</Container>
