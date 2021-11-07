@@ -1,11 +1,20 @@
 import React, { useContext } from 'react';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
-import { Container, Row, Col, Button } from 'react-bootstrap';
+import {
+	Container,
+	Row,
+	Col,
+	Button,
+	Form,
+	FloatingLabel,
+} from 'react-bootstrap';
+
 import UserContext from '../../context/UserContext';
 import { FaUser } from 'react-icons/fa';
 import Link from 'next/link';
 import UserCard from '../../components/UserCard';
+import gql from 'graphql-tag';
 
 const StyledMain = styled.main`
 	min-height: 100vh;
@@ -49,14 +58,24 @@ const UserControls = styled.div`
 	}
 `;
 
+//TODO: Add data here, publicEmail, social amedia, etc.
+
 const UPDATE_USER_MUTATION = gql`
 	mutation UPDATE_USER_MUTATION(
-		$id: ID!
+		$id: ID! # data: { title: $title, status: $status, description: $description }
+		$linkedin: String
+		$instagram: String
+		$youtube: String
+		$twitter: String
 	) {
 		updateUser(
 			id: $id
-			//TODO: Add data here, publicEmail, social amedia, etc.
-			# data: { title: $title, status: $status, description: $description }
+			data: {
+				linkedin: $linkedin
+				instagram: $instagram
+				youtube: $youtube
+				twitter: $twitter
+			}
 		) {
 			id
 		}
@@ -71,17 +90,93 @@ export default function UserPage() {
 	return (
 		<StyledMain>
 			<Container>
+				<Row className="mb-5">
+					<h2>Edit your public user card</h2>
+				</Row>
 				<Row>
-					<p>Edit User Settings</p>
-					<div className="avatar">
-						<FaUser />
-					</div>
-					{user && <UserCard user={user} />}
-					{/* <UserCard user={user} /> */}
-					{/* <h1>Hello, {user?.name}</h1> */}
-					//TODO Form here to edit social media and public e-mail
-					settings, updateUserQuery? Or user options?
-					<UserControls></UserControls>
+					<Col lg="6" lg={{ order: 2 }}>
+						{user && <UserCard user={user} />}
+					</Col>
+					<Col lg="6" lg={{ order: 1 }}>
+						<Form>
+							<Form.Group
+								as={Row}
+								className="mb-3"
+								controlId="exampleForm.ControlInput1"
+							>
+								<Form.Label column sm="2">
+									Public Email?
+								</Form.Label>
+								<Col sm="10">
+									<Form.Check
+										type={'checkbox'}
+										id={`default-checkbox`}
+										label={`Users can see your e-mail and send you e-mails`}
+									/>
+								</Col>
+							</Form.Group>
+							<Form.Group
+								as={Row}
+								className="mb-3"
+								controlId="exampleForm.ControlInput1"
+							>
+								<Form.Label column sm="2">
+									Linkedin
+								</Form.Label>
+								<Col sm="10">
+									<Form.Control
+										type="text"
+										placeholder="Linkedin"
+									/>
+								</Col>
+							</Form.Group>
+							<Form.Group
+								as={Row}
+								className="mb-3"
+								controlId="exampleForm.ControlInput2"
+							>
+								<Form.Label column sm="2">
+									Twitter
+								</Form.Label>
+								<Col sm="10">
+									<Form.Control
+										type="text"
+										placeholder="Twitter"
+									/>
+								</Col>
+							</Form.Group>
+							<Form.Group
+								as={Row}
+								className="mb-3"
+								controlId="exampleForm.ControlInput3"
+							>
+								<Form.Label column sm="2">
+									Youtube
+								</Form.Label>
+								<Col sm="10">
+									<Form.Control
+										type="text"
+										placeholder="Youtube"
+									/>
+								</Col>
+							</Form.Group>
+							<Form.Group
+								as={Row}
+								className="mb-3"
+								controlId="exampleForm.ControlInput4"
+							>
+								<Form.Label column sm="2">
+									Instagram
+								</Form.Label>
+								<Col sm="10">
+									<Form.Control
+										type="text"
+										placeholder="Instagram"
+									/>
+								</Col>
+							</Form.Group>
+						</Form>
+					</Col>
 				</Row>
 			</Container>
 		</StyledMain>

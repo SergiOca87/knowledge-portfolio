@@ -187,20 +187,20 @@ const GlobalStyles = createGlobalStyle`
     }
   }
 
-  input[type=text], input[type=email], input[type=password], input[type=url], textarea {
-    position: relative;
-    background-color: transparent;
-    border: none;
-    color: #fff;
-    height: 5rem;
-    border-bottom: 1px solid #fff;
-    width: 100%;
-    outline: none;
+  // input[type=text], input[type=email], input[type=password], input[type=url], textarea {
+  //   position: relative;
+  //   background-color: transparent;
+  //   border: none;
+  //   color: #fff;
+  //   height: 5rem;
+  //   border-bottom: 1px solid #fff;
+  //   width: 100%;
+  //   outline: none;
 
-    ::placeholder {
-      color: #fff;
-    }
-  }
+  //   ::placeholder {
+  //     color: #fff;
+  //   }
+  // }
 
   .primary-bg {
     background-color: var(--primary);

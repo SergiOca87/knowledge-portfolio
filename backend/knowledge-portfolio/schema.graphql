@@ -27,7 +27,28 @@ type User {
       reason: "This query will be removed in a future version. Please use itemsCount instead."
     )
   itemsCount(where: ItemWhereInput! = {}): Int
-  sent: Message
+  sent(
+    where: MessageWhereInput! = {}
+    search: String
+    sortBy: [SortMessagesBy!]
+      @deprecated(reason: "sortBy has been deprecated in favour of orderBy")
+    orderBy: [MessageOrderByInput!]! = []
+    first: Int
+    skip: Int! = 0
+  ): [Message!]
+  _sentMeta(
+    where: MessageWhereInput! = {}
+    search: String
+    sortBy: [SortMessagesBy!]
+      @deprecated(reason: "sortBy has been deprecated in favour of orderBy")
+    orderBy: [MessageOrderByInput!]! = []
+    first: Int
+    skip: Int! = 0
+  ): _QueryMeta
+    @deprecated(
+      reason: "This query will be removed in a future version. Please use sentCount instead."
+    )
+  sentCount(where: MessageWhereInput! = {}): Int
   received(
     where: MessageWhereInput! = {}
     search: String
@@ -206,8 +227,9 @@ input UserWhereInput {
   items_every: ItemWhereInput
   items_some: ItemWhereInput
   items_none: ItemWhereInput
-  sent: MessageWhereInput
-  sent_is_null: Boolean
+  sent_every: MessageWhereInput
+  sent_some: MessageWhereInput
+  sent_none: MessageWhereInput
   received_every: MessageWhereInput
   received_some: MessageWhereInput
   received_none: MessageWhereInput
@@ -372,7 +394,7 @@ input UserUpdateInput {
   password: String
   specialization: String
   items: ItemRelateToManyInput
-  sent: MessageRelateToOneInput
+  sent: MessageRelateToManyInput
   received: MessageRelateToManyInput
   categories: CategoryRelateToManyInput
   options: JSON
@@ -392,13 +414,6 @@ input ItemRelateToManyInput {
   create: [ItemCreateInput]
   connect: [ItemWhereUniqueInput]
   disconnect: [ItemWhereUniqueInput]
-  disconnectAll: Boolean
-}
-
-input MessageRelateToOneInput {
-  create: MessageCreateInput
-  connect: MessageWhereUniqueInput
-  disconnect: MessageWhereUniqueInput
   disconnectAll: Boolean
 }
 
@@ -435,7 +450,7 @@ input UserCreateInput {
   password: String
   specialization: String
   items: ItemRelateToManyInput
-  sent: MessageRelateToOneInput
+  sent: MessageRelateToManyInput
   received: MessageRelateToManyInput
   categories: CategoryRelateToManyInput
   options: JSON
@@ -863,28 +878,7 @@ type Message {
   id: ID!
   text: String
   sender: User
-  receiver(
-    where: UserWhereInput! = {}
-    search: String
-    sortBy: [SortUsersBy!]
-      @deprecated(reason: "sortBy has been deprecated in favour of orderBy")
-    orderBy: [UserOrderByInput!]! = []
-    first: Int
-    skip: Int! = 0
-  ): [User!]
-  _receiverMeta(
-    where: UserWhereInput! = {}
-    search: String
-    sortBy: [SortUsersBy!]
-      @deprecated(reason: "sortBy has been deprecated in favour of orderBy")
-    orderBy: [UserOrderByInput!]! = []
-    first: Int
-    skip: Int! = 0
-  ): _QueryMeta
-    @deprecated(
-      reason: "This query will be removed in a future version. Please use receiverCount instead."
-    )
-  receiverCount(where: UserWhereInput! = {}): Int
+  receiver: User
 }
 
 input MessageWhereInput {
@@ -918,9 +912,8 @@ input MessageWhereInput {
   text_not_in: [String]
   sender: UserWhereInput
   sender_is_null: Boolean
-  receiver_every: UserWhereInput
-  receiver_some: UserWhereInput
-  receiver_none: UserWhereInput
+  receiver: UserWhereInput
+  receiver_is_null: Boolean
 }
 
 input MessageWhereUniqueInput {
@@ -942,7 +935,7 @@ input MessageOrderByInput {
 input MessageUpdateInput {
   text: String
   sender: UserRelateToOneInput
-  receiver: UserRelateToManyInput
+  receiver: UserRelateToOneInput
 }
 
 input MessagesUpdateInput {
@@ -953,7 +946,7 @@ input MessagesUpdateInput {
 input MessageCreateInput {
   text: String
   sender: UserRelateToOneInput
-  receiver: UserRelateToManyInput
+  receiver: UserRelateToOneInput
 }
 
 input MessagesCreateInput {

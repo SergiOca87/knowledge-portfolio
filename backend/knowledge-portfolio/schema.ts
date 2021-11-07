@@ -27,7 +27,7 @@ export const lists = createSchema({
       password: password({ isRequired: true }),
       specialization: text(),
       items: relationship({ ref: 'Item.author', many: true }),
-      sent: relationship({ ref: 'Message.sender', many: false}),
+      sent: relationship({ ref: 'Message.sender', many: true}),
       received: relationship({ ref: 'Message.receiver', many: true}),
       categories: relationship({ ref: 'Category.author', many: true }),
       options: json(),
@@ -165,7 +165,7 @@ export const lists = createSchema({
       }),
       receiver: relationship({
         ref: 'User.received',
-        many: true
+        many: false
       })
     }
   })

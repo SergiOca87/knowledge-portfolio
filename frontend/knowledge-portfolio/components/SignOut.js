@@ -15,9 +15,9 @@ export default function SignOut() {
 	});
 
 	const handleSignOut = async () => {
-		('click');
 		const res = await signOut();
-		res;
+
+		//TODO: Redirect
 	};
 
 	return (

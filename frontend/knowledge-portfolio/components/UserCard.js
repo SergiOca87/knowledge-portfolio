@@ -147,7 +147,7 @@ export default function UserCard({ user }) {
 							<FaLinkedin />
 						</a>
 					)}
-					//TODO: Replace this icon
+
 					{user.website && (
 						<a href={user.website} target="_blank">
 							<FaUser />

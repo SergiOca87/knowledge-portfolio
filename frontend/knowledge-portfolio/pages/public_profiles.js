@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import gql from 'graphql-tag';
 import styled, { css } from 'styled-components';
 import { useQuery } from '@apollo/client';
@@ -8,6 +8,7 @@ import Link from 'next/link';
 import Categories from '../components/Categories';
 import UserCard from '../components/UserCard';
 import MessageModal from '../components/MessageModal';
+import UserContext from '../context/UserContext';
 
 const ALL_USER_QUERY = gql`
 	query {
@@ -125,6 +126,8 @@ export default function publicProfiles() {
 	const [showMessageModal, setShowMessageModal] = useState(false);
 	const [receiverId, setReceiverId] = useState(null);
 
+	const { user } = useContext(UserContext);
+
 	if (loading) {
 		return <p>Loading...</p>;
 	} else {
@@ -175,15 +178,18 @@ export default function publicProfiles() {
 												>
 													Send a Message
 												</Button>
-												<MessageModal
-													showMessageModal={
-														showMessageModal
-													}
-													setShowMessageModal={
-														setShowMessageModal
-													}
-													receiverId={receiverId}
-												/>
+												{user && (
+													<MessageModal
+														showMessageModal={
+															showMessageModal
+														}
+														setShowMessageModal={
+															setShowMessageModal
+														}
+														receiverId={receiverId}
+														senderId={user?.id}
+													/>
+												)}
 											</Col>
 										)}
 									</>

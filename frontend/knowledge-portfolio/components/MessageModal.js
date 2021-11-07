@@ -29,22 +29,23 @@ export default function MessageModal({
 	showMessageModal,
 	setShowMessageModal,
 	receiverId,
+	senderId,
 }) {
 	const { user } = useContext(UserContext);
 
 	const [inputs, setInputs] = useState({
 		text: '',
-		sender: user ? user.id : '',
+		sender: '',
 		receiver: '',
 	});
 
 	useEffect(() => {
 		setInputs({
 			text: '',
-			sender: user?.id,
+			sender: senderId,
 			receiver: receiverId,
 		});
-	}, [user, receiverId]);
+	}, [senderId, receiverId]);
 
 	const [createMessage, { loading, error, data }] = useMutation(
 		CREATE_MESSAGE_MUTATION,

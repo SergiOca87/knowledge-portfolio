@@ -72,12 +72,16 @@ export default function Nav() {
 								<FaUser />
 							</Link>
 							<Link href={`/mail/${user.id}`}>
-								{user.received.length > 0 && (
-									<StyledMail>
-										<FaRegEnvelopeOpen />
-										<span>{user.received.length}</span>
-									</StyledMail>
-								)}
+								<StyledMail>
+									{user.received.length > 0 ? (
+										<>
+											<FaRegEnvelopeOpen />
+											<span>{user.received.length}</span>
+										</>
+									) : (
+										<FaRegEnvelope />
+									)}
+								</StyledMail>
 							</Link>
 							<SignOut />
 						</>

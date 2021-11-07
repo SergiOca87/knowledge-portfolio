@@ -16,8 +16,8 @@ model User {
   password                String?
   specialization          String?
   items                   Item[]     @relation("Item_author")
-  sent                    Message?   @relation("Message_sender")
-  received                Message[]  @relation("Message_receiver_User_received")
+  sent                    Message[]  @relation("Message_sender")
+  received                Message[]  @relation("Message_receiver")
   categories              Category[] @relation("Category_author")
   options                 Json?
   following               User[]     @relation("User_following_many")
@@ -64,9 +64,13 @@ model Category {
 }
 
 model Message {
-  id       String  @id @default(cuid())
-  text     String?
-  sender   User?   @relation("Message_sender", fields: [senderId], references: [id])
-  senderId String? @unique @map("sender")
-  receiver User[]  @relation("Message_receiver_User_received")
+  id         String  @id @default(cuid())
+  text       String?
+  sender     User?   @relation("Message_sender", fields: [senderId], references: [id])
+  senderId   String? @map("sender")
+  receiver   User?   @relation("Message_receiver", fields: [receiverId], references: [id])
+  receiverId String? @map("receiver")
+
+  @@index([senderId])
+  @@index([receiverId])
 }

@@ -11,15 +11,15 @@ import { USER_ITEMS_QUERY } from './ItemGrid';
 import UserContext from '../context/UserContext';
 import { Button } from 'react-bootstrap';
 
-const DELETE_ITEM_MUTATION = gql`
-	mutation DELETE_ITEM_MUTATION($id: ID!) {
-		deleteItem(id: $id) {
+const DELETE_MESSAGE_MUTATION = gql`
+	mutation DELETE_MESSAGE_MUTATION($id: ID!) {
+		deleteMessage(id: $id) {
 			id
 		}
 	}
 `;
 
-export default function DeleteItem({ id, children }) {
+export default function DeleteMessage({ id, children }) {
 	const { user } = useContext(UserContext);
 	// So that the user has to click twice to delete an Item
 	const [deleteConfirm, setDeleteConfirm] = useState({
@@ -27,13 +27,16 @@ export default function DeleteItem({ id, children }) {
 		message: 'Delete',
 	});
 	// Submit current state to create a new Item
-	const [deleteItem, { loading, error }] = useMutation(DELETE_ITEM_MUTATION, {
-		variables: {
-			id,
-		},
+	const [deleteMessage, { loading, error }] = useMutation(
+		DELETE_MESSAGE_MUTATION,
+		{
+			variables: {
+				id,
+			},
 
-		refetchQueries: [{ query: CURRENT_USER_QUERY }],
-	});
+			refetchQueries: [{ query: CURRENT_USER_QUERY }],
+		}
+	);
 
 	const handleDelete = async (e) => {
 		e.preventDefault();
@@ -44,7 +47,11 @@ export default function DeleteItem({ id, children }) {
 		});
 
 		if (deleteConfirm.counter >= 2) {
-			deleteItem();
+			deleteMessage();
+			setDeleteConfirm({
+				counter: 0,
+				message: 'Delete?',
+			});
 		}
 	};
 
