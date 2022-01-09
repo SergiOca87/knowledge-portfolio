@@ -164,6 +164,7 @@ export default function publicProfiles() {
 												</StyledUserCard>
 												<Button
 													onClick={(e) => {
+														// Set a cinditional here, if user, ok, else show toast to log in
 														showMessageModal
 															? setShowMessageModal(
 																	false

@@ -12,6 +12,7 @@ import {
 } from '@keystone-next/fields';
 // import { cloudinaryImage } from '@keystone-next/cloudinary';
 import { document } from '@keystone-next/fields-document';
+import { permissionFields } from './fields';
 
 export const lists = createSchema({
   User: list({
@@ -38,8 +39,7 @@ export const lists = createSchema({
       instagram: text(),
       youtube: text(),
       website: text()
-
-
+      // role: relationship({ ref: 'Role.assignedTo' })
 
       // role: relationship({
       //   ref: 'Role.assignedTo', 
@@ -168,12 +168,12 @@ export const lists = createSchema({
         many: false
       })
     }
-  })
+  }),
 
-  //TODO: Do we need roles or just logged and not logged is enough?
   // Role: list({
   //   fields: {
   //     name: text({ isRequired: true }),
+  //     ...permissionFields,
   //     assignedTo: relationship({
   //       ref: 'User.role', //TODO: Add this to user (two way),
   //       many: true

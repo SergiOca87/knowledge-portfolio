@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import { Container, Row, Col, Button } from 'react-bootstrap';
@@ -38,7 +38,7 @@ const StyledMessageCard = styled.div`
 `;
 
 export default function UserMessages({ id }) {
-	// const router = useRouter();
+	const router = useRouter();
 	// const { id } = router.query;
 	const { user } = useContext(UserContext);
 	const [deleteConfirm, setDeleteConfirm] = useState({
@@ -47,6 +47,14 @@ export default function UserMessages({ id }) {
 	});
 
 	const userId = user?.id;
+
+	// useEffect(() => {
+	// 	if (!user) {
+	// 		router.push({
+	// 			pathname: `/login/`,
+	// 		});
+	// 	}
+	// });
 
 	// const [deleteMessage, { loading, error }] = useMutation(
 	// 	DELETE_MESSAGE_MUTATION,
@@ -72,7 +80,7 @@ export default function UserMessages({ id }) {
 	// 	}
 	// };
 
-	return (
+	return user ? (
 		<Main>
 			<Container>
 				<Row>
@@ -155,6 +163,16 @@ export default function UserMessages({ id }) {
 						</Tab>
 					</Tabs>
 				</Row>
+			</Container>
+		</Main>
+	) : (
+		<Main>
+			<Container>
+				<h2>
+					You have to log in to see this content,
+					<br />
+					You can log in or register <Link href="/login">here</Link>
+				</h2>
 			</Container>
 		</Main>
 	);

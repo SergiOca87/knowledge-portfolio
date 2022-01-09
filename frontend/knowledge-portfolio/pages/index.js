@@ -256,6 +256,35 @@ export default function Home() {
 							</Col>
 						</Row>
 					</div>
+					<div className="inner-grid">
+						<Row>
+							<Col
+								lg={5}
+								className="d-flex flex-column justify-content-center align-items-start"
+							>
+								<h3>
+									<span>Web 3?</span>
+								</h3>
+								<p>
+									This Web App can be used with or without Web
+									3 capabilities.
+								</p>
+								<p>
+									If you choose to explore what we offer in
+									terms of web3, you can read more over{' '}
+									<Link href="web3">here</Link>
+								</p>
+							</Col>
+							<Col lg={{ span: 6, offset: 1 }}>
+								<img
+									src="/images/undraw_ether_re_y7ft.svg"
+									css={css`
+										max-height: 50rem;
+									`}
+								/>
+							</Col>
+						</Row>
+					</div>
 				</Container>
 			</StyledMain>
 		</>

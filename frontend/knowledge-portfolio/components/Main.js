@@ -14,8 +14,29 @@ const StyledMain = styled.main`
 	position: relative;
 	overflow: hidden;
 	color: #fff;
+
+	.noise-overlay {
+		position: absolute;
+		top: 0;
+		left: 0;
+		z-index: 0;
+		background-image: url('/images/noise.png');
+		width: 100%;
+		height: 100%;
+		opacity: 0.1;
+	}
+
+	.children-wrap {
+		position: relative;
+		z-index: 10;
+	}
 `;
 
 export default function Main({ children }) {
-	return <StyledMain>{children}</StyledMain>;
+	return (
+		<StyledMain>
+			<div className="noise-overlay"> </div>
+			<div className="children-wrap">{children}</div>
+		</StyledMain>
+	);
 }
