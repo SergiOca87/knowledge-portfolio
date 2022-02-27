@@ -1,19 +1,19 @@
-import React, { useContext, useEffect } from 'react';
-import Link from 'next/link';
+import React, { useContext, useEffect } from "react";
+import Link from "next/link";
 // import { useUser } from './User';
-import gql from 'graphql-tag';
-import { useMutation } from '@apollo/client';
-import SignOut from './SignOut';
-import styled, { css } from 'styled-components';
-import { Container } from 'react-bootstrap';
-import UserContext from '../context/UserContext';
+import gql from "graphql-tag";
+import { useMutation } from "@apollo/client";
+import SignOut from "./SignOut";
+import styled, { css } from "styled-components";
+import { Container } from "react-bootstrap";
+import UserContext from "../context/UserContext";
 import {
 	FaEnvelope,
 	FaMailBulk,
 	FaRegEnvelope,
 	FaRegEnvelopeOpen,
 	FaUser,
-} from 'react-icons/fa';
+} from "react-icons/fa";
 
 const StyledNav = styled.nav`
 	display: flex;
@@ -21,12 +21,20 @@ const StyledNav = styled.nav`
 	justify-content: flex-end;
 	padding: 2rem 2rem;
 	width: 100%;
-	gap: 2rem;
-	background-color: var(--tertiary);
+	gap: 5rem;
+	background-color: #fff;
 
 	a {
-		color: #fff;
 		display: block;
+		text-transform: uppercase;
+		font-family: "Montserrat-Bold";
+		color: var(--primary);
+		text-decoration: none;
+
+		&:hover {
+			color: var(--secondary);
+			text-decoration: none;
+		}
 	}
 `;
 
@@ -55,11 +63,7 @@ export default function Nav() {
 	const { user, setUser } = useContext(UserContext);
 
 	return (
-		<div
-			css={css`
-				background-color: var(--tertiary);
-			`}
-		>
+		<div>
 			<Container>
 				<StyledNav className="d-flex justify-content-end">
 					<Link href={`/public_profiles`}>Public Portfolios</Link>

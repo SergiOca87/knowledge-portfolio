@@ -1,7 +1,7 @@
-import styled, { createGlobalStyle } from 'styled-components';
+import styled, { createGlobalStyle } from "styled-components";
 // import Header from './Header';
-import Head from 'next/head';
-import Nav from './Nav';
+import Head from "next/head";
+import Nav from "./Nav";
 
 const GlobalStyles = createGlobalStyle`
 
@@ -40,7 +40,7 @@ export default function Layout({ title, keywords, description, children }) {
 	return (
 		<>
 			<Head>
-				<title>Knowledge Portfolio | {title}</title>
+				<title>Owlit | {title}</title>
 				<meta name="description" content={description} />
 				<meta name="keywords" content={keywords} />
 			</Head>
