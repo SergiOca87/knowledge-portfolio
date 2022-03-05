@@ -1,13 +1,13 @@
-import PropTypes from "prop-types";
-import styled, { createGlobalStyle } from "styled-components";
-import "bootstrap/dist/css/bootstrap.min.css";
-import Nav from "./Nav";
-import gql from "graphql-tag";
-import { useContext, useEffect } from "react";
-import UserContext from "../context/UserContext";
-import { useQuery } from "@apollo/client";
-import { CURRENT_USER_QUERY } from "./User";
-import { ToastContainer, toast } from "react-toastify";
+import PropTypes from 'prop-types';
+import styled, { createGlobalStyle } from 'styled-components';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import Nav from './Nav';
+import gql from 'graphql-tag';
+import { useContext, useEffect } from 'react';
+import UserContext from '../context/UserContext';
+import { useQuery } from '@apollo/client';
+import { CURRENT_USER_QUERY } from './User';
+import { ToastContainer, toast } from 'react-toastify';
 
 const GlobalStyles = createGlobalStyle`
   @font-face {
@@ -103,15 +103,18 @@ const GlobalStyles = createGlobalStyle`
     margin-bottom: 2rem;
     font-family: 'Montserrat-Light';
 
-    a {
-      color: var(--secondary);
-      font-family: 'Montserrat-Medium';
+   
+  }
+  a{
+    color: var(--secondary);
+    font-family: 'Montserrat-Medium';
 
-      &:hover {
-        color: #fff;
-      }
 
+    &:hover {
+      color: var(--primary);
+      text-decoration: none;
     }
+
   }
   .container-fluid {
     padding: 0;
@@ -160,50 +163,46 @@ const GlobalStyles = createGlobalStyle`
     }
   }
 
-  .flex-fields {
+  .card {
+    position: relative;
     display: flex;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: #fff;
+    background-clip: border-box;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 0;
+    height: 100%;
+
+    .card-header {
+      background-color: var(--primary);
+      color: #fff;
+      padding: 1rem 1.5rem;
+      letter-spacing: 1px;
+      font-size: 2.6rem;
+   
+    }
+
+    .card-text {
+      padding: 2rem;
+    }
+
+    .card-footer {
+      background-color: transparent;
+      padding: 3rem 0;
+    }
   }
 
-  .input-wrap {
-    margin-bottom: 3rem;
+  label {
+    color: var(--black);
+  }
 
-    &.text {
-      label {
-        position: relative;
-        width: 100%;
-        
-    
-        &:after {
-          content: "";
-          position: absolute;
-          transition: all 300ms;
-          bottom: 0;
-          left: 0;
-          width: 0;
-          height: 2px;
-          background-color: var(--secondary);
-        }
-    
-    
-        span {
-          transform: translateY(4rem);
-          display: block;
-          transition: all 300ms;
-          pointer-events: none;
-          margin: 0
-        }
-    
-        &:focus, &:active, &:focus-within {
-          span {
-            transform: translateY(0);
-          }
-    
-          &:after {
-            width: 100%;
-          }
-        }
-      }
-    }
+  input[type=text], input[type=email], input[type=password], input[type=url], textarea {
+    height: 4rem;
+    font-size: 1.8rem;
   }
 
   // input[type=text], input[type=email], input[type=password], input[type=url], textarea {

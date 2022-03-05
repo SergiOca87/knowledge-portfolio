@@ -1,19 +1,16 @@
-import React, { useState, useEffect } from "react";
-import Head from "next/head";
-import Image from "next/image";
-import SignIn from "../components/SignIn";
-import SignUp from "../components/SignUp";
-import { CSSTransition, Transition } from "react-transition-group";
+import React, { useState, useEffect } from 'react';
+import Head from 'next/head';
+import Image from 'next/image';
 
-import { FaRegEdit } from "react-icons/fa";
-import { FaEthereum } from "react-icons/fa";
-import { FaRegShareSquare } from "react-icons/fa";
+import { FaRegEdit } from 'react-icons/fa';
+import { FaEthereum } from 'react-icons/fa';
+import { FaRegShareSquare } from 'react-icons/fa';
 
-import styled, { css } from "styled-components";
-import Link from "next/link";
-import gql from "graphql-tag";
-import Hero from "../components/Hero";
-import { Container, Row, Col, Card, Button } from "react-bootstrap";
+import styled, { css } from 'styled-components';
+import Link from 'next/link';
+import gql from 'graphql-tag';
+import Hero from '../components/Hero';
+import { Container, Row, Col, Card, Button } from 'react-bootstrap';
 
 const StyledGrid = styled.div`
 	display: grid;
@@ -94,7 +91,7 @@ const StyledMain = styled.main`
 			color: var(--primary);
 
 			&:after {
-				content: "";
+				content: '';
 				background-color: var(--secondary);
 				position: absolute;
 				top: 0;
@@ -114,97 +111,110 @@ const StyledMain = styled.main`
 
 	strong {
 		color: var(--primary);
-		font-family: "Montserrat-Medium";
+		font-family: 'Montserrat-Medium';
 		background-color: var(--secondary);
 		padding: 0 3px;
 	}
 
 	.cards {
+		margin-top: -7rem;
+
 		.card {
-			margin-top: -5rem;
-			position: relative;
-			display: flex;
-			flex-direction: column;
-			min-width: 0;
-			word-wrap: break-word;
-			background-color: #fff;
-			background-clip: border-box;
-			border: 1px solid rgba(0, 0, 0, 0.1);
-			border-radius: 10px;
-			overflow: hidden;
-
-			.card-header {
-				background-color: var(--primary);
-				color: #fff;
-				padding: 2rem;
-				letter-spacing: 1px;
+			.card-body {
+				display: flex;
+				flex-direction: column;
+				justify-content: space-between;
 			}
+		}
+	}
 
-			.card-text {
-				padding: 2rem;
-			}
+	.flip-card {
+		background-color: transparent;
+		width: 20rem;
+		height: 8rem;
+		perspective: 1000px;
+	}
 
-			.card-footer {
-				background-color: transparent;
-				padding: 3rem 0;
+	.flip-card-inner {
+		position: relative;
+		width: 100%;
+		height: 100%;
+		text-align: center;
+		transition: transform 0.6s;
+		transform-style: preserve-3d;
+		box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+
+		&.true {
+			transform: rotateX(180deg);
+
+			h2 {
+				transform: rotate(180deg);
 			}
+		}
+	}
+
+	.flip-card-front,
+	.flip-card-back {
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		-webkit-backface-visibility: hidden;
+		backface-visibility: hidden;
+	}
+
+	.flip-card-front {
+		background-color: var(--secondary);
+		display: flex;
+		justify-content: center;
+		align-items: center;
+
+		h2 {
+			color: #fff;
+			margin: 0;
+		}
+	}
+
+	.flip-card-back {
+		background-color: var(--primary);
+		transform: rotateY(180deg);
+		display: flex;
+		justify-content: center;
+		align-items: center;
+
+		h2 {
+			color: #fff;
+			margin: 0;
 		}
 	}
 `;
 
-const ChangingWord = styled.div`
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	transition: all 300ms;
-	width: 16rem;
-	margin-right: 1.3rem;
-	position: relative;
-	text-align: center;
-	padding: 1rem 2rem;
-
-	span {
-		position: relative;
-		z-index: 10;
-		text-transform: uppercase;
-		color: #fff;
-	}
-
-	&:after {
-		content: "";
-		background-color: var(--secondary);
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		transform: skew(3deg, 3deg);
-	}
-`;
+const ChangingWord = styled.div``;
 
 export default function Home() {
-	const words = ["Share", "Own", "Use"];
+	const words = ['Share', 'Own', 'Use'];
 	const [currentIndex, setCurrentIndex] = useState(0);
-	const [fade, setFade] = useState("in");
+	const [flip, setFlip] = useState(false);
 
-	useEffect(() => {
-		setTimeout(() => {
-			setFade("out");
-		}, 3500);
-	}, []);
+	// useEffect(() => {
+	// 	setTimeout(() => {
+	// 		setFlip('back');
+	// 	}, 3500);
+	// }, []);
 
 	useEffect(() => {
 		const interval = setInterval(() => {
-			//TODO: Set a fade out class here
-			setFade("in");
+			//Flip the card
 
+			flip === true ? setFlip(false) : setFlip(true);
+
+			// Change the word that's on the current back
 			currentIndex >= 2
 				? setCurrentIndex(0)
 				: setCurrentIndex((currentIndex) => currentIndex + 1);
 
-			setTimeout(() => {
-				setFade("out");
-			}, 3500);
+			// setTimeout(() => {
+			// 	setFlip('back');
+			// }, 3500);
 
 			//TODO: Wait half a second and set a fade in class here?
 		}, 4000);
@@ -228,15 +238,52 @@ export default function Home() {
 						<Container>
 							<Row className="align-items-center">
 								<Col lg={5}>
-									<h1 class="primary">Owlit</h1>
-									<h2>
-										<ChangingWord
-											className={`title-fade ${fade}`}
-										>
-											<span>{words[currentIndex]}</span>
-										</ChangingWord>{" "}
-										Your Knowledge
-									</h2>
+									<>
+										<h1 className="primary">Owlit</h1>
+										{/* <h2>
+											<ChangingWord
+												classNameName={`title-fade ${fade}`}
+											>
+												<span>
+													{words[currentIndex]}
+												</span>
+											</ChangingWord>{' '}
+											Your Knowledge
+										</h2> */}
+										<div className="flip-card">
+											<div
+												className={`flip-card-inner ${flip}`}
+											>
+												<div className="flip-card-front">
+													<h2>
+														<ChangingWord>
+															<span>
+																{
+																	words[
+																		currentIndex
+																	]
+																}
+															</span>
+														</ChangingWord>{' '}
+													</h2>
+												</div>
+												<div className="flip-card-back">
+													<h2>
+														<ChangingWord>
+															<span>
+																{
+																	words[
+																		currentIndex
+																	]
+																}
+															</span>
+														</ChangingWord>{' '}
+													</h2>
+												</div>
+											</div>
+										</div>
+										<span>Your Knowledge</span>
+									</>
 								</Col>
 
 								<Col lg={7}>
@@ -252,8 +299,8 @@ export default function Home() {
 									>
 										<Image
 											src="/images/owl.png"
-											layout={"fill"}
-											objectFit={"contain"}
+											layout={'fill'}
+											objectFit={'contain'}
 										/>
 									</div>
 								</Col>
@@ -271,10 +318,10 @@ export default function Home() {
 									<div
 										className="text-center"
 										css={css`
-											padding: 3rem 0;
+											padding: 2rem 0;
 											svg {
 												fill: var(--secondary);
-												font-size: 10rem;
+												font-size: 8rem;
 											}
 										`}
 									>
@@ -291,7 +338,7 @@ export default function Home() {
 									<div className="card-footer text-center">
 										<Button variant="primary">
 											Add Items
-										</Button>{" "}
+										</Button>{' '}
 									</div>
 								</Card.Body>
 							</Card>
@@ -304,10 +351,10 @@ export default function Home() {
 									<div
 										className="text-center"
 										css={css`
-											padding: 3rem 0;
+											padding: 2rem 0;
 											svg {
 												fill: var(--secondary);
-												font-size: 10rem;
+												font-size: 8rem;
 											}
 										`}
 									>
@@ -324,7 +371,7 @@ export default function Home() {
 									<div className="card-footer text-center">
 										<Button variant="primary">
 											Public Portfolios
-										</Button>{" "}
+										</Button>{' '}
 									</div>
 								</Card.Body>
 							</Card>
@@ -337,10 +384,10 @@ export default function Home() {
 									<div
 										className="text-center"
 										css={css`
-											padding: 3rem 0;
+											padding: 2rem 0;
 											svg {
 												fill: var(--secondary);
-												font-size: 10rem;
+												font-size: 8rem;
 											}
 										`}
 									>
@@ -355,7 +402,7 @@ export default function Home() {
 										pede.
 									</Card.Text>
 									<div className="card-footer text-center">
-										<Button variant="primary">Web3</Button>{" "}
+										<Button variant="primary">Web3</Button>{' '}
 									</div>
 								</Card.Body>
 							</Card>

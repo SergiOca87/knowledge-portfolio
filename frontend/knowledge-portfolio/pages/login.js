@@ -4,7 +4,7 @@ import SignUp from '../components/SignUp';
 import styled from 'styled-components';
 import RequestReset from '../components/RequestReset';
 import Link from 'next/link';
-import { Col, Container, Row } from 'react-bootstrap';
+import { Col, Container, Row, Card } from 'react-bootstrap';
 import Main from '../components/Main';
 
 const StyledFormCard = styled.div`
@@ -20,19 +20,10 @@ export default function login() {
 			<Container>
 				<Row>
 					<Col lg={6}>
-						<StyledFormCard>
-							<SignIn />
-							<p>
-								<Link href="/forgot-password">
-									Forgot your password?
-								</Link>
-							</p>
-						</StyledFormCard>
+						<SignIn />
 					</Col>
 					<Col lg={6}>
-						<StyledFormCard>
-							<SignUp />
-						</StyledFormCard>
+						<SignUp />
 					</Col>
 				</Row>
 			</Container>

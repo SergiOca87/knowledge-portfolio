@@ -8,6 +8,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import styled from 'styled-components';
 import { useState } from 'react';
+import { Button, Card, Form } from 'react-bootstrap';
 
 const SIGNUP_MUTATION = gql`
 	mutation SIGNUP_MUTATION(
@@ -108,42 +109,54 @@ export default function SignUp() {
 	// 		? data?.authenticateUserWithPassword
 	// 		: undefined;
 	return (
-		<form method="POST" onSubmit={handleSubmit}>
-			<h2>Register</h2>
-			{/* //TODO: This error should be a toast */}
-			{data?.error && <p>data.error</p>}
-			<fieldset>
-				{/* {data?.createUser && (
+		<Card
+			css={css`
+				margin-bottom: 3rem;
+			`}
+		>
+			<Card.Header as="h3">Register</Card.Header>
+			<Card.Body
+				css={css`
+					padding: 4rem 2rem;
+				`}
+			>
+				<Form method="POST" onSubmit={handleSubmit}>
+					{/* //TODO: This error should be a toast */}
+					{data?.error && <p>data.error</p>}
+
+					{/* {data?.createUser && (
 					<p>
 						Account created with {data.createUser.email} - You can
 						now Log In.
 					</p>
 				)} */}
-				<label htmlFor="name">
-					Your Name
-					<input
-						type="name"
-						name="name"
-						placeholder="Your Name"
-						autoComplete="name"
-						value={inputs.name}
-						required
-						onChange={(e) => handleChange(e)}
-					/>
-				</label>
-				<label htmlFor="email">
-					Email
-					<input
-						type="email"
-						name="email"
-						placeholder="Your Email Address"
-						autoComplete="email"
-						required
-						value={inputs.email}
-						onChange={(e) => handleChange(e)}
-					/>
-				</label>
-				{/* <label htmlFor="publicEmail">
+					<Form.Group className="mb-5" controlId="formEmail">
+						<Form.Label htmlFor="first-name">Name</Form.Label>
+						<Form.Control
+							type="text"
+							name="name"
+							id="first-name"
+							placeholder="Name"
+							autoComplete="name"
+							value={inputs.name}
+							required
+							onChange={(e) => handleChange(e)}
+						/>
+					</Form.Group>
+					<Form.Group className="mb-5" controlId="formEmail">
+						<Form.Label htmlFor="email">Email address</Form.Label>
+						<Form.Control
+							type="email"
+							name="email"
+							placeholder="Your Email Address"
+							autoComplete="email"
+							required
+							value={inputs.email}
+							onChange={(e) => handleChange(e)}
+						/>
+					</Form.Group>
+
+					{/* <label htmlFor="publicEmail">
 					Public Email? (users/visitors can see your e-mail)
 					<input
 						type="checkbox"
@@ -153,20 +166,23 @@ export default function SignUp() {
 						onChange={(e) => handleChange(e)}
 					/>
 				</label> */}
-				<label htmlFor="password">
-					Password
-					<input
-						type="password"
-						name="password"
-						placeholder="Password"
-						autoComplete="password"
-						required
-						value={inputs.password}
-						onChange={(e) => handleChange(e)}
-					/>
-				</label>
-				<button type="submit">Sign In!</button>
-			</fieldset>
-		</form>
+					<Form.Group className="mb-5" controlId="password">
+						<Form.Label htmlFor="password">Password</Form.Label>
+						<Form.Control
+							type="password"
+							name="password"
+							placeholder="Password"
+							autoComplete="password"
+							required
+							value={inputs.password}
+							onChange={(e) => handleChange(e)}
+						/>
+					</Form.Group>
+					<Button variant="primary" type="submit">
+						Register
+					</Button>
+				</Form>
+			</Card.Body>
+		</Card>
 	);
 }

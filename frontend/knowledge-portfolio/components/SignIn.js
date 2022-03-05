@@ -11,6 +11,8 @@ import UserContext from '../context/UserContext';
 import { CURRENT_USER_QUERY } from './User';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { Button, Card, Form } from 'react-bootstrap';
+import Link from 'next/link';
 // import { CURRENT_USER_QUERY } from './User';
 
 // import Error from './ErrorMessage';
@@ -123,37 +125,60 @@ export default function SignIn() {
 
 	return (
 		<>
-			<form method="POST" onSubmit={handleSubmit}>
-				<h2>Sign In</h2>
-				{error && <p>{error.message}</p>}
-				<fieldset>
-					<div className="input-wrap">
-						<label htmlFor="email">
-							<span>Email</span>
-							<input
+			<Card
+				css={css`
+					margin-bottom: 3rem;
+				`}
+			>
+				<Card.Header as="h3">Sign In</Card.Header>
+				<Card.Body
+					css={css`
+						padding: 4rem 2rem;
+					`}
+				>
+					<Form method="POST" onSubmit={handleSubmit}>
+						{error && <p>{error.message}</p>}
+
+						<Form.Group className="mb-5" controlId="formEmail">
+							<Form.Label htmlFor="email">
+								Email address
+							</Form.Label>
+							<Form.Control
 								type="email"
 								name="email"
+								id="email"
 								autoComplete="email"
 								value={inputs.email}
 								onChange={(e) => handleChange(e)}
 							/>
-						</label>
-					</div>
-					<div className="input-wrap">
-						<label htmlFor="password" onFocus={() => 'focus'}>
-							<span>Password</span>
-							<input
+						</Form.Group>
+						<Form.Group className="mb-5" controlId="password">
+							<Form.Label htmlFor="password">Password</Form.Label>
+							<Form.Control
 								type="password"
 								name="password"
+								id="pasword"
 								autoComplete="password"
 								value={inputs.password}
 								onChange={(e) => handleChange(e)}
 							/>
-						</label>
+						</Form.Group>
+						<Button variant="primary" type="submit">
+							Sign In
+						</Button>
+					</Form>
+
+					<div
+						css={css`
+							margin-top: 3rem;
+						`}
+					>
+						<Link href="/forgot-password" className="link">
+							Forgot your password?
+						</Link>
 					</div>
-					<button type="submit">Sign In!</button>
-				</fieldset>
-			</form>
+				</Card.Body>
+			</Card>
 		</>
 	);
 }
