@@ -1,4 +1,4 @@
-import { checkbox } from '@keystone-next/fields';
+import { checkbox } from '@keystone-6/fields';
 
 export const permissionFields = {
   canAddItems: checkbox({

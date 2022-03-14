@@ -239,7 +239,12 @@ export default function Home() {
 							<Row className="align-items-center">
 								<Col lg={5}>
 									<>
-										<h1 className="primary">Owlit</h1>
+										<h1 className="primary">
+											Owl
+											<span className="secondary">
+												it
+											</span>
+										</h1>
 										{/* <h2>
 											<ChangingWord
 												classNameName={`title-fade ${fade}`}

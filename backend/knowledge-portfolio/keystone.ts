@@ -1,9 +1,9 @@
 
 import 'dotenv/config';
-import { config } from '@keystone-next/keystone/schema';
-import { statelessSessions, withAuthData  } from '@keystone-next/keystone/session';
-import { createAuth } from '@keystone-next/auth';
+import { config } from '@keystone-6/core';
+import { withAuth, session } from './auth';
 import { lists } from './schema';
+import type { DatabaseConfig } from '@keystone-6/core/types';
 import { sendPasswordResetEmail } from './mail';
 
 // let sessionSecret = process.env.SESSION_SECRET;
@@ -18,29 +18,33 @@ import { sendPasswordResetEmail } from './mail';
 //   }
 // }
 
-const { withAuth } = createAuth({
-  listKey: 'User',
-  identityField: 'email',
-  secretField: 'password',
-  sessionData: 'id name email',
-  initFirstItem: {
-    fields: ['email', 'password'],
-    itemData: { isAdmin: true },
-    skipKeystoneWelcome: false,
-  },
-  passwordResetLink: {
-   async sendToken(args) {
-     await sendPasswordResetEmail(args.token, args.identity);
-   }
-  },
-  // magicAuthLink: {
-  //   sendToken: async ({ itemId, identity, token, context }) => { /* ... */ },
-  //   tokensValidForMins: 60,
-  // },
-});
+// const { withAuth } = createAuth({
+//   listKey: 'User',
+//   identityField: 'email',
+//   secretField: 'password',
+//   sessionData: 'id name email',
+//   initFirstItem: {
+//     fields: ['email', 'password'],
+//     itemData: { isAdmin: true },
+//     skipKeystoneWelcome: false,
+//   },
+//   passwordResetLink: {
+//    async sendToken(args) {
+//      await sendPasswordResetEmail(args.token, args.identity);
+//    }
+//   },
+//   // magicAuthLink: {
+//   //   sendToken: async ({ itemId, identity, token, context }) => { /* ... */ },
+//   //   tokensValidForMins: 60,
+//   // },
+// });
 
-export default withAuth(
-  config({
+export default config(
+  withAuth({
+    session,
+    ui: {
+      isAccessAllowed: (context) => !!context.session?.data,
+    },
     server: {
       cors: {
         origin: [process.env.FRONTEND_URL],
@@ -48,7 +52,8 @@ export default withAuth(
       }
     },
     db: {
-      adapter: 'prisma_postgresql',
+      provider: 'postgresql',
+      // adapter: 'prisma_postgresql',
       url: process.env.DATABASE_URL
     },
     ui: {
@@ -63,14 +68,5 @@ export default withAuth(
       },
     },
     lists,
-    session: statelessSessions({
-      secret: 'ABCDEFGH1234567887654321HGFEDCBA',
-      maxAge: 60 * 60 * 24,
-      secure: true,
-      path: '/',
-      domain: 'localhost',
-      sameSite: 'lax',
-    }),
-  })
-
+  }),
 );

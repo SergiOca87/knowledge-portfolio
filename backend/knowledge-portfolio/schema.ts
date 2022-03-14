@@ -1,5 +1,5 @@
 //TODO: Image should be cloudinaryimage when supported
-import { createSchema, list } from '@keystone-next/keystone/schema';
+import { list } from '@keystone-6/core';
 import {
   text,
   relationship,
@@ -9,12 +9,12 @@ import {
   image, 
   json,
   checkbox
-} from '@keystone-next/fields';
-// import { cloudinaryImage } from '@keystone-next/cloudinary';
-import { document } from '@keystone-next/fields-document';
+} from '@keystone-6/core/fields';
+// import { cloudinaryImage } from '@keystone-6/cloudinary';
+import { document } from '@keystone-6/fields-document';
 import { permissionFields } from './fields';
 
-export const lists = createSchema({
+export const lists = {
   User: list({
     ui: {
       listView: {
@@ -22,10 +22,10 @@ export const lists = createSchema({
       },
     },
     fields: {
-      name: text({ isRequired: true }),
-      email: text({ isRequired: true, isUnique: true }),
+      name: text({validation: { isRequired: true } }),
+      email: text({ validation: { isRequired: true}, isIndexed: 'unique' }),
       publicEmail: checkbox({ defaultValue: true }),
-      password: password({ isRequired: true }),
+      password: password({validation: { isRequired: true } }),
       specialization: text(),
       items: relationship({ ref: 'Item.author', many: true }),
       sent: relationship({ ref: 'Message.sender', many: true}),
@@ -45,7 +45,7 @@ export const lists = createSchema({
       //   ref: 'Role.assignedTo', 
       // })
     },
-    access: true,
+    // access: true,
   }),
   Item: list({
     fields: {
@@ -172,7 +172,7 @@ export const lists = createSchema({
 
   // Role: list({
   //   fields: {
-  //     name: text({ isRequired: true }),
+  //     name: text({validation: { isRequired: true } }),
   //     ...permissionFields,
   //     assignedTo: relationship({
   //       ref: 'User.role', //TODO: Add this to user (two way),
@@ -180,4 +180,4 @@ export const lists = createSchema({
   //     })
   //   }
   // })
-});
+};
