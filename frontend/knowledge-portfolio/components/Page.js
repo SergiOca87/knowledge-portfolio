@@ -8,6 +8,7 @@ import UserContext from '../context/UserContext';
 import { useQuery } from '@apollo/client';
 import { CURRENT_USER_QUERY } from './User';
 import { ToastContainer, toast } from 'react-toastify';
+import Footer from './Footer';
 
 const GlobalStyles = createGlobalStyle`
   @font-face {
@@ -102,7 +103,7 @@ const GlobalStyles = createGlobalStyle`
     line-height: 1.4;
     margin-bottom: 2rem;
     font-family: 'Montserrat-Light';
-
+    color: #585858;
    
   }
   a{
@@ -277,6 +278,7 @@ export default function Page({ children }) {
 			<Nav />
 			<ToastContainer />
 			<InnerStyles>{children}</InnerStyles>
+			<Footer />
 		</div>
 	);
 }

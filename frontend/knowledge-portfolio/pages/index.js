@@ -24,6 +24,7 @@ const StyledMain = styled.main`
 	overflow: hidden;
 	background-color: #f1f1f1;
 	height: 100%;
+	padding-bottom: 6rem;
 
 	.titles {
 		min-height: 50rem;
@@ -225,10 +226,7 @@ export default function Home() {
 		<>
 			<Head>
 				<title>Your Knowledge Portfolio</title>
-				<meta
-					name="description"
-					content="Visually share your knowledge"
-				/>
+				<meta name="description" content="Share your knowledge" />
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
 
@@ -239,12 +237,6 @@ export default function Home() {
 							<Row className="align-items-center">
 								<Col lg={5}>
 									<>
-										<h1 className="primary">
-											Owl
-											<span className="secondary">
-												it
-											</span>
-										</h1>
 										{/* <h2>
 											<ChangingWord
 												classNameName={`title-fade ${fade}`}
@@ -255,6 +247,7 @@ export default function Home() {
 											</ChangingWord>{' '}
 											Your Knowledge
 										</h2> */}
+
 										<div className="flip-card">
 											<div
 												className={`flip-card-inner ${flip}`}
@@ -287,12 +280,28 @@ export default function Home() {
 												</div>
 											</div>
 										</div>
-										<span>Your Knowledge</span>
+										<h2
+											css={css`
+												font-family: 'Montserrat-Bold';
+												margin: 0;
+												margin-top: 2rem;
+												margin-left: 2rem;
+												font-size: 3.4rem;
+											`}
+										>
+											<span className="primary d-block">
+												Your&nbsp;
+											</span>
+											<span className="secondary d-block">
+												Knowledge
+											</span>
+										</h2>
 									</>
 								</Col>
 
 								<Col lg={7}>
 									<div
+										className="d-none d-lg-block"
 										css={css`
 											position: absolute;
 											bottom: -65px;

@@ -6,6 +6,7 @@ import { useQuery } from '@apollo/client';
 import gql from 'graphql-tag';
 import Link from 'next/link';
 import { useContext, useEffect, useState } from 'react';
+import { LOGGED_IN_USER } from './User';
 import { Col, Row } from 'react-bootstrap';
 import styled, { css } from 'styled-components';
 import PortfolioOptionsContext from '../context/PortfolioOptionsContext';
@@ -138,7 +139,7 @@ export default function ItemGrid({
 
 	return (
 		<>
-			{user && (
+			{user ? (
 				<>
 					<StyledItemGrid
 						css={css`
@@ -177,6 +178,15 @@ export default function ItemGrid({
 						)}
 					</StyledItemGrid>
 				</>
+			) : (
+				<Container>
+					<h2>
+						You have to log in to see this content,
+						<br />
+						You can log in or register{' '}
+						<Link href="/login">here</Link>
+					</h2>
+				</Container>
 			)}
 		</>
 	);

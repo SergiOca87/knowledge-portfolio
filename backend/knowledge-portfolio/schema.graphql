@@ -56,11 +56,20 @@ type User {
   instagram: String
   youtube: String
   website: String
+  passwordResetToken: PasswordState
+  passwordResetIssuedAt: DateTime
+  passwordResetRedeemedAt: DateTime
+  magicAuthToken: PasswordState
+  magicAuthIssuedAt: DateTime
+  magicAuthRedeemedAt: DateTime
 }
 
 type PasswordState {
   isSet: Boolean!
 }
+
+scalar DateTime
+  @specifiedBy(url: "https://datatracker.ietf.org/doc/html/rfc3339#section-5.6")
 
 input UserWhereUniqueInput {
   id: ID
@@ -87,6 +96,12 @@ input UserWhereInput {
   instagram: StringFilter
   youtube: StringFilter
   website: StringFilter
+  passwordResetToken: PasswordFilter
+  passwordResetIssuedAt: DateTimeNullableFilter
+  passwordResetRedeemedAt: DateTimeNullableFilter
+  magicAuthToken: PasswordFilter
+  magicAuthIssuedAt: DateTimeNullableFilter
+  magicAuthRedeemedAt: DateTimeNullableFilter
 }
 
 input IDFilter {
@@ -163,6 +178,21 @@ input UserManyRelationFilter {
   none: UserWhereInput
 }
 
+input PasswordFilter {
+  isSet: Boolean!
+}
+
+input DateTimeNullableFilter {
+  equals: DateTime
+  in: [DateTime!]
+  notIn: [DateTime!]
+  lt: DateTime
+  lte: DateTime
+  gt: DateTime
+  gte: DateTime
+  not: DateTimeNullableFilter
+}
+
 input UserOrderByInput {
   id: OrderDirection
   name: OrderDirection
@@ -174,6 +204,10 @@ input UserOrderByInput {
   instagram: OrderDirection
   youtube: OrderDirection
   website: OrderDirection
+  passwordResetIssuedAt: OrderDirection
+  passwordResetRedeemedAt: OrderDirection
+  magicAuthIssuedAt: OrderDirection
+  magicAuthRedeemedAt: OrderDirection
 }
 
 enum OrderDirection {
@@ -199,6 +233,12 @@ input UserUpdateInput {
   instagram: String
   youtube: String
   website: String
+  passwordResetToken: String
+  passwordResetIssuedAt: DateTime
+  passwordResetRedeemedAt: DateTime
+  magicAuthToken: String
+  magicAuthIssuedAt: DateTime
+  magicAuthRedeemedAt: DateTime
 }
 
 input ItemRelateToManyForUpdateInput {
@@ -252,6 +292,12 @@ input UserCreateInput {
   instagram: String
   youtube: String
   website: String
+  passwordResetToken: String
+  passwordResetIssuedAt: DateTime
+  passwordResetRedeemedAt: DateTime
+  magicAuthToken: String
+  magicAuthIssuedAt: DateTime
+  magicAuthRedeemedAt: DateTime
 }
 
 input ItemRelateToManyForCreateInput {
@@ -516,6 +562,17 @@ type Mutation {
   createInitialUser(
     data: CreateInitialUserInput!
   ): UserAuthenticationWithPasswordSuccess!
+  sendUserPasswordResetLink(email: String!): Boolean!
+  redeemUserPasswordResetToken(
+    email: String!
+    token: String!
+    password: String!
+  ): RedeemUserPasswordResetTokenResult
+  sendUserMagicAuthLink(email: String!): Boolean!
+  redeemUserMagicAuthToken(
+    email: String!
+    token: String!
+  ): RedeemUserMagicAuthTokenResult!
 }
 
 union UserAuthenticationWithPasswordResult =
@@ -535,6 +592,37 @@ input CreateInitialUserInput {
   name: String
   email: String
   password: String
+}
+
+type RedeemUserPasswordResetTokenResult {
+  code: PasswordResetRedemptionErrorCode!
+  message: String!
+}
+
+enum PasswordResetRedemptionErrorCode {
+  FAILURE
+  TOKEN_EXPIRED
+  TOKEN_REDEEMED
+}
+
+union RedeemUserMagicAuthTokenResult =
+    RedeemUserMagicAuthTokenSuccess
+  | RedeemUserMagicAuthTokenFailure
+
+type RedeemUserMagicAuthTokenSuccess {
+  token: String!
+  item: User!
+}
+
+type RedeemUserMagicAuthTokenFailure {
+  code: MagicLinkRedemptionErrorCode!
+  message: String!
+}
+
+enum MagicLinkRedemptionErrorCode {
+  FAILURE
+  TOKEN_EXPIRED
+  TOKEN_REDEEMED
 }
 
 type Query {
@@ -572,9 +660,18 @@ type Query {
   messagesCount(where: MessageWhereInput! = {}): Int
   keystone: KeystoneMeta!
   authenticatedItem: AuthenticatedItem
+  validateUserPasswordResetToken(
+    email: String!
+    token: String!
+  ): ValidateUserPasswordResetTokenResult
 }
 
 union AuthenticatedItem = User
+
+type ValidateUserPasswordResetTokenResult {
+  code: PasswordResetRedemptionErrorCode!
+  message: String!
+}
 
 type KeystoneMeta {
   adminMeta: KeystoneAdminMeta!

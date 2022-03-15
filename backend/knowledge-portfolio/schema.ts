@@ -14,6 +14,16 @@ import {
 import { document } from '@keystone-6/fields-document';
 import { permissionFields } from './fields';
 
+/******* USER VALIDATION *******/
+// Validate there is a user with a valid session
+const isUser = ({ session }: { session: Session }) =>
+  !!session?.data.id;
+
+// Validate the current user is an Admin
+const isAdmin = ({ session }: { session: Session }) =>
+  session?.data.isAdmin;
+  /************************************************/
+
 export const lists = {
   User: list({
     ui: {
@@ -48,6 +58,13 @@ export const lists = {
     // access: true,
   }),
   Item: list({
+    access: {
+      operation: {
+        create: isUser,
+        update: isUser,
+        delete: isUser,
+      },
+    },
     fields: {
       title: text(),
       status: text(), 
@@ -132,6 +149,13 @@ export const lists = {
   //   }
   // }),
   Category: list({
+    access: {
+      operation: {
+        create: isUser,
+        update: isUser,
+        delete: isUser,
+      },
+    },
     ui: {
       isHidden: false,
     },
@@ -157,6 +181,13 @@ export const lists = {
   }),
 
   Message: list({
+    access: {
+      operation: {
+        create: isUser,
+        update: isUser,
+        delete: isUser,
+      },
+    },
     fields: {
       text: text(),
       sender: relationship({

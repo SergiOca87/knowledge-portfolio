@@ -79,6 +79,41 @@ export const SINGLE_USER_QUERY = gql`
 	}
 `;
 
+export const LOGGED_IN_USER = gql`
+	query {
+		authenticatedItem {
+			... on User {
+				id
+				name
+				email
+				publicEmail
+				options
+				instagram
+				youtube
+				website
+				received {
+					id
+				}
+				categories {
+					id
+				}
+				items {
+					id
+					title
+					description
+					status
+					singlePageContent
+					categories {
+						id
+						name
+						icon
+					}
+				}
+			}
+		}
+	}
+`;
+
 export function useUser() {
 	// const { data } = useQuery(CURRENT_USER_QUERY);
 	// const { user, setUser } = useContext(UserContext);

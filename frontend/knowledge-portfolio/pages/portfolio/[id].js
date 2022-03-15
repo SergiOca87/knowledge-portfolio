@@ -11,6 +11,7 @@ import {
 	Tooltip,
 } from 'react-bootstrap';
 import UserContext from '../../context/UserContext';
+
 import {
 	FaUser,
 	FaPlus,
@@ -29,7 +30,9 @@ import PortfolioOptionsContext, {
 } from '../../context/PortfolioOptionsContext';
 import UserStyleOptions from '../../components/UserStyleOptions';
 import OrderingModal from '../../components/OrderingModal';
+import { LOGGED_IN_USER } from '../../components/User';
 import QrModal from '../../components/QrModal';
+import { useQuery } from '@apollo/client';
 
 const StyledUserCard = styled.div`
 	display: flex;
@@ -127,160 +130,168 @@ export default function UserPortfolioPage() {
 	//Tooltip
 	const [show, setShow] = useState(false);
 	const target = useRef(null);
-	const { user } = useContext(UserContext);
+	// const { user } = useContext(UserContext);
 	// const { options } = useContext(PortfolioOptionsContext);
-	const userOptions = user?.options?.options;
 
-	console.log('user portfolio?', user);
+	const { loading, error, data } = useQuery(LOGGED_IN_USER);
+
+	const user = data?.authenticatedItem;
+
+	const userOptions = user?.options?.options;
 
 	const handleClose = () => {
 		setShow(false);
 	};
+	if (loading) {
+		return <p>Loading...</p>;
+	} else {
+		return (
+			<Main>
+				{user ? (
+					<>
+						<UserStyleOptions user={user}>
+							<Container>
+								<StyledUserCard>
+									{userOptions?.userImage ? (
+										<div
+											className="avatar"
+											css={`
+												background-image: ${user.image};
+											`}
+										></div>
+									) : (
+										<div className="avatar">
+											<FaUser />
+										</div>
+									)}
+									<h1>
+										Welcome to your portfolio, {user?.name}
+									</h1>
+								</StyledUserCard>
 
-	return (
-		<Main>
-			{user ? (
-				<>
-					<UserStyleOptions user={user}>
-						<Container>
-							<StyledUserCard>
-								{userOptions?.userImage ? (
-									<div
-										className="avatar"
-										css={`
-											background-image: ${user.image};
-										`}
-									></div>
-								) : (
-									<div className="avatar">
-										<FaUser />
-									</div>
-								)}
-								<h1>Welcome to your portfolio, {user?.name}</h1>
-							</StyledUserCard>
-
-							<UserControls>
-								<div>
-									<OverlayTrigger
-										placement={'top'}
-										overlay={
-											<Tooltip id={`tooltip-top}`}>
-												Add New Portfolio Item
-											</Tooltip>
-										}
-									>
-										<Button>
-											<Link href={'/add-item'}>
-												<FaPlus />
-											</Link>
-										</Button>
-									</OverlayTrigger>
-								</div>
-								<div>
-									<OverlayTrigger
-										placement={'top'}
-										overlay={
-											<Tooltip id={`tooltip-top}`}>
-												Toggle Public View
-											</Tooltip>
-										}
-									>
-										<Button>
-											<Link
-												href={`/public-portfolio/${id}`}
-											>
-												<FaEye />
-											</Link>
-										</Button>
-									</OverlayTrigger>
-								</div>
-								<div>
-									<OverlayTrigger
-										placement={'top'}
-										overlay={
-											<Tooltip id={`tooltip-top}`}>
-												Edit Portfolio
-											</Tooltip>
-										}
-									>
-										<Button>
-											<Link href={'/'}>
-												<PortfolioEdit
-													placement={'end'}
-													// setOpenModal={setOpenModal}
-													// openModal={openModal}
-												/>
-											</Link>
-										</Button>
-									</OverlayTrigger>
-								</div>
-								<div>
-									<OverlayTrigger
-										placement={'top'}
-										overlay={
-											<Tooltip id="tooltip-top">
-												Download as a PDF
-											</Tooltip>
-										}
-									>
-										<Button>
-											<Link href={'/'}>
-												<FaFileDownload />
-											</Link>
-										</Button>
-									</OverlayTrigger>
-								</div>
-								<div>
-									<OverlayTrigger
-										placement={'top'}
-										overlay={
-											<Tooltip id="tooltip-top">
-												Generate QR Code
-											</Tooltip>
-										}
-									>
-										<Button
-											onClick={() =>
-												showQrModal
-													? setShowQrModal(false)
-													: setShowQrModal(true)
+								<UserControls>
+									<div>
+										<OverlayTrigger
+											placement={'top'}
+											overlay={
+												<Tooltip id={`tooltip-top}`}>
+													Add New Portfolio Item
+												</Tooltip>
 											}
 										>
-											{/* <Link
+											<Button>
+												<Link href={'/add-item'}>
+													<FaPlus />
+												</Link>
+											</Button>
+										</OverlayTrigger>
+									</div>
+									<div>
+										<OverlayTrigger
+											placement={'top'}
+											overlay={
+												<Tooltip id={`tooltip-top}`}>
+													Toggle Public View
+												</Tooltip>
+											}
+										>
+											<Button>
+												<Link
+													href={`/public-portfolio/${id}`}
+												>
+													<FaEye />
+												</Link>
+											</Button>
+										</OverlayTrigger>
+									</div>
+									<div>
+										<OverlayTrigger
+											placement={'top'}
+											overlay={
+												<Tooltip id={`tooltip-top}`}>
+													Edit Portfolio
+												</Tooltip>
+											}
+										>
+											<Button>
+												<Link href={'/'}>
+													<PortfolioEdit
+														placement={'end'}
+														// setOpenModal={setOpenModal}
+														// openModal={openModal}
+													/>
+												</Link>
+											</Button>
+										</OverlayTrigger>
+									</div>
+									<div>
+										<OverlayTrigger
+											placement={'top'}
+											overlay={
+												<Tooltip id="tooltip-top">
+													Download as a PDF
+												</Tooltip>
+											}
+										>
+											<Button>
+												<Link href={'/'}>
+													<FaFileDownload />
+												</Link>
+											</Button>
+										</OverlayTrigger>
+									</div>
+									<div>
+										<OverlayTrigger
+											placement={'top'}
+											overlay={
+												<Tooltip id="tooltip-top">
+													Generate QR Code
+												</Tooltip>
+											}
+										>
+											<Button
+												onClick={() =>
+													showQrModal
+														? setShowQrModal(false)
+														: setShowQrModal(true)
+												}
+											>
+												{/* <Link
 										href={`/qr/${id}`}
 										query={`${router.pathname}`}
 									> */}
-											<FaQrcode />
-											{/* </Link> */}
-										</Button>
-									</OverlayTrigger>
-								</div>
-							</UserControls>
+												<FaQrcode />
+												{/* </Link> */}
+											</Button>
+										</OverlayTrigger>
+									</div>
+								</UserControls>
 
-							{/* {loop throug map} */}
-							<StyledGridWrap>
-								<ItemGrid
-									user={user}
-									// options={user?.options ? user.options : ''}
-								/>
-							</StyledGridWrap>
-						</Container>
-					</UserStyleOptions>
-					<QrModal
-						showQrModal={showQrModal}
-						setShowQrModal={setShowQrModal}
-					/>
-				</>
-			) : (
-				<Container>
-					<h2>
-						You have to log in to see this content,
-						<br />
-						You can log in or register{' '}
-						<Link href="/login">here</Link>
-					</h2>
-				</Container>
-			)}
-		</Main>
-	);
+								{/* {loop throug map} */}
+								<StyledGridWrap>
+									<ItemGrid
+										user={user}
+										// options={user?.options ? user.options : ''}
+									/>
+								</StyledGridWrap>
+							</Container>
+						</UserStyleOptions>
+						<QrModal
+							showQrModal={showQrModal}
+							setShowQrModal={setShowQrModal}
+						/>
+					</>
+				) : (
+					<Container>
+						<h2>
+							You have to log in to see this content,
+							<br />
+							You can log in or register{' '}
+							<Link href="/login">here</Link>
+						</h2>
+					</Container>
+				)}
+			</Main>
+		);
+	}
 }

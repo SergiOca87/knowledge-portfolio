@@ -4,11 +4,19 @@ import { statelessSessions } from '@keystone-6/core/session';
 const { withAuth } = createAuth({
   listKey: 'User',
   identityField: 'email',
-  sessionData: 'name',
   secretField: 'password',
+  sessionData: 'name',
   initFirstItem: {
     fields: ['name', 'email', 'password'],
     itemData: { isAdmin: true },
+  },
+  passwordResetLink: {
+    sendToken: async ({ itemId, identity, token, context }) => { /* ... */ },
+    tokensValidForMins: 60,
+  },
+  magicAuthLink: {
+    sendToken: async ({ itemId, identity, token, context }) => { /* ... */ },
+    tokensValidForMins: 60,
   },
 });
 

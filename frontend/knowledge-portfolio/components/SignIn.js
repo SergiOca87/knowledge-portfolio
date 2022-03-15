@@ -6,9 +6,9 @@ import { useMutation, useQuery } from '@apollo/client';
 // import Form from './styles/Form';
 // import useForm from '../lib/useForm';
 import React, { useContext, useEffect, useState } from 'react';
-import Router from 'next/router';
+import Router, { useRouter } from 'next/router';
 import UserContext from '../context/UserContext';
-import { CURRENT_USER_QUERY } from './User';
+import { CURRENT_USER_QUERY, LOGGED_IN_USER } from './User';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Button, Card, Form } from 'react-bootstrap';
@@ -17,6 +17,7 @@ import Link from 'next/link';
 
 // import Error from './ErrorMessage';
 
+//TODO: Is this correct with Keyston 6 now?
 const SIGNIN_MUTATION = gql`
 	mutation SIGNIN_MUTATION($email: String!, $password: String!) {
 		authenticateUserWithPassword(email: $email, password: $password) {
@@ -41,7 +42,6 @@ const SIGNIN_MUTATION = gql`
 				}
 			}
 			... on UserAuthenticationWithPasswordFailure {
-				code
 				message
 			}
 		}
@@ -64,15 +64,24 @@ const SIGNIN_MUTATION = gql`
 
 export default function SignIn() {
 	const { user, setUser } = useContext(UserContext);
+	const router = useRouter();
+
+	// Check if there is a user or not
+	const { loading, error, data } = useQuery(LOGGED_IN_USER);
+
+	if (loading) {
+		return <p>Loading...</p>;
+	}
 
 	// If there is a logged in user, redirect to its page:
-	useEffect(() => {
-		if (user) {
-			Router.push({
-				pathname: `/portfolio/${user.id}`,
-			});
-		}
-	}, [user]);
+	//TODO: Can this be checked in context.session?
+	// useEffect(() => {
+	// 	if (user) {
+	// 		Router.push({
+	// 			pathname: `/portfolio/${user.id}`,
+	// 		});
+	// 	}
+	// }, [user]);
 	//////////////////////////////////////////////////
 
 	const [inputs, setInputs] = useState({
@@ -80,13 +89,13 @@ export default function SignIn() {
 		password: '',
 	});
 
-	const [signin, { data: signInData, loading, error }] = useMutation(
-		SIGNIN_MUTATION,
-		{
-			variables: inputs,
-			refetchQueries: [{ query: CURRENT_USER_QUERY }],
-		}
-	);
+	const [
+		signin,
+		{ data: signInData, loading: signInLoading, error: signInError },
+	] = useMutation(SIGNIN_MUTATION, {
+		variables: inputs,
+		refetchQueries: LOGGED_IN_USER,
+	});
 
 	const handleChange = (e) => {
 		let { value, name } = e.target;
@@ -110,18 +119,26 @@ export default function SignIn() {
 				password: '',
 			});
 
-			if (res.data.authenticateUserWithPassword.code === 'FAILURE') {
+			if (
+				res.data.authenticateUserWithPassword.message ===
+				'Authentication failed.'
+			) {
 				toast.error(res.data.authenticateUserWithPassword.message);
-			} else {
-				setUser(res?.signInData?.authenticateUserWithPassword.item);
+			} else if (
+				res.data.authenticateUserWithPassword.__typename ===
+				'UserAuthenticationWithPasswordSuccess'
+			) {
+				// setUser(res?.data?.authenticateUserWithPassword.item);
+
+				// toast.success('');
+
+				//TODO: Why doesn't this work as using the URL directly?
+				router.push(
+					`/portfolio/${res?.data?.authenticateUserWithPassword.item.id}`
+				);
 			}
 		}
 	}
-	// const error =
-	// 	data?.authenticateUserWithPassword.__typename ===
-	// 	'UserAuthenticationWithPasswordFailure'
-	// 		? data?.authenticateUserWithPassword
-	// 		: undefined;
 
 	return (
 		<>
