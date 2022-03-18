@@ -73,17 +73,6 @@ export default function SignIn() {
 		return <p>Loading...</p>;
 	}
 
-	// If there is a logged in user, redirect to its page:
-	//TODO: Can this be checked in context.session?
-	// useEffect(() => {
-	// 	if (user) {
-	// 		Router.push({
-	// 			pathname: `/portfolio/${user.id}`,
-	// 		});
-	// 	}
-	// }, [user]);
-	//////////////////////////////////////////////////
-
 	const [inputs, setInputs] = useState({
 		email: '',
 		password: '',

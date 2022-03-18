@@ -73,7 +73,6 @@ export default function PortfolioEdit({ children }) {
 	//TODO: How can we "handleSubmit" after adding this orderedItems Array to options
 	//TODO. Would be better not to have to save changes after saving order...
 	useEffect(() => {
-		console.log('on load, user options are', user.options);
 		if (reorderedItems && reorderedItems.length) {
 			setOptions({ ...options, reorderedItems: reorderedItems });
 		}
@@ -81,9 +80,14 @@ export default function PortfolioEdit({ children }) {
 
 	return (
 		<>
-			<Button variant="primary" onClick={handleShow} className="me-2">
-				<FaPencilAlt />
-			</Button>
+			<OverlayTrigger
+				placement={'top'}
+				overlay={<Tooltip id={`tooltip-top}`}>Edit Portfolio</Tooltip>}
+			>
+				<Button variant="primary" onClick={handleShow}>
+					<FaPencilAlt />
+				</Button>
+			</OverlayTrigger>
 			<StyledCanvas show={show} onHide={handleClose}>
 				<Offcanvas.Header closeButton className="secondary-bg">
 					<Offcanvas.Title>Portfolio Options</Offcanvas.Title>

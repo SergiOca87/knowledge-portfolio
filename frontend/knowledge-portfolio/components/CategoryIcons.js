@@ -22,12 +22,13 @@ const StyledIcons = styled.div`
 
 		svg {
 			transition: all 200ms;
+			fill: var(--secondary);
 		}
 
 		&:hover,
 		&.active {
 			svg {
-				fill: var(--secondary);
+				fill: var(--primary);
 			}
 		}
 	}

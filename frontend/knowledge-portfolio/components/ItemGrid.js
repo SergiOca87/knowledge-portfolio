@@ -166,16 +166,16 @@ export default function ItemGrid({
 						{!isPublicPage && visibleItems <= 0 && (
 							<p>
 								You can now start adding items to your portfolio
-								or you create a few categories first{' '}
+								or create a few categories first{' '}
 								<Link href="/add-category">Here</Link>
 							</p>
 						)}
 
-						{!isPublicPage && (
+						{/* {!isPublicPage && (
 							<li lg={user?.options?.options?.cols}>
 								<StyledEmptyCard>Add</StyledEmptyCard>
 							</li>
-						)}
+						)} */}
 					</StyledItemGrid>
 				</>
 			) : (

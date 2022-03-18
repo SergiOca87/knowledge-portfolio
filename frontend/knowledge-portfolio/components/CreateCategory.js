@@ -7,12 +7,13 @@ import Link from 'next/link';
 import { useContext, useEffect, useState } from 'react';
 import UserContext from '../context/UserContext';
 import styled from 'styled-components';
-import { Col, Container, Row } from 'react-bootstrap';
+import { Button, Card, Col, Container, Form, Row } from 'react-bootstrap';
 import * as FontAwesome from 'react-icons/fa';
 import CategoryIcons from './CategoryIcons';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { CURRENT_USER_QUERY } from './User';
+import { CURRENT_USER_QUERY, LOGGED_IN_USER } from './User';
+import { useRouter } from 'next/router';
 
 const StyledForm = styled.form`
 	max-width: 70rem;
@@ -60,9 +61,11 @@ const CREATE_CATEGORY_MUTATION = gql`
 `;
 
 export default function CreateCategory() {
+	//TODO: Get user from actual keystone context
 	const { user } = useContext(UserContext);
 	const userCategories = getCategories();
 	const [iconSearch, setIconSearch] = useState('');
+	const router = useRouter();
 
 	const [inputs, setInputs] = useState({
 		name: '',
@@ -83,7 +86,7 @@ export default function CreateCategory() {
 			variables: inputs,
 
 			//TODO: THis need the ID!
-			refetchQueries: [{ query: CURRENT_USER_QUERY }],
+			refetchQueries: [{ query: LOGGED_IN_USER }],
 		}
 	);
 
@@ -134,44 +137,54 @@ export default function CreateCategory() {
 				icon: '',
 			});
 
-			res?.data?.createCategory &&
-				toast.success(
-					`Created the ${res.data.createCategory.name} category`
-				);
+			toast.success(`Category created, reloading page...`);
+
+			setTimeout(() => {
+				router.reload(window.location.pathname);
+			}, 3000);
 		}
 	};
 
 	return (
 		<>
 			<ToastContainer />
-			<StyledForm method="POST" onSubmit={handleSubmit}>
-				<fieldset disabled={loading} aria-busy={loading}>
-					<div className="input-wrap text">
-						<label htmlFor="title">
-							<span>Category Name</span>
-							<input
-								required
+			<Card
+				css={css`
+					margin-bottom: 3rem;
+				`}
+			>
+				<Card.Body
+					css={css`
+						padding: 4rem 2rem;
+					`}
+				>
+					<Form method="POST" method="POST" onSubmit={handleSubmit}>
+						<Form.Group className="mb-5">
+							<Form.Label htmlFor="email">
+								Category Name
+							</Form.Label>
+							<Form.Control
 								type="text"
 								name="name"
+								id="name"
 								value={inputs.name}
 								required
 								onChange={handleChange}
 							/>
-						</label>
-					</div>
-					<div className="input-wrap text">
+						</Form.Group>
+						<Form.Group className="mb-5">
+							<Form.Label htmlFor="icon">
+								Search for an Icon
+							</Form.Label>
+							<Form.Control
+								type="text"
+								value={iconSearch}
+								name="icon"
+								id="icon"
+								onChange={(e) => setIconSearch(e.target.value)}
+							/>
+						</Form.Group>
 						<Container>
-							<div className="icons-top-bar">
-								<p>Add an Icon</p>
-								<input
-									type="text"
-									value={iconSearch}
-									placeholder="Search Icon"
-									onChange={(e) =>
-										setIconSearch(e.target.value)
-									}
-								/>
-							</div>
 							<div onClick={handleIconClick}>
 								<CategoryIcons
 									search={iconSearch}
@@ -179,9 +192,8 @@ export default function CreateCategory() {
 								/>
 							</div>
 						</Container>
-					</div>
 
-					{/* <label htmlFor="completed">
+						{/* <label htmlFor="completed">
 				<span>Completed?</span>
 				<input
 					type="checkbox"
@@ -189,9 +201,17 @@ export default function CreateCategory() {
 					onChange={handleChange}
 				/>
 			</label> */}
-					<input type="submit" value="submit" />
-				</fieldset>
-			</StyledForm>
+						<Button
+							variant="primary"
+							type="submit"
+							value="submit"
+							className="mt-5"
+						>
+							Create Category
+						</Button>
+					</Form>
+				</Card.Body>
+			</Card>
 		</>
 	);
 }

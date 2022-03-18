@@ -3,6 +3,7 @@ import gql from 'graphql-tag';
 import { useMutation } from '@apollo/client';
 import { CURRENT_USER_QUERY } from './User';
 import { Router } from 'next/router';
+import { Button } from 'react-bootstrap';
 
 const SIGN_OUT_MUTATION = gql`
 	mutation {
@@ -25,8 +26,8 @@ export default function SignOut() {
 	};
 
 	return (
-		<button type="button" onClick={handleSignOut}>
+		<Button variant="primary" type="button" onClick={handleSignOut}>
 			Sign Out
-		</button>
+		</Button>
 	);
 }

@@ -89,8 +89,8 @@ const GlobalStyles = createGlobalStyle`
     color: #4c4c4c
   }
   h1 {
-    font-size: 6rem;
-    font-family: 'Montserrat-ExtraBold';
+    font-size: 5rem;
+    font-family: 'Montserrat-Bold';
   }
   h2 {
     font-size: 4rem;

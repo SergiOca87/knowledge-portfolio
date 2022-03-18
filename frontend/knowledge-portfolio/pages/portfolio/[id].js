@@ -75,15 +75,7 @@ const UserControls = styled.div`
 	div {
 		&:first-child {
 			button {
-				border-right: 1px solid var(--secondary);
-				border-left: 1px solid transparent;
-			}
-		}
-
-		&:last-child {
-			button {
 				border-left: 1px solid var(--secondary);
-				border-right: 1px solid transparent;
 			}
 		}
 	}
@@ -94,13 +86,12 @@ const UserControls = styled.div`
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		background-color: var(--tertiary);
+		background-color: transparent;
 		transition: all 300ms;
 		cursor: pointer;
-		border-top: 5px solid transparent !important;
 		border-bottom: transparent !important;
-		border-left: 1px solid transparent;
-		border-right: 1px solid transparent;
+		border-right: 1px solid var(--secondary);
+		border-top: 4px solid var(--secondary);
 
 		svg {
 			transition: all 300ms;
@@ -110,13 +101,12 @@ const UserControls = styled.div`
 		&:hover,
 		&:active,
 		&:focus {
-			border-top: 5px solid var(--secondary) !important;
-			background-color: var(--tertiary);
-			border-color: none !important;
+			border-top: 4px solid var(--secondary);
+			background-color: var(--secondary);
 
 			svg {
-				stroke: var(--secondary);
-				fill: var(--secondary);
+				stroke: #fff;
+				fill: #fff;
 			}
 		}
 	}
@@ -205,24 +195,13 @@ export default function UserPortfolioPage() {
 										</OverlayTrigger>
 									</div>
 									<div>
-										<OverlayTrigger
-											placement={'top'}
-											overlay={
-												<Tooltip id={`tooltip-top}`}>
-													Edit Portfolio
-												</Tooltip>
-											}
-										>
-											<Button>
-												<Link href={'/'}>
-													<PortfolioEdit
-														placement={'end'}
-														// setOpenModal={setOpenModal}
-														// openModal={openModal}
-													/>
-												</Link>
-											</Button>
-										</OverlayTrigger>
+										<Link href={'/'}>
+											<PortfolioEdit
+												placement={'end'}
+												// setOpenModal={setOpenModal}
+												// openModal={openModal}
+											/>
+										</Link>
 									</div>
 									<div>
 										<OverlayTrigger

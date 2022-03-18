@@ -19,7 +19,7 @@ import {
 const StyledNav = styled.nav`
 	display: flex;
 	align-items: center;
-	justify-content: flex-end;
+	justify-content: space-between;
 	padding: 2rem 2rem;
 	width: 100%;
 	gap: 5rem;
@@ -27,10 +27,13 @@ const StyledNav = styled.nav`
 
 	h1 {
 		margin: 0;
+		font-size: 5.5rem;
+		font-family: 'Montserrat-ExtraBold';
 	}
 
 	a {
-		display: block;
+		display: flex;
+		align-items: center;
 		text-transform: uppercase;
 		font-family: 'Montserrat-Bold';
 		color: var(--primary);
@@ -76,7 +79,7 @@ export default function Nav() {
 	return (
 		<div>
 			<Container>
-				<StyledNav className="d-flex justify-content-between">
+				<StyledNav>
 					<div>
 						<h1 className="primary">
 							Owl
@@ -85,7 +88,7 @@ export default function Nav() {
 					</div>
 
 					<div
-						className="d-flex justify-content-end"
+						className="d-flex align-items-center justify-between"
 						css={css`
 							gap: 4rem;
 						`}

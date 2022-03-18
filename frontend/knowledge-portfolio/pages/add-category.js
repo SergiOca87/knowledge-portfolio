@@ -6,6 +6,10 @@ import Main from '../components/Main';
 import { getCategories } from '../components/UserCategories';
 import UserContext from '../context/UserContext';
 
+// const StyledContainer = styled.Container`
+
+// `
+
 export default function createItems() {
 	const { user } = useContext(UserContext);
 	const userCategories = getCategories();
@@ -20,19 +24,19 @@ export default function createItems() {
 						visitors to filter your items.
 					</p>
 				</div>
-				<Row>
-					<Col lg={7}>
-						<CreateCategory />
-					</Col>
 
-					{user && userCategories && (
-						<Col lg={4}>
-							<Categories
-								categories={userCategories?.allCategories}
-							/>
-						</Col>
-					)}
-				</Row>
+				<div
+					css={css`
+						max-width: 80rem;
+						margin: 4rem auto;
+					`}
+				>
+					<CreateCategory />
+				</div>
+
+				{user && userCategories && (
+					<Categories categories={userCategories?.allCategories} />
+				)}
 			</Container>
 		</Main>
 	);
