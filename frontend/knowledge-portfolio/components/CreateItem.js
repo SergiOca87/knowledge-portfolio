@@ -12,6 +12,7 @@ import { USER_CATEGORIES_QUERY, getCategories } from './UserCategories';
 import Link from 'next/link';
 // import { USER_ITEMS_QUERY } from './ItemGrid';
 import { CURRENT_USER_QUERY } from '../components/User';
+import { LOGGED_IN_USER } from './User';
 import Router from 'next/router';
 import UserContext from '../context/UserContext';
 import { EditorState, convertFromRaw } from 'draft-js';
@@ -19,7 +20,13 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import styled, { css } from 'styled-components';
-import { Accordion, Button, useAccordionButton } from 'react-bootstrap';
+import {
+	Accordion,
+	Button,
+	Card,
+	Form,
+	useAccordionButton,
+} from 'react-bootstrap';
 
 import Editor from './Editor';
 
@@ -43,7 +50,7 @@ const CREATE_ITEM_MUTATION = gql`
 		$visibility: String
 		$singlePageContent: JSON
 		$image: String
-		$categories: [CategoryWhereUniqueInput]
+		$categories: [CategoryWhereUniqueInput!]
 		$date: String
 		$urlTitle: String
 		$url: String
@@ -78,10 +85,18 @@ const CREATE_ITEM_MUTATION = gql`
 `;
 
 export default function CreateItem() {
-	const { user } = useContext(UserContext);
-	const userCategories = getCategories();
+	// const { user } = useContext(UserContext);
+	const {
+		loading: userLoading,
+		error: userError,
+		data: userData,
+	} = useQuery(LOGGED_IN_USER);
 
-	console.log('current user', user);
+	const user = userData?.authenticatedItem;
+	const userCategories = user?.categories;
+
+	console.log('logged in user...', userCategories);
+	// const userCategories = data.categories;
 
 	const [inputs, setInputs] = useState({
 		title: '',
@@ -135,7 +150,7 @@ export default function CreateItem() {
 		CREATE_ITEM_MUTATION,
 		{
 			variables: inputs,
-			refetchQueries: [{ query: CURRENT_USER_QUERY }],
+			refetchQueries: [{ query: LOGGED_IN_USER }],
 		}
 	);
 
@@ -206,195 +221,206 @@ export default function CreateItem() {
 	};
 
 	return (
-		<StyledForm method="POST" onSubmit={handleSubmit}>
-			<fieldset disabled={loading} aria-busy={loading}>
-				<div className="input-wrap text">
-					<label htmlFor="title">
-						<span>Title</span>
-						<input
-							required
+		<Card
+			css={css`
+				margin-bottom: 3rem;
+			`}
+		>
+			<Card.Body
+				css={css`
+					padding: 4rem 2rem;
+				`}
+			>
+				<Form method="POST" onSubmit={handleSubmit}>
+					//TODO: This or toast?
+					{error && <p>{error.message}</p>}
+					<Form.Group className="mb-5">
+						<Form.Label htmlFor="title">Title</Form.Label>
+						<Form.Control
 							type="text"
 							name="title"
+							id="title"
+							required
 							value={inputs.title}
 							onChange={handleChange}
 						/>
-					</label>
-				</div>
-				<div className="input-wrap text">
-					<label htmlFor="date">
-						<span>Date</span>
-						<input
+					</Form.Group>
+					<Form.Group className="mb-5">
+						<Form.Label htmlFor="date">Date</Form.Label>
+						<Form.Control
 							type="date"
 							name="date"
+							id="date"
 							value={inputs.date}
 							onChange={handleChange}
 						/>
-					</label>
-				</div>
-				<div className="input-wrap text">
-					<label htmlFor="description">
-						<span>Description</span>
-						<textarea
+					</Form.Group>
+					<Form.Group className="mb-5">
+						<Form.Label htmlFor="description">
+							Description
+						</Form.Label>
+						<Form.Control
+							as="textarea"
+							rows={3}
 							name="description"
+							id="description"
 							maxLength="300"
 							value={inputs.description}
 							onChange={handleChange}
 						/>
-					</label>
-				</div>
-				<div className="input-wrap">
-					<label htmlFor="image">
-						<span>Image</span>
-						<input
-							type="file"
-							id="image"
-							name="image"
-							onChange={handleChange}
-							accept="image/png, image/jpeg"
-						/>
-					</label>
-				</div>
-				<div className="input-wrap">
+					</Form.Group>
+					//TODO: Cloudinary Images
+					{/* <div className="input-wrap">
+						<label htmlFor="image">
+							<span>Image</span>
+							<input
+								type="file"
+								id="image"
+								name="image"
+								onChange={handleChange}
+								accept="image/png, image/jpeg"
+							/>
+						</label>
+					</div> */}
 					{userCategories && (
-						<label htmlFor="categories">
-							<span>Categories</span>
+						<Form.Group className="mb-5">
+							<Form.Label htmlFor="category">Category</Form.Label>
 							<p className="tip">
 								If you need a new category you can create it{' '}
 								<Link href="/create-category"> here</Link>
 							</p>
-							<select
+							<Form.Select
+								aria-label="Categories"
 								name="categories"
-								multiple={true}
+								id="category"
 								onChange={handleChange}
 							>
 								<option value="Uncategorized">
 									Uncategorized
 								</option>
-								{userCategories?.allCategories?.map(
-									(category) => {
-										return (
-											<option
-												key={category.id}
-												value={category.id}
-											>
-												{category.name}
-											</option>
-										);
-									}
-								)}
+								{userCategories?.map((category) => {
+									return (
+										<option
+											key={category.id}
+											value={category.id}
+										>
+											{category.name}
+										</option>
+									);
+								})}
+							</Form.Select>
+						</Form.Group>
+					)}
+					<div className="input-wrap">
+						<label htmlFor="status">
+							<span>Status</span>
+							<select name="status" onChange={handleChange}>
+								<option value="finished">Finished</option>
+								<option value="unfinished">Unfinished</option>
 							</select>
 						</label>
-					)}
-				</div>
-				<div className="input-wrap">
-					<label htmlFor="status">
-						<span>Status</span>
-						<select name="status" onChange={handleChange}>
-							<option value="finished">Finished</option>
-							<option value="unfinished">Unfinished</option>
-						</select>
-					</label>
-				</div>
-				<div className="input-wrap">
-					<label htmlFor="visibility">
-						<span>Visibility (public or private)</span>
-						<select name="visibility" onChange={handleChange}>
-							<option value="true">Public</option>
-							<option value="false">Private</option>
-						</select>
-					</label>
-				</div>
-				<Accordion>
-					<div
-						className="input-wrap"
-						onClick={() => {
-							('open drawer');
-						}}
+					</div>
+					<div className="input-wrap">
+						<label htmlFor="visibility">
+							<span>Visibility (public or private)</span>
+							<select name="visibility" onChange={handleChange}>
+								<option value="true">Public</option>
+								<option value="false">Private</option>
+							</select>
+						</label>
+					</div>
+					<Accordion>
+						<div
+							className="input-wrap"
+							onClick={() => {
+								('open drawer');
+							}}
+						>
+							<label>
+								<span>Single Page Content</span>
+								<p className="tip">
+									Adding single page content will enable a
+									"More Details" buttonon your portfolio item.
+									This button will redirect the user to a page
+									with the content that you add here. Use this
+									feature if you need to create a detailed
+									view of your item with long text, images or
+									video.
+								</p>
+								<div className="d-flex align-center">
+									<span
+										css={css`
+											margin: 0;
+											font-size: 1.4rem;
+											margin-right: 1.5rem;
+										`}
+									>
+										Add
+									</span>
+									<CustomToggle eventKey="0">
+										<input
+											type="checkbox"
+											id="singlePage"
+											name="singlePage"
+											value={inputs.singlePage}
+											onChange={handleChange}
+										/>
+									</CustomToggle>
+								</div>
+							</label>
+						</div>
+
+						<Accordion.Collapse eventKey="0">
+							<>
+								<Editor
+									// editorState={editorState}
+									onContentStateChange={onContentStateChange}
+								/>
+								<textarea
+									disabled
+									value={inputs.singlePageContent}
+								/>
+							</>
+						</Accordion.Collapse>
+					</Accordion>
+					<p className="tip">
+						Use the URL field to direct the user to an external URL
+						where you can show more of your portfolio item. URL
+						Title is the clickable text that the user will see.
+					</p>
+					<div className="flex-fields">
+						<div className="input-wrap text">
+							<label htmlFor="url">
+								<span>URL Title</span>
+								<input
+									type="text"
+									name="urlTitle"
+									value={inputs.urlTitle}
+									onChange={handleChange}
+								/>
+							</label>
+						</div>
+						<div className="input-wrap text">
+							<label htmlFor="url">
+								<span>URL</span>
+								<input
+									type="url"
+									name="url"
+									value={inputs.url}
+									onChange={handleChange}
+								/>
+							</label>
+						</div>
+					</div>
+					<Button
+						type="submit"
+						value="submit"
+						variant="transparent-secondary"
 					>
-						<label>
-							<span>Single Page Content</span>
-							<p className="tip">
-								Adding single page content will enable a "More
-								Details" buttonon your portfolio item. This
-								button will redirect the user to a page with the
-								content that you add here. Use this feature if
-								you need to create a detailed view of your item
-								with long text, images or video.
-							</p>
-							<div className="d-flex align-center">
-								<span
-									css={css`
-										margin: 0;
-										font-size: 1.4rem;
-										margin-right: 1.5rem;
-									`}
-								>
-									Add
-								</span>
-								<CustomToggle eventKey="0">
-									<input
-										type="checkbox"
-										id="singlePage"
-										name="singlePage"
-										value={inputs.singlePage}
-										onChange={handleChange}
-									/>
-								</CustomToggle>
-							</div>
-						</label>
-					</div>
-
-					<Accordion.Collapse eventKey="0">
-						<>
-							<Editor
-								// editorState={editorState}
-								onContentStateChange={onContentStateChange}
-							/>
-							<textarea
-								disabled
-								value={inputs.singlePageContent}
-							/>
-						</>
-					</Accordion.Collapse>
-				</Accordion>
-
-				<p className="tip">
-					Use the URL field to direct the user to an external URL
-					where you can show more of your portfolio item. URL Title is
-					the clickable text that the user will see.
-				</p>
-				<div className="flex-fields">
-					<div className="input-wrap text">
-						<label htmlFor="url">
-							<span>URL Title</span>
-							<input
-								type="text"
-								name="urlTitle"
-								value={inputs.urlTitle}
-								onChange={handleChange}
-							/>
-						</label>
-					</div>
-					<div className="input-wrap text">
-						<label htmlFor="url">
-							<span>URL</span>
-							<input
-								type="url"
-								name="url"
-								value={inputs.url}
-								onChange={handleChange}
-							/>
-						</label>
-					</div>
-				</div>
-				<Button
-					type="submit"
-					value="submit"
-					variant="transparent-secondary"
-				>
-					Add
-				</Button>
-			</fieldset>
-		</StyledForm>
+						Add
+					</Button>
+				</Form>
+			</Card.Body>
+		</Card>
 	);
 }

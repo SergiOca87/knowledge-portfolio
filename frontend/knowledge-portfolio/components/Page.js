@@ -91,6 +91,7 @@ const GlobalStyles = createGlobalStyle`
   h1 {
     font-size: 5rem;
     font-family: 'Montserrat-Bold';
+    margin-bottom: 1rem;
   }
   h2 {
     font-size: 4rem;

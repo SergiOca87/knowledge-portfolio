@@ -4,6 +4,8 @@ import Main from '../components/Main';
 import { Container } from 'react-bootstrap';
 import { css } from 'styled-components';
 
+//TODO: If user create item, else use sign in
+
 export default function createItems() {
 	return (
 		<Main>

@@ -58,13 +58,13 @@ export const lists = {
     // access: true,
   }),
   Item: list({
-    access: {
-      operation: {
-        create: isUser,
-        update: isUser,
-        delete: isUser,
-      },
-    },
+    // access: {
+    //   operation: {
+    //     create: isUser,
+    //     update: isUser,
+    //     delete: isUser,
+    //   },
+    // },
     fields: {
       title: text(),
       status: text(), 
@@ -149,13 +149,13 @@ export const lists = {
   //   }
   // }),
   Category: list({
-    access: {
-      operation: {
-        create: isUser,
-        update: isUser,
-        delete: isUser,
-      },
-    },
+    // access: {
+    //   operation: {
+    //     create: isUser,
+    //     update: isUser,
+    //     delete: isUser,
+    //   },
+    // },
     ui: {
       isHidden: false,
     },
@@ -181,13 +181,13 @@ export const lists = {
   }),
 
   Message: list({
-    access: {
-      operation: {
-        create: isUser,
-        update: isUser,
-        delete: isUser,
-      },
-    },
+    // access: {
+    //   operation: {
+    //     create: isUser,
+    //     update: isUser,
+    //     delete: isUser,
+    //   },
+    // },
     fields: {
       text: text(),
       sender: relationship({

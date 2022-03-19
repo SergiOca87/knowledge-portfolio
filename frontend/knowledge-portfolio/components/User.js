@@ -62,6 +62,8 @@ export const SINGLE_USER_QUERY = gql`
 			website
 			categories {
 				id
+				name
+				icon
 			}
 			items {
 				id
@@ -96,6 +98,8 @@ export const LOGGED_IN_USER = gql`
 				}
 				categories {
 					id
+					name
+					icon
 				}
 				items {
 					id

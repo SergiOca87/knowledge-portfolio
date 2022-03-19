@@ -12,7 +12,7 @@ import * as FontAwesome from 'react-icons/fa';
 import CategoryIcons from './CategoryIcons';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { CURRENT_USER_QUERY, LOGGED_IN_USER } from './User';
+import { LOGGED_IN_USER } from './User';
 import { useRouter } from 'next/router';
 
 const StyledForm = styled.form`
@@ -56,14 +56,25 @@ const CREATE_CATEGORY_MUTATION = gql`
 			id
 			name
 			icon
+			author
 		}
 	}
 `;
 
 export default function CreateCategory() {
 	//TODO: Get user from actual keystone context
-	const { user } = useContext(UserContext);
-	const userCategories = getCategories();
+	// const { user } = useContext(UserContext);
+	// const userCategories = getCategories();
+	const {
+		loading: userLoading,
+		error: userError,
+		data: userData,
+	} = useQuery(LOGGED_IN_USER);
+
+	const user = userData?.authenticatedItem;
+
+	console.log('user', user);
+
 	const [iconSearch, setIconSearch] = useState('');
 	const router = useRouter();
 
@@ -85,7 +96,6 @@ export default function CreateCategory() {
 		{
 			variables: inputs,
 
-			//TODO: THis need the ID!
 			refetchQueries: [{ query: LOGGED_IN_USER }],
 		}
 	);
@@ -133,15 +143,14 @@ export default function CreateCategory() {
 
 			setInputs({
 				name: '',
-				author: user ? user.id : '',
 				icon: '',
 			});
 
 			toast.success(`Category created, reloading page...`);
 
-			setTimeout(() => {
-				router.reload(window.location.pathname);
-			}, 3000);
+			// setTimeout(() => {
+			// 	router.reload(window.location.pathname);
+			// }, 3000);
 		}
 	};
 
@@ -158,7 +167,7 @@ export default function CreateCategory() {
 						padding: 4rem 2rem;
 					`}
 				>
-					<Form method="POST" method="POST" onSubmit={handleSubmit}>
+					<Form method="POST" onSubmit={handleSubmit}>
 						<Form.Group className="mb-5">
 							<Form.Label htmlFor="email">
 								Category Name

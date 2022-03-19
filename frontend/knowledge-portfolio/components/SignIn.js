@@ -63,7 +63,7 @@ const SIGNIN_MUTATION = gql`
 // `;
 
 export default function SignIn() {
-	const { user, setUser } = useContext(UserContext);
+	// const { user, setUser } = useContext(UserContext);
 	const router = useRouter();
 
 	// Check if there is a user or not
