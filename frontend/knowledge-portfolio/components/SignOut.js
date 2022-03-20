@@ -2,7 +2,7 @@ import React from 'react';
 import gql from 'graphql-tag';
 import { useMutation } from '@apollo/client';
 import { CURRENT_USER_QUERY } from './User';
-import { Router } from 'next/router';
+import { Router, useRouter } from 'next/router';
 import { Button } from 'react-bootstrap';
 
 const SIGN_OUT_MUTATION = gql`
@@ -12,6 +12,8 @@ const SIGN_OUT_MUTATION = gql`
 `;
 
 export default function SignOut() {
+	const router = useRouter();
+
 	const [signOut] = useMutation(SIGN_OUT_MUTATION, {
 		refetchQueries: [{ query: CURRENT_USER_QUERY }],
 	});
@@ -20,9 +22,7 @@ export default function SignOut() {
 		const res = await signOut();
 
 		//TODO: Proper redirect? How?
-		// Router.push({
-		// 	pathname: `/`,
-		// });
+		router.push(`/login/`);
 	};
 
 	return (

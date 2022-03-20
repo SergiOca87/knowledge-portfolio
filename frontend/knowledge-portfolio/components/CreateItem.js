@@ -183,15 +183,7 @@ export default function CreateItem() {
 			() => 'totally custom!'
 		);
 
-		return (
-			<button
-				type="button"
-				style={{ backgroundColor: 'pink' }}
-				onClick={decoratedOnClick}
-			>
-				{children}
-			</button>
-		);
+		return <div onClick={decoratedOnClick}>{children}</div>;
 	}
 
 	// Submit current state to create a new Item
@@ -311,64 +303,56 @@ export default function CreateItem() {
 							</Form.Select>
 						</Form.Group>
 					)}
-					<div className="input-wrap">
-						<label htmlFor="status">
-							<span>Status</span>
-							<select name="status" onChange={handleChange}>
-								<option value="finished">Finished</option>
-								<option value="unfinished">Unfinished</option>
-							</select>
-						</label>
-					</div>
-					<div className="input-wrap">
-						<label htmlFor="visibility">
-							<span>Visibility (public or private)</span>
-							<select name="visibility" onChange={handleChange}>
-								<option value="true">Public</option>
-								<option value="false">Private</option>
-							</select>
-						</label>
-					</div>
-					<Accordion>
-						<div
-							className="input-wrap"
-							onClick={() => {
-								('open drawer');
-							}}
+					<Form.Group className="mb-5">
+						<Form.Label htmlFor="status">status</Form.Label>
+						<Form.Select
+							aria-label="Status"
+							name="status"
+							id="status"
+							onChange={handleChange}
 						>
-							<label>
-								<span>Single Page Content</span>
-								<p className="tip">
-									Adding single page content will enable a
-									"More Details" buttonon your portfolio item.
-									This button will redirect the user to a page
-									with the content that you add here. Use this
-									feature if you need to create a detailed
-									view of your item with long text, images or
-									video.
-								</p>
-								<div className="d-flex align-center">
-									<span
-										css={css`
-											margin: 0;
-											font-size: 1.4rem;
-											margin-right: 1.5rem;
-										`}
-									>
-										Add
-									</span>
-									<CustomToggle eventKey="0">
-										<input
-											type="checkbox"
-											id="singlePage"
-											name="singlePage"
-											value={inputs.singlePage}
-											onChange={handleChange}
-										/>
-									</CustomToggle>
-								</div>
-							</label>
-						</div>
+							<option value="finished">Finished</option>
+							<option value="unfinished">Unfinished</option>
+						</Form.Select>
+					</Form.Group>
+					<Form.Group className="mb-5">
+						<Form.Label htmlFor="status">
+							Visibility (public or private)
+						</Form.Label>
+						<Form.Select
+							aria-label="Visibility"
+							name="visibility"
+							id="visibility"
+							onChange={handleChange}
+						>
+							<option value="true">Public</option>
+							<option value="false">Private</option>
+						</Form.Select>
+					</Form.Group>
+					<Accordion>
+						<label>
+							<span>Single Page Content</span>
+							<p className="tip">
+								Adding single page content will enable a "More
+								Details" button on your portfolio item. This
+								button will redirect the user to a page with the
+								content that you add here. Use this feature if
+								you need to create a detailed view of your item
+								with long text, images or video.
+							</p>
+							<div className="d-flex align-center">
+								<CustomToggle eventKey="0">
+									<Form.Check
+										type="switch"
+										label="Single Page Content"
+										id="singlePage"
+										name="singlePage"
+										value={inputs.singlePage}
+										onChange={handleChange}
+									/>
+								</CustomToggle>
+							</div>
+						</label>
 
 						<Accordion.Collapse eventKey="0">
 							<>
@@ -383,40 +367,33 @@ export default function CreateItem() {
 							</>
 						</Accordion.Collapse>
 					</Accordion>
-					<p className="tip">
-						Use the URL field to direct the user to an external URL
-						where you can show more of your portfolio item. URL
-						Title is the clickable text that the user will see.
-					</p>
-					<div className="flex-fields">
-						<div className="input-wrap text">
-							<label htmlFor="url">
-								<span>URL Title</span>
-								<input
-									type="text"
-									name="urlTitle"
-									value={inputs.urlTitle}
-									onChange={handleChange}
-								/>
-							</label>
-						</div>
-						<div className="input-wrap text">
-							<label htmlFor="url">
-								<span>URL</span>
-								<input
-									type="url"
-									name="url"
-									value={inputs.url}
-									onChange={handleChange}
-								/>
-							</label>
-						</div>
-					</div>
-					<Button
-						type="submit"
-						value="submit"
-						variant="transparent-secondary"
-					>
+					<Form.Group className="mb-5">
+						<p className="tip">
+							Use the URL field to direct the user to an external
+							URL where you can show more of your portfolio item.
+							URL Title is the clickable text that the user will
+							see.
+						</p>
+						<Form.Label htmlFor="urlTitle">URL Title</Form.Label>
+						<Form.Control
+							type="text"
+							name="urlTitle"
+							id="title"
+							value={inputs.urlTitle}
+							onChange={handleChange}
+						/>
+					</Form.Group>
+					<Form.Group className="mb-5">
+						<Form.Label htmlFor="url">URL</Form.Label>
+						<Form.Control
+							type="url"
+							name="url"
+							id="url"
+							value={inputs.url}
+							onChange={handleChange}
+						/>
+					</Form.Group>
+					<Button type="submit" value="submit" variant="primary">
 						Add
 					</Button>
 				</Form>

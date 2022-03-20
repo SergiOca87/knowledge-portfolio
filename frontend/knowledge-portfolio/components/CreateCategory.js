@@ -148,9 +148,9 @@ export default function CreateCategory() {
 
 			toast.success(`Category created, reloading page...`);
 
-			// setTimeout(() => {
-			// 	router.reload(window.location.pathname);
-			// }, 3000);
+			setTimeout(() => {
+				router.reload(window.location.pathname);
+			}, 3000);
 		}
 	};
 

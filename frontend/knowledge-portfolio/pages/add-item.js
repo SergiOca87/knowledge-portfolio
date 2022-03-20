@@ -10,19 +10,29 @@ export default function createItems() {
 	return (
 		<Main>
 			<Container>
-				<div className="titles">
-					<h1>Add a Portfolio Item</h1>
-					<p
+				<div
+					css={css`
+						max-width: 80rem;
+						margin: 0 auto;
+					`}
+				>
+					<div
+						className="titles"
 						css={css`
 							max-width: 60rem;
+							margin-bottom: 4rem;
 						`}
 					>
-						If you haven't done so, before ading an item you may
-						want to create a few categories for this item first, you
-						can do so <Link href="add-category">here</Link>{' '}
-					</p>
+						<h1>Add a Portfolio Item</h1>
+						<p>
+							If you haven't done so, before ading an item you may
+							want to create a few categories for this item first,
+							you can do so <Link href="add-category">here</Link>{' '}
+						</p>
+					</div>
+
+					<CreateItem />
 				</div>
-				<CreateItem />
 			</Container>
 		</Main>
 	);

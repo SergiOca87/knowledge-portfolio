@@ -9,7 +9,6 @@ import UserContext from '../context/UserContext';
 // const StyledContainer = styled.Container`
 
 // `
-
 export default function createItems() {
 	const { user } = useContext(UserContext);
 	const userCategories = getCategories();
@@ -17,26 +16,34 @@ export default function createItems() {
 	return (
 		<Main>
 			<Container>
-				<div className="titles">
-					<h1>Add a Category</h1>
-					<p>
-						Categories allow you to group your data and allow
-						visitors to filter your items.
-					</p>
-				</div>
-
 				<div
 					css={css`
 						max-width: 80rem;
-						margin: 4rem auto;
+						margin: 0rem auto;
 					`}
 				>
-					<CreateCategory />
-				</div>
+					<div
+						className="titles"
+						css={css`
+							max-width: 60rem;
+							margin-bottom: 4rem;
+						`}
+					>
+						<h1>Add a Category</h1>
+						<p>
+							Categories allow you to group your data and allow
+							visitors to filter your items.
+						</p>
+					</div>
 
-				{user && userCategories && (
-					<Categories categories={userCategories?.allCategories} />
-				)}
+					<CreateCategory />
+
+					{user && userCategories && (
+						<Categories
+							categories={userCategories?.allCategories}
+						/>
+					)}
+				</div>
 			</Container>
 		</Main>
 	);
