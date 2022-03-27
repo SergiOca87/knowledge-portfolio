@@ -12,10 +12,11 @@ import UserContext from '../context/UserContext';
 
 const ALL_USER_QUERY = gql`
 	query {
-		allUsers(where: { public: true }) {
+		users(where: { public: { equals: true } }) {
 			id
 			name
 			email
+			public
 			publicEmail
 			items {
 				id
@@ -137,62 +138,61 @@ export default function publicProfiles() {
 					<h1>Public Portfolios</h1>
 					<Row>
 						{data &&
-							data.allUsers.map((singleUser) => {
+							data.users.map((singleUser) => {
 								const userId = singleUser.id;
+								console.log('singleUser', singleUser);
 								return (
 									<>
-										{singleUser.items.length > 0 && (
-											<Col md={6}>
-												<UserCard user={singleUser} />
-												<StyledUserCard>
-													{/* <p>Category: {item.category.name}</p> */}
-													{singleUser.categories && (
-														<Categories
-															categories={
-																singleUser?.categories
-															}
-														/>
-													)}
-
-													<Link
-														href={`/public-portfolio/${singleUser.id}`}
-													>
-														<Button variant="transparent-secondary">
-															View Portfolio
-														</Button>
-													</Link>
-												</StyledUserCard>
-												<Button
-													onClick={(e) => {
-														// Set a cinditional here, if user, ok, else show toast to log in
-														showMessageModal
-															? setShowMessageModal(
-																	false
-															  )
-															: setShowMessageModal(
-																	true
-															  );
-														setReceiverId(
-															singleUser.id
-														);
-													}}
-												>
-													Send a Message
-												</Button>
-												{user && (
-													<MessageModal
-														showMessageModal={
-															showMessageModal
+										<Col md={6}>
+											<UserCard user={singleUser} />
+											<StyledUserCard>
+												{/* <p>Category: {item.category.name}</p> */}
+												{singleUser.categories && (
+													<Categories
+														categories={
+															singleUser?.categories
 														}
-														setShowMessageModal={
-															setShowMessageModal
-														}
-														receiverId={receiverId}
-														senderId={user?.id}
 													/>
 												)}
-											</Col>
-										)}
+
+												<Link
+													href={`/public-portfolio/${singleUser.id}`}
+												>
+													<Button variant="transparent-secondary">
+														View Portfolio
+													</Button>
+												</Link>
+											</StyledUserCard>
+											<Button
+												onClick={(e) => {
+													// Set a cinditional here, if user, ok, else show toast to log in
+													showMessageModal
+														? setShowMessageModal(
+																false
+														  )
+														: setShowMessageModal(
+																true
+														  );
+													setReceiverId(
+														singleUser.id
+													);
+												}}
+											>
+												Send a Message
+											</Button>
+											{user && (
+												<MessageModal
+													showMessageModal={
+														showMessageModal
+													}
+													setShowMessageModal={
+														setShowMessageModal
+													}
+													receiverId={receiverId}
+													senderId={user?.id}
+												/>
+											)}
+										</Col>
 									</>
 								);
 							})}

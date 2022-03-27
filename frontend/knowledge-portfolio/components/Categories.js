@@ -8,7 +8,7 @@ const StyledCategories = styled.div`
 		display: flex;
 		flex-wrap: wrap;
 		margin-top: 0.5rem;
-		padding-left: 2rem;
+
 		gap: 0.5rem;
 
 		.category {
@@ -33,9 +33,9 @@ const categoriesTitle = (categories) => {
 	if (categories && categories.length === 0) {
 		return;
 	} else if (categories && categories.length > 1) {
-		return <p>Categories:</p>;
+		return <h5 className="secondary">Categories:</h5>;
 	} else {
-		return <p>Category:</p>;
+		return <h5 className="secondary">Category:</h5>;
 	}
 };
 

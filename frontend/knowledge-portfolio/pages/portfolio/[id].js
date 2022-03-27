@@ -117,6 +117,7 @@ export default function UserPortfolioPage() {
 	const { id } = router.query;
 	const [openModal, setOpenModal] = useState(false);
 	const [showQrModal, setShowQrModal] = useState(false);
+	const [shouldRender, setShouldRender] = useState(true);
 	//Tooltip
 	const [show, setShow] = useState(false);
 	const target = useRef(null);
@@ -129,6 +130,13 @@ export default function UserPortfolioPage() {
 
 	const userOptions = user?.options?.options;
 
+	// useEffect(() => {
+	// 	if (!firstRender) {
+	// 		router.reload(window.location.pathname);
+	// 		setFirstRender(true);
+	// 	}
+	// }, [firstRender]);
+
 	const handleClose = () => {
 		setShow(false);
 	};
@@ -137,139 +145,132 @@ export default function UserPortfolioPage() {
 	} else {
 		return (
 			<Main>
-				{user ? (
-					<>
-						<UserStyleOptions user={user}>
-							<Container>
-								<StyledUserCard>
-									{userOptions?.userImage ? (
-										<div
-											className="avatar"
-											css={`
-												background-image: ${user.image};
-											`}
-										></div>
-									) : (
-										<div className="avatar">
-											<FaUser />
-										</div>
-									)}
-									<h1>
-										Welcome to your portfolio, {user?.name}
-									</h1>
-								</StyledUserCard>
+				<>
+					<UserStyleOptions user={user}>
+						<Container>
+							<StyledUserCard>
+								{userOptions?.userImage ? (
+									<div
+										className="avatar"
+										css={`
+											background-image: ${user.image};
+										`}
+									></div>
+								) : (
+									<div className="avatar">
+										<FaUser />
+									</div>
+								)}
+								<h1>
+									Welcome to your portfolio,{' '}
+									<span className="secondary">
+										{user?.name}
+									</span>
+								</h1>
+							</StyledUserCard>
 
-								<UserControls>
-									<div>
-										<OverlayTrigger
-											placement={'top'}
-											overlay={
-												<Tooltip id={`tooltip-top}`}>
-													Add New Portfolio Item
-												</Tooltip>
-											}
-										>
-											<Button>
-												<Link href={'/add-item'}>
-													<FaPlus />
-												</Link>
-											</Button>
-										</OverlayTrigger>
-									</div>
-									<div>
-										<OverlayTrigger
-											placement={'top'}
-											overlay={
-												<Tooltip id={`tooltip-top}`}>
-													Toggle Public View
-												</Tooltip>
-											}
-										>
-											<Button>
-												<Link
-													href={`/public-portfolio/${id}`}
-												>
-													<FaEye />
-												</Link>
-											</Button>
-										</OverlayTrigger>
-									</div>
-									<div>
-										<Link href={'/'}>
-											<PortfolioEdit
-												placement={'end'}
-												// setOpenModal={setOpenModal}
-												// openModal={openModal}
-											/>
-										</Link>
-									</div>
-									<div>
-										<OverlayTrigger
-											placement={'top'}
-											overlay={
-												<Tooltip id="tooltip-top">
-													Download as a PDF
-												</Tooltip>
-											}
-										>
-											<Button>
-												<Link href={'/'}>
-													<FaFileDownload />
-												</Link>
-											</Button>
-										</OverlayTrigger>
-									</div>
-									<div>
-										<OverlayTrigger
-											placement={'top'}
-											overlay={
-												<Tooltip id="tooltip-top">
-													Generate QR Code
-												</Tooltip>
-											}
-										>
-											<Button
-												onClick={() =>
-													showQrModal
-														? setShowQrModal(false)
-														: setShowQrModal(true)
-												}
+							<UserControls>
+								<div>
+									<OverlayTrigger
+										placement={'top'}
+										overlay={
+											<Tooltip id={`tooltip-top}`}>
+												Add New Portfolio Item
+											</Tooltip>
+										}
+									>
+										<Button>
+											<Link href={'/add-item'}>
+												<FaPlus />
+											</Link>
+										</Button>
+									</OverlayTrigger>
+								</div>
+								<div>
+									<OverlayTrigger
+										placement={'top'}
+										overlay={
+											<Tooltip id={`tooltip-top}`}>
+												Toggle Public View
+											</Tooltip>
+										}
+									>
+										<Button>
+											<Link
+												href={`/public-portfolio/${id}`}
 											>
-												{/* <Link
+												<FaEye />
+											</Link>
+										</Button>
+									</OverlayTrigger>
+								</div>
+								<div>
+									<Link href={'/'}>
+										<PortfolioEdit
+											placement={'end'}
+											// setOpenModal={setOpenModal}
+											// openModal={openModal}
+										/>
+									</Link>
+								</div>
+								<div>
+									<OverlayTrigger
+										placement={'top'}
+										overlay={
+											<Tooltip id="tooltip-top">
+												Download as a PDF
+											</Tooltip>
+										}
+									>
+										<Button>
+											<Link href={'/'}>
+												<FaFileDownload />
+											</Link>
+										</Button>
+									</OverlayTrigger>
+								</div>
+								<div>
+									<OverlayTrigger
+										placement={'top'}
+										overlay={
+											<Tooltip id="tooltip-top">
+												Generate QR Code
+											</Tooltip>
+										}
+									>
+										<Button
+											onClick={() =>
+												showQrModal
+													? setShowQrModal(false)
+													: setShowQrModal(true)
+											}
+										>
+											{/* <Link
 										href={`/qr/${id}`}
 										query={`${router.pathname}`}
 									> */}
-												<FaQrcode />
-												{/* </Link> */}
-											</Button>
-										</OverlayTrigger>
-									</div>
-								</UserControls>
+											<FaQrcode />
+											{/* </Link> */}
+										</Button>
+									</OverlayTrigger>
+								</div>
+							</UserControls>
 
-								{/* {loop throug map} */}
-								<StyledGridWrap>
-									<ItemGrid
-										user={user}
-										// options={user?.options ? user.options : ''}
-									/>
-								</StyledGridWrap>
-							</Container>
-						</UserStyleOptions>
-						<QrModal
-							showQrModal={showQrModal}
-							setShowQrModal={setShowQrModal}
-						/>
-					</>
-				) : (
-					<Container>
-						<h2>
-							You have to log in to see this content,
-							<br />
-							You can log in or register{' '}
-							<Link href="/login">here</Link>
-						</h2>
-					</Container>
-				)}
+							{/* {loop throug map} */}
+							<StyledGridWrap>
+								<ItemGrid
+									user={user}
+									// options={user?.options ? user.options : ''}
+								/>
+							</StyledGridWrap>
+						</Container>
+					</UserStyleOptions>
+					<QrModal
+						showQrModal={showQrModal}
+						setShowQrModal={setShowQrModal}
+					/>
+				</>
+				}
 			</Main>
 		);
 	}

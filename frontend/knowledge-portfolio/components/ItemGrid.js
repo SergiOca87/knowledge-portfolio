@@ -137,17 +137,16 @@ export default function ItemGrid({
 		setVisibleItems(itemsToRender().length);
 	}, [chosenCategory, chosenText, activeCategories]);
 
+	//TODO: User options or default
+
 	return (
 		<>
 			{user ? (
 				<>
 					<StyledItemGrid
 						css={css`
-							grid-template-columns: repeat(
-								${user.options?.options.cols},
-								1fr
-							);
-							gap: ${user.options?.options.gap};
+							grid-template-columns: repeat(2, 1fr);
+							gap: 2rem;
 						`}
 					>
 						{user.items &&

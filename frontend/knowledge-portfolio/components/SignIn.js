@@ -8,7 +8,7 @@ import { useMutation, useQuery } from '@apollo/client';
 import React, { useContext, useEffect, useState } from 'react';
 import Router, { useRouter } from 'next/router';
 import UserContext from '../context/UserContext';
-import { CURRENT_USER_QUERY, LOGGED_IN_USER } from './User';
+import { LOGGED_IN_USER } from './User';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Button, Card, Form } from 'react-bootstrap';
@@ -17,7 +17,6 @@ import Link from 'next/link';
 
 // import Error from './ErrorMessage';
 
-//TODO: Is this correct with Keyston 6 now?
 const SIGNIN_MUTATION = gql`
 	mutation SIGNIN_MUTATION($email: String!, $password: String!) {
 		authenticateUserWithPassword(email: $email, password: $password) {
@@ -122,9 +121,13 @@ export default function SignIn() {
 				// toast.success('');
 
 				//TODO: Why doesn't this work as using the URL directly?
-				router.push(
-					`/portfolio/${res?.data?.authenticateUserWithPassword.item.id}`
-				);
+				if (res.data) {
+					router.push(
+						`/portfolio/${res?.data?.authenticateUserWithPassword.item.id} `
+					),
+						null,
+						{ shallow: false };
+				}
 			}
 		}
 	}

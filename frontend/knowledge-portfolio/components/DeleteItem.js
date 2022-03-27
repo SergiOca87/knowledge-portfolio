@@ -1,20 +1,20 @@
-//TODO: Figure out the categories
-
 import React, { useContext, useEffect } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import { USER_CATEGORIES_QUERY, getCategories } from './UserCategories';
-import { CURRENT_USER_QUERY, useUser } from './User';
+import { LOGGED_IN_USER } from './User';
 import { useState } from 'react';
 import gql from 'graphql-tag';
 import Router from 'next/router';
 import { USER_ITEMS_QUERY } from './ItemGrid';
 import UserContext from '../context/UserContext';
 import { Button } from 'react-bootstrap';
+import { ToastContainer, toast } from 'react-toastify';
 
 const DELETE_ITEM_MUTATION = gql`
 	mutation DELETE_ITEM_MUTATION($id: ID!) {
-		deleteItem(id: $id) {
+		deleteItem(where: { id: $id }) {
 			id
+			title
 		}
 	}
 `;
@@ -32,7 +32,7 @@ export default function DeleteItem({ id, children }) {
 			id,
 		},
 
-		refetchQueries: [{ query: CURRENT_USER_QUERY }],
+		refetchQueries: [{ query: LOGGED_IN_USER }],
 	});
 
 	const handleDelete = async (e) => {
@@ -43,8 +43,13 @@ export default function DeleteItem({ id, children }) {
 			message: 'Are You Sure?',
 		});
 
-		if (deleteConfirm.counter >= 2) {
-			deleteItem();
+		if (error) {
+			toast.error(error);
+		} else if (deleteConfirm.counter >= 2) {
+			const res = await deleteItem();
+
+			res?.data?.deleteItem &&
+				toast.success(`${res.data.deleteItem.title} has been deleted`);
 		}
 	};
 

@@ -2,157 +2,71 @@ import styled, { css } from 'styled-components';
 import React from 'react';
 import Link from 'next/link';
 import DeleteItem from './DeleteItem';
-import { Button } from 'react-bootstrap';
+import { Button, Card, ListGroup, ListGroupItem } from 'react-bootstrap';
 import Categories from './Categories';
 import { FaPencilAlt } from 'react-icons/fa';
 import { FaTrashAlt } from 'react-icons/fa';
 
-const StyledItem = styled.div`
-	height: 100%;
-	width: 100%;
-	flex: 1;
-	background-color: var(--tertiary);
-	display: flex;
-	flex-direction: column;
-	border: 1px solid var(--tertiary);
-
-	.title {
-		padding: 2rem;
-		text-align: center;
-		background-color: var(--tertiary);
-		border-bottom: 1px solid var(--secondary);
-
-		h4 {
-			margin: 0;
-			color: var(--primary);
-			color: #fff;
-			font-family: 'Montserrat-Medium';
-			font-size: 2.2rem;
-		}
-
-		p {
-			margin-bottom: 0;
+const StyledCard = styled(Card)`
+	.list-group-item {
+		&:not(:last-child) {
+			margin-bottom: 2rem;
 		}
 	}
 
 	.buttons {
 		display: flex;
 		justify-content: flex-end;
-		padding: 2rem;
-		margin-top: auto;
-		background-color: var(--primary);
-
-		.btn {
-			margin-right: 0.5rem;
-		}
-	}
-
-	.details {
-		padding: 2rem;
-
-		.separator {
-			display: flex;
-			justify-content: center;
-			flex-direction: column;
-			padding: 2rem 0;
-			align-items: flex-start;
-
-			&:not(:last-child) {
-				border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-			}
-
-			h5 {
-				text-transform: uppercase;
-				letter-spacing: 1px;
-				margin-bottom: 0.5rem;
-				color: var(--secondary);
-			}
-
-			p {
-				margin: 0;
-				padding-left: 2rem;
-			}
-		}
-
-		.categories {
-			display: flex;
-			flex-wrap: wrap;
-			margin-top: 0.5rem;
-			padding-left: 2rem;
-
-			.category {
-				font-size: 1.8rem;
-				margin-right: 1rem;
-			}
-
-			div {
-				display: flex;
-				align-items: center;
-				border: 1px solid var(--secondary);
-				font-size: 1.2rem;
-				text-transform: uppercase;
-				padding: 0.8rem 1.5rem;
-				letter-spacing: 1px;
-				font-family: 'Montserrat-Medium';
-				margin-right: 0.5rem;
-			}
-		}
 	}
 `;
-
-// The Item is the knowledge block
-// Title
-// Description
-// Date
-// image?
-// Category (relationship)
-// Url
-// Completed?
 
 //TODO: Add Date
 export default function Item({ item, isPublic }) {
 	return (
-		<StyledItem className="portfolio-item">
-			<div
-				className="title"
-				css={css`
-					display: flex;
-					justify-content: ${item.date ? 'space-between' : 'center'};
-				`}
-			>
-				<h4>{item.title}</h4>
+		<StyledCard>
+			<Card.Header as="h4" className="mb-3">
+				{item.title}
 				{item.date && <p>{item.date}</p>}
-			</div>
-			<div className="details">
-				<div className="separator">
-					<h5>Description:</h5>
-					<p>{item.description}</p>
-				</div>
+			</Card.Header>
+			<Card.Body>
+				<ListGroup className="list-group-flush">
+					{item.description && (
+						<ListGroupItem>
+							<h5 className="secondary">Description:</h5>
+							<p>{item.description}</p>
+						</ListGroupItem>
+					)}
 
-				<div className="separator">
-					<h5>Status:</h5>
-					<p
-						css={css`
-							text-transform: capitalize;
-						`}
-					>
-						{item.status}
-					</p>
-				</div>
-				{/* <p>Category: {item.category.name}</p> */}
-				{item.categories && (
-					<Categories categories={item?.categories} />
-				)}
-				{item.singlePageContent && (
-					<div className="separator">
-						<Link href={`/items/${item.id}`}>
-							<Button variant="transparent-secondary">
-								More Details
-							</Button>
-						</Link>
-					</div>
-				)}
-			</div>
+					{item.status && (
+						<ListGroupItem>
+							<h5 className="secondary">Status:</h5>
+							<p
+								css={css`
+									text-transform: capitalize;
+								`}
+							>
+								{item.status}
+							</p>
+						</ListGroupItem>
+					)}
+
+					{/* <p>Category: {item.category.name}</p> */}
+					{item.categories.length && (
+						<ListGroupItem>
+							<Categories categories={item?.categories} />
+						</ListGroupItem>
+					)}
+					{item.singlePageContent && (
+						<ListGroupItem>
+							<Link href={`/items/${item.id}`}>
+								<Button variant="transparent-secondary">
+									More Details
+								</Button>
+							</Link>
+						</ListGroupItem>
+					)}
+				</ListGroup>
+			</Card.Body>
 			{!isPublic && (
 				<div className="buttons">
 					<Link
@@ -173,6 +87,6 @@ export default function Item({ item, isPublic }) {
 					</DeleteItem>
 				</div>
 			)}
-		</StyledItem>
+		</StyledCard>
 	);
 }

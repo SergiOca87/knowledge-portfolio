@@ -62,58 +62,75 @@ export default function web3() {
 	return (
 		<Main>
 			<Container>
-				<div
-					className="titles"
-					css={css`
-						max-width: 70.5rem;
-					`}
-				>
-					<h1>Web3</h1>
-					<p>
-						"Owly or whatever this is called" web3 section is in
-						alpha-testing phase. We have launched an ERC-20 token
-						(contract) to be used as reward currency for those who
-						add official certifications from partners on their
-						portfolios.
-					</p>
+				<Row>
+					<Col lg="7">
+						<div
+							className="titles"
+							css={css`
+								max-width: 70.5rem;
+							`}
+						>
+							<h1>
+								<span className="primary">Web</span>
+								<span className="secondary">3</span>
+							</h1>
+							<p>
+								The web3 section is in alpha-testing phase. We
+								have launched an ERC-20 token (contract) to be
+								used as reward currency for those who add
+								official certifications from partners on their
+								portfolios.
+							</p>
 
-					<p>
-						The utility of this currency will be based on deals made
-						with partners, who may offer things to expand your
-						knowledge even further. We want to provide a real
-						incentive to learn, we believe that "Pay-To-Learn" will
-						be a common paradigm as Web3 continues to be adopted by
-						more users.
-					</p>
-				</div>
+							<p>
+								The utility of this currency will be based on
+								deals made with partners, who may offer things
+								to expand your knowledge even further. We want
+								to provide a real incentive to learn, we believe
+								that "Pay-To-Learn" will be a common paradigm as
+								Web3 continues to be adopted by more users.
+							</p>
+						</div>
 
-				<p>Button to connect wallet here</p>
-				<p> If Metamask, show cryptocard</p>
+						<p>Button to connect wallet here</p>
+						<p> If Metamask, show cryptocard</p>
 
-				{user ? (
-					<p>
-						Are you eligible for a free OWL drop?{' '}
-						<span className="secondary" onCLick={eligible}>
-							{' '}
-							Click Here
-						</span>{' '}
-						to find out
-					</p>
-				) : (
-					<>
-						<p>
-							<Link href="login">Log In</Link> to find out if you
-							are eligible for a free OWL airdrop.
-						</p>
-						<CryptoCard>
-							<div className="top">
-								<h4>UserName</h4>
-								<span>img</span>
-							</div>
-							<div className="bottom">Holding: 2,000,000 OWL</div>
-						</CryptoCard>
-					</>
-				)}
+						{user ? (
+							<p>
+								Are you eligible for a free OWL drop?{' '}
+								<span className="secondary" onCLick={eligible}>
+									{' '}
+									Click Here
+								</span>{' '}
+								to find out
+							</p>
+						) : (
+							<>
+								<p>
+									<Link href="login">Log In</Link> to find out
+									if you are eligible for a free OWL airdrop.
+								</p>
+								<CryptoCard>
+									<div className="top">
+										<h4>UserName</h4>
+										<span>img</span>
+									</div>
+									<div className="bottom">
+										Holding: 2,000,000 OWL
+									</div>
+								</CryptoCard>
+							</>
+						)}
+					</Col>
+					<Col lg="5">
+						<img
+							src="/images/undraw_ether_re_y7ft.svg"
+							css={css`
+								max-height: 50rem;
+							`}
+						/>
+					</Col>
+				</Row>
 			</Container>
 		</Main>
 	);

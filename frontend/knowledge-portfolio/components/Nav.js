@@ -15,6 +15,7 @@ import {
 	FaRegEnvelopeOpen,
 	FaUser,
 } from 'react-icons/fa';
+import router from 'next/router';
 
 const StyledNav = styled.nav`
 	display: flex;
@@ -38,8 +39,10 @@ const StyledNav = styled.nav`
 		font-family: 'Montserrat-Bold';
 		color: var(--primary);
 		text-decoration: none;
+		font-size: 1.5rem;
 
-		&:hover {
+		&:hover,
+		&.active {
 			color: var(--secondary);
 			text-decoration: none;
 		}
@@ -71,10 +74,8 @@ export default function Nav() {
 	// const { user, setUser } = useContext(UserContext);
 	const { data } = useQuery(LOGGED_IN_USER);
 
-	//TODO: Follow this pattern everywhere.
+	//TODO: Follow this pattern everywhere. May need to useeffect and set the user anyways so that this is more reactive?
 	const user = data?.authenticatedItem;
-
-	console.log('nav', user);
 
 	return (
 		<div>
@@ -90,14 +91,43 @@ export default function Nav() {
 					<div
 						className="d-flex align-items-center justify-between"
 						css={css`
-							gap: 4rem;
+							gap: 3rem;
 						`}
 					>
-						<Link href={`/public_profiles`}>Public Portfolios</Link>
+						<Link href={`/public_profiles`}>
+							<a
+								className={
+									router.pathname == '/public_profiles'
+										? 'active'
+										: ''
+								}
+							>
+								Public Portfolios
+							</a>
+						</Link>
+						<Link href={`/web3`}>
+							<a
+								className={
+									router.pathname == '/web3' ? 'active' : ''
+								}
+							>
+								Web3
+							</a>
+						</Link>
 						{user ? (
 							<>
 								<Link href={`/portfolio/${user.id}`}>
-									Portfolio
+									<a
+										className={
+											router.pathname.includes(
+												'/portfolio/'
+											)
+												? 'active'
+												: ''
+										}
+									>
+										Portfolio
+									</a>
 								</Link>
 								<Link href={`/user/${user.id}`}>
 									<FaUser />
