@@ -12,7 +12,6 @@ import {
 	gql,
 	createHttpLink,
 } from '@apollo/client';
-import UserContext, { UserProvider } from '../context/UserContext';
 import PortfolioOptionsContext, {
 	OptionsProvider,
 } from '../context/PortfolioOptionsContext';
@@ -36,13 +35,11 @@ function MyApp({ Component, pageProps }) {
 	return (
 		<>
 			<ApolloProvider client={client}>
-				<UserProvider>
-					<OptionsProvider>
-						<Page>
-							<Component {...pageProps} />
-						</Page>
-					</OptionsProvider>
-				</UserProvider>
+				<OptionsProvider>
+					<Page>
+						<Component {...pageProps} />
+					</Page>
+				</OptionsProvider>
 			</ApolloProvider>
 		</>
 	);

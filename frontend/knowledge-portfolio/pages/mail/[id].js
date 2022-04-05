@@ -2,10 +2,10 @@ import React, { useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import { Container, Row, Col, Button } from 'react-bootstrap';
-import UserContext from '../../context/UserContext';
 import { FaUser } from 'react-icons/fa';
 import { Tabs, Tab } from 'react-bootstrap';
 import Link from 'next/link';
+import { LOGGED_IN_USER } from '../../components/User';
 import Main from '../../components/Main';
 import UserCard from '../../components/UserCard';
 import gql from 'graphql-tag';
@@ -40,7 +40,8 @@ const StyledMessageCard = styled.div`
 export default function UserMessages({ id }) {
 	const router = useRouter();
 	// const { id } = router.query;
-	const { user } = useContext(UserContext);
+	const { loading, error, data } = useQuery(LOGGED_IN_USER);
+	const user = data?.authenticatedItem;
 	const [deleteConfirm, setDeleteConfirm] = useState({
 		counter: 0,
 		message: 'Delete',

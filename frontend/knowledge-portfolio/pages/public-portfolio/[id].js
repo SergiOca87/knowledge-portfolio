@@ -10,7 +10,6 @@ import {
 	OverlayTrigger,
 	Tooltip,
 } from 'react-bootstrap';
-import UserContext from '../../context/UserContext';
 import {
 	FaUser,
 	FaPlus,
@@ -167,7 +166,7 @@ export default function UserPortfolioPage() {
 	//Tooltip
 	const [show, setShow] = useState(false);
 	const target = useRef(null);
-	// const { user } = useContext(UserContext);
+	//
 	// const { options } = useContext(PortfolioOptionsContext);
 
 	const { data, loading, error } = useQuery(SINGLE_USER_QUERY, {

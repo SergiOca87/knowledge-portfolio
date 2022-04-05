@@ -5,7 +5,7 @@ import { useMutation, useQuery } from '@apollo/client';
 import gql from 'graphql-tag';
 import Link from 'next/link';
 import { useContext, useEffect, useState } from 'react';
-import UserContext from '../context/UserContext';
+
 import styled from 'styled-components';
 import { Button, Card, Col, Container, Form, Row } from 'react-bootstrap';
 import * as FontAwesome from 'react-icons/fa';
@@ -63,7 +63,7 @@ const CREATE_CATEGORY_MUTATION = gql`
 
 export default function CreateCategory() {
 	//TODO: Get user from actual keystone context
-	// const { user } = useContext(UserContext);
+	//
 	// const userCategories = getCategories();
 	const {
 		loading: userLoading,

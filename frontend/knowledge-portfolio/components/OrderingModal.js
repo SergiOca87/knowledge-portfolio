@@ -3,7 +3,6 @@ import { Button, CloseButton, Modal } from 'react-bootstrap';
 import styled from 'styled-components';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import PortfolioOptionsContext from '../context/PortfolioOptionsContext';
-import UserContext from '../context/UserContext';
 
 const StyledListItem = styled.li`
 	width: 100%;
@@ -18,7 +17,7 @@ export default function OrderingModal({
 	setReorderedItems,
 }) {
 	//TODO: We need to receive an itemList setter most likely to pass up the new order.
-	const { user } = useContext(UserContext);
+
 	const [show, setShow] = useState(false);
 	const [draggedItems, setDraggedItems] = useState(null);
 	const { options, setOptions } = useContext(PortfolioOptionsContext);

@@ -8,7 +8,6 @@ import Link from 'next/link';
 import Categories from '../components/Categories';
 import UserCard from '../components/UserCard';
 import MessageModal from '../components/MessageModal';
-import UserContext from '../context/UserContext';
 
 const ALL_USER_QUERY = gql`
 	query {
@@ -126,8 +125,6 @@ export default function publicProfiles() {
 	const { data, error, loading } = useQuery(ALL_USER_QUERY);
 	const [showMessageModal, setShowMessageModal] = useState(false);
 	const [receiverId, setReceiverId] = useState(null);
-
-	const { user } = useContext(UserContext);
 
 	if (loading) {
 		return <p>Loading...</p>;

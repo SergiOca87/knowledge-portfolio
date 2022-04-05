@@ -7,7 +7,6 @@ import { useMutation, useQuery } from '@apollo/client';
 // import useForm from '../lib/useForm';
 import React, { useContext, useEffect, useState } from 'react';
 import Router, { useRouter } from 'next/router';
-import UserContext from '../context/UserContext';
 import { LOGGED_IN_USER } from './User';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';

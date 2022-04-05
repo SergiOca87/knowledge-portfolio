@@ -4,9 +4,9 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Nav from './Nav';
 import gql from 'graphql-tag';
 import { useContext, useEffect } from 'react';
-import UserContext from '../context/UserContext';
+import { LOGGED_IN_USER } from './User';
 import { useQuery } from '@apollo/client';
-import { CURRENT_USER_QUERY } from './User';
+
 import { ToastContainer, toast } from 'react-toastify';
 import Footer from './Footer';
 
@@ -259,12 +259,7 @@ const InnerStyles = styled.div`
 // `;
 
 export default function Page({ children }) {
-	const { user, setUser } = useContext(UserContext);
-	const { data, loading, error } = useQuery(CURRENT_USER_QUERY);
-
-	if (data) {
-		setUser(data?.authenticatedItem);
-	}
+	const { loading, error, data } = useQuery(LOGGED_IN_USER);
 
 	if (loading) {
 		return <p>Loading...</p>;

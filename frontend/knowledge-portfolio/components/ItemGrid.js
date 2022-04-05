@@ -10,7 +10,7 @@ import { LOGGED_IN_USER } from './User';
 import { Col, Row } from 'react-bootstrap';
 import styled, { css } from 'styled-components';
 import PortfolioOptionsContext from '../context/PortfolioOptionsContext';
-import UserContext from '../context/UserContext';
+
 import Item from './Item';
 
 const StyledItemGrid = styled.ul`

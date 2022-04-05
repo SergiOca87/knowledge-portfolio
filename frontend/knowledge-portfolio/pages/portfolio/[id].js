@@ -10,7 +10,6 @@ import {
 	OverlayTrigger,
 	Tooltip,
 } from 'react-bootstrap';
-import UserContext from '../../context/UserContext';
 
 import {
 	FaUser,

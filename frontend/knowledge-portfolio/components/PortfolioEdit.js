@@ -1,6 +1,6 @@
 //TODO: USer options should be selected by default (access user options JSON).
 
-import { useMutation } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import gql from 'graphql-tag';
 import React, { useContext, useState, useEffect } from 'react';
 import {
@@ -13,9 +13,9 @@ import {
 import { FaPencilAlt } from 'react-icons/fa';
 import styled from 'styled-components';
 import PortfolioOptionsContext from '../context/PortfolioOptionsContext';
-import UserContext from '../context/UserContext';
+
 import OrderingModal from './OrderingModal';
-import { CURRENT_USER_QUERY } from './User';
+import { LOGGED_IN_USER } from './User';
 
 const StyledFormWrap = styled.div``;
 const StyledButtonGroup = styled.div``;
@@ -35,7 +35,6 @@ const UPDATE_USER_MUTATION = gql`
 `;
 
 export default function PortfolioEdit({ children }) {
-	const { user } = useContext(UserContext);
 	const { options, setOptions } = useContext(PortfolioOptionsContext);
 	const [openModal, setOpenModal] = useState(false);
 	const [show, setShow] = useState(false);
@@ -48,6 +47,14 @@ export default function PortfolioEdit({ children }) {
 		options: {},
 	};
 
+	const {
+		loading: loggedLoading,
+		error: loggedError,
+		data: loggedData,
+	} = useQuery(LOGGED_IN_USER);
+
+	const user = data?.authenticatedItem;
+
 	const [updateUser, { loading, error, data }] = useMutation(
 		UPDATE_USER_MUTATION,
 		{
@@ -55,7 +62,7 @@ export default function PortfolioEdit({ children }) {
 				id: user?.id,
 				options: optionsObject,
 			},
-			refetchQueries: [{ query: CURRENT_USER_QUERY }],
+			refetchQueries: [{ query: LOGGED_IN_USER }],
 		}
 	);
 

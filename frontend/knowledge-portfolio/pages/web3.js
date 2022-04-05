@@ -8,7 +8,6 @@ import Link from 'next/link';
 import Categories from '../components/Categories';
 import UserCard from '../components/UserCard';
 import MessageModal from '../components/MessageModal';
-import UserContext from '../context/UserContext';
 
 const CryptoCard = styled.div`
 	width: 40rem;
@@ -52,8 +51,6 @@ const CryptoCard = styled.div`
 `;
 
 export default function web3() {
-	const { user, setUser } = useContext(UserContext);
-
 	const eligible = () => {
 		// Is a user?
 		// Has 5 portfolio items?

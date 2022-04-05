@@ -4,13 +4,11 @@ import Categories from '../components/Categories';
 import CreateCategory from '../components/CreateCategory';
 import Main from '../components/Main';
 import { getCategories } from '../components/UserCategories';
-import UserContext from '../context/UserContext';
 
 // const StyledContainer = styled.Container`
 
 // `
 export default function createItems() {
-	const { user } = useContext(UserContext);
 	const userCategories = getCategories();
 
 	return (

@@ -6,7 +6,7 @@ import { useMutation, useQuery } from '@apollo/client';
 import SignOut from './SignOut';
 import styled, { css } from 'styled-components';
 import { Container } from 'react-bootstrap';
-import UserContext from '../context/UserContext';
+
 import { LOGGED_IN_USER } from './User';
 import {
 	FaEnvelope,

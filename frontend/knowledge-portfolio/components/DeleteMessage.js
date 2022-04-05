@@ -8,7 +8,7 @@ import { useState } from 'react';
 import gql from 'graphql-tag';
 import Router from 'next/router';
 import { USER_ITEMS_QUERY } from './ItemGrid';
-import UserContext from '../context/UserContext';
+
 import { Button } from 'react-bootstrap';
 
 const DELETE_MESSAGE_MUTATION = gql`
@@ -20,7 +20,6 @@ const DELETE_MESSAGE_MUTATION = gql`
 `;
 
 export default function DeleteMessage({ id, children }) {
-	const { user } = useContext(UserContext);
 	// So that the user has to click twice to delete an Item
 	const [deleteConfirm, setDeleteConfirm] = useState({
 		counter: 0,

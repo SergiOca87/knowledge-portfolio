@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import Link from 'next/link';
-import UserContext from '../context/UserContext';
+
 import gql from 'graphql-tag';
 import { createHttpLink, useMutation } from '@apollo/client';
 import { ToastContainer, toast } from 'react-toastify';
@@ -31,8 +31,6 @@ export default function MessageModal({
 	receiverId,
 	senderId,
 }) {
-	const { user } = useContext(UserContext);
-
 	const [inputs, setInputs] = useState({
 		text: '',
 		sender: '',

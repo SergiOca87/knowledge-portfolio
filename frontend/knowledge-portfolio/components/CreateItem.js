@@ -14,7 +14,7 @@ import Link from 'next/link';
 import { CURRENT_USER_QUERY } from '../components/User';
 import { LOGGED_IN_USER } from './User';
 import Router from 'next/router';
-import UserContext from '../context/UserContext';
+
 import { EditorState, convertFromRaw } from 'draft-js';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -85,7 +85,7 @@ const CREATE_ITEM_MUTATION = gql`
 `;
 
 export default function CreateItem() {
-	// const { user } = useContext(UserContext);
+	//
 	const {
 		loading: userLoading,
 		error: userError,

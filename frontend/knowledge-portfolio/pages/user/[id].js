@@ -10,7 +10,6 @@ import {
 	FloatingLabel,
 } from 'react-bootstrap';
 
-import UserContext from '../../context/UserContext';
 import { FaUser } from 'react-icons/fa';
 import Link from 'next/link';
 import UserCard from '../../components/UserCard';
@@ -85,7 +84,6 @@ const UPDATE_USER_MUTATION = gql`
 export default function UserPage() {
 	const router = useRouter();
 	// const { id } = router.query;
-	const { user } = useContext(UserContext);
 
 	return (
 		<StyledMain>
