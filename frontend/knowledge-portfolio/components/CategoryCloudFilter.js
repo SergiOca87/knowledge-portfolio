@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import UserContext from '../context/UserContext';
+import UserContext from '../context/userContext';
 import Categories from './Categories';
 import { USER_CATEGORIES_QUERY, getCategories } from './UserCategories';
 

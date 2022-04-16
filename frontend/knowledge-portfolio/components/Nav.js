@@ -16,6 +16,7 @@ import {
 	FaUser,
 } from 'react-icons/fa';
 import router from 'next/router';
+import { useUserState } from '../context/userContext';
 
 const StyledNav = styled.nav`
 	display: flex;
@@ -71,11 +72,13 @@ const StyledMail = styled.div`
 
 export default function Nav() {
 	// const user = useUser();
-	// const { user, setUser } = useContext(UserContext);
-	const { data } = useQuery(LOGGED_IN_USER);
+	const { user, setUser } = useUserState();
+	// const { data } = useQuery(LOGGED_IN_USER);
 
 	//TODO: Follow this pattern everywhere. May need to useeffect and set the user anyways so that this is more reactive?
-	const user = data?.authenticatedItem;
+	// const user = data?.authenticatedItem;
+
+	console.log('user nav', user);
 
 	return (
 		<div>
@@ -134,7 +137,7 @@ export default function Nav() {
 								</Link>
 								<Link href={`/mail/${user.id}`}>
 									<StyledMail>
-										{user.received.length > 0 ? (
+										{user?.received?.length > 0 ? (
 											<>
 												<FaRegEnvelopeOpen />
 												<span>

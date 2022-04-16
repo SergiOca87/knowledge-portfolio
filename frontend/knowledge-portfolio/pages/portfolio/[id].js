@@ -32,6 +32,7 @@ import OrderingModal from '../../components/OrderingModal';
 import { LOGGED_IN_USER } from '../../components/User';
 import QrModal from '../../components/QrModal';
 import { useQuery } from '@apollo/client';
+import UserContext from '../../context/userContext';
 
 const StyledUserCard = styled.div`
 	display: flex;
@@ -112,6 +113,7 @@ const UserControls = styled.div`
 `;
 
 export default function UserPortfolioPage() {
+	const { user, setUser } = useContext(UserContext);
 	const router = useRouter();
 	const { id } = router.query;
 	const [openModal, setOpenModal] = useState(false);
@@ -125,9 +127,13 @@ export default function UserPortfolioPage() {
 
 	const { loading, error, data } = useQuery(LOGGED_IN_USER);
 
-	const user = data?.authenticatedItem;
+	// const user = data?.authenticatedItem;
 
 	const userOptions = user?.options?.options;
+
+	useEffect(() => {
+		console.log('user from context?', user);
+	}, [user]);
 
 	// useEffect(() => {
 	// 	if (!firstRender) {

@@ -12,6 +12,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Button, Card, Form } from 'react-bootstrap';
 import Link from 'next/link';
+import { useUserState } from '../context/userContext';
 // import { CURRENT_USER_QUERY } from './User';
 
 // import Error from './ErrorMessage';
@@ -61,8 +62,12 @@ const SIGNIN_MUTATION = gql`
 // `;
 
 export default function SignIn() {
-	// const { user, setUser } = useContext(UserContext);
+	const { user, setUser } = useUserState();
 	const router = useRouter();
+
+	useEffect(() => {
+		console.log('user from context?', user);
+	});
 
 	// Check if there is a user or not
 	const { loading, error, data } = useQuery(LOGGED_IN_USER);
@@ -81,7 +86,7 @@ export default function SignIn() {
 		{ data: signInData, loading: signInLoading, error: signInError },
 	] = useMutation(SIGNIN_MUTATION, {
 		variables: inputs,
-		refetchQueries: LOGGED_IN_USER,
+		// refetchQueries: LOGGED_IN_USER,
 	});
 
 	const handleChange = (e) => {
@@ -115,18 +120,19 @@ export default function SignIn() {
 				res.data.authenticateUserWithPassword.__typename ===
 				'UserAuthenticationWithPasswordSuccess'
 			) {
-				// setUser(res?.data?.authenticateUserWithPassword.item);
+				setUser(res?.data?.authenticateUserWithPassword.item);
 
+				console.log('user from context2', user);
 				// toast.success('');
 
 				//TODO: Why doesn't this work as using the URL directly?
-				if (res.data) {
-					router.push(
-						`/portfolio/${res?.data?.authenticateUserWithPassword.item.id} `
-					),
-						null,
-						{ shallow: false };
-				}
+				// if (res.data) {
+				// 	router.push(
+				// 		`/portfolio/${res?.data?.authenticateUserWithPassword.item.id} `
+				// 	),
+				// 		null,
+				// 		{ shallow: false };
+				// }
 			}
 		}
 	}

@@ -15,6 +15,8 @@ import {
 import PortfolioOptionsContext, {
 	OptionsProvider,
 } from '../context/PortfolioOptionsContext';
+// import UserContext, { UserProvider } from '../context/UserContext';
+import { UserProvider } from '../context/userContext';
 
 Router.events.on('routeChangeStart', () => NProgress.start());
 Router.events.on('routeChangeComplete', () => NProgress.done());
@@ -35,11 +37,11 @@ function MyApp({ Component, pageProps }) {
 	return (
 		<>
 			<ApolloProvider client={client}>
-				<OptionsProvider>
+				<UserProvider>
 					<Page>
 						<Component {...pageProps} />
 					</Page>
-				</OptionsProvider>
+				</UserProvider>
 			</ApolloProvider>
 		</>
 	);
