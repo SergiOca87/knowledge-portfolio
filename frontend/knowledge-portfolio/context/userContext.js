@@ -1,5 +1,5 @@
 /* eslint-disable react/react-in-jsx-scope */
-import { useState, createContext, useContext } from 'react';
+import { useState, createContext, useContext, useEffect } from 'react';
 import { gql, useQuery } from '@apollo/client';
 
 const UserStateContext = createContext();
@@ -104,8 +104,6 @@ export const SINGLE_USER_QUERY = gql`
 
 export const UserProvider = ({ children }) => {
 	const [user, setUser] = useState('');
-
-	//TODO: UseEffect to see if there is a user already maybe?
 
 	return (
 		<UserStateContext.Provider value={{ user, setUser }}>

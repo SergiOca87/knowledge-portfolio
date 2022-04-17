@@ -3,12 +3,13 @@ import styled, { createGlobalStyle } from 'styled-components';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Nav from './Nav';
 import gql from 'graphql-tag';
-import { useContext, useEffect } from 'react';
-import { LOGGED_IN_USER } from './User';
+import { useContext, useEffect, useState } from 'react';
+// import { LOGGED_IN_USER } from './User';
 import { useQuery } from '@apollo/client';
 
 import { ToastContainer, toast } from 'react-toastify';
 import Footer from './Footer';
+import { useUserState } from '../context/userContext';
 
 const GlobalStyles = createGlobalStyle`
   @font-face {
@@ -245,29 +246,54 @@ const InnerStyles = styled.div`
 	// padding: 2rem;
 `;
 
-// Find if there is a logged in User at this high level in the App
-// const CURRENT_USER_QUERY = gql`
-// 	query {
-// 		authenticatedItem {
-// 			... on User {
-// 				id
-// 				name
-// 				email
-// 			}
-// 		}
-// 	}
-// `;
+export const LOGGED_IN_USER = gql`
+	query {
+		authenticatedItem {
+			... on User {
+				id
+				name
+				email
+				publicEmail
+				options
+				instagram
+				youtube
+				website
+				received {
+					id
+				}
+				categories {
+					id
+					name
+					icon
+				}
+				items {
+					id
+					title
+					description
+					status
+					singlePageContent
+					categories {
+						id
+						name
+						icon
+					}
+				}
+			}
+		}
+	}
+`;
 
 export default function Page({ children }) {
-	const { loading, error, data } = useQuery(LOGGED_IN_USER);
+	const { user, setUser } = useUserState();
 
-	if (loading) {
-		return <p>Loading...</p>;
-	}
+	const { data } = useQuery(LOGGED_IN_USER);
 
-	if (error) {
-		toast.error(error);
-	}
+	useEffect(() => {
+		console.log('useEffect is running', data);
+		data && setUser(data?.authenticatedItem);
+
+		console.log('user?', user);
+	}, [data]);
 
 	return (
 		<div>

@@ -72,9 +72,9 @@ export default function SignIn() {
 	// Check if there is a user or not
 	const { loading, error, data } = useQuery(LOGGED_IN_USER);
 
-	if (loading) {
-		return <p>Loading...</p>;
-	}
+	// if (loading) {
+	// 	return <p>Loading...</p>;
+	// }
 
 	const [inputs, setInputs] = useState({
 		email: '',
@@ -124,6 +124,9 @@ export default function SignIn() {
 
 				console.log('user from context2', user);
 				// toast.success('');
+				router.push(
+					`/portfolio/${res?.data?.authenticateUserWithPassword.item.id}`
+				);
 
 				//TODO: Why doesn't this work as using the URL directly?
 				// if (res.data) {

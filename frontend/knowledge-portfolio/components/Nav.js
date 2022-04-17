@@ -7,7 +7,7 @@ import SignOut from './SignOut';
 import styled, { css } from 'styled-components';
 import { Container } from 'react-bootstrap';
 
-import { LOGGED_IN_USER } from './User';
+// import { LOGGED_IN_USER } from './User';
 import {
 	FaEnvelope,
 	FaMailBulk,
@@ -15,7 +15,7 @@ import {
 	FaRegEnvelopeOpen,
 	FaUser,
 } from 'react-icons/fa';
-import router from 'next/router';
+import { useRouter } from 'next/router';
 import { useUserState } from '../context/userContext';
 
 const StyledNav = styled.nav`
@@ -75,10 +75,12 @@ export default function Nav() {
 	const { user, setUser } = useUserState();
 	// const { data } = useQuery(LOGGED_IN_USER);
 
+	const router = useRouter();
+
+	console.log('in nav...', user);
+
 	//TODO: Follow this pattern everywhere. May need to useeffect and set the user anyways so that this is more reactive?
 	// const user = data?.authenticatedItem;
-
-	console.log('user nav', user);
 
 	return (
 		<div>

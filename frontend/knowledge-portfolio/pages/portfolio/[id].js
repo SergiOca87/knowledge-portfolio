@@ -29,10 +29,10 @@ import PortfolioOptionsContext, {
 } from '../../context/PortfolioOptionsContext';
 import UserStyleOptions from '../../components/UserStyleOptions';
 import OrderingModal from '../../components/OrderingModal';
-import { LOGGED_IN_USER } from '../../components/User';
+// import { LOGGED_IN_USER } from '../../components/User';
 import QrModal from '../../components/QrModal';
 import { useQuery } from '@apollo/client';
-import UserContext from '../../context/userContext';
+import UserContext, { useUserState } from '../../context/userContext';
 
 const StyledUserCard = styled.div`
 	display: flex;
@@ -113,7 +113,7 @@ const UserControls = styled.div`
 `;
 
 export default function UserPortfolioPage() {
-	const { user, setUser } = useContext(UserContext);
+	const { user, setUser } = useUserState();
 	const router = useRouter();
 	const { id } = router.query;
 	const [openModal, setOpenModal] = useState(false);
@@ -125,11 +125,11 @@ export default function UserPortfolioPage() {
 	// const { user } = useContext(UserContext);
 	// const { options } = useContext(PortfolioOptionsContext);
 
-	const { loading, error, data } = useQuery(LOGGED_IN_USER);
+	// const { loading, error, data } = useQuery(LOGGED_IN_USER);
 
-	// const user = data?.authenticatedItem;
+	// // const user = data?.authenticatedItem;
 
-	const userOptions = user?.options?.options;
+	// const userOptions = user?.options?.options;
 
 	useEffect(() => {
 		console.log('user from context?', user);
@@ -145,138 +145,131 @@ export default function UserPortfolioPage() {
 	const handleClose = () => {
 		setShow(false);
 	};
-	if (loading) {
-		return <p>Loading...</p>;
-	} else {
-		return (
-			<Main>
-				<>
-					<UserStyleOptions user={user}>
-						<Container>
-							<StyledUserCard>
-								{userOptions?.userImage ? (
-									<div
-										className="avatar"
-										css={`
-											background-image: ${user.image};
-										`}
-									></div>
-								) : (
-									<div className="avatar">
-										<FaUser />
-									</div>
-								)}
-								<h1>
-									Welcome to your portfolio,{' '}
-									<span className="secondary">
-										{user?.name}
-									</span>
-								</h1>
-							</StyledUserCard>
 
-							<UserControls>
-								<div>
-									<OverlayTrigger
-										placement={'top'}
-										overlay={
-											<Tooltip id={`tooltip-top}`}>
-												Add New Portfolio Item
-											</Tooltip>
+	return (
+		<Main>
+			<>
+				<UserStyleOptions user={user}>
+					<Container>
+						<StyledUserCard>
+							{/* {user.options?.userImage !== 'undefined' ? (
+								<div
+									className="avatar"
+									css={`
+										background-image: ${user.image};
+									`}
+								></div>
+							) : (
+								<div className="avatar">
+									<FaUser />
+								</div>
+							)} */}
+							<h1>
+								Welcome to your portfolio,{' '}
+								<span className="secondary">{user?.name}</span>
+							</h1>
+						</StyledUserCard>
+
+						<UserControls>
+							<div>
+								<OverlayTrigger
+									placement={'top'}
+									overlay={
+										<Tooltip id={`tooltip-top}`}>
+											Add New Portfolio Item
+										</Tooltip>
+									}
+								>
+									<Button>
+										<Link href={'/add-item'}>
+											<FaPlus />
+										</Link>
+									</Button>
+								</OverlayTrigger>
+							</div>
+							<div>
+								<OverlayTrigger
+									placement={'top'}
+									overlay={
+										<Tooltip id={`tooltip-top}`}>
+											Toggle Public View
+										</Tooltip>
+									}
+								>
+									<Button>
+										<Link href={`/public-portfolio/${id}`}>
+											<FaEye />
+										</Link>
+									</Button>
+								</OverlayTrigger>
+							</div>
+							<div>
+								<Link href={'/'}>
+									<PortfolioEdit
+										placement={'end'}
+										// setOpenModal={setOpenModal}
+										// openModal={openModal}
+									/>
+								</Link>
+							</div>
+							<div>
+								<OverlayTrigger
+									placement={'top'}
+									overlay={
+										<Tooltip id="tooltip-top">
+											Download as a PDF
+										</Tooltip>
+									}
+								>
+									<Button>
+										<Link href={'/'}>
+											<FaFileDownload />
+										</Link>
+									</Button>
+								</OverlayTrigger>
+							</div>
+							<div>
+								<OverlayTrigger
+									placement={'top'}
+									overlay={
+										<Tooltip id="tooltip-top">
+											Generate QR Code
+										</Tooltip>
+									}
+								>
+									<Button
+										onClick={() =>
+											showQrModal
+												? setShowQrModal(false)
+												: setShowQrModal(true)
 										}
 									>
-										<Button>
-											<Link href={'/add-item'}>
-												<FaPlus />
-											</Link>
-										</Button>
-									</OverlayTrigger>
-								</div>
-								<div>
-									<OverlayTrigger
-										placement={'top'}
-										overlay={
-											<Tooltip id={`tooltip-top}`}>
-												Toggle Public View
-											</Tooltip>
-										}
-									>
-										<Button>
-											<Link
-												href={`/public-portfolio/${id}`}
-											>
-												<FaEye />
-											</Link>
-										</Button>
-									</OverlayTrigger>
-								</div>
-								<div>
-									<Link href={'/'}>
-										<PortfolioEdit
-											placement={'end'}
-											// setOpenModal={setOpenModal}
-											// openModal={openModal}
-										/>
-									</Link>
-								</div>
-								<div>
-									<OverlayTrigger
-										placement={'top'}
-										overlay={
-											<Tooltip id="tooltip-top">
-												Download as a PDF
-											</Tooltip>
-										}
-									>
-										<Button>
-											<Link href={'/'}>
-												<FaFileDownload />
-											</Link>
-										</Button>
-									</OverlayTrigger>
-								</div>
-								<div>
-									<OverlayTrigger
-										placement={'top'}
-										overlay={
-											<Tooltip id="tooltip-top">
-												Generate QR Code
-											</Tooltip>
-										}
-									>
-										<Button
-											onClick={() =>
-												showQrModal
-													? setShowQrModal(false)
-													: setShowQrModal(true)
-											}
-										>
-											{/* <Link
+										{/* <Link
 										href={`/qr/${id}`}
 										query={`${router.pathname}`}
 									> */}
-											<FaQrcode />
-											{/* </Link> */}
-										</Button>
-									</OverlayTrigger>
-								</div>
-							</UserControls>
+										<FaQrcode />
+										{/* </Link> */}
+									</Button>
+								</OverlayTrigger>
+							</div>
+						</UserControls>
 
-							{/* {loop throug map} */}
-							<StyledGridWrap>
-								<ItemGrid
-									user={user}
-									// options={user?.options ? user.options : ''}
-								/>
-							</StyledGridWrap>
-						</Container>
-					</UserStyleOptions>
-					<QrModal
-						showQrModal={showQrModal}
-						setShowQrModal={setShowQrModal}
-					/>
-				</>
-				}
-			</Main>
-		);
-	}
+						{/* {loop throug map} */}
+						<StyledGridWrap>
+							<ItemGrid
+								user={user}
+								// options={user?.options ? user.options : ''}
+							/>
+						</StyledGridWrap>
+					</Container>
+				</UserStyleOptions>
+				<QrModal
+					showQrModal={showQrModal}
+					setShowQrModal={setShowQrModal}
+				/>
+			</>
+			}
+		</Main>
+	);
 }
