@@ -6,12 +6,13 @@ import { useQuery } from '@apollo/client';
 import gql from 'graphql-tag';
 import Link from 'next/link';
 import { useContext, useEffect, useState } from 'react';
-import { LOGGED_IN_USER } from './User';
+// import { LOGGED_IN_USER } from './User';
 import { Col, Row } from 'react-bootstrap';
 import styled, { css } from 'styled-components';
-import PortfolioOptionsContext from '../context/PortfolioOptionsContext';
+// import PortfolioOptionsContext from '../context/PortfolioOptionsContext';
 
 import Item from './Item';
+import NotLoggedIn from './NotLoggedIn';
 
 const StyledItemGrid = styled.ul`
 	display: grid;
@@ -38,9 +39,9 @@ export default function ItemGrid({
 	//Number of items that are rendered
 	const [visibleItems, setVisibleItems] = useState(0);
 	const isAll = activeCategories?.includes('All') ? true : false;
-	const { options, setOptions } = useContext(PortfolioOptionsContext);
+	// const { options, setOptions } = useContext(PortfolioOptionsContext);
 
-	let sortedArray = [...user.items];
+	let sortedArray = [...user?.items];
 
 	// Drag and Drop
 	// const [itemsPosition, setItemsPosition] = useState();
@@ -137,8 +138,6 @@ export default function ItemGrid({
 		setVisibleItems(itemsToRender().length);
 	}, [chosenCategory, chosenText, activeCategories]);
 
-	//TODO: User options or default
-
 	return (
 		<>
 			{user ? (
@@ -178,14 +177,7 @@ export default function ItemGrid({
 					</StyledItemGrid>
 				</>
 			) : (
-				<Container>
-					<h2>
-						You have to log in to see this content,
-						<br />
-						You can log in or register{' '}
-						<Link href="/login">here</Link>
-					</h2>
-				</Container>
+				<NotLoggedIn />
 			)}
 		</>
 	);

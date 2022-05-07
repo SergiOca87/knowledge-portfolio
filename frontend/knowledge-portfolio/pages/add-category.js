@@ -3,45 +3,59 @@ import { Col, Container, Row } from 'react-bootstrap';
 import Categories from '../components/Categories';
 import CreateCategory from '../components/CreateCategory';
 import Main from '../components/Main';
-import { getCategories } from '../components/UserCategories';
+import NotLoggedIn from '../components/NotLoggedIn';
+// import { getCategories } from '../components/UserCategories';
+import { useUserState } from '../context/userContext';
 
 // const StyledContainer = styled.Container`
 
 // `
 export default function createItems() {
-	const userCategories = getCategories();
+	// const userCategories = getCategories();
+	const { user, setUser } = useUserState();
 
 	return (
 		<Main>
 			<Container>
-				<div
-					css={css`
-						max-width: 80rem;
-						margin: 0rem auto;
-					`}
-				>
+				{user ? (
 					<div
-						className="titles"
 						css={css`
-							max-width: 60rem;
-							margin-bottom: 4rem;
+							max-width: 80rem;
+							margin: 0rem auto;
 						`}
 					>
-						<h1>Add a Category</h1>
-						<p>
-							Categories allow you to group your data and allow
-							visitors to filter your items.
-						</p>
+						<div
+							className="titles"
+							css={css`
+								max-width: 60rem;
+								margin-bottom: 4rem;
+							`}
+						>
+							<h1>Add a Category</h1>
+							<p>
+								Categories allow you to group your data and
+								allow visitors to filter your items.
+							</p>
+
+							{user.categories.length ? (
+								<>
+									<p>Your current existing Categories:</p>
+									<Categories
+										title={false}
+										categories={user.categories}
+										background={true}
+									/>
+								</>
+							) : (
+								''
+							)}
+						</div>
+
+						<CreateCategory />
 					</div>
-
-					<CreateCategory />
-
-					{user && userCategories && (
-						<Categories
-							categories={userCategories?.allCategories}
-						/>
-					)}
-				</div>
+				) : (
+					<NotLoggedIn />
+				)}
 			</Container>
 		</Main>
 	);

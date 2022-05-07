@@ -23,16 +23,17 @@ import Link from 'next/link';
 
 import ItemGrid from '../../components/ItemGrid';
 import Main from '../../components/Main';
-import PortfolioEdit from '../../components/PortfolioEdit';
-import PortfolioOptionsContext, {
-	OptionsProvider,
-} from '../../context/PortfolioOptionsContext';
+// import PortfolioEdit from '../../components/PortfolioEdit';
+// import PortfolioOptionsContext, {
+// 	OptionsProvider,
+// } from '../../context/PortfolioOptionsContext';
 import UserStyleOptions from '../../components/UserStyleOptions';
 import OrderingModal from '../../components/OrderingModal';
 // import { LOGGED_IN_USER } from '../../components/User';
 import QrModal from '../../components/QrModal';
 import { useQuery } from '@apollo/client';
 import UserContext, { useUserState } from '../../context/userContext';
+import NotLoggedIn from '../../components/NotLoggedIn';
 
 const StyledUserCard = styled.div`
 	display: flex;
@@ -131,9 +132,9 @@ export default function UserPortfolioPage() {
 
 	// const userOptions = user?.options?.options;
 
-	useEffect(() => {
-		console.log('user from context?', user);
-	}, [user]);
+	// useEffect(() => {
+	// 	console.log('user from context?', user);
+	// }, [user]);
 
 	// useEffect(() => {
 	// 	if (!firstRender) {
@@ -148,9 +149,9 @@ export default function UserPortfolioPage() {
 
 	return (
 		<Main>
-			<>
-				<UserStyleOptions user={user}>
-					<Container>
+			<Container>
+				{user ? (
+					<>
 						<StyledUserCard>
 							{/* {user.options?.userImage !== 'undefined' ? (
 								<div
@@ -204,13 +205,13 @@ export default function UserPortfolioPage() {
 								</OverlayTrigger>
 							</div>
 							<div>
-								<Link href={'/'}>
-									<PortfolioEdit
-										placement={'end'}
-										// setOpenModal={setOpenModal}
-										// openModal={openModal}
-									/>
-								</Link>
+								{/* <Link href={'/'}>
+								<PortfolioEdit
+									placement={'end'}
+									// setOpenModal={setOpenModal}
+									// openModal={openModal}
+								/>
+							</Link> */}
 							</div>
 							<div>
 								<OverlayTrigger
@@ -257,19 +258,17 @@ export default function UserPortfolioPage() {
 
 						{/* {loop throug map} */}
 						<StyledGridWrap>
-							<ItemGrid
-								user={user}
-								// options={user?.options ? user.options : ''}
-							/>
+							<ItemGrid user={user} />
 						</StyledGridWrap>
-					</Container>
-				</UserStyleOptions>
-				<QrModal
-					showQrModal={showQrModal}
-					setShowQrModal={setShowQrModal}
-				/>
-			</>
-			}
+					</>
+				) : (
+					<NotLoggedIn />
+				)}
+			</Container>
+			<QrModal
+				showQrModal={showQrModal}
+				setShowQrModal={setShowQrModal}
+			/>
 		</Main>
 	);
 }

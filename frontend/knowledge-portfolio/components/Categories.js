@@ -42,11 +42,13 @@ const categoriesTitle = (categories) => {
 export default function Categories({
 	categories,
 	asButtons = false,
+	title = true,
+	background = false,
 	activeCategories,
 }) {
 	return (
 		<StyledCategories>
-			{categoriesTitle(categories)}
+			{title ? categoriesTitle(categories) : ''}
 			<div className="categories">
 				{asButtons && (
 					<Button
@@ -86,7 +88,14 @@ export default function Categories({
 							<span>{category.name}</span>
 						</Button>
 					) : (
-						<div key={category.id}>
+						<div
+							key={category.id}
+							css={css`
+								background-color: ${background
+									? 'var(--secondary)'
+									: 'transparent'};
+							`}
+						>
 							{IconName && (
 								<span className="category">
 									<IconName />

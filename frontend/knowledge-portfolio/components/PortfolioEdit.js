@@ -3,6 +3,7 @@
 import { useMutation, useQuery } from '@apollo/client';
 import gql from 'graphql-tag';
 import React, { useContext, useState, useEffect } from 'react';
+
 import {
 	Offcanvas,
 	Button,
@@ -72,9 +73,9 @@ export default function PortfolioEdit({ children }) {
 		optionsObject.options = { ...options };
 		optionsObject = JSON.stringify(optionsObject);
 
-		const res = await updateUser().then(
-			console.log('user was updated', user, 'with options', options)
-		);
+		// const res = await updateUser().then(
+		// 	console.log('user was updated', user, 'with options', options)
+		// );
 	}
 
 	//TODO: How can we "handleSubmit" after adding this orderedItems Array to options

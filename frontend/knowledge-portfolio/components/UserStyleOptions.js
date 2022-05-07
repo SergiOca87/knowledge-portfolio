@@ -46,7 +46,9 @@ p {
 `;
 	return (
 		<>
-			{user && <div css={user.options ? userStyles : ''}>{children}</div>}
+			{user && (
+				<div css={user?.options ? userStyles : ''}>{children}</div>
+			)}
 		</>
 	);
 }

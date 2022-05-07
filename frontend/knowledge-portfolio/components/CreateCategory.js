@@ -12,8 +12,9 @@ import * as FontAwesome from 'react-icons/fa';
 import CategoryIcons from './CategoryIcons';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { LOGGED_IN_USER } from './User';
+// import { LOGGED_IN_USER } from './User';
 import { useRouter } from 'next/router';
+import UserContext, { useUserState } from '../context/userContext';
 
 const StyledForm = styled.form`
 	max-width: 70rem;
@@ -56,24 +57,29 @@ const CREATE_CATEGORY_MUTATION = gql`
 			id
 			name
 			icon
-			author
+			author {
+				name
+			}
 		}
 	}
 `;
 
 export default function CreateCategory() {
-	//TODO: Get user from actual keystone context
 	//
 	// const userCategories = getCategories();
-	const {
-		loading: userLoading,
-		error: userError,
-		data: userData,
-	} = useQuery(LOGGED_IN_USER);
+	// const {
+	// 	loading: userLoading,
+	// 	error: userError,
+	// 	data: userData,
+	// } = useQuery(LOGGED_IN_USER);
 
-	const user = userData?.authenticatedItem;
+	const { user, setUser } = useUserState();
 
-	console.log('user', user);
+	console.log('create category author is...', user.id);
+
+	// const user = userData?.authenticatedItem;
+
+	// console.log('user', user);
 
 	const [iconSearch, setIconSearch] = useState('');
 	const router = useRouter();
@@ -96,7 +102,7 @@ export default function CreateCategory() {
 		{
 			variables: inputs,
 
-			refetchQueries: [{ query: LOGGED_IN_USER }],
+			// refetchQueries: [{ query: LOGGED_IN_USER }],
 		}
 	);
 
