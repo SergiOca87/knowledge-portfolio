@@ -140,10 +140,15 @@ export default function CreateCategory() {
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 
-		//TODO: Success or error? Add toasts
-
 		if (error) {
 			toast.error(error.message);
+		} else if (
+			user.categories.filter(
+				(category) =>
+					category.name.toLowerCase() === inputs.name.toLowerCase()
+			).length > 0
+		) {
+			toast.error(`The category ${inputs.name} already exists`);
 		} else {
 			const res = await createCategory().catch((err) => toast.error(err));
 

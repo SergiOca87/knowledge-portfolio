@@ -30,14 +30,17 @@ import {
 
 import Editor from './Editor';
 
-const StyledForm = styled.form`
+const StyledForm = styled(Form)`
 	max-width: 70rem;
 	margin: 4rem auto;
 	padding: 2rem;
-	background-color: var(--tertiary);
 
 	.tip {
 		font-size: 1.4rem;
+	}
+
+	.single-page-editor {
+		color: #000;
 	}
 `;
 
@@ -177,14 +180,14 @@ export default function CreateItem() {
 
 	//Single Page Details Drawer
 	//TODO: We can get rid of this or customize
-	function CustomToggle({ children, eventKey }) {
-		const decoratedOnClick = useAccordionButton(
-			eventKey,
-			() => 'totally custom!'
-		);
+	// function CustomToggle({ children, eventKey }) {
+	// 	const decoratedOnClick = useAccordionButton(
+	// 		eventKey,
+	// 		() => 'totally custom!'
+	// 	);
 
-		return <div onClick={decoratedOnClick}>{children}</div>;
-	}
+	// 	return <div onClick={decoratedOnClick}>{children}</div>;
+	// }
 
 	// Submit current state to create a new Item
 	const handleSubmit = async (e) => {
@@ -223,7 +226,7 @@ export default function CreateItem() {
 					padding: 4rem 2rem;
 				`}
 			>
-				<Form method="POST" onSubmit={handleSubmit}>
+				<StyledForm method="POST" onSubmit={handleSubmit}>
 					//TODO: This or toast?
 					{error && <p>{error.message}</p>}
 					<Form.Group className="mb-5">
@@ -279,7 +282,7 @@ export default function CreateItem() {
 							<Form.Label htmlFor="category">Category</Form.Label>
 							<p className="tip">
 								If you need a new category you can create it{' '}
-								<Link href="/create-category"> here</Link>
+								<Link href="/add-category"> here</Link>
 							</p>
 							<Form.Select
 								aria-label="Categories"
@@ -329,43 +332,48 @@ export default function CreateItem() {
 							<option value="false">Private</option>
 						</Form.Select>
 					</Form.Group>
-					<Accordion>
-						<label>
-							<span>Single Page Content</span>
-							<p className="tip">
-								Adding single page content will enable a "More
-								Details" button on your portfolio item. This
-								button will redirect the user to a page with the
-								content that you add here. Use this feature if
-								you need to create a detailed view of your item
-								with long text, images or video.
-							</p>
-							<div className="d-flex align-center">
-								<CustomToggle eventKey="0">
-									<Form.Check
-										type="switch"
-										label="Single Page Content"
-										id="singlePage"
-										name="singlePage"
-										value={inputs.singlePage}
-										onChange={handleChange}
-									/>
-								</CustomToggle>
-							</div>
-						</label>
+					<label>
+						<p className="tip">
+							Adding single page content will enable a "More
+							Details" button on your portfolio item. This button
+							will redirect the user to a page with the content
+							that you add on the WYSYWYG below. Use this feature
+							if you need to create a detailed view of your item
+							with a longer description text, images or video.
+						</p>
+						{/* <div className="d-flex align-center">
+							<CustomToggle>
+								<Form.Check
+									type="switch"
+									label="Single Page Content"
+									id="singlePage"
+									name="singlePage"
 
-						<Accordion.Collapse eventKey="0">
-							<>
+									// value={inputs.singlePage}
+									// onChange={handleChange}
+								/>
+							</CustomToggle>
+						</div> */}
+					</label>
+					<Accordion>
+						<Accordion.Item eventKey="0">
+							<Accordion.Header>
+								Single Page Content
+							</Accordion.Header>
+							<Accordion.Body>
 								<Editor
 									// editorState={editorState}
+									editorClassName="single-page-editor"
 									onContentStateChange={onContentStateChange}
 								/>
 								<textarea
-									disabled
 									value={inputs.singlePageContent}
+									css={css`
+										display: none;
+									`}
 								/>
-							</>
-						</Accordion.Collapse>
+							</Accordion.Body>
+						</Accordion.Item>
 					</Accordion>
 					<Form.Group className="mb-5">
 						<p className="tip">
@@ -396,7 +404,7 @@ export default function CreateItem() {
 					<Button type="submit" value="submit" variant="primary">
 						Add
 					</Button>
-				</Form>
+				</StyledForm>
 			</Card.Body>
 		</Card>
 	);
