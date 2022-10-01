@@ -9,7 +9,7 @@ import { FaRegShareSquare } from 'react-icons/fa';
 import styled, { css } from 'styled-components';
 import Link from 'next/link';
 import gql from 'graphql-tag';
-import Hero from '../components/Hero';
+import Hero from '../components/layout/Hero';
 import { Container, Row, Col, Card, Button } from 'react-bootstrap';
 import { useQuery } from '@apollo/client';
 

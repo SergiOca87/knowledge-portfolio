@@ -34,6 +34,7 @@ export default function Item({ item, isPublic }) {
 						<ListGroupItem>
 							<h5 className="secondary">Description:</h5>
 							<p>{item.description}</p>
+							<p>{item.mainImage?.publicUrl}</p>
 						</ListGroupItem>
 					)}
 

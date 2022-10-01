@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
-import UserContext from '../context/userContext';
+import UserContext from '../../context/userContext';
 import Categories from './Categories';
-import { USER_CATEGORIES_QUERY, getCategories } from './UserCategories';
+import { USER_CATEGORIES_QUERY, getCategories } from '../user/UserCategories';
 
 export default function CategoryCloudFilter({
 	activeCategories,

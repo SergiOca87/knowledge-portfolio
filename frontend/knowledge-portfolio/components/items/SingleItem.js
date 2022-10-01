@@ -6,7 +6,7 @@ import { useQuery } from '@apollo/client';
 import gql from 'graphql-tag';
 import styled from 'styled-components';
 import Head from 'next/head';
-import Layout from './Layout';
+import Layout from '../Layout';
 import Categories from './Categories';
 import draftToHtml from 'draftjs-to-html';
 import parse from 'html-react-parser';

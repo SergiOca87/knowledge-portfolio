@@ -8,11 +8,12 @@
 import { useContext, useEffect, useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import gql from 'graphql-tag';
-import { USER_CATEGORIES_QUERY, getCategories } from './UserCategories';
+import { USER_CATEGORIES_QUERY, getCategories } from '../user/UserCategories';
 import Link from 'next/link';
+import { createUploadLink } from 'apollo-upload-client';
 // import { USER_ITEMS_QUERY } from './ItemGrid';
-import { CURRENT_USER_QUERY } from '../components/User';
-import { LOGGED_IN_USER } from './User';
+import { CURRENT_USER_QUERY } from '../user/User';
+import { LOGGED_IN_USER } from '../user/User';
 import Router from 'next/router';
 
 import { EditorState, convertFromRaw } from 'draft-js';
@@ -28,7 +29,7 @@ import {
 	useAccordionButton,
 } from 'react-bootstrap';
 
-import Editor from './Editor';
+import Editor from '../Editor';
 
 const StyledForm = styled(Form)`
 	max-width: 70rem;
@@ -52,7 +53,7 @@ const CREATE_ITEM_MUTATION = gql`
 		$author: ID!
 		$visibility: String
 		$singlePageContent: JSON
-		$image: String
+		$mainImage: Upload
 		$categories: [CategoryWhereUniqueInput!]
 		$date: String
 		$urlTitle: String
@@ -66,7 +67,7 @@ const CREATE_ITEM_MUTATION = gql`
 				status: $status
 				visibility: $visibility
 				singlePageContent: $singlePageContent
-				image: $image
+				mainImage: $mainImage
 				# categories: { connect: { id: $categories } }
 				date: $date
 				categories: { connect: $categories }
@@ -108,7 +109,7 @@ export default function CreateItem() {
 		status: 'finished',
 		visibility: 'true',
 		singlePageContent: '',
-		image: '',
+		mainImage: '',
 		categories: [],
 		urlTitle: '',
 		date: '',
@@ -237,6 +238,16 @@ export default function CreateItem() {
 							id="title"
 							required
 							value={inputs.title}
+							onChange={handleChange}
+						/>
+					</Form.Group>
+					<Form.Group className="mb-5">
+						<Form.Label htmlFor="title">Main Image</Form.Label>
+						<Form.Control
+							type="file"
+							name="mainImage"
+							id="mainImage"
+							value={inputs.mainImage}
 							onChange={handleChange}
 						/>
 					</Form.Group>

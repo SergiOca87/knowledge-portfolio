@@ -1,11 +1,13 @@
 import React from 'react';
-import SignIn from '../components/SignIn';
-import SignUp from '../components/SignUp';
+// import SignIn from '../components/SignIn';
+// import SignUp from '../components/SignUp';
 import styled from 'styled-components';
-import RequestReset from '../components/RequestReset';
+// import RequestReset from '../components/RequestReset';
 import Link from 'next/link';
 import { Col, Container, Row, Card } from 'react-bootstrap';
-import Main from '../components/Main';
+import Main from '../components/layout/Main';
+import SignInUp from '../components/auth/SignInUp';
+import { supabase } from '../utils/supabaseClient';
 
 const StyledFormCard = styled.div`
 	padding: 3rem 2rem;
@@ -18,14 +20,15 @@ export default function login() {
 	return (
 		<Main>
 			<Container>
-				<Row>
-					<Col lg={6}>
-						<SignIn />
-					</Col>
-					<Col lg={6}>
-						<SignUp />
-					</Col>
-				</Row>
+				<SignInUp />
+				{/* <Row> */}
+				{/* <Col lg={6}> */}
+				{/* <SignIn /> */}
+				{/* </Col> */}
+				{/* <Col lg={6}> */}
+				{/* <SignUp /> */}
+				{/* </Col> */}
+				{/* </Row> */}
 			</Container>
 		</Main>
 	);

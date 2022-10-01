@@ -5,8 +5,8 @@ import { useQuery } from '@apollo/client';
 import gql from 'graphql-tag';
 import styled from 'styled-components';
 import Head from 'next/head';
-import Layout from './Layout';
-import { useUser } from './User';
+import Layout from '../Layout';
+import { useUser } from '../user/User';
 
 const SINGLE_CATEGORY_QUERY = gql`
 	query SINGLE_CATEGORY_QUERY($id: ID!) {

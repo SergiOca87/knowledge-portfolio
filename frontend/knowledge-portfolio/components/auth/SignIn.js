@@ -5,14 +5,14 @@ import gql from 'graphql-tag';
 import { useMutation, useQuery } from '@apollo/client';
 // import Form from './styles/Form';
 // import useForm from '../lib/useForm';
-import React, { useContext, useEffect, useState } from 'react';
-import Router, { useRouter } from 'next/router';
-import { LOGGED_IN_USER } from './User';
-import { ToastContainer, toast } from 'react-toastify';
+import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
+import { LOGGED_IN_USER } from '../user/User';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Button, Card, Form } from 'react-bootstrap';
 import Link from 'next/link';
-import { useUserState } from '../context/userContext';
+import { useUserState } from '../../context/userContext';
 // import { CURRENT_USER_QUERY } from './User';
 
 // import Error from './ErrorMessage';
@@ -32,6 +32,10 @@ const SIGNIN_MUTATION = gql`
 						description
 						status
 						singlePageContent
+						mainImage {
+							id
+							publicUrl
+						}
 						categories {
 							id
 							name
@@ -65,9 +69,9 @@ export default function SignIn() {
 	const { user, setUser } = useUserState();
 	const router = useRouter();
 
-	useEffect(() => {
-		console.log('user from context?', user);
-	});
+	// useEffect(() => {
+	// 	console.log('user from context?', user);
+	// });
 
 	// Check if there is a user or not
 	const { loading, error, data } = useQuery(LOGGED_IN_USER);
@@ -100,6 +104,8 @@ export default function SignIn() {
 
 	async function handleSubmit(e) {
 		e.preventDefault();
+
+		console.log('errors', error, signInError);
 
 		if (error) {
 			toast.error(error.message);
@@ -148,15 +154,16 @@ export default function SignIn() {
 				`}
 			>
 				<Card.Header as="h3">Sign In</Card.Header>
+
+				{error && error.message}
+
 				<Card.Body
 					css={css`
 						padding: 4rem 2rem;
 					`}
 				>
 					<Form method="POST" onSubmit={handleSubmit}>
-						{error && <p>{error.message}</p>}
-
-						<Form.Group className="mb-5" controlId="formEmail">
+						<Form.Group className="mb-5">
 							<Form.Label htmlFor="email">
 								Email address
 							</Form.Label>
@@ -169,7 +176,7 @@ export default function SignIn() {
 								onChange={(e) => handleChange(e)}
 							/>
 						</Form.Group>
-						<Form.Group className="mb-5" controlId="password">
+						<Form.Group className="mb-5">
 							<Form.Label htmlFor="password">Password</Form.Label>
 							<Form.Control
 								type="password"

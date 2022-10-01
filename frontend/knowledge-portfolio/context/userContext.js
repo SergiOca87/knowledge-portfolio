@@ -18,6 +18,10 @@ const SIGNIN_MUTATION = gql`
 						title
 						description
 						status
+						mainImage {
+							id
+							publicUrl
+						}
 						singlePageContent
 						categories {
 							id
@@ -59,6 +63,10 @@ export const LOGGED_IN_USER = gql`
 					title
 					description
 					status
+					mainImage {
+						id
+						publicUrl
+					}
 					singlePageContent
 					categories {
 						id
@@ -91,6 +99,10 @@ export const SINGLE_USER_QUERY = gql`
 				title
 				description
 				status
+				mainImage {
+					id
+        			publicUrl
+				}
 				singlePageContent
 				categories {
 					id

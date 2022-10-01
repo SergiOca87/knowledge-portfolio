@@ -4,7 +4,7 @@ import { useMutation } from '@apollo/client';
 // import { CURRENT_USER_QUERY } from './User';
 import { Router, useRouter } from 'next/router';
 import { Button } from 'react-bootstrap';
-import { useUserState } from '../context/userContext';
+import { useUserState } from '../../context/userContext';
 
 const SIGN_OUT_MUTATION = gql`
 	mutation {

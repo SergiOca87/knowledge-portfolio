@@ -1,6 +1,6 @@
 /* eslint-disable react/react-in-jsx-scope */
 // import { CURRENT_USER_QUERY, useUser } from './User';
-import { USER_CATEGORIES_QUERY, getCategories } from './UserCategories';
+import { USER_CATEGORIES_QUERY, getCategories } from '../user/UserCategories';
 import { useMutation, useQuery } from '@apollo/client';
 import gql from 'graphql-tag';
 import Link from 'next/link';
@@ -14,7 +14,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 // import { LOGGED_IN_USER } from './User';
 import { useRouter } from 'next/router';
-import UserContext, { useUserState } from '../context/userContext';
+import UserContext, { useUserState } from '../../context/userContext';
 
 const StyledForm = styled.form`
 	max-width: 70rem;

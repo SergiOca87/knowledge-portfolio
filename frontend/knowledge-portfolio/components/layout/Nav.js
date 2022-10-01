@@ -3,7 +3,7 @@ import Link from 'next/link';
 // import { useUser } from './User';
 import gql from 'graphql-tag';
 import { useMutation, useQuery } from '@apollo/client';
-import SignOut from './SignOut';
+import SignOut from '../auth/SignOut';
 import styled, { css } from 'styled-components';
 import { Container } from 'react-bootstrap';
 
@@ -16,7 +16,7 @@ import {
 	FaUser,
 } from 'react-icons/fa';
 import { useRouter } from 'next/router';
-import { useUserState } from '../context/userContext';
+import { useUserState } from '../../context/userContext';
 
 const StyledNav = styled.nav`
 	display: flex;
