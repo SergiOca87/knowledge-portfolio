@@ -12,7 +12,7 @@ import styled, { css } from 'styled-components';
 // import PortfolioOptionsContext from '../context/PortfolioOptionsContext';
 
 import Item from './Item';
-import NotLoggedIn from './NotLoggedIn';
+// import NotLoggedIn from './NotLoggedIn';
 
 const StyledItemGrid = styled.ul`
 	display: grid;
@@ -177,7 +177,7 @@ export default function ItemGrid({
 					</StyledItemGrid>
 				</>
 			) : (
-				<NotLoggedIn />
+				<p>Not logged in</p>
 			)}
 		</>
 	);

@@ -5,7 +5,6 @@ import { LOGGED_IN_USER } from '../user/User';
 import { useState } from 'react';
 import gql from 'graphql-tag';
 import Router from 'next/router';
-import { USER_ITEMS_QUERY } from '../ItemGrid';
 
 import { Button } from 'react-bootstrap';
 import { ToastContainer, toast } from 'react-toastify';

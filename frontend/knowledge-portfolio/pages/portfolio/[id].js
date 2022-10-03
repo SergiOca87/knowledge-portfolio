@@ -21,19 +21,18 @@ import {
 } from 'react-icons/fa';
 import Link from 'next/link';
 
-import ItemGrid from '../../components/ItemGrid';
-import Main from '../../components/Main';
+import ItemGrid from '../../components/items/ItemGrid';
+import Main from '../../components/layout/Main';
 // import PortfolioEdit from '../../components/PortfolioEdit';
 // import PortfolioOptionsContext, {
 // 	OptionsProvider,
 // } from '../../context/PortfolioOptionsContext';
-import UserStyleOptions from '../../components/UserStyleOptions';
+import UserStyleOptions from '../../components/user/UserStyleOptions';
 import OrderingModal from '../../components/OrderingModal';
 // import { LOGGED_IN_USER } from '../../components/User';
 import QrModal from '../../components/QrModal';
-import { useQuery } from '@apollo/client';
 import UserContext, { useUserState } from '../../context/userContext';
-import NotLoggedIn from '../../components/NotLoggedIn';
+import NotLoggedIn from '../../components/auth/NotLoggedIn';
 
 const StyledUserCard = styled.div`
 	display: flex;
@@ -114,7 +113,7 @@ const UserControls = styled.div`
 `;
 
 export default function UserPortfolioPage() {
-	const { user, setUser } = useUserState();
+	const { user } = useUserState();
 	const router = useRouter();
 	const { id } = router.query;
 	const [openModal, setOpenModal] = useState(false);

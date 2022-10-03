@@ -30,6 +30,8 @@ import {
 } from 'react-bootstrap';
 
 import Editor from '../Editor';
+import { useUserState } from '../../context/userContext';
+import { supabase } from '../../utils/supabaseClient';
 
 const StyledForm = styled(Form)`
 	max-width: 70rem;
@@ -45,84 +47,31 @@ const StyledForm = styled(Form)`
 	}
 `;
 
-const CREATE_ITEM_MUTATION = gql`
-	mutation CREATE_ITEM_MUTATION(
-		$title: String!
-		$description: String
-		$status: String
-		$author: ID!
-		$visibility: String
-		$singlePageContent: JSON
-		$mainImage: Upload
-		$categories: [CategoryWhereUniqueInput!]
-		$date: String
-		$urlTitle: String
-		$url: String
-	) {
-		createItem(
-			data: {
-				title: $title
-				description: $description
-				author: { connect: { id: $author } }
-				status: $status
-				visibility: $visibility
-				singlePageContent: $singlePageContent
-				mainImage: $mainImage
-				# categories: { connect: { id: $categories } }
-				date: $date
-				categories: { connect: $categories }
-				urlTitle: $urlTitle
-				url: $url
-			}
-		) {
-			# Do we need to return more things?
-			id
-			title
-			categories {
-				name
-				id
-				icon
-			}
-			# description
-		}
-	}
-`;
-
 export default function CreateItem() {
-	//
-	const {
-		loading: userLoading,
-		error: userError,
-		data: userData,
-	} = useQuery(LOGGED_IN_USER);
-
-	const user = userData?.authenticatedItem;
-	const userCategories = user?.categories;
-
-	console.log('logged in user...', userCategories);
-	// const userCategories = data.categories;
+	const { user } = useUserState();
 
 	const [inputs, setInputs] = useState({
 		title: '',
-		description: '',
-		author: user ? user?.id : '',
-		status: 'finished',
-		visibility: 'true',
-		singlePageContent: '',
-		mainImage: '',
-		categories: [],
-		urlTitle: '',
-		date: '',
-		url: '',
+		// description: '',
+		// author: user ? user?.id : '',
+		// status: 'finished',
+		// visibility: 'true',
+		// singlePageContent: '',
+		// mainImage: '',
+		// categories: [],
+		// urlTitle: '',
+		// date: '',
+		// url: '',
 	});
 
 	useEffect(() => {
 		setInputs({
 			...inputs,
-			author: user?.id,
+			// author: user?.id,
 		});
 	}, [user]);
 
+	/*
 	const content = {
 		entityMap: {},
 		blocks: [
@@ -148,16 +97,17 @@ export default function CreateItem() {
 			singlePageContent: JSON.stringify(contentState, null, 4),
 		});
 	};
+	*/
 	//////////////////////////////////////////////////////////
 
-	const [createItem, { loading, error, data }] = useMutation(
-		CREATE_ITEM_MUTATION,
-		{
-			variables: inputs,
-			refetchQueries: [{ query: LOGGED_IN_USER }],
-		}
-	);
-
+	// const [createItem, { loading, error, data }] = useMutation(
+	// CREATE_ITEM_MUTATION,
+	// {
+	// variables: inputs,
+	// refetchQueries: [{ query: LOGGED_IN_USER }],
+	// }
+	// );
+	//
 	// Adds changes to state
 	const handleChange = (e) => {
 		let { value, name, selectedOptions } = e.target;
@@ -194,13 +144,17 @@ export default function CreateItem() {
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 
+		const { error } = await supabase
+			.from('items')
+			.insert({ title: inputs.title });
+		/*
 		if (error) {
 			toast.error(error);
 		} else {
-			const res = await createItem();
+			
 
-			res?.data?.createItem &&
-				toast.success(`${res.data.createItem.title} has been created`);
+			// res?.data?.createItem &&
+			// toast.success(`${res.data.createItem.title} has been created`);
 
 			// Clear form on submit
 			setInputs({
@@ -210,7 +164,7 @@ export default function CreateItem() {
 				categories: [],
 			});
 		}
-
+*/
 		//TODO: Use React Toasts for errors
 		// (error);
 		//Redirect should happen here
@@ -228,8 +182,6 @@ export default function CreateItem() {
 				`}
 			>
 				<StyledForm method="POST" onSubmit={handleSubmit}>
-					//TODO: This or toast?
-					{error && <p>{error.message}</p>}
 					<Form.Group className="mb-5">
 						<Form.Label htmlFor="title">Title</Form.Label>
 						<Form.Control
@@ -241,6 +193,8 @@ export default function CreateItem() {
 							onChange={handleChange}
 						/>
 					</Form.Group>
+					{/*
+					
 					<Form.Group className="mb-5">
 						<Form.Label htmlFor="title">Main Image</Form.Label>
 						<Form.Control
@@ -275,20 +229,7 @@ export default function CreateItem() {
 							onChange={handleChange}
 						/>
 					</Form.Group>
-					//TODO: Cloudinary Images
-					{/* <div className="input-wrap">
-						<label htmlFor="image">
-							<span>Image</span>
-							<input
-								type="file"
-								id="image"
-								name="image"
-								onChange={handleChange}
-								accept="image/png, image/jpeg"
-							/>
-						</label>
-					</div> */}
-					{userCategories && (
+					{user?.userCategories && (
 						<Form.Group className="mb-5">
 							<Form.Label htmlFor="category">Category</Form.Label>
 							<p className="tip">
@@ -352,7 +293,8 @@ export default function CreateItem() {
 							if you need to create a detailed view of your item
 							with a longer description text, images or video.
 						</p>
-						{/* <div className="d-flex align-center">
+							*/}
+					{/* <div className="d-flex align-center">
 							<CustomToggle>
 								<Form.Check
 									type="switch"
@@ -365,6 +307,7 @@ export default function CreateItem() {
 								/>
 							</CustomToggle>
 						</div> */}
+					{/*
 					</label>
 					<Accordion>
 						<Accordion.Item eventKey="0">
@@ -412,6 +355,7 @@ export default function CreateItem() {
 							onChange={handleChange}
 						/>
 					</Form.Group>
+					*/}
 					<Button type="submit" value="submit" variant="primary">
 						Add
 					</Button>

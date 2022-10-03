@@ -3,7 +3,7 @@ import React from 'react';
 import Link from 'next/link';
 import DeleteItem from './DeleteItem';
 import { Button, Card, ListGroup, ListGroupItem } from 'react-bootstrap';
-import Categories from './Categories';
+import Categories from '../categories/Categories';
 import { FaPencilAlt } from 'react-icons/fa';
 import { FaTrashAlt } from 'react-icons/fa';
 
