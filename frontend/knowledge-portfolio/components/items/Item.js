@@ -28,7 +28,7 @@ export default function Item({ item, isPublic }) {
 				{item.title}
 				{item.date && <p>{item.date}</p>}
 			</Card.Header>
-			<Card.Body>
+			{/* <Card.Body>
 				<ListGroup className="list-group-flush">
 					{item.description && (
 						<ListGroupItem>
@@ -51,7 +51,6 @@ export default function Item({ item, isPublic }) {
 						</ListGroupItem>
 					)}
 
-					{/* <p>Category: {item.category.name}</p> */}
 					{item.categories.length && (
 						<ListGroupItem>
 							<Categories categories={item?.categories} />
@@ -67,8 +66,8 @@ export default function Item({ item, isPublic }) {
 						</ListGroupItem>
 					)}
 				</ListGroup>
-			</Card.Body>
-			{!isPublic && (
+			</Card.Body> */}
+			{/* {!isPublic && (
 				<div className="buttons">
 					<Link
 						href={{
@@ -87,7 +86,7 @@ export default function Item({ item, isPublic }) {
 						<FaTrashAlt />
 					</DeleteItem>
 				</div>
-			)}
+			)} */}
 		</StyledCard>
 	);
 }

@@ -146,13 +146,12 @@ export default function CreateItem() {
 
 		const { error } = await supabase
 			.from('items')
-			.insert({ title: inputs.title });
+			.insert({ title: inputs.title, username: user.email });
 		/*
 		if (error) {
 			toast.error(error);
 		} else {
 			
-
 			// res?.data?.createItem &&
 			// toast.success(`${res.data.createItem.title} has been created`);
 

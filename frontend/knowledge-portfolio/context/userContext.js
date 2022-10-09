@@ -21,6 +21,24 @@ export const UserProvider = ({ children }) => {
 				if (user) {
 					console.log('user in state', user);
 					setUser(user);
+
+					try {
+						// const user = supabase.auth.user();
+						const updates = {
+							id: user.id,
+							username: user.email,
+							updated_at: new Date(),
+						};
+
+						let { error } = await supabase
+							.from('profiles')
+							.upsert(updates);
+						if (error) {
+							throw error;
+						}
+					} catch (error) {
+						alert(error.message);
+					}
 				}
 				// setIsLoading(false);
 			}

@@ -31,6 +31,7 @@ export default function ItemGrid({
 	user,
 	isPublic,
 	// options,
+	items,
 	isPublicPage = false,
 	chosenCategory,
 	chosenText,
@@ -39,146 +40,144 @@ export default function ItemGrid({
 	//Number of items that are rendered
 	const [visibleItems, setVisibleItems] = useState(0);
 	const isAll = activeCategories?.includes('All') ? true : false;
+
 	// const { options, setOptions } = useContext(PortfolioOptionsContext);
 
-	let sortedArray = [...user?.items];
+	// let sortedArray = [...user?.items];
 
 	// Drag and Drop
 	// const [itemsPosition, setItemsPosition] = useState();
 
 	//TODO: This ordering needs to mutate the user options object (portfolioEdit)
-	const orderUserItemsArray = () => {
-		// Descending
-		if (user.options?.options?.ordering === 'ascending') {
-			sortedArray.reverse();
-		}
+	// const orderUserItemsArray = () => {
+	// 	// Descending
+	// 	if (user.options?.options?.ordering === 'ascending') {
+	// 		sortedArray.reverse();
+	// 	}
 
-		// alphabetical
-		if (user.options?.options?.ordering === 'alphabetical') {
-			sortedArray.sort((a, b) => a.title.localeCompare(b.title));
-		}
+	// 	// alphabetical
+	// 	if (user.options?.options?.ordering === 'alphabetical') {
+	// 		sortedArray.sort((a, b) => a.title.localeCompare(b.title));
+	// 	}
 
-		// Date
-		if (user.options?.options?.ordering === 'date') {
-			sortedArray.sort((a, b) => new Date(b.date) - new Date(a.date));
-		}
+	// 	// Date
+	// 	if (user.options?.options?.ordering === 'date') {
+	// 		sortedArray.sort((a, b) => new Date(b.date) - new Date(a.date));
+	// 	}
 
-		//TODO, not working because well, this never mutates the user
-		if (user.options?.options?.ordering === 'drag') {
-			sortedArray = user.options?.options?.reorderedItems;
-		}
+	// 	//TODO, not working because well, this never mutates the user
+	// 	if (user.options?.options?.ordering === 'drag') {
+	// 		sortedArray = user.options?.options?.reorderedItems;
+	// 	}
 
-		// if (user.options?.options?.ordering === 'drag') {
-		// 	handleOnDragEnd = (result) => {
-		// 		const [reorderedItem] = sortedArray.splice(
-		// 			result.source.index,
-		// 			1
-		// 		);
-		// 		sortedArray.splice(result.destination.index, 0, reorderedItem);
-		// 	};
-		// }
+	// 	// if (user.options?.options?.ordering === 'drag') {
+	// 	// 	handleOnDragEnd = (result) => {
+	// 	// 		const [reorderedItem] = sortedArray.splice(
+	// 	// 			result.source.index,
+	// 	// 			1
+	// 	// 		);
+	// 	// 		sortedArray.splice(result.destination.index, 0, reorderedItem);
+	// 	// 	};
+	// 	// }
 
-		return sortedArray;
-	};
+	// 	return sortedArray;
+	// };
 
 	// if (options.options.ordering === 'descending') {
 	// 	console.log('ordering is descending');
 	// 	user.items.reverse();
 	// }
 
-	const itemsToRender = () => {
-		if (isPublicPage && user.items && chosenText !== '' && !isAll) {
-			return orderUserItemsArray().filter((item) => {
-				return (
-					item.title
-						.toLowerCase()
-						.includes(chosenText.toLowerCase()) &&
-					activeCategories.every((activeCategory) => {
-						if (
-							item.categories.find(
-								(itemCategory) =>
-									itemCategory.name === activeCategory
-							) !== undefined
-						)
-							return true;
-					})
-				);
-			});
-			// Else If there are user.items and the chosenCategory is not "All", undefined or null and chosenText is empty
-		} else if (isPublicPage && user.items && chosenText === '' && !isAll) {
-			return orderUserItemsArray().filter((item) => {
-				return activeCategories.every((activeCategory) => {
-					if (
-						item.categories.find(
-							(itemCategory) =>
-								itemCategory.name === activeCategory
-						) !== undefined
-					)
-						return true;
-				});
-			});
-			// Else If there are user.items and the chosenCategory is "All", undefined or null and chosenText is not empty
-		} else if (isPublicPage && user.items && chosenText !== '' && isAll) {
-			return orderUserItemsArray().filter((item) =>
-				item.title.toLowerCase().includes(chosenText.toLowerCase())
-			);
-			//Else return all items
-		} else {
-			return orderUserItemsArray();
-		}
-	};
+	// const itemsToRender = () => {
+	// 	if (isPublicPage && user.items && chosenText !== '' && !isAll) {
+	// 		return orderUserItemsArray().filter((item) => {
+	// 			return (
+	// 				item.title
+	// 					.toLowerCase()
+	// 					.includes(chosenText.toLowerCase()) &&
+	// 				activeCategories.every((activeCategory) => {
+	// 					if (
+	// 						item.categories.find(
+	// 							(itemCategory) =>
+	// 								itemCategory.name === activeCategory
+	// 						) !== undefined
+	// 					)
+	// 						return true;
+	// 				})
+	// 			);
+	// 		});
+	// 		// Else If there are user.items and the chosenCategory is not "All", undefined or null and chosenText is empty
+	// 	} else if (isPublicPage && user.items && chosenText === '' && !isAll) {
+	// 		return orderUserItemsArray().filter((item) => {
+	// 			return activeCategories.every((activeCategory) => {
+	// 				if (
+	// 					item.categories.find(
+	// 						(itemCategory) =>
+	// 							itemCategory.name === activeCategory
+	// 					) !== undefined
+	// 				)
+	// 					return true;
+	// 			});
+	// 		});
+	// 		// Else If there are user.items and the chosenCategory is "All", undefined or null and chosenText is not empty
+	// 	} else if (isPublicPage && user.items && chosenText !== '' && isAll) {
+	// 		return orderUserItemsArray().filter((item) =>
+	// 			item.title.toLowerCase().includes(chosenText.toLowerCase())
+	// 		);
+	// 		//Else return all items
+	// 	} else {
+	// 		return orderUserItemsArray();
+	// 	}
+	// };
 
 	// On Page load, how many visible items are there?
-	useEffect(() => {
-		setVisibleItems(itemsToRender().length);
-	}, []);
+	// useEffect(() => {
+	// 	setVisibleItems(itemsToRender().length);
+	// }, []);
 
-	// On filters change
-	useEffect(() => {
-		setVisibleItems(itemsToRender().length);
-	}, [chosenCategory, chosenText, activeCategories]);
+	// // On filters change
+	// useEffect(() => {
+	// 	setVisibleItems(itemsToRender().length);
+	// }, [chosenCategory, chosenText, activeCategories]);
 
 	return (
 		<>
-			{user ? (
-				<>
-					<StyledItemGrid
-						css={css`
-							grid-template-columns: repeat(2, 1fr);
-							gap: 2rem;
-						`}
-					>
-						{user.items &&
-							itemsToRender().map((item, index) => {
+			<>
+				<StyledItemGrid
+					css={css`
+						grid-template-columns: repeat(2, 1fr);
+						gap: 2rem;
+					`}
+				>
+					{items
+						? items.map((item, index) => {
 								return (
 									<li key={item.id}>
 										<Item item={item} isPublic={isPublic} />
 									</li>
 								);
-							})}
+						  })
+						: ''}
 
-						{isPublicPage && visibleItems <= 0 && (
-							<h3>No results match your search criteria</h3>
-						)}
+					{isPublicPage && visibleItems <= 0 && (
+						<h3>No results match your search criteria</h3>
+					)}
 
-						{!isPublicPage && visibleItems <= 0 && (
-							<p>
-								You can now start adding items to your portfolio
-								or create a few categories first{' '}
-								<Link href="/add-category">Here</Link>
-							</p>
-						)}
+					{!isPublicPage && visibleItems <= 0 && (
+						<p>
+							You can now start adding items to your portfolio or
+							create a few categories first{' '}
+							<Link href="/add-category">Here</Link>
+						</p>
+					)}
 
-						{/* {!isPublicPage && (
+					{/* {!isPublicPage && (
 							<li lg={user?.options?.options?.cols}>
 								<StyledEmptyCard>Add</StyledEmptyCard>
 							</li>
 						)} */}
-					</StyledItemGrid>
-				</>
-			) : (
-				<p>Not logged in</p>
-			)}
+				</StyledItemGrid>
+			</>
 		</>
 	);
 }

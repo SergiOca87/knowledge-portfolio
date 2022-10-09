@@ -33,6 +33,7 @@ import OrderingModal from '../../components/OrderingModal';
 import QrModal from '../../components/QrModal';
 import UserContext, { useUserState } from '../../context/userContext';
 import NotLoggedIn from '../../components/auth/NotLoggedIn';
+import { supabase } from '../../utils/supabaseClient';
 
 const StyledUserCard = styled.div`
 	display: flex;
@@ -112,7 +113,7 @@ const UserControls = styled.div`
 	}
 `;
 
-export default function UserPortfolioPage() {
+export default function UserPortfolioPage({ items }) {
 	const { user } = useUserState();
 	const router = useRouter();
 	const { id } = router.query;
@@ -151,6 +152,7 @@ export default function UserPortfolioPage() {
 			<Container>
 				{user ? (
 					<>
+						//TODO: This should be a Component
 						<StyledUserCard>
 							{/* {user.options?.userImage !== 'undefined' ? (
 								<div
@@ -166,10 +168,10 @@ export default function UserPortfolioPage() {
 							)} */}
 							<h1>
 								Welcome to your portfolio,{' '}
-								<span className="secondary">{user?.name}</span>
+								{/* <span className="secondary">{user?.name}</span> */}
 							</h1>
 						</StyledUserCard>
-
+						//TODO: This should be a component
 						<UserControls>
 							<div>
 								<OverlayTrigger
@@ -254,10 +256,9 @@ export default function UserPortfolioPage() {
 								</OverlayTrigger>
 							</div>
 						</UserControls>
-
 						{/* {loop throug map} */}
 						<StyledGridWrap>
-							<ItemGrid user={user} />
+							<ItemGrid items={items} />
 						</StyledGridWrap>
 					</>
 				) : (
@@ -271,3 +272,9 @@ export default function UserPortfolioPage() {
 		</Main>
 	);
 }
+
+// TODO: Make sure this is ok vs useeffect if items are added and page is reloaded
+UserPortfolioPage.getInitialProps = async (ctx) => {
+	const { data, error } = await supabase.from('items').select();
+	return { items: data };
+};
