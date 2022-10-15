@@ -19,11 +19,8 @@ export const UserProvider = ({ children }) => {
 			// only update the react state if the component i
 			if (mounted) {
 				if (user) {
-					console.log('user in state', user);
-					setUser(user);
-
 					try {
-						// const user = supabase.auth.user();
+						// Create a user profile which is publicly accessible
 						const updates = {
 							id: user.id,
 							username: user.email,
@@ -33,6 +30,19 @@ export const UserProvider = ({ children }) => {
 						let { error } = await supabase
 							.from('profiles')
 							.upsert(updates);
+						if (error) {
+							throw error;
+						}
+					} catch (error) {
+						alert(error.message);
+					}
+
+					try {
+						let { data: profile, error } = await supabase
+							.from('profiles')
+							.select('*')
+							.eq('id', user.id);
+						setUser(profile[0]);
 						if (error) {
 							throw error;
 						}

@@ -71,44 +71,34 @@ export default function CreateItem() {
 		});
 	}, [user]);
 
-	/*
-	const content = {
-		entityMap: {},
-		blocks: [
-			{
-				key: '637gr',
-				text: 'Initialized from content state.',
-				type: 'unstyled',
-				depth: 0,
-				inlineStyleRanges: [],
-				entityRanges: [],
-				data: {},
-			},
-		],
-	};
+	// Single page content
+	// const content = {
+	// 	entityMap: {},
+	// 	blocks: [
+	// 		{
+	// 			key: '637gr',
+	// 			text: 'Initialized from content state.',
+	// 			type: 'unstyled',
+	// 			depth: 0,
+	// 			inlineStyleRanges: [],
+	// 			entityRanges: [],
+	// 			data: {},
+	// 		},
+	// 	],
+	// };
 
 	//WYSYWYG State
-	const [contentState, setContentState] = useState(convertFromRaw(content));
+	// const [contentState, setContentState] = useState(convertFromRaw(content));
 
-	const onContentStateChange = (contentState) => {
-		setContentState(contentState);
-		setInputs({
-			...inputs,
-			singlePageContent: JSON.stringify(contentState, null, 4),
-		});
-	};
-	*/
-	//////////////////////////////////////////////////////////
+	// const onContentStateChange = (contentState) => {
+	// 	setContentState(contentState);
+	// 	setInputs({
+	// 		...inputs,
+	// 		singlePageContent: JSON.stringify(contentState, null, 4),
+	// 	});
+	// };
 
-	// const [createItem, { loading, error, data }] = useMutation(
-	// CREATE_ITEM_MUTATION,
-	// {
-	// variables: inputs,
-	// refetchQueries: [{ query: LOGGED_IN_USER }],
-	// }
-	// );
-	//
-	// Adds changes to state
+	// Add input changes to state
 	const handleChange = (e) => {
 		let { value, name, selectedOptions } = e.target;
 
@@ -129,44 +119,44 @@ export default function CreateItem() {
 		}
 	};
 
-	//Single Page Details Drawer
-	//TODO: We can get rid of this or customize
-	// function CustomToggle({ children, eventKey }) {
-	// 	const decoratedOnClick = useAccordionButton(
-	// 		eventKey,
-	// 		() => 'totally custom!'
-	// 	);
-
-	// 	return <div onClick={decoratedOnClick}>{children}</div>;
-	// }
-
 	// Submit current state to create a new Item
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 
-		const { error } = await supabase
-			.from('items')
-			.insert({ title: inputs.title, username: user.email });
-		/*
+		const {
+			title,
+			// description,
+			// categories,
+			// singlePageContent,
+			// urlTitle,
+			// url,
+			// status,
+		} = inputs;
+
+		const { error } = await supabase.from('items').insert({
+			// created_at: date,
+			username: user.username,
+			title,
+			// description,
+			// categories,
+			// singlePageContent,
+			// urlTitle,
+			// url,
+			// status,
+			userId: user.id,
+		});
+
 		if (error) {
 			toast.error(error);
 		} else {
-			
-			// res?.data?.createItem &&
-			// toast.success(`${res.data.createItem.title} has been created`);
-
 			// Clear form on submit
 			setInputs({
 				title: '',
-				description: '',
-				status: 'finished',
-				categories: [],
+				// description: '',
+				// status: 'finished',
+				// categories: [],
 			});
 		}
-*/
-		//TODO: Use React Toasts for errors
-		// (error);
-		//Redirect should happen here
 	};
 
 	return (
@@ -180,6 +170,7 @@ export default function CreateItem() {
 					padding: 4rem 2rem;
 				`}
 			>
+				{/*TODO: Should be its own component*/}
 				<StyledForm method="POST" onSubmit={handleSubmit}>
 					<Form.Group className="mb-5">
 						<Form.Label htmlFor="title">Title</Form.Label>
@@ -204,7 +195,8 @@ export default function CreateItem() {
 							onChange={handleChange}
 						/>
 					</Form.Group>
-					<Form.Group className="mb-5">
+					*/}
+					{/* <Form.Group className="mb-5">
 						<Form.Label htmlFor="date">Date</Form.Label>
 						<Form.Control
 							type="date"
@@ -268,8 +260,8 @@ export default function CreateItem() {
 							<option value="finished">Finished</option>
 							<option value="unfinished">Unfinished</option>
 						</Form.Select>
-					</Form.Group>
-					<Form.Group className="mb-5">
+					</Form.Group> */}
+					{/* <Form.Group className="mb-5">
 						<Form.Label htmlFor="status">
 							Visibility (public or private)
 						</Form.Label>
@@ -282,7 +274,7 @@ export default function CreateItem() {
 							<option value="true">Public</option>
 							<option value="false">Private</option>
 						</Form.Select>
-					</Form.Group>
+					</Form.Group> */}
 					<label>
 						<p className="tip">
 							Adding single page content will enable a "More
@@ -292,30 +284,15 @@ export default function CreateItem() {
 							if you need to create a detailed view of your item
 							with a longer description text, images or video.
 						</p>
-							*/}
-					{/* <div className="d-flex align-center">
-							<CustomToggle>
-								<Form.Check
-									type="switch"
-									label="Single Page Content"
-									id="singlePage"
-									name="singlePage"
-
-									// value={inputs.singlePage}
-									// onChange={handleChange}
-								/>
-							</CustomToggle>
-						</div> */}
-					{/*
 					</label>
-					<Accordion>
+					{/* <Accordion>
 						<Accordion.Item eventKey="0">
 							<Accordion.Header>
 								Single Page Content
 							</Accordion.Header>
 							<Accordion.Body>
 								<Editor
-									// editorState={editorState}
+									
 									editorClassName="single-page-editor"
 									onContentStateChange={onContentStateChange}
 								/>
@@ -327,8 +304,8 @@ export default function CreateItem() {
 								/>
 							</Accordion.Body>
 						</Accordion.Item>
-					</Accordion>
-					<Form.Group className="mb-5">
+					</Accordion> */}
+					{/* <Form.Group className="mb-5">
 						<p className="tip">
 							Use the URL field to direct the user to an external
 							URL where you can show more of your portfolio item.
@@ -353,8 +330,8 @@ export default function CreateItem() {
 							value={inputs.url}
 							onChange={handleChange}
 						/>
-					</Form.Group>
-					*/}
+					</Form.Group> */}
+
 					<Button type="submit" value="submit" variant="primary">
 						Add
 					</Button>
