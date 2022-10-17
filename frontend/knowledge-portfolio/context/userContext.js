@@ -5,7 +5,8 @@ import { supabase } from '../utils/supabaseClient';
 const UserStateContext = createContext();
 
 export const UserProvider = ({ children }) => {
-	const [user, setUser] = useState('');
+	const [user, setUser] = useState(null);
+	const [userCategories, setUserCategories] = useState(null);
 
 	useEffect(() => {
 		let mounted = true;
@@ -49,6 +50,21 @@ export const UserProvider = ({ children }) => {
 					} catch (error) {
 						alert(error.message);
 					}
+
+					try {
+						let { data: categories, error } = await supabase
+							.from('categories')
+							.select('*')
+							.eq('userId', user.id);
+						setUserCategories(categories);
+
+						console.log(userCategories);
+						if (error) {
+							throw error;
+						}
+					} catch (error) {
+						alert(error.message);
+					}
 				}
 				// setIsLoading(false);
 			}
@@ -57,7 +73,9 @@ export const UserProvider = ({ children }) => {
 	}, []);
 
 	return (
-		<UserStateContext.Provider value={{ user, setUser }}>
+		<UserStateContext.Provider
+			value={{ user, setUser, userCategories, setUserCategories }}
+		>
 			{children}
 		</UserStateContext.Provider>
 	);

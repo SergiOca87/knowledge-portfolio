@@ -32,6 +32,7 @@ export default function ItemGrid({
 	isPublic,
 	// options,
 	items,
+	categories,
 	isPublicPage = false,
 	chosenCategory,
 	chosenText,
@@ -140,6 +141,7 @@ export default function ItemGrid({
 	// 	setVisibleItems(itemsToRender().length);
 	// }, [chosenCategory, chosenText, activeCategories]);
 
+	console.log('in item grid, these are the categories', categories);
 	return (
 		<>
 			<>

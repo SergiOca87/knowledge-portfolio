@@ -66,7 +66,7 @@ const StyledGridWrap = styled.div`
 	position: relative;
 `;
 
-export default function UserPortfolioPage({ items }) {
+export default function UserPortfolioPage({ items, categories }) {
 	const { user } = useUserState();
 	// const [items, setItems] = useState();
 
@@ -120,7 +120,7 @@ export default function UserPortfolioPage({ items }) {
 
 						<StyledGridWrap>
 							<PortfolioControls />
-							<ItemGrid items={items} />
+							<ItemGrid items={items} categories={categories} />
 						</StyledGridWrap>
 					</>
 				) : (
@@ -143,14 +143,25 @@ export async function getStaticProps(context) {
 	const userId = params.id;
 
 	// Fetch items related to that ID (foreign key relationship)
-	let { data: items, error } = await supabase
+	let { data: items } = await supabase
 		.from('items')
+		.select('*')
+		.eq('userId', userId);
+
+	// Store existing category ids on items and flatten the array into a sigle Array
+	// Not necessary anymore
+	// const categoryIds = items.map((item) => item.categories).flat();
+
+	// Fetch User categories
+	let { data: categories } = await supabase
+		.from('categories')
 		.select('*')
 		.eq('userId', userId);
 
 	return {
 		props: {
 			items,
+			categories,
 		},
 		revalidate: 60,
 	};

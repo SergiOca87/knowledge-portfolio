@@ -48,17 +48,16 @@ const StyledForm = styled(Form)`
 `;
 
 export default function CreateItem() {
-	const { user } = useUserState();
+	const { user, userCategories } = useUserState();
 
 	const [inputs, setInputs] = useState({
 		title: '',
-		// description: '',
-		// author: user ? user?.id : '',
+		description: '',
 		// status: 'finished',
 		// visibility: 'true',
 		// singlePageContent: '',
 		// mainImage: '',
-		// categories: [],
+		categories: [],
 		// urlTitle: '',
 		// date: '',
 		// url: '',
@@ -67,7 +66,6 @@ export default function CreateItem() {
 	useEffect(() => {
 		setInputs({
 			...inputs,
-			// author: user?.id,
 		});
 	}, [user]);
 
@@ -104,7 +102,7 @@ export default function CreateItem() {
 
 		if (name === 'categories') {
 			let values = Array.from(selectedOptions).map((option) => {
-				return { id: option.value };
+				return option.value;
 			});
 
 			setInputs({
@@ -125,20 +123,22 @@ export default function CreateItem() {
 
 		const {
 			title,
-			// description,
-			// categories,
+			description,
+			categories,
 			// singlePageContent,
 			// urlTitle,
 			// url,
 			// status,
 		} = inputs;
 
+		console.log('inserting these inputs:', inputs);
+
 		const { error } = await supabase.from('items').insert({
 			// created_at: date,
 			username: user.username,
 			title,
-			// description,
-			// categories,
+			description,
+			categories: [...categories],
 			// singlePageContent,
 			// urlTitle,
 			// url,
@@ -152,9 +152,9 @@ export default function CreateItem() {
 			// Clear form on submit
 			setInputs({
 				title: '',
-				// description: '',
+				description: '',
 				// status: 'finished',
-				// categories: [],
+				categories: [],
 			});
 		}
 	};
@@ -206,6 +206,7 @@ export default function CreateItem() {
 							onChange={handleChange}
 						/>
 					</Form.Group>
+						*/}
 					<Form.Group className="mb-5">
 						<Form.Label htmlFor="description">
 							Description
@@ -220,7 +221,7 @@ export default function CreateItem() {
 							onChange={handleChange}
 						/>
 					</Form.Group>
-					{user?.userCategories && (
+					{userCategories && (
 						<Form.Group className="mb-5">
 							<Form.Label htmlFor="category">Category</Form.Label>
 							<p className="tip">
@@ -249,6 +250,7 @@ export default function CreateItem() {
 							</Form.Select>
 						</Form.Group>
 					)}
+					{/*
 					<Form.Group className="mb-5">
 						<Form.Label htmlFor="status">status</Form.Label>
 						<Form.Select
