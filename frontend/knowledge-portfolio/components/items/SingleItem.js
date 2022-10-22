@@ -36,39 +36,39 @@ const StyledSingleItem = styled.div`
 	}
 `;
 
-const SINGLE_ITEM_QUERY = gql`
-	query SINGLE_ITEM_QUERY($id: ID!) {
-		Item(where: { id: $id }) {
-			title
-			description
-			status
-			singlePageContent
-			author {
-				name
-				# image
-			}
-			categories {
-				id
-				name
-				icon
-			}
-		}
-	}
-`;
+// const SINGLE_ITEM_QUERY = gql`
+// 	query SINGLE_ITEM_QUERY($id: ID!) {
+// 		Item(where: { id: $id }) {
+// 			title
+// 			description
+// 			status
+// 			singlePageContent
+// 			author {
+// 				name
+// 				# image
+// 			}
+// 			categories {
+// 				id
+// 				name
+// 				icon
+// 			}
+// 		}
+// 	}
+// `;
 
 export default function SingleItem({ id }) {
-	const { data, loading, error } = useQuery(SINGLE_ITEM_QUERY, {
-		variables: {
-			id,
-		},
-	});
+	// const { data, loading, error } = useQuery(SINGLE_ITEM_QUERY, {
+	// 	variables: {
+	// 		id,
+	// 	},
+	// });
 
-	if (loading) return <p>Loading...</p>;
+	// if (loading) return <p>Loading...</p>;
 
 	//TODO: Toast
-	if (error) return <p>error {error.message}</p>;
+	// if (error) return <p>error {error.message}</p>;
 
-	const markup = draftToHtml(JSON.parse(data.Item.singlePageContent));
+	// const markup = draftToHtml(JSON.parse(data.Item.singlePageContent));
 
 	return (
 		<>

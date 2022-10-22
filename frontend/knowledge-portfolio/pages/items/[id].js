@@ -16,3 +16,7 @@ export default function SingleItemPage() {
 		</Main>
 	);
 }
+
+//TODO: Here we need getStaticProps() and getStaticPaths() with a fallback set to true and a "notFound" fallback, apuntes
+
+//TODO: Instead of router we use params on getStaticPaths

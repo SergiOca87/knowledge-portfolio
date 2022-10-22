@@ -165,3 +165,5 @@ export default function UserPage() {
 		</StyledMain>
 	);
 }
+
+//TODO: Maybe we should either use the user context, or get it from getServerSideProps() (apuntes)

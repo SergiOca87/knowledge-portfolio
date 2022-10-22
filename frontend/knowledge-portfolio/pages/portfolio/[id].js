@@ -135,6 +135,8 @@ export default function UserPortfolioPage({ items, categories }) {
 	);
 }
 
+// TODO: Maybe the right approach is to use serverSideProps, identify the user who is making the request via a supabase function like getUser
+
 export async function getStaticProps(context) {
 	// Get params from URL
 	const { params } = context;

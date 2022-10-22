@@ -21,12 +21,17 @@ const StyledCard = styled(Card)`
 `;
 
 //TODO: Add Date
-export default function Item({ item, isPublic }) {
+export default function Item({ item, categories, isPublic }) {
 	return (
 		<StyledCard>
 			<Card.Header as="h4" className="mb-3">
-				{item.title}
+				<h3>{item.title}</h3>
+				<p>{item.description}</p>
 				{item.date && <p>{item.date}</p>}
+
+				{/* {Maybe categoriesList could be a component} */}
+				{categories &&
+					categories.map((category) => <p>{category.name}</p>)}
 			</Card.Header>
 			{/* <Card.Body>
 				<ListGroup className="list-group-flush">

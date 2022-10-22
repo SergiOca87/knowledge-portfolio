@@ -141,7 +141,6 @@ export default function ItemGrid({
 	// 	setVisibleItems(itemsToRender().length);
 	// }, [chosenCategory, chosenText, activeCategories]);
 
-	console.log('in item grid, these are the categories', categories);
 	return (
 		<>
 			<>
@@ -153,9 +152,26 @@ export default function ItemGrid({
 				>
 					{items
 						? items.map((item, index) => {
+								let itemCategories = '';
+
+								// If the item has categories and they match a category ID from the user categories, pass it to the item
+								// Maybe this logic should not be here in the Component
+								if (item.categories && item.categories.length) {
+									itemCategories = categories.filter(
+										(category) =>
+											item.categories.includes(
+												category.id
+											)
+									);
+								}
+
 								return (
 									<li key={item.id}>
-										<Item item={item} isPublic={isPublic} />
+										<Item
+											item={item}
+											categories={itemCategories}
+											isPublic={isPublic}
+										/>
 									</li>
 								);
 						  })

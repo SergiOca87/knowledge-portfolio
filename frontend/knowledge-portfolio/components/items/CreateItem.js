@@ -55,7 +55,7 @@ export default function CreateItem() {
 		description: '',
 		// status: 'finished',
 		// visibility: 'true',
-		// singlePageContent: '',
+		singlePageContent: '',
 		// mainImage: '',
 		categories: [],
 		// urlTitle: '',
@@ -70,31 +70,31 @@ export default function CreateItem() {
 	}, [user]);
 
 	// Single page content
-	// const content = {
-	// 	entityMap: {},
-	// 	blocks: [
-	// 		{
-	// 			key: '637gr',
-	// 			text: 'Initialized from content state.',
-	// 			type: 'unstyled',
-	// 			depth: 0,
-	// 			inlineStyleRanges: [],
-	// 			entityRanges: [],
-	// 			data: {},
-	// 		},
-	// 	],
-	// };
+	const content = {
+		entityMap: {},
+		blocks: [
+			{
+				key: '637gr',
+				text: 'Initialized from content state.',
+				type: 'unstyled',
+				depth: 0,
+				inlineStyleRanges: [],
+				entityRanges: [],
+				data: {},
+			},
+		],
+	};
+
+	const [contentState, setContentState] = useState(convertFromRaw(content));
 
 	//WYSYWYG State
-	// const [contentState, setContentState] = useState(convertFromRaw(content));
-
-	// const onContentStateChange = (contentState) => {
-	// 	setContentState(contentState);
-	// 	setInputs({
-	// 		...inputs,
-	// 		singlePageContent: JSON.stringify(contentState, null, 4),
-	// 	});
-	// };
+	const onContentStateChange = (contentState) => {
+		setContentState(contentState);
+		setInputs({
+			...inputs,
+			singlePageContent: JSON.stringify(contentState, null, 4),
+		});
+	};
 
 	// Add input changes to state
 	const handleChange = (e) => {
@@ -125,13 +125,11 @@ export default function CreateItem() {
 			title,
 			description,
 			categories,
-			// singlePageContent,
-			// urlTitle,
-			// url,
-			// status,
+			singlePageContent,
+			urlTitle,
+			url,
+			status,
 		} = inputs;
-
-		console.log('inserting these inputs:', inputs);
 
 		const { error } = await supabase.from('items').insert({
 			// created_at: date,
@@ -139,10 +137,10 @@ export default function CreateItem() {
 			title,
 			description,
 			categories: [...categories],
-			// singlePageContent,
-			// urlTitle,
-			// url,
-			// status,
+			singlePageContent,
+			urlTitle,
+			url,
+			status,
 			userId: user.id,
 		});
 
@@ -153,9 +151,15 @@ export default function CreateItem() {
 			setInputs({
 				title: '',
 				description: '',
-				// status: 'finished',
+				singlePageContent: '',
+				urlTitle: '',
+				url: '',
+				status: 'true',
 				categories: [],
 			});
+
+			//TODO: This is not working (to clear the wysywyg), may have to reload the page on submit
+			setContentState(convertFromRaw(content));
 		}
 	};
 
@@ -250,7 +254,7 @@ export default function CreateItem() {
 							</Form.Select>
 						</Form.Group>
 					)}
-					{/*
+
 					<Form.Group className="mb-5">
 						<Form.Label htmlFor="status">status</Form.Label>
 						<Form.Select
@@ -259,10 +263,10 @@ export default function CreateItem() {
 							id="status"
 							onChange={handleChange}
 						>
-							<option value="finished">Finished</option>
-							<option value="unfinished">Unfinished</option>
+							<option value={true}>Finished</option>
+							<option value={false}>Unfinished</option>
 						</Form.Select>
-					</Form.Group> */}
+					</Form.Group>
 					{/* <Form.Group className="mb-5">
 						<Form.Label htmlFor="status">
 							Visibility (public or private)
@@ -287,27 +291,26 @@ export default function CreateItem() {
 							with a longer description text, images or video.
 						</p>
 					</label>
-					{/* <Accordion>
+					<Accordion>
 						<Accordion.Item eventKey="0">
 							<Accordion.Header>
 								Single Page Content
 							</Accordion.Header>
 							<Accordion.Body>
 								<Editor
-									
 									editorClassName="single-page-editor"
 									onContentStateChange={onContentStateChange}
 								/>
-								<textarea
+								{/* <textarea
 									value={inputs.singlePageContent}
 									css={css`
 										display: none;
 									`}
-								/>
+								/> */}
 							</Accordion.Body>
 						</Accordion.Item>
-					</Accordion> */}
-					{/* <Form.Group className="mb-5">
+					</Accordion>
+					<Form.Group className="mb-5">
 						<p className="tip">
 							Use the URL field to direct the user to an external
 							URL where you can show more of your portfolio item.
@@ -332,7 +335,7 @@ export default function CreateItem() {
 							value={inputs.url}
 							onChange={handleChange}
 						/>
-					</Form.Group> */}
+					</Form.Group>
 
 					<Button type="submit" value="submit" variant="primary">
 						Add

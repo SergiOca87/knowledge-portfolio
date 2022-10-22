@@ -8,6 +8,7 @@ export const UserProvider = ({ children }) => {
 	const [user, setUser] = useState(null);
 	const [userCategories, setUserCategories] = useState(null);
 
+	//TODO: Can we use getServerSideProps here? Is it worth it?
 	useEffect(() => {
 		let mounted = true;
 		async function getInitialUser() {
