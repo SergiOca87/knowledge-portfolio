@@ -1,14 +1,11 @@
 import React, { useContext, useState } from 'react';
 import UserContext from '../../context/userContext';
 import Categories from './Categories';
-import { USER_CATEGORIES_QUERY, getCategories } from '../user/UserCategories';
+// import { USER_CATEGORIES_QUERY, getCategories } from '../user/UserCategories';
 
-export default function CategoryCloudFilter({
-	activeCategories,
-	setActiveCategories,
-	userId,
-}) {
-	const userCategories = getCategories(userId);
+export default function CategoryCloudFilter({ categories }) {
+	// const userCategories = getCategories(userId);
+	const [activeCategories, setActiveCategories] = useState('');
 
 	//TODO: Handle the "All" case
 	const handleButtonClick = (e) => {
@@ -39,9 +36,9 @@ export default function CategoryCloudFilter({
 				handleButtonClick(e);
 			}}
 		>
-			{userCategories && (
+			{categories && (
 				<Categories
-					categories={userCategories.allCategories}
+					categories={categories}
 					asButtons={true}
 					activeCategories={activeCategories}
 				/>

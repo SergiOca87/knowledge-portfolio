@@ -22,6 +22,7 @@ import {
 import Link from 'next/link';
 
 import ItemGrid from '../../components/items/ItemGrid';
+import CategoryCloudFilter from '../../components/categories/CategoryCloudFilter';
 import Main from '../../components/layout/Main';
 // import PortfolioEdit from '../../components/PortfolioEdit';
 // import PortfolioOptionsContext, {
@@ -68,7 +69,10 @@ const StyledGridWrap = styled.div`
 
 export default function UserPortfolioPage({ items, categories }) {
 	const { user } = useUserState();
+	const [filteredCategories, setFilteredCategories] = useState('');
 	// const [items, setItems] = useState();
+
+	//TODO: Lift state form categoryCloudFilter to a state here and filter items
 
 	//TODO: Add some toast error
 	// useEffect(() => {
@@ -120,6 +124,7 @@ export default function UserPortfolioPage({ items, categories }) {
 
 						<StyledGridWrap>
 							<PortfolioControls />
+							<CategoryCloudFilter categories={categories} />
 							<ItemGrid items={items} categories={categories} />
 						</StyledGridWrap>
 					</>
@@ -160,6 +165,7 @@ export async function getStaticProps(context) {
 		.select('*')
 		.eq('userId', userId);
 
+	//TODO Revalidated or use getServerSideProps? To check on each refresh
 	return {
 		props: {
 			items,

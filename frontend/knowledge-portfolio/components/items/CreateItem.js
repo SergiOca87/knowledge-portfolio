@@ -236,6 +236,7 @@ export default function CreateItem() {
 								aria-label="Categories"
 								name="categories"
 								id="category"
+								multiple
 								onChange={handleChange}
 							>
 								<option value="Uncategorized">

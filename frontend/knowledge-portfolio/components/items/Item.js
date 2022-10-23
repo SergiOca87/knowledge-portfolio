@@ -29,9 +29,13 @@ export default function Item({ item, categories, isPublic }) {
 				<p>{item.description}</p>
 				{item.date && <p>{item.date}</p>}
 
-				{/* {Maybe categoriesList could be a component} */}
-				{categories &&
-					categories.map((category) => <p>{category.name}</p>)}
+				{categories && (
+					<Categories
+						title={false}
+						categories={categories}
+						background={true}
+					/>
+				)}
 			</Card.Header>
 			{/* <Card.Body>
 				<ListGroup className="list-group-flush">
