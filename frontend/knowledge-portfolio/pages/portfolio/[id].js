@@ -69,10 +69,9 @@ const StyledGridWrap = styled.div`
 
 export default function UserPortfolioPage({ items, categories }) {
 	const { user } = useUserState();
-	const [filteredCategories, setFilteredCategories] = useState('');
+	// const [filteredCategories, setFilteredCategories] = useState('');
+	const [activeCategories, setActiveCategories] = useState([]);
 	// const [items, setItems] = useState();
-
-	//TODO: Lift state form categoryCloudFilter to a state here and filter items
 
 	//TODO: Add some toast error
 	// useEffect(() => {
@@ -124,8 +123,15 @@ export default function UserPortfolioPage({ items, categories }) {
 
 						<StyledGridWrap>
 							<PortfolioControls />
-							<CategoryCloudFilter categories={categories} />
-							<ItemGrid items={items} categories={categories} />
+							<CategoryCloudFilter
+								activeCategories={activeCategories}
+								setActiveCategories={setActiveCategories}
+							/>
+							<ItemGrid
+								items={items}
+								categories={categories}
+								activeCategories={activeCategories}
+							/>
 						</StyledGridWrap>
 					</>
 				) : (

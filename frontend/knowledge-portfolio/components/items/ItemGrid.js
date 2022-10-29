@@ -34,13 +34,13 @@ export default function ItemGrid({
 	items,
 	categories,
 	isPublicPage = false,
-	chosenCategory,
-	chosenText,
 	activeCategories,
+	chosenText,
+	// activeCategories,
 }) {
 	//Number of items that are rendered
 	const [visibleItems, setVisibleItems] = useState(0);
-	const isAll = activeCategories?.includes('All') ? true : false;
+	// const isAll = activeCategories?.includes('All') ? true : false;
 
 	// const { options, setOptions } = useContext(PortfolioOptionsContext);
 
@@ -140,6 +140,18 @@ export default function ItemGrid({
 	// useEffect(() => {
 	// 	setVisibleItems(itemsToRender().length);
 	// }, [chosenCategory, chosenText, activeCategories]);
+	const [filteredItems, setFilteredItems] = useState([]);
+
+	// On Page load, fill up the filteredItems Array with items
+	useEffect(() => {
+		setFilteredItems(items);
+	}, []);
+
+	useEffect(() => {
+		//TODO: When this changes (on every category button click), filter the items, maybe run a function or a state change.
+		//TODO: If activeCategories is empty, it equals All.
+		console.log('active Categories?', activeCategories);
+	}, [activeCategories]);
 
 	return (
 		<>
@@ -150,32 +162,28 @@ export default function ItemGrid({
 						gap: 2rem;
 					`}
 				>
-					{items
-						? items.map((item, index) => {
-								let itemCategories = '';
+					{filteredItems &&
+						filteredItems.map((item, index) => {
+							let itemCategories = '';
 
-								// If the item has categories and they match a category ID from the user categories, pass it to the item
-								// Maybe this logic should not be here in the Component
-								if (item.categories && item.categories.length) {
-									itemCategories = categories.filter(
-										(category) =>
-											item.categories.includes(
-												category.id
-											)
-									);
-								}
-
-								return (
-									<li key={item.id}>
-										<Item
-											item={item}
-											categories={itemCategories}
-											isPublic={isPublic}
-										/>
-									</li>
+							// If the item has categories and they match a category ID from the user categories, pass it to the item
+							// Maybe this logic should not be here in the Component
+							if (item.categories && item.categories.length) {
+								itemCategories = categories.filter((category) =>
+									item.categories.includes(category.id)
 								);
-						  })
-						: ''}
+							}
+
+							return (
+								<li key={item.id}>
+									<Item
+										item={item}
+										categories={itemCategories}
+										isPublic={isPublic}
+									/>
+								</li>
+							);
+						})}
 
 					{isPublicPage && visibleItems <= 0 && (
 						<h3>No results match your search criteria</h3>

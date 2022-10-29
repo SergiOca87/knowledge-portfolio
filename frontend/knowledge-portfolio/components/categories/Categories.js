@@ -45,49 +45,22 @@ export default function Categories({
 	title = true,
 	background = false,
 	activeCategories,
+	setClickedCategories,
 }) {
+	console.log('categories', categories);
 	return (
 		<StyledCategories>
 			{title ? categoriesTitle(categories) : ''}
-			<div className="categories">
-				{asButtons && (
-					<Button
-						size="sm"
-						className={
-							activeCategories.includes('All') ? 'active' : ''
-						}
-						data-category="All"
-					>
-						<span>All</span>
-					</Button>
-				)}
 
-				{categories?.map((category) => {
-					let IconName = '';
+			{categories.map((category) => {
+				let IconName = '';
 
-					if (category.icon) {
-						IconName = FontAwesome[category.icon];
-					}
-					return asButtons ? (
-						<Button
-							size="sm"
-							key={category.id}
-							data-category={`${category.name}`}
-							className={
-								activeCategories.includes(category.name)
-									? 'active'
-									: ''
-							}
-						>
-							{IconName && (
-								<span className="category">
-									<IconName />
-								</span>
-							)}
+				if (category.icon) {
+					IconName = FontAwesome[category.icon];
+				}
 
-							<span>{category.name}</span>
-						</Button>
-					) : (
+				return (
+					<div className="categories">
 						<div
 							key={category.id}
 							css={css`
@@ -104,9 +77,9 @@ export default function Categories({
 
 							<span>{category.name}</span>
 						</div>
-					);
-				})}
-			</div>
+					</div>
+				);
+			})}
 		</StyledCategories>
 	);
 }
