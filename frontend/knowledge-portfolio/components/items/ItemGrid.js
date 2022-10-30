@@ -148,9 +148,19 @@ export default function ItemGrid({
 	}, []);
 
 	useEffect(() => {
-		//TODO: When this changes (on every category button click), filter the items, maybe run a function or a state change.
-		//TODO: If activeCategories is empty, it equals All.
-		console.log('active Categories?', activeCategories);
+		if (activeCategories.length === 0) {
+			setFilteredItems(items);
+		} else {
+			setFilteredItems(
+				filteredItems.filter(
+					(item) =>
+						item.categories !== null &&
+						item.categories.some((category) =>
+							activeCategories.includes(category)
+						)
+				)
+			);
+		}
 	}, [activeCategories]);
 
 	return (

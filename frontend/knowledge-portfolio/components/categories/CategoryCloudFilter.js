@@ -19,12 +19,12 @@ export default function CategoryCloudFilter({
 		// If click is on svg or span, find the parent button
 		const button = target.closest('.btn-primary');
 
-		// Get the category name stored in the data attr
-		const clickedCategory = button.dataset.category;
+		// Get the category id stored in the data attr
+		const clickedCategory = Number(button.dataset.category);
 
-		if (clickedCategory === 'All') {
-			setActiveCategories([]);
-		} else if (activeCategories?.includes(clickedCategory)) {
+		console.log(clickedCategory);
+
+		if (activeCategories?.includes(clickedCategory)) {
 			// Deselect the category (button toggle), so remove it from the activeCategories
 			setActiveCategories(
 				activeCategories.filter(
@@ -42,7 +42,7 @@ export default function CategoryCloudFilter({
 				size="sm"
 				className={activeCategories?.includes('All') ? 'active' : ''}
 				data-category="All"
-				onClick={(e) => handleButtonClick(e.target)}
+				onClick={(e) => setActiveCategories([])}
 			>
 				<span>All</span>
 			</Button>
@@ -57,9 +57,9 @@ export default function CategoryCloudFilter({
 						<Button
 							size="sm"
 							key={category.id}
-							data-category={`${category.name}`}
+							data-category={`${category.id}`}
 							className={
-								activeCategories?.includes(category.name)
+								activeCategories?.includes(category.id)
 									? 'active'
 									: ''
 							}

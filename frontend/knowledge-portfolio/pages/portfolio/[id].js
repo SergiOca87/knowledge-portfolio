@@ -72,7 +72,6 @@ export default function UserPortfolioPage({ items, categories }) {
 	// const [filteredCategories, setFilteredCategories] = useState('');
 	const [activeCategories, setActiveCategories] = useState([]);
 	// const [items, setItems] = useState();
-
 	//TODO: Add some toast error
 	// useEffect(() => {
 	// 	const fetchItems = async () => {
