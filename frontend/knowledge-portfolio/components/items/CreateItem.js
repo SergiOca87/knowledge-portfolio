@@ -6,19 +6,14 @@
 //TODO: At the moment we can connect existing categories, but may be useful to be able to create them ehre as well
 //TODO: Refetch the logged in user (the only poissible user that should be able to create items)
 import { useContext, useEffect, useState } from 'react';
-import { useMutation, useQuery } from '@apollo/client';
-import gql from 'graphql-tag';
-import { USER_CATEGORIES_QUERY, getCategories } from '../user/UserCategories';
 import Link from 'next/link';
-import { createUploadLink } from 'apollo-upload-client';
-// import { USER_ITEMS_QUERY } from './ItemGrid';
-import { CURRENT_USER_QUERY } from '../user/User';
-import { LOGGED_IN_USER } from '../user/User';
 import Router from 'next/router';
-
+import Categories from '../categories/Categories';
 import { EditorState, convertFromRaw } from 'draft-js';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+
+import FloatingLabel from 'react-bootstrap/FloatingLabel';
 
 import styled, { css } from 'styled-components';
 import {
@@ -177,15 +172,17 @@ export default function CreateItem() {
 				{/*TODO: Should be its own component*/}
 				<StyledForm method="POST" onSubmit={handleSubmit}>
 					<Form.Group className="mb-5">
-						<Form.Label htmlFor="title">Title</Form.Label>
-						<Form.Control
-							type="text"
-							name="title"
-							id="title"
-							required
-							value={inputs.title}
-							onChange={handleChange}
-						/>
+						<FloatingLabel controlId="floatingInput" label="Title">
+							<Form.Control
+								type="text"
+								name="title"
+								id="title"
+								placeholder="Title"
+								required
+								value={inputs.title}
+								onChange={handleChange}
+							/>
+						</FloatingLabel>
 					</Form.Group>
 					{/*
 					
@@ -212,18 +209,21 @@ export default function CreateItem() {
 					</Form.Group>
 						*/}
 					<Form.Group className="mb-5">
-						<Form.Label htmlFor="description">
-							Description
-						</Form.Label>
-						<Form.Control
-							as="textarea"
-							rows={3}
-							name="description"
-							id="description"
-							maxLength="300"
-							value={inputs.description}
-							onChange={handleChange}
-						/>
+						<FloatingLabel
+							controlId="floatingInput"
+							label="Description"
+						>
+							<Form.Control
+								as="textarea"
+								rows={3}
+								name="description"
+								placeholder="Description"
+								id="description"
+								maxLength="300"
+								value={inputs.description}
+								onChange={handleChange}
+							/>
+						</FloatingLabel>
 					</Form.Group>
 					{userCategories && (
 						<Form.Group className="mb-5">
@@ -232,7 +232,15 @@ export default function CreateItem() {
 								If you need a new category you can create it{' '}
 								<Link href="/add-category"> here</Link>
 							</p>
-							<Form.Select
+
+							<Categories
+								title={false}
+								categories={userCategories}
+								background={true}
+								asButtons={true}
+							/>
+
+							{/* <Form.Select
 								aria-label="Categories"
 								name="categories"
 								id="category"
@@ -252,7 +260,7 @@ export default function CreateItem() {
 										</option>
 									);
 								})}
-							</Form.Select>
+							</Form.Select> */}
 						</Form.Group>
 					)}
 

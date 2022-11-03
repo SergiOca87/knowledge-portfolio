@@ -26,24 +26,15 @@ export default function Item({ item, categories, isPublic }) {
 		<StyledCard>
 			<Card.Header as="h4" className="mb-3">
 				<h3>{item.title}</h3>
-				<p>{item.description}</p>
 				{item.date && <p>{item.date}</p>}
-
-				{categories && (
-					<Categories
-						title={false}
-						categories={categories}
-						background={true}
-					/>
-				)}
 			</Card.Header>
-			{/* <Card.Body>
+			<Card.Body>
 				<ListGroup className="list-group-flush">
 					{item.description && (
 						<ListGroupItem>
 							<h5 className="secondary">Description:</h5>
 							<p>{item.description}</p>
-							<p>{item.mainImage?.publicUrl}</p>
+							{/* <p>{item.mainImage?.publicUrl}</p> */}
 						</ListGroupItem>
 					)}
 
@@ -60,11 +51,16 @@ export default function Item({ item, categories, isPublic }) {
 						</ListGroupItem>
 					)}
 
-					{item.categories.length && (
+					{categories && (
 						<ListGroupItem>
-							<Categories categories={item?.categories} />
+							<Categories
+								title={false}
+								categories={categories}
+								background={true}
+							/>
 						</ListGroupItem>
 					)}
+
 					{item.singlePageContent && (
 						<ListGroupItem>
 							<Link href={`/items/${item.id}`}>
@@ -75,8 +71,8 @@ export default function Item({ item, categories, isPublic }) {
 						</ListGroupItem>
 					)}
 				</ListGroup>
-			</Card.Body> */}
-			{/* {!isPublic && (
+			</Card.Body>
+			{!isPublic && (
 				<div className="buttons">
 					<Link
 						href={{
@@ -95,7 +91,7 @@ export default function Item({ item, categories, isPublic }) {
 						<FaTrashAlt />
 					</DeleteItem>
 				</div>
-			)} */}
+			)}
 		</StyledCard>
 	);
 }

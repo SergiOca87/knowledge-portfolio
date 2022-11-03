@@ -54,6 +54,9 @@ export default function CategoryCloudFilter({
 				}
 				return (
 					<>
+						{/* //TODO: These should be the Category component now
+						//TODO: Handle state change here for both filtering and
+						submitting selected categories */}
 						<Button
 							size="sm"
 							key={category.id}

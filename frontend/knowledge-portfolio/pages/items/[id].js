@@ -1,20 +1,52 @@
 import React from 'react';
-import SingleItem from '../../components/SingleItem';
+import SingleItem from '../../components/items/SingleItem';
 import { useRouter } from 'next/router';
-import Main from '../../components/Main';
+import Main from '../../components/layout/Main';
 import { Container } from 'react-bootstrap';
+import { supabase } from '../../utils/supabaseClient';
 
-export default function SingleItemPage() {
-	const router = useRouter();
-	const { id } = router.query;
-
+export default function SingleItemPage({ item }) {
 	return (
 		<Main>
 			<Container>
-				<SingleItem id={id} />
+				<SingleItem item={item} />
 			</Container>
 		</Main>
 	);
+}
+
+//TODO: I don't think this need revalidation?
+export async function getStaticProps(context) {
+	const { params } = context;
+
+	const itemId = params.id;
+
+	let { data: item } = await supabase
+		.from('items')
+		.select('*')
+		.eq('id', itemId);
+
+	return {
+		props: {
+			item,
+		},
+	};
+}
+
+export async function getStaticPaths() {
+	// Get all users from supabase
+	let { data, error } = await supabase.from('items').select('id');
+
+	console.log('data', data);
+
+	// Let Next.js know how many pages (user ids) are there
+	const paths = data.map((itemId) => ({
+		params: {
+			id: itemId.id.toString(),
+		},
+	}));
+
+	return { paths, fallback: false };
 }
 
 //TODO: Here we need getStaticProps() and getStaticPaths() with a fallback set to true and a "notFound" fallback, apuntes

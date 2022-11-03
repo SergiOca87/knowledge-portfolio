@@ -1,13 +1,10 @@
 /* eslint-disable react/react-in-jsx-scope */
 //TODO: Add a "back to all items"
 //TODO: Add the rest of the fields to the single item component
-
-import { useQuery } from '@apollo/client';
-import gql from 'graphql-tag';
 import styled from 'styled-components';
 import Head from 'next/head';
-import Layout from '../Layout';
-import Categories from './Categories';
+import Layout from '../layout/Layout';
+import Categories from '../categories/Categories';
 import draftToHtml from 'draftjs-to-html';
 import parse from 'html-react-parser';
 
@@ -56,7 +53,7 @@ const StyledSingleItem = styled.div`
 // 	}
 // `;
 
-export default function SingleItem({ id }) {
+export default function SingleItem({ item }) {
 	// const { data, loading, error } = useQuery(SINGLE_ITEM_QUERY, {
 	// 	variables: {
 	// 		id,
@@ -64,25 +61,37 @@ export default function SingleItem({ id }) {
 	// });
 
 	// if (loading) return <p>Loading...</p>;
+	const singleItem = item[0];
 
 	//TODO: Toast
 	// if (error) return <p>error {error.message}</p>;
 
-	// const markup = draftToHtml(JSON.parse(data.Item.singlePageContent));
+	const markup = singleItem.singlePageContent
+		? draftToHtml(JSON.parse(singleItem.singlePageContent))
+		: '';
+
+	console.log(
+		'markup',
+		markup,
+		'singlePageContent',
+		singleItem.singlePageContent,
+		singleItem
+	);
 
 	return (
 		<>
 			<StyledSingleItem>
-				<h1>{data.Item.title}</h1>
+				<h1>{singleItem.title}</h1>
 				<div className="meta">
-					<p>By: {data.Item.author.name}</p>
-					{data.Item.categories && (
-						<Categories categories={data.Item.categories} />
+					<p>By: {singleItem.username}</p>
+					{singleItem.categories && (
+						<Categories categories={singleItem.categories} />
 					)}
 				</div>
 				<hr />
 				<div className="content">
-					{console.log(JSON.parse(data.Item.singlePageContent))}
+					{singleItem.singlePageContent &&
+						console.log(JSON.parse(singleItem.singlePageContent))}
 					{parse(`${markup}`)}
 				</div>
 			</StyledSingleItem>
