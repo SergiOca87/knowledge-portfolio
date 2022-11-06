@@ -2,11 +2,13 @@ import React, { useContext, useEffect, useState } from 'react';
 import UserContext, { useUserState } from '../../context/userContext';
 import { Button } from 'react-bootstrap';
 import * as FontAwesome from 'react-icons/fa';
+import Category from './Category';
 // import { USER_CATEGORIES_QUERY, getCategories } from '../user/UserCategories';
 
 export default function CategoryCloudFilter({
 	activeCategories,
 	setActiveCategories,
+	all = false,
 }) {
 	const { userCategories } = useUserState();
 
@@ -38,14 +40,18 @@ export default function CategoryCloudFilter({
 
 	return (
 		<>
-			<Button
-				size="sm"
-				className={activeCategories?.includes('All') ? 'active' : ''}
-				data-category="All"
-				onClick={(e) => setActiveCategories([])}
-			>
-				<span>All</span>
-			</Button>
+			{all && (
+				<Button
+					size="sm"
+					className={
+						activeCategories?.includes('All') ? 'active' : ''
+					}
+					data-category="All"
+					onClick={(e) => setActiveCategories([])}
+				>
+					<span>All</span>
+				</Button>
+			)}
 			{userCategories?.map((category) => {
 				let IconName = '';
 
@@ -57,7 +63,13 @@ export default function CategoryCloudFilter({
 						{/* //TODO: These should be the Category component now
 						//TODO: Handle state change here for both filtering and
 						submitting selected categories */}
-						<Button
+						<Category
+							category={category}
+							asButtons={true}
+							activeCategories={activeCategories}
+							handleButtonClick={handleButtonClick}
+						/>
+						{/* <Button
 							size="sm"
 							key={category.id}
 							data-category={`${category.id}`}
@@ -75,7 +87,7 @@ export default function CategoryCloudFilter({
 							)}
 
 							<span>{category.name}</span>
-						</Button>
+						</Button> */}
 					</>
 				);
 			})}

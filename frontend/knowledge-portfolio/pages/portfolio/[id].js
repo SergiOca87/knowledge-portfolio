@@ -125,6 +125,7 @@ export default function UserPortfolioPage({ items, categories }) {
 							<CategoryCloudFilter
 								activeCategories={activeCategories}
 								setActiveCategories={setActiveCategories}
+								all={true}
 							/>
 							<ItemGrid
 								items={items}

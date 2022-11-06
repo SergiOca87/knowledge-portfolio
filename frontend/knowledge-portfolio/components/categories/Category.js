@@ -2,6 +2,7 @@ import React from 'react';
 import * as FontAwesome from 'react-icons/fa';
 import ToggleButton from 'react-bootstrap/ToggleButton';
 import styled from 'styled-components';
+import { Button } from 'react-bootstrap';
 
 const StyledCategory = styled.div`
 	display: flex;
@@ -27,7 +28,13 @@ const StyledCategory = styled.div`
 	}
 `;
 
-function Category({ category, background, asButtons }) {
+function Category({
+	category,
+	background,
+	asButtons,
+	activeCategories,
+	handleButtonClick,
+}) {
 	let IconName = '';
 
 	if (category.icon) {
@@ -35,26 +42,21 @@ function Category({ category, background, asButtons }) {
 	}
 
 	return asButtons ? (
-		<ToggleButton
-			className="mb-2"
-			id="toggle-check"
-			type="checkbox"
-			checked={false}
-			value="1"
-			css={css`
-				background-color: ${background
-					? 'var(--secondary)'
-					: 'transparent'};
-			`}
-			onChange={(e) => console.log('clicked')}
+		<Button
+			size="sm"
+			key={category.id}
+			data-category={`${category.id}`}
+			className={activeCategories?.includes(category.id) ? 'active' : ''}
+			onClick={(e) => handleButtonClick(e.target)}
 		>
 			{IconName && (
 				<span className="category">
 					<IconName />
 				</span>
 			)}
+
 			<span>{category.name}</span>
-		</ToggleButton>
+		</Button>
 	) : (
 		<StyledCategory>
 			<div

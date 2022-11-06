@@ -27,6 +27,7 @@ import {
 import Editor from '../Editor';
 import { useUserState } from '../../context/userContext';
 import { supabase } from '../../utils/supabaseClient';
+import CategoryCloudFilter from '../categories/CategoryCloudFilter';
 
 const StyledForm = styled(Form)`
 	max-width: 70rem;
@@ -44,6 +45,7 @@ const StyledForm = styled(Form)`
 
 export default function CreateItem() {
 	const { user, userCategories } = useUserState();
+	const [activeCategories, setActiveCategories] = useState([]);
 
 	const [inputs, setInputs] = useState({
 		title: '',
@@ -52,7 +54,6 @@ export default function CreateItem() {
 		// visibility: 'true',
 		singlePageContent: '',
 		// mainImage: '',
-		categories: [],
 		// urlTitle: '',
 		// date: '',
 		// url: '',
@@ -95,43 +96,25 @@ export default function CreateItem() {
 	const handleChange = (e) => {
 		let { value, name, selectedOptions } = e.target;
 
-		if (name === 'categories') {
-			let values = Array.from(selectedOptions).map((option) => {
-				return option.value;
-			});
-
-			setInputs({
-				...inputs,
-				categories: [...values],
-			});
-		} else {
-			setInputs({
-				...inputs,
-				[name]: value,
-			});
-		}
+		setInputs({
+			...inputs,
+			[name]: value,
+		});
 	};
 
 	// Submit current state to create a new Item
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 
-		const {
-			title,
-			description,
-			categories,
-			singlePageContent,
-			urlTitle,
-			url,
-			status,
-		} = inputs;
+		const { title, description, singlePageContent, urlTitle, url, status } =
+			inputs;
 
 		const { error } = await supabase.from('items').insert({
 			// created_at: date,
 			username: user.username,
 			title,
 			description,
-			categories: [...categories],
+			categories: activeCategories,
 			singlePageContent,
 			urlTitle,
 			url,
@@ -150,8 +133,9 @@ export default function CreateItem() {
 				urlTitle: '',
 				url: '',
 				status: 'true',
-				categories: [],
 			});
+
+			setActiveCategories([]);
 
 			//TODO: This is not working (to clear the wysywyg), may have to reload the page on submit
 			setContentState(convertFromRaw(content));
@@ -233,12 +217,16 @@ export default function CreateItem() {
 								<Link href="/add-category"> here</Link>
 							</p>
 
-							<Categories
+							<CategoryCloudFilter
+								activeCategories={activeCategories}
+								setActiveCategories={setActiveCategories}
+							/>
+							{/* <Categories
 								title={false}
 								categories={userCategories}
 								background={true}
 								asButtons={true}
-							/>
+							/> */}
 
 							{/* <Form.Select
 								aria-label="Categories"
