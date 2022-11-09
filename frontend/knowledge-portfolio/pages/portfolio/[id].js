@@ -192,5 +192,7 @@ export async function getStaticPaths() {
 		},
 	}));
 
-	return { paths, fallback: false };
+	//TODO: If this errors we may need a "loading"
+	//TODO: If this gets too slow, can switch to getserverSideProps to render on every request
+	return { paths, fallback: 'blocking' };
 }

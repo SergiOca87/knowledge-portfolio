@@ -9,6 +9,7 @@
 	},
 	"dependencies": {
 		"@apollo/client": "^3.4.1",
+		"@appland/appmap-agent-js": "^11.7.1",
 		"@react-icons/all-files": "^4.1.0",
 		"@supabase/auth-ui-react": "^0.2.1",
 		"@supabase/supabase-js": "^2.0.0-rc.10",
