@@ -8,47 +8,8 @@ import { FaRegShareSquare } from 'react-icons/fa';
 
 import styled, { css } from 'styled-components';
 import Link from 'next/link';
-import gql from 'graphql-tag';
 import Hero from '../components/layout/Hero';
 import { Container, Row, Col, Card, Button } from 'react-bootstrap';
-import { useQuery } from '@apollo/client';
-
-export const LOGGED_IN_USER = gql`
-	query {
-		authenticatedItem {
-			... on User {
-				id
-				name
-				email
-				publicEmail
-				options
-				instagram
-				youtube
-				website
-				received {
-					id
-				}
-				categories {
-					id
-					name
-					icon
-				}
-				items {
-					id
-					title
-					description
-					status
-					singlePageContent
-					categories {
-						id
-						name
-						icon
-					}
-				}
-			}
-		}
-	}
-`;
 
 const StyledGrid = styled.div`
 	display: grid;
