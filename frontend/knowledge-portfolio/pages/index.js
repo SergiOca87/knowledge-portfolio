@@ -223,12 +223,6 @@ export default function Home() {
 
 	return (
 		<>
-			<Head>
-				<title>Your Knowledge Portfolio</title>
-				<meta name="description" content="Share your knowledge" />
-				<link rel="icon" href="/favicon.ico" />
-			</Head>
-
 			<StyledMain>
 				<Container fluid>
 					<div className="titles">
