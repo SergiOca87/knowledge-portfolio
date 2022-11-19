@@ -9,26 +9,26 @@ import { supabase } from '../../utils/supabaseClient';
 function YearInReview({ items, categories }) {
 	const { user } = useUserState();
 
+	// Extract only the year from the database column "created_at" of a given item
+	const yearItemIsCreated = (item) => new Date(item.created_at).getFullYear();
+
+	//List of items of a given year
+	const itemsByYear = (items) =>
+		items.filter((item) => yearItemIsCreated(item));
+
 	// Years present in the user items
 	const yearsInUserPortfolio = [
-		...new Set(
-			items.map((item) => new Date(item.created_at).getFullYear())
-		),
+		...new Set(items.map((item) => yearItemIsCreated(item))),
 	];
 
 	//Return a list of categories present on a given year
-	const filterCategoriesByYear = (items, year) => {
-		// A list of items of the given year
-		const itemsByYear = items.filter(
-			(item) => new Date(item.created_at).getFullYear() === year
-		);
-
+	const listCategoriesByYear = (items, year) => {
 		// Flatten, remove duplicates and return as an array
 		const categoriesByYear = [
 			...new Set(
-				itemsByYear
+				itemsByYear(items)
 					.map((item) => item.categories)
-					.filter((item) => item !== null && item.length)
+					.filter((category) => category !== null && category.length)
 					.flat()
 			),
 		];
@@ -38,12 +38,21 @@ function YearInReview({ items, categories }) {
 	};
 
 	// Return a list of items present on a given year within a category
-	const filterItemsByYearAndCategory = (items, year, category) => {
+	const listItemsByYearAndCategory = (items, year, category) => {
 		return items.filter(
 			(item) =>
-				new Date(item.created_at).getFullYear() === year &&
+				yearItemIsCreated(item) === year &&
 				item.categories &&
 				item.categories.includes(category)
+		);
+	};
+
+	// Return a list of items present on a given year without a category
+	const listItemsByYearWithoutCategory = (items, year) => {
+		console.log(items);
+		return itemsByYear(items).filter(
+			(item) =>
+				yearItemIsCreated(item) === year && item.categories === null
 		);
 	};
 
@@ -52,28 +61,40 @@ function YearInReview({ items, categories }) {
 			<div>
 				<h2>{year}</h2>
 				<ul>
-					{filterCategoriesByYear(items, year).map((categoryId) => {
+					{listCategoriesByYear(items, year).map((categoryId) => {
 						return (
-							<li>
-								{
-									categories.find(
-										(categoryObj) =>
-											categoryObj.id === categoryId
-									).name
-								}
+							<>
+								<li>
+									{
+										categories.find(
+											(categoryObj) =>
+												categoryObj.id === categoryId
+										).name
+									}
 
-								<ul>
-									{filterItemsByYearAndCategory(
-										items,
-										year,
-										categoryId
-									).map((item) => (
-										<li>{item.title}</li>
-									))}
-								</ul>
-							</li>
+									<ul>
+										{listItemsByYearAndCategory(
+											items,
+											year,
+											categoryId
+										).map((item) => (
+											<li>{item.title}</li>
+										))}
+									</ul>
+								</li>
+							</>
 						);
 					})}
+					<li>
+						Uncategorized
+						<ul>
+							{listItemsByYearWithoutCategory(items, year).map(
+								(item) => (
+									<li>{item.title}</li>
+								)
+							)}
+						</ul>
+					</li>
 				</ul>
 			</div>
 		));
@@ -83,6 +104,9 @@ function YearInReview({ items, categories }) {
 		<Main>
 			<Container>
 				{user ? renderYearBasedList() : <NotLoggedIn />}
+				{user && !items && (
+					<h2>PLease add some items to your portfolio first</h2>
+				)}
 			</Container>
 		</Main>
 	);

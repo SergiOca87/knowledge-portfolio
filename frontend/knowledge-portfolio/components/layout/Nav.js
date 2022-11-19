@@ -134,6 +134,19 @@ export default function Nav() {
 										Portfolio
 									</a>
 								</Link>
+								<Link href={`/year-in-review/${user.id}`}>
+									<a
+										className={
+											router.pathname.includes(
+												'/year-in-review/'
+											)
+												? 'active'
+												: ''
+										}
+									>
+										Year In Review
+									</a>
+								</Link>
 								<Link href={`/user/${user.id}`}>
 									<FaUser />
 								</Link>
