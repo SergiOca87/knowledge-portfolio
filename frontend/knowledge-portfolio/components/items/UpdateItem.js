@@ -2,7 +2,7 @@
 
 import React, { useEffect } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
-import { USER_CATEGORIES_QUERY, getCategories } from './UserCategories';
+import { USER_CATEGORIES_QUERY, getCategories } from '../user/UserCategories';
 import { useState } from 'react';
 import gql from 'graphql-tag';
 

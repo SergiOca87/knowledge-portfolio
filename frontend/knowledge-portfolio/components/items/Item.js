@@ -3,7 +3,7 @@ import React from 'react';
 import Link from 'next/link';
 import DeleteItem from './DeleteItem';
 import { Button, Card, ListGroup, ListGroupItem } from 'react-bootstrap';
-import Categories from './Categories';
+import Categories from '../categories/Categories';
 import { FaPencilAlt } from 'react-icons/fa';
 import { FaTrashAlt } from 'react-icons/fa';
 
@@ -21,11 +21,11 @@ const StyledCard = styled(Card)`
 `;
 
 //TODO: Add Date
-export default function Item({ item, isPublic }) {
+export default function Item({ item, categories, isPublic }) {
 	return (
 		<StyledCard>
 			<Card.Header as="h4" className="mb-3">
-				{item.title}
+				<h3>{item.title}</h3>
 				{item.date && <p>{item.date}</p>}
 			</Card.Header>
 			<Card.Body>
@@ -34,6 +34,7 @@ export default function Item({ item, isPublic }) {
 						<ListGroupItem>
 							<h5 className="secondary">Description:</h5>
 							<p>{item.description}</p>
+							{/* <p>{item.mainImage?.publicUrl}</p> */}
 						</ListGroupItem>
 					)}
 
@@ -50,12 +51,16 @@ export default function Item({ item, isPublic }) {
 						</ListGroupItem>
 					)}
 
-					{/* <p>Category: {item.category.name}</p> */}
-					{item.categories.length && (
+					{categories && (
 						<ListGroupItem>
-							<Categories categories={item?.categories} />
+							<Categories
+								title={false}
+								categories={categories}
+								background={true}
+							/>
 						</ListGroupItem>
 					)}
+
 					{item.singlePageContent && (
 						<ListGroupItem>
 							<Link href={`/items/${item.id}`}>

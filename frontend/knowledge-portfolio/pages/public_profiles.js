@@ -2,11 +2,11 @@ import React, { useContext, useState } from 'react';
 import gql from 'graphql-tag';
 import styled, { css } from 'styled-components';
 import { useQuery } from '@apollo/client';
-import Main from '../components/Main';
+import Main from '../components/layout/Main';
 import { Container, Button, Row, Col, Modal } from 'react-bootstrap';
 import Link from 'next/link';
-import Categories from '../components/Categories';
-import UserCard from '../components/UserCard';
+import Categories from '../components/categories/Categories';
+import UserCard from '../components/user/UserCard';
 import MessageModal from '../components/MessageModal';
 
 const ALL_USER_QUERY = gql`

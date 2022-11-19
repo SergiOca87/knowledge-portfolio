@@ -43,12 +43,12 @@ model User {
 model Item {
   id                String     @id @default(cuid())
   title             String     @default("")
+  mainImage         Json?
   status            String     @default("")
   date              String     @default("")
   visibility        String     @default("")
   description       String     @default("")
   singlePageContent Json?
-  image             String     @default("")
   author            User?      @relation("Item_author", fields: [authorId], references: [id])
   authorId          String?    @map("author")
   categories        Category[] @relation("Category_items")

@@ -6,18 +6,14 @@
 //TODO: At the moment we can connect existing categories, but may be useful to be able to create them ehre as well
 //TODO: Refetch the logged in user (the only poissible user that should be able to create items)
 import { useContext, useEffect, useState } from 'react';
-import { useMutation, useQuery } from '@apollo/client';
-import gql from 'graphql-tag';
-import { USER_CATEGORIES_QUERY, getCategories } from './UserCategories';
 import Link from 'next/link';
-// import { USER_ITEMS_QUERY } from './ItemGrid';
-import { CURRENT_USER_QUERY } from '../components/User';
-import { LOGGED_IN_USER } from './User';
 import Router from 'next/router';
-
+import Categories from '../categories/Categories';
 import { EditorState, convertFromRaw } from 'draft-js';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+
+import FloatingLabel from 'react-bootstrap/FloatingLabel';
 
 import styled, { css } from 'styled-components';
 import {
@@ -28,7 +24,10 @@ import {
 	useAccordionButton,
 } from 'react-bootstrap';
 
-import Editor from './Editor';
+import Editor from '../Editor';
+import { useUserState } from '../../context/userContext';
+import { supabase } from '../../utils/supabaseClient';
+import CategoryCloudFilter from '../categories/CategoryCloudFilter';
 
 const StyledForm = styled(Form)`
 	max-width: 70rem;
@@ -44,84 +43,29 @@ const StyledForm = styled(Form)`
 	}
 `;
 
-const CREATE_ITEM_MUTATION = gql`
-	mutation CREATE_ITEM_MUTATION(
-		$title: String!
-		$description: String
-		$status: String
-		$author: ID!
-		$visibility: String
-		$singlePageContent: JSON
-		$image: String
-		$categories: [CategoryWhereUniqueInput!]
-		$date: String
-		$urlTitle: String
-		$url: String
-	) {
-		createItem(
-			data: {
-				title: $title
-				description: $description
-				author: { connect: { id: $author } }
-				status: $status
-				visibility: $visibility
-				singlePageContent: $singlePageContent
-				image: $image
-				# categories: { connect: { id: $categories } }
-				date: $date
-				categories: { connect: $categories }
-				urlTitle: $urlTitle
-				url: $url
-			}
-		) {
-			# Do we need to return more things?
-			id
-			title
-			categories {
-				name
-				id
-				icon
-			}
-			# description
-		}
-	}
-`;
-
 export default function CreateItem() {
-	//
-	const {
-		loading: userLoading,
-		error: userError,
-		data: userData,
-	} = useQuery(LOGGED_IN_USER);
-
-	const user = userData?.authenticatedItem;
-	const userCategories = user?.categories;
-
-	console.log('logged in user...', userCategories);
-	// const userCategories = data.categories;
+	const { user, userCategories } = useUserState();
+	const [activeCategories, setActiveCategories] = useState([]);
 
 	const [inputs, setInputs] = useState({
 		title: '',
 		description: '',
-		author: user ? user?.id : '',
-		status: 'finished',
-		visibility: 'true',
+		// status: 'finished',
+		// visibility: 'true',
 		singlePageContent: '',
-		image: '',
-		categories: [],
-		urlTitle: '',
-		date: '',
-		url: '',
+		// mainImage: '',
+		// urlTitle: '',
+		// date: '',
+		// url: '',
 	});
 
 	useEffect(() => {
 		setInputs({
 			...inputs,
-			author: user?.id,
 		});
 	}, [user]);
 
+	// Single page content
 	const content = {
 		entityMap: {},
 		blocks: [
@@ -137,9 +81,9 @@ export default function CreateItem() {
 		],
 	};
 
-	//WYSYWYG State
 	const [contentState, setContentState] = useState(convertFromRaw(content));
 
+	//WYSYWYG State
 	const onContentStateChange = (contentState) => {
 		setContentState(contentState);
 		setInputs({
@@ -147,72 +91,55 @@ export default function CreateItem() {
 			singlePageContent: JSON.stringify(contentState, null, 4),
 		});
 	};
-	//////////////////////////////////////////////////////////
 
-	const [createItem, { loading, error, data }] = useMutation(
-		CREATE_ITEM_MUTATION,
-		{
-			variables: inputs,
-			refetchQueries: [{ query: LOGGED_IN_USER }],
-		}
-	);
-
-	// Adds changes to state
+	// Add input changes to state
 	const handleChange = (e) => {
 		let { value, name, selectedOptions } = e.target;
 
-		if (name === 'categories') {
-			let values = Array.from(selectedOptions).map((option) => {
-				return { id: option.value };
-			});
-
-			setInputs({
-				...inputs,
-				categories: [...values],
-			});
-		} else {
-			setInputs({
-				...inputs,
-				[name]: value,
-			});
-		}
+		setInputs({
+			...inputs,
+			[name]: value,
+		});
 	};
-
-	//Single Page Details Drawer
-	//TODO: We can get rid of this or customize
-	// function CustomToggle({ children, eventKey }) {
-	// 	const decoratedOnClick = useAccordionButton(
-	// 		eventKey,
-	// 		() => 'totally custom!'
-	// 	);
-
-	// 	return <div onClick={decoratedOnClick}>{children}</div>;
-	// }
 
 	// Submit current state to create a new Item
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 
+		const { title, description, singlePageContent, urlTitle, url, status } =
+			inputs;
+
+		const { error } = await supabase.from('items').insert({
+			// created_at: date,
+			username: user.username,
+			title,
+			description,
+			categories: activeCategories,
+			singlePageContent,
+			urlTitle,
+			url,
+			status,
+			userId: user.id,
+		});
+
 		if (error) {
 			toast.error(error);
 		} else {
-			const res = await createItem();
-
-			res?.data?.createItem &&
-				toast.success(`${res.data.createItem.title} has been created`);
-
 			// Clear form on submit
 			setInputs({
 				title: '',
 				description: '',
-				status: 'finished',
-				categories: [],
+				singlePageContent: '',
+				urlTitle: '',
+				url: '',
+				status: 'true',
 			});
-		}
 
-		//TODO: Use React Toasts for errors
-		// (error);
-		//Redirect should happen here
+			setActiveCategories([]);
+
+			//TODO: This is not working (to clear the wysywyg), may have to reload the page on submit
+			setContentState(convertFromRaw(content));
+		}
 	};
 
 	return (
@@ -226,21 +153,35 @@ export default function CreateItem() {
 					padding: 4rem 2rem;
 				`}
 			>
+				{/*TODO: Should be its own component*/}
 				<StyledForm method="POST" onSubmit={handleSubmit}>
-					//TODO: This or toast?
-					{error && <p>{error.message}</p>}
 					<Form.Group className="mb-5">
-						<Form.Label htmlFor="title">Title</Form.Label>
+						<FloatingLabel controlId="floatingInput" label="Title">
+							<Form.Control
+								type="text"
+								name="title"
+								id="title"
+								placeholder="Title"
+								required
+								value={inputs.title}
+								onChange={handleChange}
+							/>
+						</FloatingLabel>
+					</Form.Group>
+					{/*
+					
+					<Form.Group className="mb-5">
+						<Form.Label htmlFor="title">Main Image</Form.Label>
 						<Form.Control
-							type="text"
-							name="title"
-							id="title"
-							required
-							value={inputs.title}
+							type="file"
+							name="mainImage"
+							id="mainImage"
+							value={inputs.mainImage}
 							onChange={handleChange}
 						/>
 					</Form.Group>
-					<Form.Group className="mb-5">
+					*/}
+					{/* <Form.Group className="mb-5">
 						<Form.Label htmlFor="date">Date</Form.Label>
 						<Form.Control
 							type="date"
@@ -250,33 +191,24 @@ export default function CreateItem() {
 							onChange={handleChange}
 						/>
 					</Form.Group>
+						*/}
 					<Form.Group className="mb-5">
-						<Form.Label htmlFor="description">
-							Description
-						</Form.Label>
-						<Form.Control
-							as="textarea"
-							rows={3}
-							name="description"
-							id="description"
-							maxLength="300"
-							value={inputs.description}
-							onChange={handleChange}
-						/>
-					</Form.Group>
-					//TODO: Cloudinary Images
-					{/* <div className="input-wrap">
-						<label htmlFor="image">
-							<span>Image</span>
-							<input
-								type="file"
-								id="image"
-								name="image"
+						<FloatingLabel
+							controlId="floatingInput"
+							label="Description"
+						>
+							<Form.Control
+								as="textarea"
+								rows={3}
+								name="description"
+								placeholder="Description"
+								id="description"
+								maxLength="300"
+								value={inputs.description}
 								onChange={handleChange}
-								accept="image/png, image/jpeg"
 							/>
-						</label>
-					</div> */}
+						</FloatingLabel>
+					</Form.Group>
 					{userCategories && (
 						<Form.Group className="mb-5">
 							<Form.Label htmlFor="category">Category</Form.Label>
@@ -284,10 +216,23 @@ export default function CreateItem() {
 								If you need a new category you can create it{' '}
 								<Link href="/add-category"> here</Link>
 							</p>
-							<Form.Select
+
+							<CategoryCloudFilter
+								activeCategories={activeCategories}
+								setActiveCategories={setActiveCategories}
+							/>
+							{/* <Categories
+								title={false}
+								categories={userCategories}
+								background={true}
+								asButtons={true}
+							/> */}
+
+							{/* <Form.Select
 								aria-label="Categories"
 								name="categories"
 								id="category"
+								multiple
 								onChange={handleChange}
 							>
 								<option value="Uncategorized">
@@ -303,9 +248,10 @@ export default function CreateItem() {
 										</option>
 									);
 								})}
-							</Form.Select>
+							</Form.Select> */}
 						</Form.Group>
 					)}
+
 					<Form.Group className="mb-5">
 						<Form.Label htmlFor="status">status</Form.Label>
 						<Form.Select
@@ -314,11 +260,11 @@ export default function CreateItem() {
 							id="status"
 							onChange={handleChange}
 						>
-							<option value="finished">Finished</option>
-							<option value="unfinished">Unfinished</option>
+							<option value={true}>Finished</option>
+							<option value={false}>Unfinished</option>
 						</Form.Select>
 					</Form.Group>
-					<Form.Group className="mb-5">
+					{/* <Form.Group className="mb-5">
 						<Form.Label htmlFor="status">
 							Visibility (public or private)
 						</Form.Label>
@@ -331,7 +277,7 @@ export default function CreateItem() {
 							<option value="true">Public</option>
 							<option value="false">Private</option>
 						</Form.Select>
-					</Form.Group>
+					</Form.Group> */}
 					<label>
 						<p className="tip">
 							Adding single page content will enable a "More
@@ -341,19 +287,6 @@ export default function CreateItem() {
 							if you need to create a detailed view of your item
 							with a longer description text, images or video.
 						</p>
-						{/* <div className="d-flex align-center">
-							<CustomToggle>
-								<Form.Check
-									type="switch"
-									label="Single Page Content"
-									id="singlePage"
-									name="singlePage"
-
-									// value={inputs.singlePage}
-									// onChange={handleChange}
-								/>
-							</CustomToggle>
-						</div> */}
 					</label>
 					<Accordion>
 						<Accordion.Item eventKey="0">
@@ -362,16 +295,15 @@ export default function CreateItem() {
 							</Accordion.Header>
 							<Accordion.Body>
 								<Editor
-									// editorState={editorState}
 									editorClassName="single-page-editor"
 									onContentStateChange={onContentStateChange}
 								/>
-								<textarea
+								{/* <textarea
 									value={inputs.singlePageContent}
 									css={css`
 										display: none;
 									`}
-								/>
+								/> */}
 							</Accordion.Body>
 						</Accordion.Item>
 					</Accordion>
@@ -401,6 +333,7 @@ export default function CreateItem() {
 							onChange={handleChange}
 						/>
 					</Form.Group>
+
 					<Button type="submit" value="submit" variant="primary">
 						Add
 					</Button>

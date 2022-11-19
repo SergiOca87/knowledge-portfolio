@@ -107,7 +107,6 @@ export default function UserCard({ user }) {
 	// });
 
 	// const user = data.User;
-	console.log('user card', user);
 	return (
 		<StyledUserCard>
 			<div className="title">

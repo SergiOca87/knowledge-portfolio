@@ -1,6 +1,6 @@
 /* eslint-disable react/react-in-jsx-scope */
 // import { CURRENT_USER_QUERY, useUser } from './User';
-import { USER_CATEGORIES_QUERY, getCategories } from './UserCategories';
+import { USER_CATEGORIES_QUERY, getCategories } from '../user/UserCategories';
 import { useMutation, useQuery } from '@apollo/client';
 import gql from 'graphql-tag';
 import Link from 'next/link';
@@ -14,7 +14,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 // import { LOGGED_IN_USER } from './User';
 import { useRouter } from 'next/router';
-import UserContext, { useUserState } from '../context/userContext';
+import UserContext, { useUserState } from '../../context/userContext';
+import { supabase } from '../../utils/supabaseClient';
 
 const StyledForm = styled.form`
 	max-width: 70rem;
@@ -41,70 +42,21 @@ const StyledForm = styled.form`
 	}
 `;
 
-const CREATE_CATEGORY_MUTATION = gql`
-	mutation CREATE_CATEGORY_MUTATION(
-		$name: String!
-		$author: ID!
-		$icon: String
-	) {
-		createCategory(
-			data: {
-				name: $name
-				author: { connect: { id: $author } }
-				icon: $icon
-			}
-		) {
-			id
-			name
-			icon
-			author {
-				name
-			}
-		}
-	}
-`;
-
 export default function CreateCategory() {
-	//
-	// const userCategories = getCategories();
-	// const {
-	// 	loading: userLoading,
-	// 	error: userError,
-	// 	data: userData,
-	// } = useQuery(LOGGED_IN_USER);
-
-	const { user, setUser } = useUserState();
-
-	console.log('create category author is...', user.id);
-
-	// const user = userData?.authenticatedItem;
-
-	// console.log('user', user);
-
+	const { user, userCategories } = useUserState();
 	const [iconSearch, setIconSearch] = useState('');
 	const router = useRouter();
 
 	const [inputs, setInputs] = useState({
 		name: '',
-		author: user ? user.id : '',
 		icon: '',
 	});
 
 	useEffect(() => {
 		setInputs({
 			...inputs,
-			author: user?.id,
 		});
 	}, [user]);
-
-	const [createCategory, { loading, error, data }] = useMutation(
-		CREATE_CATEGORY_MUTATION,
-		{
-			variables: inputs,
-
-			// refetchQueries: [{ query: LOGGED_IN_USER }],
-		}
-	);
 
 	const handleChange = (e) => {
 		let { value, name } = e.target;
@@ -140,22 +92,29 @@ export default function CreateCategory() {
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 
-		if (error) {
-			toast.error(error.message);
-		} else if (
-			user.categories.filter(
-				(category) =>
-					category.name.toLowerCase() === inputs.name.toLowerCase()
+		const { name, icon } = inputs;
+
+		if (
+			userCategories.filter(
+				(category) => category.name.toLowerCase() === name.toLowerCase()
 			).length > 0
 		) {
-			toast.error(`The category ${inputs.name} already exists`);
+			toast.error(`The category ${name} already exists`);
 		} else {
-			const res = await createCategory().catch((err) => toast.error(err));
-
-			setInputs({
-				name: '',
-				icon: '',
+			const { error } = await supabase.from('categories').insert({
+				name,
+				icon,
+				userId: user.id,
 			});
+
+			if (error) {
+				toast.error(error);
+			} else {
+				setInputs({
+					name: '',
+					icon: '',
+				});
+			}
 
 			toast.success(`Category created, reloading page...`);
 

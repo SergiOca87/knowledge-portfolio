@@ -9,7 +9,7 @@ import { useQuery } from '@apollo/client';
 
 import { ToastContainer, toast } from 'react-toastify';
 import Footer from './Footer';
-import { useUserState } from '../context/userContext';
+import { useUserState } from '../../context/userContext';
 
 const GlobalStyles = createGlobalStyle`
   @font-face {

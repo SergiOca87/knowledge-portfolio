@@ -1,6 +1,6 @@
-import CreateItem from '../components/CreateItem';
+import CreateItem from '../components/items/CreateItem';
 import Link from 'next/link';
-import Main from '../components/Main';
+import Main from '../components/layout/Main';
 import { Container } from 'react-bootstrap';
 import { css } from 'styled-components';
 

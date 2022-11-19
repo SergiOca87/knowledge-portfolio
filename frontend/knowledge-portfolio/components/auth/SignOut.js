@@ -4,27 +4,21 @@ import { useMutation } from '@apollo/client';
 // import { CURRENT_USER_QUERY } from './User';
 import { Router, useRouter } from 'next/router';
 import { Button } from 'react-bootstrap';
-import { useUserState } from '../context/userContext';
-
-const SIGN_OUT_MUTATION = gql`
-	mutation {
-		endSession
-	}
-`;
+import { useUserState } from '../../context/userContext';
+import { supabase } from '../../utils/supabaseClient';
+import { toast } from 'react-toastify';
 
 export default function SignOut() {
 	const router = useRouter();
-	const { user, setUser } = useUserState();
-
-	const [signOut] = useMutation(SIGN_OUT_MUTATION);
 
 	const handleSignOut = async () => {
-		const res = await signOut();
+		const { error } = await supabase.auth.signOut();
 
-		setUser('');
-
-		//TODO: Proper redirect? How?
-		router.push(`/login/`);
+		if (error) {
+			toast.error(error);
+		} else {
+			Router.push('/');
+		}
 	};
 
 	return (

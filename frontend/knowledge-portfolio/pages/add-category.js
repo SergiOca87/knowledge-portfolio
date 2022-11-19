@@ -1,9 +1,9 @@
 import { useContext } from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
-import Categories from '../components/Categories';
-import CreateCategory from '../components/CreateCategory';
-import Main from '../components/Main';
-import NotLoggedIn from '../components/NotLoggedIn';
+import Categories from '../components/categories/Categories';
+import CreateCategory from '../components/categories/CreateCategory';
+import Main from '../components/layout/Main';
+import NotLoggedIn from '../components/auth/NotLoggedIn';
 // import { getCategories } from '../components/UserCategories';
 import { useUserState } from '../context/userContext';
 
@@ -12,7 +12,7 @@ import { useUserState } from '../context/userContext';
 // `
 export default function createItems() {
 	// const userCategories = getCategories();
-	const { user, setUser } = useUserState();
+	const { user, userCategories } = useUserState();
 
 	return (
 		<Main>
@@ -37,12 +37,12 @@ export default function createItems() {
 								allow visitors to filter your items.
 							</p>
 
-							{user.categories.length ? (
+							{userCategories?.length ? (
 								<>
 									<p>Your current existing Categories:</p>
 									<Categories
 										title={false}
-										categories={user.categories}
+										categories={userCategories}
 										background={true}
 									/>
 								</>
