@@ -99,7 +99,7 @@ export default function Nav() {
 							gap: 3rem;
 						`}
 					>
-						<Link href={`/public_profiles`}>
+						{/* <Link href={`/public_profiles`}>
 							<a
 								className={
 									router.pathname == '/public_profiles'
@@ -118,7 +118,7 @@ export default function Nav() {
 							>
 								Web3
 							</a>
-						</Link>
+						</Link> */}
 						{user ? (
 							<>
 								<Link href={`/portfolio/${user.id}`}>
@@ -150,7 +150,7 @@ export default function Nav() {
 								<Link href={`/user/${user.id}`}>
 									<FaUser />
 								</Link>
-								<Link href={`/mail/${user.id}`}>
+								{/* <Link href={`/mail/${user.id}`}>
 									<StyledMail>
 										{user?.received?.length > 0 ? (
 											<>
@@ -163,7 +163,7 @@ export default function Nav() {
 											<FaRegEnvelope />
 										)}
 									</StyledMail>
-								</Link>
+								</Link> */}
 								<SignOut />
 							</>
 						) : (

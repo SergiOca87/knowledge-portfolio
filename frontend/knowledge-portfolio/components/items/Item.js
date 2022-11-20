@@ -23,7 +23,7 @@ const StyledCard = styled(Card)`
 //TODO: Add Date
 export default function Item({ item, categories, isPublic }) {
 	return (
-		<StyledCard>
+		<StyledCard className={item.id}>
 			<Card.Header as="h4" className="mb-3">
 				<h3>{item.title}</h3>
 				{item.date && <p>{item.date}</p>}
@@ -76,10 +76,7 @@ export default function Item({ item, categories, isPublic }) {
 				<div className="buttons">
 					<Link
 						href={{
-							pathname: '/update',
-							query: {
-								id: item.id,
-							},
+							pathname: `/update/${item.id}`,
 						}}
 					>
 						<Button variant="secondary">

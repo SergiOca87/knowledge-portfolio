@@ -116,7 +116,7 @@ export default YearInReview;
 
 // TODO: Maybe the right approach is to use serverSideProps (I tihnk it is most likely), identify the user who is making the request via a supabase function like getUser
 //TODO: This is now repeated so it would make sense to put it in a utils folder(portfolioid)
-export async function getStaticProps(context) {
+export async function getServerSideProps(context) {
 	// Get params from URL
 	const { params } = context;
 
@@ -141,22 +141,21 @@ export async function getStaticProps(context) {
 			items,
 			categories,
 		},
-		revalidate: 60,
 	};
 }
 
-export async function getStaticPaths() {
-	// Get all users from supabase
-	let { data, error } = await supabase.from('profiles').select('id');
+// export async function getStaticPaths() {
+// 	// Get all users from supabase
+// 	let { data, error } = await supabase.from('profiles').select('id');
 
-	// Let Next.js know how many pages (user ids) are there
-	const paths = data.map((userId) => ({
-		params: {
-			id: userId.id,
-		},
-	}));
+// 	// Let Next.js know how many pages (user ids) are there
+// 	const paths = data.map((userId) => ({
+// 		params: {
+// 			id: userId.id,
+// 		},
+// 	}));
 
-	//TODO: If this errors we may need a "loading"
-	//TODO: If this gets too slow, can switch to getserverSideProps to render on every request
-	return { paths, fallback: 'blocking' };
-}
+// 	//TODO: If this errors we may need a "loading"
+// 	//TODO: If this gets too slow, can switch to getserverSideProps to render on every request
+// 	return { paths, fallback: 'blocking' };
+// }
