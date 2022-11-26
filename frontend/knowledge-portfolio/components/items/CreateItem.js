@@ -28,6 +28,7 @@ import Editor from '../Editor';
 import { useUserState } from '../../context/userContext';
 import { supabase } from '../../utils/supabaseClient';
 import CategoryCloudFilter from '../categories/CategoryCloudFilter';
+import DragDropFile from '../DragDropFile';
 
 const StyledForm = styled(Form)`
 	max-width: 70rem;
@@ -43,9 +44,14 @@ const StyledForm = styled(Form)`
 	}
 `;
 
+const StyleEditor = styled(Editor)`
+	color: #000;
+`;
+
 export default function CreateItem() {
 	const { user, userCategories } = useUserState();
 	const [activeCategories, setActiveCategories] = useState([]);
+	const [mainImage, setMainImage] = useState(null);
 
 	const [inputs, setInputs] = useState({
 		title: '',
@@ -53,7 +59,7 @@ export default function CreateItem() {
 		// status: 'finished',
 		// visibility: 'true',
 		singlePageContent: '',
-		// mainImage: '',
+		mainImage: '',
 		// urlTitle: '',
 		// date: '',
 		// url: '',
@@ -103,12 +109,21 @@ export default function CreateItem() {
 	};
 
 	// Submit current state to create a new Item
+
+	//https://nextjs.org/learn/basics/api-routes/api-routes-details
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 
 		const { title, description, singlePageContent, urlTitle, url, status } =
 			inputs;
 
+		//TODO: If there is a main image, send post request to our won API and send this image to Cloudinary
+		//https://codeburst.io/image-upload-with-cloudinary-part-1-next-react-node-js-6b6b0f2529f1
+		// But how do we make images unique on Cloudinary? Two images wit the same name will create problems
+		// Create a Database item with a unique ID for each image and relate it to user?
+		// The mainImage text value is unique accross rows.
+
+		//TODO: Should this be handled in an API route?
 		const { error } = await supabase.from('items').insert({
 			// created_at: date,
 			username: user.username,
@@ -120,6 +135,7 @@ export default function CreateItem() {
 			url,
 			status,
 			userId: user.id,
+			mainImage: mainImage.name,
 		});
 
 		if (error) {
@@ -153,7 +169,7 @@ export default function CreateItem() {
 					padding: 4rem 2rem;
 				`}
 			>
-				{/*TODO: Should be its own component*/}
+				{/* TODO: Should be its own component */}
 				<StyledForm method="POST" onSubmit={handleSubmit}>
 					<Form.Group className="mb-5">
 						<FloatingLabel controlId="floatingInput" label="Title">
@@ -168,9 +184,8 @@ export default function CreateItem() {
 							/>
 						</FloatingLabel>
 					</Form.Group>
-					{/*
-					
-					<Form.Group className="mb-5">
+
+					{/* <Form.Group className="mb-5">
 						<Form.Label htmlFor="title">Main Image</Form.Label>
 						<Form.Control
 							type="file"
@@ -179,8 +194,10 @@ export default function CreateItem() {
 							value={inputs.mainImage}
 							onChange={handleChange}
 						/>
-					</Form.Group>
-					*/}
+					</Form.Group> */}
+					<DragDropFile setMainImage={setMainImage} />
+					<p>{mainImage && mainImage.name}</p>
+
 					{/* <Form.Group className="mb-5">
 						<Form.Label htmlFor="date">Date</Form.Label>
 						<Form.Control
@@ -294,9 +311,13 @@ export default function CreateItem() {
 								Single Page Content
 							</Accordion.Header>
 							<Accordion.Body>
-								<Editor
+								<StyleEditor
+									wrapperClassName="single-page-editor-wrap"
 									editorClassName="single-page-editor"
 									onContentStateChange={onContentStateChange}
+									toolbar={{
+										image: { enableUpload: true },
+									}}
 								/>
 								{/* <textarea
 									value={inputs.singlePageContent}
