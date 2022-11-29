@@ -29,6 +29,7 @@ import { useUserState } from '../../context/userContext';
 import { supabase } from '../../utils/supabaseClient';
 import CategoryCloudFilter from '../categories/CategoryCloudFilter';
 import DragDropFile from '../DragDropFile';
+import UploadImageWidget from './UploadImageWidget';
 
 const StyledForm = styled(Form)`
 	max-width: 70rem;
@@ -52,6 +53,7 @@ export default function CreateItem() {
 	const { user, userCategories } = useUserState();
 	const [activeCategories, setActiveCategories] = useState([]);
 	const [mainImage, setMainImage] = useState(null);
+	const [mainImageId, setMainImageId] = useState(null);
 
 	const [inputs, setInputs] = useState({
 		title: '',
@@ -117,26 +119,44 @@ export default function CreateItem() {
 		const { title, description, singlePageContent, urlTitle, url, status } =
 			inputs;
 
-		//TODO: If there is a main image, send post request to our won API and send this image to Cloudinary
+		//TODO: If there is a mainImage create a new Image database record, this may nee dto be refactored to use API routes
+		if (mainImage.name) {
+			const { data, error } = await supabase
+				.from('image')
+				.insert({
+					// created_at: date,
+					imageName: mainImage.name,
+					userId: user.id,
+				})
+				.select();
+
+			setMainImageId(data.id);
+		}
+
+		//TODO: If there is a main image, send post request to our own API and send this image to Cloudinary
+		// https://cloudinary.com/documentation/react_image_and_video_upload
 		//https://codeburst.io/image-upload-with-cloudinary-part-1-next-react-node-js-6b6b0f2529f1
 		// But how do we make images unique on Cloudinary? Two images wit the same name will create problems
 		// Create a Database item with a unique ID for each image and relate it to user?
 		// The mainImage text value is unique accross rows.
 
 		//TODO: Should this be handled in an API route?
-		const { error } = await supabase.from('items').insert({
-			// created_at: date,
-			username: user.username,
-			title,
-			description,
-			categories: activeCategories,
-			singlePageContent,
-			urlTitle,
-			url,
-			status,
-			userId: user.id,
-			mainImage: mainImage.name,
-		});
+		const { data, error } = await supabase
+			.from('items')
+			.insert({
+				// created_at: date,
+				username: user.username,
+				title,
+				description,
+				categories: activeCategories,
+				singlePageContent,
+				urlTitle,
+				url,
+				status,
+				userId: user.id,
+				mainImage: mainImage.name,
+			})
+			.select();
 
 		if (error) {
 			toast.error(error);
@@ -155,6 +175,16 @@ export default function CreateItem() {
 
 			//TODO: This is not working (to clear the wysywyg), may have to reload the page on submit
 			setContentState(convertFromRaw(content));
+
+			// With the returned inserted item, get its id an duse it to create a relationship with the mainImage
+			console.log('data', data);
+
+			if (mainImage.name) {
+				const { error } = await supabase
+					.from('image')
+					.update({ item: data.id })
+					.eq('id', mainImageId);
+			}
 		}
 	};
 
@@ -195,6 +225,8 @@ export default function CreateItem() {
 							onChange={handleChange}
 						/>
 					</Form.Group> */}
+
+					<UploadImageWidget />
 					<DragDropFile setMainImage={setMainImage} />
 					<p>{mainImage && mainImage.name}</p>
 

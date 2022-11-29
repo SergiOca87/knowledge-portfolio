@@ -1,6 +1,7 @@
 import styled, { css } from 'styled-components';
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import DeleteItem from './DeleteItem';
 import { Button, Card, ListGroup, ListGroupItem } from 'react-bootstrap';
 import Categories from '../categories/Categories';
@@ -24,6 +25,15 @@ const StyledCard = styled(Card)`
 export default function Item({ item, categories, isPublic }) {
 	return (
 		<StyledCard className={item.id}>
+			{/* {item.mainImage.src && (
+				<Image
+					src={item.mainImage.src}
+					width="300"
+					height="300"
+					alt=""
+				/>
+			)} */}
+
 			<Card.Header as="h4" className="mb-3">
 				<h3>{item.title}</h3>
 				{item.date && <p>{item.date}</p>}

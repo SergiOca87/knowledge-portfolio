@@ -246,55 +246,7 @@ const InnerStyles = styled.div`
 	// padding: 2rem;
 `;
 
-export const LOGGED_IN_USER = gql`
-	query {
-		authenticatedItem {
-			... on User {
-				id
-				name
-				email
-				publicEmail
-				options
-				instagram
-				youtube
-				website
-				received {
-					id
-				}
-				categories {
-					id
-					name
-					icon
-				}
-				items {
-					id
-					title
-					description
-					status
-					singlePageContent
-					categories {
-						id
-						name
-						icon
-					}
-				}
-			}
-		}
-	}
-`;
-
 export default function Page({ children }) {
-	const { user, setUser } = useUserState();
-
-	const { data } = useQuery(LOGGED_IN_USER);
-
-	useEffect(() => {
-		console.log('useEffect is running', data);
-		data && setUser(data?.authenticatedItem);
-
-		console.log('user?', user);
-	}, [data]);
-
 	return (
 		<div>
 			<GlobalStyles />
