@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
+import { toast } from 'react-toastify';
 
-function UploadImageWidget() {
+function UploadImageWidget({ setMainImage }) {
 	//TODO: Can any of this be an initialprop?
 	//TODO: It's better to change this to a signed upload (more secure)
 
@@ -17,7 +18,18 @@ function UploadImageWidget() {
 				maxFiles: 1,
 			},
 			function (error, result) {
-				console.log('cloudinary result', result);
+				if (error) {
+					toast.error(error);
+				}
+
+				if (result.event === 'success') {
+					console.log('image upload callback', result.info.url);
+
+					setMainImage({
+						imageName: result.info.original_filename,
+						imageUrl: result.info.url,
+					});
+				}
 			}
 		);
 	}, []);
