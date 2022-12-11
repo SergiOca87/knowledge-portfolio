@@ -1,10 +1,15 @@
 import React from 'react';
 import UpdateItem from '../../components/items/UpdateItem';
 import { supabase } from '../../utils/supabaseClient';
+import Script from 'next/script';
 
 export default function UpdatePage({ item }) {
 	return (
 		<div>
+			<Script
+				src="https://upload-widget.cloudinary.com/global/all.js"
+				strategy="beforeInteractive"
+			/>
 			<UpdateItem item={item} />
 		</div>
 	);

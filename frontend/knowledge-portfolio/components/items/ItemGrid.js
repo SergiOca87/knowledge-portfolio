@@ -142,6 +142,8 @@ export default function ItemGrid({
 	// }, [chosenCategory, chosenText, activeCategories]);
 	const [filteredItems, setFilteredItems] = useState([]);
 
+	const [itemImage, setItemImage] = useState();
+
 	// On Page load, fill up the filteredItems Array with items
 	useEffect(() => {
 		setFilteredItems(items);
@@ -183,6 +185,14 @@ export default function ItemGrid({
 									item.categories.includes(category.id)
 								);
 							}
+
+							// if (images && images.length) {
+							// 	setItemImage(
+							// 		...images.filter(
+							// 			(image) => image.item === item.id
+							// 		)
+							// 	);
+							// }
 
 							return (
 								<li key={item.id}>

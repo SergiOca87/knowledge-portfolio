@@ -25,20 +25,21 @@ const StyledCard = styled(Card)`
 export default function Item({ item, categories, isPublic }) {
 	return (
 		<StyledCard className={item.id}>
-			{/* {item.mainImage.src && (
-				<Image
-					src={item.mainImage.src}
-					width="300"
-					height="300"
-					alt=""
-				/>
-			)} */}
-
 			<Card.Header as="h4" className="mb-3">
 				<h3>{item.title}</h3>
+
 				{item.date && <p>{item.date}</p>}
 			</Card.Header>
+
 			<Card.Body>
+				{item.mainImageUrl && (
+					<Image
+						src={item.mainImageUrl}
+						width="300"
+						height="300"
+						alt={item.mainImageName}
+					/>
+				)}
 				<ListGroup className="list-group-flush">
 					{item.description && (
 						<ListGroupItem>

@@ -10,28 +10,30 @@ function UploadImageWidget({ setMainImage }) {
 	const widgetRef = useRef();
 
 	useEffect(() => {
-		cloudinaryRef.current = window.cloudinary;
-		widgetRef.current = cloudinaryRef.current.createUploadWidget(
-			{
-				cloudName: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
-				uploadPreset: 'tczpsuv3',
-				maxFiles: 1,
-			},
-			function (error, result) {
-				if (error) {
-					toast.error(error);
-				}
+		if (typeof window !== 'undefined') {
+			cloudinaryRef.current = window.cloudinary;
+			widgetRef.current = cloudinaryRef.current.createUploadWidget(
+				{
+					cloudName: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
+					uploadPreset: 'tczpsuv3',
+					multiple: false,
+				},
+				function (error, result) {
+					if (error) {
+						toast.error(error);
+					}
 
-				if (result.event === 'success') {
-					console.log('image upload callback', result.info.url);
+					if (result.event === 'success') {
+						// This is submitting my main form
 
-					setMainImage({
-						imageName: result.info.original_filename,
-						imageUrl: result.info.url,
-					});
+						setMainImage({
+							imageName: result.info.original_filename,
+							imageUrl: result.info.url,
+						});
+					}
 				}
-			}
-		);
+			);
+		}
 	}, []);
 
 	return (

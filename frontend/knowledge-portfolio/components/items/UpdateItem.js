@@ -26,6 +26,7 @@ import Editor from '../Editor';
 import { useUserState } from '../../context/userContext';
 import { supabase } from '../../utils/supabaseClient';
 import CategoryCloudFilter from '../categories/CategoryCloudFilter';
+import UploadImageWidget from './UploadImageWidget';
 
 const StyledForm = styled(Form)`
 	max-width: 70rem;
@@ -41,11 +42,23 @@ const StyledForm = styled(Form)`
 	}
 `;
 
+const StyleEditor = styled(Editor)`
+	color: #000;
+`;
+
 export default function UpdateItem({ item }) {
 	const { user, userCategories } = useUserState();
 	const [activeCategories, setActiveCategories] = useState([]);
+	const [mainImage, setMainImage] = useState('');
 
 	item = item[0];
+
+	useEffect(() => {
+		setMainImage({
+			imageName: item.mainImageName ? item.mainImageName : '',
+			imageUrl: item.mainImageUrl ? item.mainImageUrl : '',
+		});
+	}, []);
 
 	const [inputs, setInputs] = useState({
 		title: item.title,
@@ -53,7 +66,7 @@ export default function UpdateItem({ item }) {
 		// status: 'finished',
 		// visibility: 'true',
 		singlePageContent: item.singlePageContent,
-		// mainImage: '',
+		mainImage,
 		// urlTitle: '',
 		// date: '',
 		// url: '',
@@ -63,11 +76,10 @@ export default function UpdateItem({ item }) {
 		setInputs({
 			...inputs,
 		});
-
-		console.log('item is?', item);
 	}, [user]);
 
 	// Single page content
+	//TODO: Maybe we should extract this
 	const content = {
 		entityMap: {},
 		blocks: [
@@ -105,50 +117,96 @@ export default function UpdateItem({ item }) {
 	};
 
 	// Submit current state to create a new Item
+
+	//https://nextjs.org/learn/basics/api-routes/api-routes-details
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 
-		const { title, description, singlePageContent, urlTitle, url, status } =
-			inputs;
-
-		const { error } = await supabase
-			.from('items')
-			.update({
-				// created_at: date,
-				// username: user.username,
+		if (e.target.id !== 'main-submit') {
+			return;
+		} else {
+			const {
 				title,
 				description,
-				categories: activeCategories,
 				singlePageContent,
 				urlTitle,
 				url,
 				status,
-				userId: user.id,
-			})
-			.eq('id', item.id);
+			} = inputs;
 
-		//TODO - Redirect to portfolio
-		Router.push({
-			pathname: `/portfolio/${user.id}`,
-		});
+			//TODO: Should this be handled in an API route?
+			//TODO: We need some extra validation here, if API route, serverside validation:
+			// if (
+			// 	!email.includes('@') ||
+			// 	!name ||
+			// 	name.trim() === '' ||
+			// 	!text ||
+			// 	text.trim() === ''
+			// ) {
+			// 	toast.message('...');
+			// 	return;
+			// }
 
-		if (error) {
-			toast.error(error);
-		} else {
-			// Clear form on submit
-			setInputs({
-				title: '',
-				description: '',
-				singlePageContent: '',
-				urlTitle: '',
-				url: '',
-				status: 'true',
-			});
+			const { error } = await supabase
+				.from('items')
+				.update({
+					// created_at: date,
+					username: user.username,
+					title,
+					description,
+					categories: activeCategories,
+					singlePageContent,
+					urlTitle,
+					url,
+					status,
+					userId: user.id,
+					mainImageName: mainImage.imageName,
+					mainImageUrl: mainImage.imageUrl,
+				})
+				.eq('id', item.id);
 
-			setActiveCategories([]);
+			if (error) {
+				toast.error(error);
+			} else {
+				// Clear form on submit
+				setInputs({
+					title: '',
+					description: '',
+					singlePageContent: '',
+					urlTitle: '',
+					url: '',
+					status: 'true',
+				});
 
-			//TODO: This is not working (to clear the wysywyg), may have to reload the page on submit
-			setContentState(convertFromRaw(content));
+				setActiveCategories([]);
+
+				//TODO: This is not working (to clear the wysywyg), may have to reload the page on submit
+				// setContentState(convertFromRaw(singlePageContent));
+
+				if (mainImage) {
+					const { data: imageData, error: imageError } =
+						await supabase
+							.from('image')
+							.insert({
+								// created_at: date,
+								imageName: mainImage.imageName,
+								userId: user.id,
+								imageUrl: mainImage.imageUrl,
+								item: item.id,
+							})
+							.select();
+
+					//TODO: May not be necessary to do this relationship at the end with the imageUrl field but may be useful down the road
+					const { data: itemDataUpdate, error: itemDataUpdateError } =
+						await supabase
+							.from('items')
+							.update({
+								// created_at: date,
+								mainImageId: imageData[0].id,
+							})
+							.eq('id', item.id);
+				}
+			}
 		}
 	};
 
@@ -163,7 +221,7 @@ export default function UpdateItem({ item }) {
 					padding: 4rem 2rem;
 				`}
 			>
-				{/*TODO: Should be its own component*/}
+				{/* TODO: Should be its own component */}
 				<StyledForm method="POST" onSubmit={handleSubmit}>
 					<Form.Group className="mb-5">
 						<FloatingLabel controlId="floatingInput" label="Title">
@@ -178,19 +236,11 @@ export default function UpdateItem({ item }) {
 							/>
 						</FloatingLabel>
 					</Form.Group>
-					{/*
-					
-					<Form.Group className="mb-5">
-						<Form.Label htmlFor="title">Main Image</Form.Label>
-						<Form.Control
-							type="file"
-							name="mainImage"
-							id="mainImage"
-							value={inputs.mainImage}
-							onChange={handleChange}
-						/>
-					</Form.Group>
-					*/}
+
+					{/* This is part of a form */}
+					<UploadImageWidget setMainImage={setMainImage} />
+					<p>{mainImage && mainImage.imageName}</p>
+
 					{/* <Form.Group className="mb-5">
 						<Form.Label htmlFor="date">Date</Form.Label>
 						<Form.Control
@@ -304,9 +354,13 @@ export default function UpdateItem({ item }) {
 								Single Page Content
 							</Accordion.Header>
 							<Accordion.Body>
-								<Editor
+								<StyleEditor
+									wrapperClassName="single-page-editor-wrap"
 									editorClassName="single-page-editor"
 									onContentStateChange={onContentStateChange}
+									toolbar={{
+										image: { enableUpload: true },
+									}}
 								/>
 								{/* <textarea
 									value={inputs.singlePageContent}
@@ -344,8 +398,13 @@ export default function UpdateItem({ item }) {
 						/>
 					</Form.Group>
 
-					<Button type="submit" value="submit" variant="primary">
-						Edit
+					<Button
+						onClick={handleSubmit}
+						value="submit"
+						variant="primary"
+						id="main-submit"
+					>
+						Update
 					</Button>
 				</StyledForm>
 			</Card.Body>

@@ -4,6 +4,7 @@ import Main from '../components/layout/Main';
 import { Container } from 'react-bootstrap';
 import { css } from 'styled-components';
 import Script from 'next/script';
+import UpdateItem from '../components/items/UpdateItem';
 
 //TODO: If user create item, else use sign in
 

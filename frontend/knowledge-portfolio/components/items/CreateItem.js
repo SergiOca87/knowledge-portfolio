@@ -53,7 +53,6 @@ export default function CreateItem() {
 	const { user, userCategories } = useUserState();
 	const [activeCategories, setActiveCategories] = useState([]);
 	const [mainImage, setMainImage] = useState('');
-	const [mainImageId, setMainImageId] = useState(null);
 
 	const [inputs, setInputs] = useState({
 		title: '',
@@ -74,6 +73,7 @@ export default function CreateItem() {
 	}, [user]);
 
 	// Single page content
+	//TODO: Maybe we should extract this
 	const content = {
 		entityMap: {},
 		blocks: [
@@ -116,64 +116,92 @@ export default function CreateItem() {
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 
-		const { title, description, singlePageContent, urlTitle, url, status } =
-			inputs;
+		e.preventDefault();
 
-		//TODO: Should this be handled in an API route?
-		const { data: itemData, error } = await supabase
-			.from('items')
-			.insert({
-				// created_at: date,
-				username: user.username,
+		if (e.target.id !== 'main-submit') {
+			return;
+		} else {
+			const {
 				title,
 				description,
-				categories: activeCategories,
 				singlePageContent,
 				urlTitle,
 				url,
 				status,
-				userId: user.id,
-				mainImage: mainImage.imageName,
-			})
-			.select();
+			} = inputs;
 
-		if (error) {
-			toast.error(error);
-		} else {
-			// Clear form on submit
-			setInputs({
-				title: '',
-				description: '',
-				singlePageContent: '',
-				urlTitle: '',
-				url: '',
-				status: 'true',
-			});
+			//TODO: Should this be handled in an API route?
+			//TODO: We need some extra validation here, if API route, serverside validation:
+			// if (
+			// 	!email.includes('@') ||
+			// 	!name ||
+			// 	name.trim() === '' ||
+			// 	!text ||
+			// 	text.trim() === ''
+			// ) {
+			// 	toast.message('...');
+			// 	return;
+			// }
 
-			setActiveCategories([]);
+			const { data: itemData, error } = await supabase
+				.from('items')
+				.insert({
+					// created_at: date,
+					username: user.username,
+					title,
+					description,
+					categories: activeCategories,
+					singlePageContent,
+					urlTitle,
+					url,
+					status,
+					userId: user.id,
+					mainImageName: mainImage.imageName,
+					mainImageUrl: mainImage.imageUrl,
+				})
+				.select();
 
-			//TODO: This is not working (to clear the wysywyg), may have to reload the page on submit
-			setContentState(convertFromRaw(content));
+			if (error) {
+				toast.error(error);
+			} else {
+				// Clear form on submit
+				setInputs({
+					title: '',
+					description: '',
+					singlePageContent: '',
+					urlTitle: '',
+					url: '',
+					status: 'true',
+				});
 
-			if (mainImage) {
-				const { data, error } = await supabase
-					.from('image')
-					.insert({
-						// created_at: date,
-						imageName: mainImage.imageName,
-						userId: user.id,
-						imageUrl: mainImage.imageUrl,
-						item: itemData[0].id,
-					})
-					.select();
+				setActiveCategories([]);
 
-				// setMainImageId(data.id);
-				console.log(
-					mainImage.imageName,
-					user.id,
-					mainImage.imageUrl,
-					itemData[0].id
-				);
+				//TODO: This is not working (to clear the wysywyg), may have to reload the page on submit
+				setContentState(convertFromRaw(singlePageContent));
+
+				if (mainImage) {
+					const { data: imageData, error: imageError } =
+						await supabase
+							.from('image')
+							.insert({
+								// created_at: date,
+								imageName: mainImage.imageName,
+								userId: user.id,
+								imageUrl: mainImage.imageUrl,
+								item: itemData[0].id,
+							})
+							.select();
+
+					//TODO: May not be necessary to do this relationship at the end with the imageUrl field but may be useful down the road
+					const { data: itemDataUpdate, error: itemDataUpdateError } =
+						await supabase
+							.from('items')
+							.update({
+								// created_at: date,
+								mainImageId: imageData[0].id,
+							})
+							.eq('id', itemData[0].id);
+				}
 			}
 		}
 	};
@@ -218,7 +246,7 @@ export default function CreateItem() {
 
 					<UploadImageWidget setMainImage={setMainImage} />
 					{/* <DragDropFile setMainImage={setMainImage} /> */}
-					<p>{mainImage && mainImage.name}</p>
+					<p>{mainImage && mainImage.imageName}</p>
 
 					{/* <Form.Group className="mb-5">
 						<Form.Label htmlFor="date">Date</Form.Label>
@@ -377,7 +405,12 @@ export default function CreateItem() {
 						/>
 					</Form.Group>
 
-					<Button type="submit" value="submit" variant="primary">
+					<Button
+						onClick={handleSubmit}
+						value="submit"
+						variant="primary"
+						id="main-submit"
+					>
 						Add
 					</Button>
 				</StyledForm>
