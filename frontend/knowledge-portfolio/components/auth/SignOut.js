@@ -17,7 +17,7 @@ export default function SignOut() {
 		if (error) {
 			toast.error(error);
 		} else {
-			Router.push('/');
+			router.push('/');
 		}
 	};
 

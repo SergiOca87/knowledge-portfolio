@@ -26,7 +26,7 @@ import {
 
 import Editor from '../Editor';
 import { useUserState } from '../../context/userContext';
-import { supabase } from '../../utils/supabaseClient';
+// import { supabase } from '../../utils/supabaseClient';
 import CategoryCloudFilter from '../categories/CategoryCloudFilter';
 import DragDropFile from '../DragDropFile';
 import UploadImageWidget from './UploadImageWidget';
@@ -116,8 +116,7 @@ export default function CreateItem() {
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 
-		e.preventDefault();
-
+		// This is to prevent cloudinary form to submit the item
 		if (e.target.id !== 'main-submit') {
 			return;
 		} else {
@@ -130,36 +129,54 @@ export default function CreateItem() {
 				status,
 			} = inputs;
 
+			const newItem = {
+				user: user.username,
+				title,
+				description,
+				categories: activeCategories,
+				singlePageContent,
+				urlTitle,
+				url,
+				status,
+				userId: user.id,
+				mainImageName: mainImage.imageName,
+				mainImageUrl: mainImage.imageUrl,
+			};
+
 			//TODO: Should this be handled in an API route?
 			//TODO: We need some extra validation here, if API route, serverside validation:
-			// if (
-			// 	!email.includes('@') ||
-			// 	!name ||
-			// 	name.trim() === '' ||
-			// 	!text ||
-			// 	text.trim() === ''
-			// ) {
-			// 	toast.message('...');
-			// 	return;
-			// }
+			if (!user || !title || title.trim() === '') {
+				toast.message('There was a problem creating your item');
+				return;
+			}
 
-			const { data: itemData, error } = await supabase
-				.from('items')
-				.insert({
-					// created_at: date,
-					username: user.username,
-					title,
-					description,
-					categories: activeCategories,
-					singlePageContent,
-					urlTitle,
-					url,
-					status,
-					userId: user.id,
-					mainImageName: mainImage.imageName,
-					mainImageUrl: mainImage.imageUrl,
-				})
-				.select();
+			// const { data: itemData, error } = await supabase
+			// 	.from('items')
+			// 	.insert({
+			// 		// created_at: date,
+			// 		username: user.username,
+			// 		title,
+			// 		description,
+			// 		categories: activeCategories,
+			// 		singlePageContent,
+			// 		urlTitle,
+			// 		url,
+			// 		status,
+			// 		userId: user.id,
+			// 		mainImageName: mainImage.imageName,
+			// 		mainImageUrl: mainImage.imageUrl,
+			// 	})
+			// 	.select();
+
+			fetch('api/createItem', {
+				method: 'POST',
+				body: JSON.stringify(newItem),
+				headers: {
+					'Content-Type': 'application/json',
+				},
+			})
+				.then((response) => response.json())
+				.then((data) => console.log(data));
 
 			if (error) {
 				toast.error(error);

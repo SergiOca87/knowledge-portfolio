@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 
 import { FaRegEdit } from 'react-icons/fa';
 import { FaEthereum } from 'react-icons/fa';
@@ -10,6 +11,7 @@ import styled, { css } from 'styled-components';
 import Link from 'next/link';
 import Hero from '../components/layout/Hero';
 import { Container, Row, Col, Card, Button } from 'react-bootstrap';
+import { supabase } from '../utils/supabaseClient';
 
 const StyledGrid = styled.div`
 	display: grid;
@@ -195,11 +197,7 @@ export default function Home() {
 	const [currentIndex, setCurrentIndex] = useState(0);
 	const [flip, setFlip] = useState(false);
 
-	// useEffect(() => {
-	// 	setTimeout(() => {
-	// 		setFlip('back');
-	// 	}, 3500);
-	// }, []);
+	const router = useRouter();
 
 	useEffect(() => {
 		const interval = setInterval(() => {
