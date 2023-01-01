@@ -157,8 +157,8 @@ export default function ItemGrid({
 				filteredItems.filter(
 					(item) =>
 						item.categories !== null &&
-						item.categories.some((category) =>
-							activeCategories.includes(category)
+						activeCategories.every((category) =>
+							item.categories.includes(category)
 						)
 				)
 			);

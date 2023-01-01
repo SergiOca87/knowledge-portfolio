@@ -156,6 +156,8 @@ export async function getServerSideProps(context) {
 	const userId = params.id;
 
 	// Fetch items related to that ID (foreign key relationship)
+	// This is ok here, does not need t be an API call:
+	//It can be tempting to reach for an API Route when you want to fetch data from the server, then call that API route from getServerSideProps. This is an unnecessary and inefficient approach, as it will cause an extra request to be made due to both getServerSideProps and API Routes running on the server.
 	let { data: items } = await supabase
 		.from('items')
 		.select('*')
@@ -171,13 +173,11 @@ export async function getServerSideProps(context) {
 		.select('*')
 		.eq('userId', userId);
 
-	//TODO Revalidated or use getServerSideProps? To check on each refresh
 	return {
 		props: {
 			items,
 			categories,
 		},
-		// revalidate: 5,
 	};
 }
 

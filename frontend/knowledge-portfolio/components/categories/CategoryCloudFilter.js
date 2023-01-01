@@ -24,8 +24,6 @@ export default function CategoryCloudFilter({
 		// Get the category id stored in the data attr
 		const clickedCategory = Number(button.dataset.category);
 
-		console.log(clickedCategory);
-
 		if (activeCategories?.includes(clickedCategory)) {
 			// Deselect the category (button toggle), so remove it from the activeCategories
 			setActiveCategories(
@@ -60,9 +58,6 @@ export default function CategoryCloudFilter({
 				}
 				return (
 					<>
-						{/* //TODO: These should be the Category component now
-						//TODO: Handle state change here for both filtering and
-						submitting selected categories */}
 						<Category
 							category={category}
 							asButtons={true}

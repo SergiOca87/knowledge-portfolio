@@ -1,8 +1,5 @@
 import React, { useContext, useEffect } from 'react';
 import Link from 'next/link';
-// import { useUser } from './User';
-import gql from 'graphql-tag';
-import { useMutation, useQuery } from '@apollo/client';
 import SignOut from '../auth/SignOut';
 import styled, { css } from 'styled-components';
 import { Container } from 'react-bootstrap';
@@ -74,10 +71,8 @@ export default function Nav() {
 	// const user = useUser();
 	const { user, setUser } = useUserState();
 	// const { data } = useQuery(LOGGED_IN_USER);
-
+	// const user = useUser();
 	const router = useRouter();
-
-	console.log('in nav...', user);
 
 	//TODO: Follow this pattern everywhere. May need to useeffect and set the user anyways so that this is more reactive?
 	// const user = data?.authenticatedItem;

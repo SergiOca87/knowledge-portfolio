@@ -150,33 +150,34 @@ export default function CreateItem() {
 				return;
 			}
 
-			// const { data: itemData, error } = await supabase
-			// 	.from('items')
-			// 	.insert({
-			// 		// created_at: date,
-			// 		username: user.username,
-			// 		title,
-			// 		description,
-			// 		categories: activeCategories,
-			// 		singlePageContent,
-			// 		urlTitle,
-			// 		url,
-			// 		status,
-			// 		userId: user.id,
-			// 		mainImageName: mainImage.imageName,
-			// 		mainImageUrl: mainImage.imageUrl,
-			// 	})
-			// 	.select();
+			const { data: itemData, error } = await supabase
+				.from('items')
+				.insert({
+					// created_at: date,
+					username: user.username,
+					title,
+					description,
+					categories: activeCategories,
+					singlePageContent,
+					urlTitle,
+					url,
+					status,
+					userId: user.id,
+					mainImageName: mainImage.imageName,
+					mainImageUrl: mainImage.imageUrl,
+				})
+				.select();
 
-			fetch('api/createItem', {
-				method: 'POST',
-				body: JSON.stringify(newItem),
-				headers: {
-					'Content-Type': 'application/json',
-				},
-			})
-				.then((response) => response.json())
-				.then((data) => console.log(data));
+			//TODO: An alternative way using API, not needed?
+			// fetch('api/createItem', {
+			// 	method: 'POST',
+			// 	body: JSON.stringify(newItem),
+			// 	headers: {
+			// 		'Content-Type': 'application/json',
+			// 	},
+			// })
+			// 	.then((response) => response.json())
+			// 	.then((data) => console.log(data));
 
 			if (error) {
 				toast.error(error);

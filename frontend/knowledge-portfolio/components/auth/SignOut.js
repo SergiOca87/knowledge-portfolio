@@ -10,6 +10,7 @@ import { toast } from 'react-toastify';
 
 export default function SignOut() {
 	const router = useRouter();
+	const { setUser } = useUserState();
 
 	const handleSignOut = async () => {
 		const { error } = await supabase.auth.signOut();
@@ -17,6 +18,7 @@ export default function SignOut() {
 		if (error) {
 			toast.error(error);
 		} else {
+			setUser(null);
 			router.push('/');
 		}
 	};

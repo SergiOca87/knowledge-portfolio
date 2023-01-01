@@ -1,5 +1,7 @@
 import { supabase } from '../../utils/supabaseClient';
 
+//TODO: We are not doing it with APIs
+
 export default async function handler(req, res) {
 	if (req.method === 'POST') {
 		// Extract values
@@ -33,9 +35,6 @@ export default async function handler(req, res) {
 			.from('items')
 			.insert(newItem)
 			.select();
-
-		console.log('api create item', data);
-
 		// Send error code otherwise
 
 		// Send ok code
