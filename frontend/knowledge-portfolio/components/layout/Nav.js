@@ -68,14 +68,9 @@ const StyledMail = styled.div`
 `;
 
 export default function Nav() {
-	// const user = useUser();
-	const { user, setUser } = useUserState();
-	// const { data } = useQuery(LOGGED_IN_USER);
-	// const user = useUser();
+	const { user } = useUserState();
 	const router = useRouter();
-
-	//TODO: Follow this pattern everywhere. May need to useeffect and set the user anyways so that this is more reactive?
-	// const user = data?.authenticatedItem;
+	const userId = user ? userId : null;
 
 	return (
 		<div>
@@ -94,29 +89,11 @@ export default function Nav() {
 							gap: 3rem;
 						`}
 					>
-						{/* <Link href={`/public_profiles`}>
-							<a
-								className={
-									router.pathname == '/public_profiles'
-										? 'active'
-										: ''
-								}
-							>
-								Public Portfolios
-							</a>
-						</Link>
-						<Link href={`/web3`}>
-							<a
-								className={
-									router.pathname == '/web3' ? 'active' : ''
-								}
-							>
-								Web3
-							</a>
-						</Link> */}
+						{user ? <p>{userId}</p> : 'no user'}
+
 						{user ? (
 							<>
-								<Link href={`/portfolio/${user.id}`}>
+								<Link href={`/portfolio/${userId}`}>
 									<a
 										className={
 											router.pathname.includes(
@@ -129,7 +106,7 @@ export default function Nav() {
 										Portfolio
 									</a>
 								</Link>
-								<Link href={`/year-in-review/${user.id}`}>
+								<Link href={`/year-in-review/${userId}`}>
 									<a
 										className={
 											router.pathname.includes(
@@ -142,23 +119,10 @@ export default function Nav() {
 										Year In Review
 									</a>
 								</Link>
-								<Link href={`/user/${user.id}`}>
+								<Link href={`/user/${userId}`}>
 									<FaUser />
 								</Link>
-								{/* <Link href={`/mail/${user.id}`}>
-									<StyledMail>
-										{user?.received?.length > 0 ? (
-											<>
-												<FaRegEnvelopeOpen />
-												<span>
-													{user.received.length}
-												</span>
-											</>
-										) : (
-											<FaRegEnvelope />
-										)}
-									</StyledMail>
-								</Link> */}
+
 								<SignOut />
 							</>
 						) : (

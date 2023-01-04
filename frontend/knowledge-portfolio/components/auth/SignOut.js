@@ -1,16 +1,12 @@
 import React from 'react';
-import gql from 'graphql-tag';
-import { useMutation } from '@apollo/client';
-// import { CURRENT_USER_QUERY } from './User';
-import { Router, useRouter } from 'next/router';
+import { useRouter } from 'next/router';
 import { Button } from 'react-bootstrap';
-import { useUserState } from '../../context/userContext';
 import { supabase } from '../../utils/supabaseClient';
 import { toast } from 'react-toastify';
+import { useUserState } from '../../context/userContext';
 
 export default function SignOut() {
 	const router = useRouter();
-	const { setUser } = useUserState();
 
 	const handleSignOut = async () => {
 		const { error } = await supabase.auth.signOut();
@@ -18,7 +14,6 @@ export default function SignOut() {
 		if (error) {
 			toast.error(error);
 		} else {
-			setUser(null);
 			router.push('/');
 		}
 	};

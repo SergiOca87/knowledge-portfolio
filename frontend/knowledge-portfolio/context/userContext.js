@@ -44,7 +44,9 @@ export const UserProvider = ({ children }) => {
 							.from('profiles')
 							.select('*')
 							.eq('id', user.id);
-						setUser(profile[0]);
+
+						profile && setUser(profile[0]);
+
 						if (error) {
 							throw error;
 						}

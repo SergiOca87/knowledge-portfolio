@@ -17,12 +17,10 @@ function MyApp({ Component, pageProps }) {
 	// Listen to auth events:
 	// https://supabase.com/docs/reference/javascript/next/auth-onauthstatechange
 	supabase.auth.onAuthStateChange((event, session) => {
-		console.log('event', event);
 		if (event === 'PASSWORD_RECOVERY') {
 			router.push('/update-user');
 		} else if (event === 'SIGNED_IN') {
 			//TODO: The best would be to add the user to context and then redirect.
-
 			console.log(session);
 			router.push(`/portfolio/${session.user.id}`);
 		}

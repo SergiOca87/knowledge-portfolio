@@ -1,7 +1,5 @@
 import { supabase } from '../../utils/supabaseClient';
 
-//TODO: We are not doing it with APIs
-
 export default async function handler(req, res) {
 	if (req.method === 'POST') {
 		// Extract values
@@ -30,12 +28,34 @@ export default async function handler(req, res) {
 			return;
 		}
 
-		// await supabase, etc.
-		const { data, error } = await supabase
+		const { data: itemData, error } = await supabase
 			.from('items')
 			.insert(newItem)
 			.select();
 		// Send error code otherwise
+
+		if (newItem.mainImageName) {
+			const { data: imageData, error: imageError } = await supabase
+				.from('image')
+				.insert({
+					// created_at: date,
+					imageName: newItem.mainImageName,
+					userId: mainImageName.userId,
+					imageUrl: newItem.mainImageUrl,
+					item: itemData[0].id,
+				})
+				.select();
+
+			//TODO: May not be necessary to do this relationship at the end with the imageUrl field but may be useful down the road
+			const { data: itemDataUpdate, error: itemDataUpdateError } =
+				await supabase
+					.from('items')
+					.update({
+						// created_at: date,
+						mainImageId: imageData[0].id,
+					})
+					.eq('id', itemData[0].id);
+		}
 
 		// Send ok code
 	}

@@ -150,34 +150,34 @@ export default function CreateItem() {
 				return;
 			}
 
-			const { data: itemData, error } = await supabase
-				.from('items')
-				.insert({
-					// created_at: date,
-					username: user.username,
-					title,
-					description,
-					categories: activeCategories,
-					singlePageContent,
-					urlTitle,
-					url,
-					status,
-					userId: user.id,
-					mainImageName: mainImage.imageName,
-					mainImageUrl: mainImage.imageUrl,
-				})
-				.select();
+			// const { data: itemData, error } = await supabase
+			// 	.from('items')
+			// 	.insert({
+			// 		// created_at: date,
+			// 		username: user.username,
+			// 		title,
+			// 		description,
+			// 		categories: activeCategories,
+			// 		singlePageContent,
+			// 		urlTitle,
+			// 		url,
+			// 		status,
+			// 		userId: user.id,
+			// 		mainImageName: mainImage.imageName,
+			// 		mainImageUrl: mainImage.imageUrl,
+			// 	})
+			// 	.select();
 
 			//TODO: An alternative way using API, not needed?
-			// fetch('api/createItem', {
-			// 	method: 'POST',
-			// 	body: JSON.stringify(newItem),
-			// 	headers: {
-			// 		'Content-Type': 'application/json',
-			// 	},
-			// })
-			// 	.then((response) => response.json())
-			// 	.then((data) => console.log(data));
+			fetch('api/createItem', {
+				method: 'POST',
+				body: JSON.stringify(newItem),
+				headers: {
+					'Content-Type': 'application/json',
+				},
+			})
+				.then((response) => response.json())
+				.then((data) => console.log(data));
 
 			if (error) {
 				toast.error(error);
@@ -196,30 +196,6 @@ export default function CreateItem() {
 
 				//TODO: This is not working (to clear the wysywyg), may have to reload the page on submit
 				setContentState(convertFromRaw(singlePageContent));
-
-				if (mainImage) {
-					const { data: imageData, error: imageError } =
-						await supabase
-							.from('image')
-							.insert({
-								// created_at: date,
-								imageName: mainImage.imageName,
-								userId: user.id,
-								imageUrl: mainImage.imageUrl,
-								item: itemData[0].id,
-							})
-							.select();
-
-					//TODO: May not be necessary to do this relationship at the end with the imageUrl field but may be useful down the road
-					const { data: itemDataUpdate, error: itemDataUpdateError } =
-						await supabase
-							.from('items')
-							.update({
-								// created_at: date,
-								mainImageId: imageData[0].id,
-							})
-							.eq('id', itemData[0].id);
-				}
 			}
 		}
 	};
