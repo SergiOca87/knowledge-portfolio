@@ -153,6 +153,7 @@ export default function ItemGrid({
 		if (activeCategories.length === 0) {
 			setFilteredItems(items);
 		} else {
+			//TODO: We can't remove items, we need to hide them, need to be able to show them again
 			setFilteredItems(
 				filteredItems.filter(
 					(item) =>

@@ -22,15 +22,26 @@ export default function DeleteItem({ id, children }) {
 		});
 
 		if (deleteConfirm.counter >= 2) {
-			const { error } = await supabase
-				.from('items')
-				.delete()
-				.eq('id', id);
+			try {
+				fetch('/api/deleteItem', {
+					method: 'DELETE',
+					body: JSON.stringify(id),
+					headers: {
+						'Content-Type': 'application.json',
+					},
+				})
+					.then((response) => response.json())
+					.then((data) => {
+						if (data.statusCode === 200) {
+							toast.success(data.message);
+							//TODO: Actually hide the item, maybe using ref?
 
-			if (error) {
-				toast.error(error);
-			} else {
-				router.replace(router.asPath);
+							return;
+						}
+					});
+			} catch (err) {
+				toast.error(err);
+				console.log(err);
 			}
 		}
 	};

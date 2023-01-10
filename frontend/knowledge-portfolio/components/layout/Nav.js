@@ -70,7 +70,7 @@ const StyledMail = styled.div`
 export default function Nav() {
 	const { user } = useUserState();
 	const router = useRouter();
-	const userId = user ? userId : null;
+	const userId = user ? user.id : null;
 
 	return (
 		<div>
@@ -89,8 +89,6 @@ export default function Nav() {
 							gap: 3rem;
 						`}
 					>
-						{user ? <p>{userId}</p> : 'no user'}
-
 						{user ? (
 							<>
 								<Link href={`/portfolio/${userId}`}>

@@ -168,20 +168,17 @@ export default function CreateItem() {
 			// 	})
 			// 	.select();
 
-			//TODO: An alternative way using API, not needed?
-			fetch('api/createItem', {
-				method: 'POST',
-				body: JSON.stringify(newItem),
-				headers: {
-					'Content-Type': 'application/json',
-				},
-			})
-				.then((response) => response.json())
-				.then((data) => console.log(data));
+			try {
+				fetch('api/createItem', {
+					method: 'POST',
+					body: JSON.stringify(newItem),
+					headers: {
+						'Content-Type': 'application/json',
+					},
+				})
+					.then((response) => response.json())
+					.then((data) => console.log(data));
 
-			if (error) {
-				toast.error(error);
-			} else {
 				// Clear form on submit
 				setInputs({
 					title: '',
@@ -196,6 +193,8 @@ export default function CreateItem() {
 
 				//TODO: This is not working (to clear the wysywyg), may have to reload the page on submit
 				setContentState(convertFromRaw(singlePageContent));
+			} catch (err) {
+				toast.error(err);
 			}
 		}
 	};

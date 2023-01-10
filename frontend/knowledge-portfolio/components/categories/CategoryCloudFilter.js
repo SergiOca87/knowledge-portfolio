@@ -21,11 +21,10 @@ export default function CategoryCloudFilter({
 		// If click is on svg or span, find the parent button
 		const button = target.closest('.btn-primary');
 
-		// Get the category id stored in the data attr
+		// Get the category id (number) stored in the data attr
 		const clickedCategory = Number(button.dataset.category);
 
 		if (activeCategories?.includes(clickedCategory)) {
-			// Deselect the category (button toggle), so remove it from the activeCategories
 			setActiveCategories(
 				activeCategories.filter(
 					(category) => category !== clickedCategory
