@@ -10,7 +10,7 @@ import Link from 'next/link';
 import Router from 'next/router';
 import Categories from '../categories/Categories';
 import { EditorState, convertFromRaw } from 'draft-js';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import FloatingLabel from 'react-bootstrap/FloatingLabel';

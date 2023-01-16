@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Button, CloseButton, Modal } from 'react-bootstrap';
 import styled from 'styled-components';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-import PortfolioOptionsContext from '../context/PortfolioOptionsContext';
+// import PortfolioOptionsContext from '../context/PortfolioOptionsContext';
 
 const StyledListItem = styled.li`
 	width: 100%;

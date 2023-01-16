@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import DeleteItem from './DeleteItem';
@@ -22,7 +22,13 @@ const StyledCard = styled(Card)`
 `;
 
 //TODO: Add Date
-export default function Item({ item, categories, isPublic }) {
+export default function Item({
+	item,
+	categories,
+	isPublic,
+	setHasBeenDeletedId,
+	hasBeenDeletedId,
+}) {
 	return (
 		<StyledCard className={item.id}>
 			<Card.Header as="h4" className="mb-3">
@@ -94,7 +100,12 @@ export default function Item({ item, categories, isPublic }) {
 							<FaPencilAlt />
 						</Button>
 					</Link>
-					<DeleteItem id={item.id} className="btn">
+					<DeleteItem
+						id={item.id}
+						setHasBeenDeletedId={setHasBeenDeletedId}
+						hasBeenDeletedId={hasBeenDeletedId}
+						className="btn"
+					>
 						{' '}
 						<FaTrashAlt />
 					</DeleteItem>

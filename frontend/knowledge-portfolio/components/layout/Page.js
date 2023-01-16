@@ -8,6 +8,8 @@ import { useContext, useEffect, useState } from 'react';
 import { useQuery } from '@apollo/client';
 
 import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import Footer from './Footer';
 import { useUserState } from '../../context/userContext';
 

@@ -29,7 +29,7 @@ import Main from '../../components/layout/Main';
 // 	OptionsProvider,
 // } from '../../context/PortfolioOptionsContext';
 import UserStyleOptions from '../../components/user/UserStyleOptions';
-import OrderingModal from '../../components/OrderingModal';
+// import OrderingModal from '../../components/OrderingModal';
 // import { LOGGED_IN_USER } from '../../components/User';
 import QrModal from '../../components/QrModal';
 import UserContext, { useUserState } from '../../context/userContext';

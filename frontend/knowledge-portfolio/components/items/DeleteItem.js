@@ -1,12 +1,18 @@
 import router from 'next/router';
 import React, { useContext, useEffect } from 'react';
+import { supabase } from '../../utils/supabaseClient';
 import { useState } from 'react';
 
 import { Button } from 'react-bootstrap';
-import { ToastContainer, toast } from 'react-toastify';
-import { supabase } from '../../utils/supabaseClient';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-export default function DeleteItem({ id, children }) {
+export default function DeleteItem({
+	id,
+	children,
+	setHasBeenDeletedId,
+	hasBeenDeletedId,
+}) {
 	// So that the user has to click twice to delete an Item
 	const [deleteConfirm, setDeleteConfirm] = useState({
 		counter: 0,
@@ -36,6 +42,10 @@ export default function DeleteItem({ id, children }) {
 							toast.success(data.message);
 							//TODO: Actually hide the item, maybe using ref?
 
+							setHasBeenDeletedId((hasBeenDeletedId) => [
+								...hasBeenDeletedId,
+								id,
+							]);
 							return;
 						}
 					});

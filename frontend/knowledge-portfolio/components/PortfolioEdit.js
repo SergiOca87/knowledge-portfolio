@@ -13,9 +13,9 @@ import {
 } from 'react-bootstrap';
 import { FaPencilAlt } from 'react-icons/fa';
 import styled from 'styled-components';
-import PortfolioOptionsContext from '../context/PortfolioOptionsContext';
+// import PortfolioOptionsContext from '../context/PortfolioOptionsContext';
 
-import OrderingModal from './OrderingModal';
+import OrderingModal from './_OrderingModal';
 import { LOGGED_IN_USER } from './User';
 
 const StyledFormWrap = styled.div``;
@@ -36,7 +36,7 @@ const UPDATE_USER_MUTATION = gql`
 `;
 
 export default function PortfolioEdit({ children }) {
-	const { options, setOptions } = useContext(PortfolioOptionsContext);
+	// const { options, setOptions } = useContext(PortfolioOptionsContext);
 	const [openModal, setOpenModal] = useState(false);
 	const [show, setShow] = useState(false);
 	const [reorderedItems, setReorderedItems] = useState(null);
