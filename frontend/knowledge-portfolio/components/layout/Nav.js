@@ -19,10 +19,11 @@ const StyledNav = styled.nav`
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	padding: 2rem 2rem;
+	padding: 1rem 2rem;
 	width: 100%;
 	gap: 5rem;
-	background-color: #fff;
+	background-color: var(--bg);
+	border-bottom: 1px solid var(--secondary);
 
 	h1 {
 		margin: 0;
@@ -74,61 +75,57 @@ export default function Nav() {
 
 	return (
 		<div>
-			<Container>
-				<StyledNav>
-					<div>
-						<h1 className="primary">
-							Owl
-							<span className="secondary">it</span>
-						</h1>
-					</div>
+			<StyledNav>
+				<div>
+					<h1 className="primary">
+						Owl
+						<span className="secondary">it</span>
+					</h1>
+				</div>
 
-					<div
-						className="d-flex align-items-center justify-between"
-						css={css`
-							gap: 3rem;
-						`}
-					>
-						{user ? (
-							<>
-								<Link href={`/portfolio/${userId}`}>
-									<a
-										className={
-											router.pathname.includes(
-												'/portfolio/'
-											)
-												? 'active'
-												: ''
-										}
-									>
-										Portfolio
-									</a>
-								</Link>
-								<Link href={`/year-in-review/${userId}`}>
-									<a
-										className={
-											router.pathname.includes(
-												'/year-in-review/'
-											)
-												? 'active'
-												: ''
-										}
-									>
-										Year In Review
-									</a>
-								</Link>
-								<Link href={`/user/${userId}`}>
-									<FaUser />
-								</Link>
+				<div
+					className="d-flex align-items-center justify-between"
+					css={css`
+						gap: 3rem;
+					`}
+				>
+					{user ? (
+						<>
+							<Link href={`/portfolio/${userId}`}>
+								<a
+									className={
+										router.pathname.includes('/portfolio/')
+											? 'active'
+											: ''
+									}
+								>
+									Portfolio
+								</a>
+							</Link>
+							<Link href={`/year-in-review/${userId}`}>
+								<a
+									className={
+										router.pathname.includes(
+											'/year-in-review/'
+										)
+											? 'active'
+											: ''
+									}
+								>
+									Year In Review
+								</a>
+							</Link>
+							<Link href={`/user/${userId}`}>
+								<FaUser />
+							</Link>
 
-								<SignOut />
-							</>
-						) : (
-							<Link href="/login">Sign In</Link>
-						)}
-					</div>
-				</StyledNav>
-			</Container>
+							<SignOut />
+						</>
+					) : (
+						<Link href="/login">Sign In</Link>
+					)}
+				</div>
+			</StyledNav>
 		</div>
 	);
 }

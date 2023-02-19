@@ -168,6 +168,8 @@ export default function CreateItem() {
 			// 	})
 			// 	.select();
 
+			console.log('new item is', newItem);
+
 			try {
 				fetch('api/createItem', {
 					method: 'POST',

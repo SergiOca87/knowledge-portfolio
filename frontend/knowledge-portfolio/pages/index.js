@@ -23,7 +23,6 @@ const StyledMain = styled.main`
 	min-height: 100vh;
 	position: relative;
 	overflow: hidden;
-	background-color: #f1f1f1;
 	height: 100%;
 	padding-bottom: 6rem;
 

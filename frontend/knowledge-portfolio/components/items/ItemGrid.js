@@ -152,6 +152,7 @@ export default function ItemGrid({
 	// Filter the items if an item has been deleted (so that the item is hidden and we don't need to reload the page)
 
 	//TODO: Resolve "Key (id)=(53) is still referenced from table "image"
+	//TODO: Is this a bad use of useeffect?
 	useEffect(() => {
 		setFilteredItems(
 			items.filter((item) => !hasBeenDeletedId.includes(item.id))
@@ -162,9 +163,8 @@ export default function ItemGrid({
 		if (activeCategories.length === 0) {
 			setFilteredItems(items);
 		} else {
-			//TODO: We can't remove items, we need to hide them, need to be able to show them again
 			setFilteredItems(
-				filteredItems.filter(
+				items.filter(
 					(item) =>
 						item.categories !== null &&
 						activeCategories.every((category) =>

@@ -53,13 +53,6 @@ export default function UpdateItem({ item }) {
 
 	item = item[0];
 
-	useEffect(() => {
-		setMainImage({
-			imageName: item.mainImageName ? item.mainImageName : '',
-			imageUrl: item.mainImageUrl ? item.mainImageUrl : '',
-		});
-	}, []);
-
 	const [inputs, setInputs] = useState({
 		title: item.title,
 		description: item.description,
@@ -71,6 +64,17 @@ export default function UpdateItem({ item }) {
 		// date: '',
 		// url: '',
 	});
+
+	// These useEffects seem necessary as what they do require a mounted component?
+	// Make sure these are necessary
+	useEffect(() => {
+		setMainImage({
+			imageName: item.mainImageName ? item.mainImageName : '',
+			imageUrl: item.mainImageUrl ? item.mainImageUrl : '',
+		});
+
+		setActiveCategories(item.categories);
+	}, []);
 
 	useEffect(() => {
 		setInputs({
@@ -122,6 +126,11 @@ export default function UpdateItem({ item }) {
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 
+		console.log(
+			'when submitting, the active categories are',
+			activeCategories
+		);
+
 		if (e.target.id !== 'main-submit') {
 			return;
 		} else {
@@ -133,6 +142,20 @@ export default function UpdateItem({ item }) {
 				url,
 				status,
 			} = inputs;
+
+			const updatedItem = {
+				userId: user.id,
+				title,
+				description,
+				categories: activeCategories,
+				singlePageContent,
+				urlTitle,
+				url,
+				status,
+				mainImageName: mainImage.imageName,
+				mainImageUrl: mainImage.imageUrl,
+				itemId: item.id,
+			};
 
 			//TODO: Should this be handled in an API route?
 			//TODO: We need some extra validation here, if API route, serverside validation:
@@ -146,28 +169,22 @@ export default function UpdateItem({ item }) {
 			// 	toast.message('...');
 			// 	return;
 			// }
+			if (!user || !title || title.trim() === '') {
+				toast.message('There was a problem creating your item');
+				return;
+			}
 
-			const { error } = await supabase
-				.from('items')
-				.update({
-					// created_at: date,
-					username: user.username,
-					title,
-					description,
-					categories: activeCategories,
-					singlePageContent,
-					urlTitle,
-					url,
-					status,
-					userId: user.id,
-					mainImageName: mainImage.imageName,
-					mainImageUrl: mainImage.imageUrl,
+			try {
+				fetch('/api/updateItem', {
+					method: 'PUT',
+					body: JSON.stringify(updatedItem),
+					headers: {
+						'Content-Type': 'application/json',
+					},
 				})
-				.eq('id', item.id);
+					.then((response) => response.json())
+					.then((data) => console.log(data));
 
-			if (error) {
-				toast.error(error);
-			} else {
 				// Clear form on submit
 				setInputs({
 					title: '',
@@ -180,33 +197,71 @@ export default function UpdateItem({ item }) {
 
 				setActiveCategories([]);
 
-				//TODO: This is not working (to clear the wysywyg), may have to reload the page on submit
-				// setContentState(convertFromRaw(singlePageContent));
-
-				if (mainImage) {
-					const { data: imageData, error: imageError } =
-						await supabase
-							.from('image')
-							.insert({
-								// created_at: date,
-								imageName: mainImage.imageName,
-								userId: user.id,
-								imageUrl: mainImage.imageUrl,
-								item: item.id,
-							})
-							.select();
-
-					//TODO: May not be necessary to do this relationship at the end with the imageUrl field but may be useful down the road
-					const { data: itemDataUpdate, error: itemDataUpdateError } =
-						await supabase
-							.from('items')
-							.update({
-								// created_at: date,
-								mainImageId: imageData[0].id,
-							})
-							.eq('id', item.id);
-				}
+				// 	//TODO: This is not working (to clear the wysywyg), may have to reload the page on submit
+				setContentState(convertFromRaw(singlePageContent));
+			} catch (err) {
+				toast.error(err);
 			}
+
+			// const { error } = await supabase
+			// 	.from('items')
+			// 	.update({
+			// 		// created_at: date,
+			// 		// username: user.username,
+			// 		title,
+			// 		// description,
+			// 		// categories: activeCategories,
+			// 		// singlePageContent,
+			// 		// urlTitle,
+			// 		// url,
+			// 		// status,
+			// 		// userId: user.id,
+			// 		// mainImageName: mainImage.imageName,
+			// 		// mainImageUrl: mainImage.imageUrl,
+			// 	})
+			// 	.eq('id', item.id);
+
+			// if (error) {
+			// 	toast.error(error);
+			// } else {
+			// 	// Clear form on submit
+			// 	setInputs({
+			// 		title: '',
+			// 		description: '',
+			// 		singlePageContent: '',
+			// 		urlTitle: '',
+			// 		url: '',
+			// 		status: 'true',
+			// 	});
+
+			// 	setActiveCategories([]);
+
+			// 	// 	//TODO: This is not working (to clear the wysywyg), may have to reload the page on submit
+			// 	// 	// setContentState(convertFromRaw(singlePageContent));
+
+			// 	if (mainImage) {
+			// 		const { data: imageData, error: imageError } =
+			// 			await supabase
+			// 				.from('image')
+			// 				.insert({
+			// 					// created_at: date,
+			// 					imageName: mainImage.imageName,
+			// 					userId: user.id,
+			// 					imageUrl: mainImage.imageUrl,
+			// 					item: item.id,
+			// 				})
+			// 				.select();
+
+			// 		//TODO: May not be necessary to do this relationship at the end with the imageUrl field but may be useful down the road
+			// 		const { data: itemDataUpdate, error: itemDataUpdateError } =
+			// 			await supabase
+			// 				.from('items')
+			// 				.update({
+			// 					// created_at: date,
+			// 					mainImageId: imageData[0].id,
+			// 				})
+			// 				.eq('id', item.id);
+			// 			}
 		}
 	};
 
@@ -222,7 +277,7 @@ export default function UpdateItem({ item }) {
 				`}
 			>
 				{/* TODO: Should be its own component */}
-				<StyledForm method="POST" onSubmit={handleSubmit}>
+				<StyledForm method="PUT" onSubmit={handleSubmit}>
 					<Form.Group className="mb-5">
 						<FloatingLabel controlId="floatingInput" label="Title">
 							<Form.Control

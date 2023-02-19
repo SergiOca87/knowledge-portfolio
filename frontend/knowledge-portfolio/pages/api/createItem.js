@@ -2,6 +2,7 @@ import { supabase } from '../../utils/supabaseClient';
 
 export default async function handler(req, res) {
 	if (req.method === 'POST') {
+		console.log('create item api', req);
 		// Extract values
 		const newItem = {
 			username: req.body.user,
@@ -19,11 +20,11 @@ export default async function handler(req, res) {
 
 		// Serverside validation
 		if (
-			!title ||
-			title.trim() === '' ||
-			!userName ||
-			userName.trim() === '' ||
-			!userId
+			!req.body.title ||
+			req.body.title.trim() === '' ||
+			!req.body.user ||
+			req.body.user.trim() === '' ||
+			!req.body.userId
 		) {
 			return;
 		}

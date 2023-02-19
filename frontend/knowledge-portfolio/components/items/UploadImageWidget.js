@@ -10,7 +10,7 @@ function UploadImageWidget({ setMainImage }) {
 	const widgetRef = useRef();
 
 	useEffect(() => {
-		if (typeof window !== 'undefined') {
+		if (typeof window !== 'undefined' && window.cloudinary) {
 			cloudinaryRef.current = window.cloudinary;
 			widgetRef.current = cloudinaryRef.current.createUploadWidget(
 				{

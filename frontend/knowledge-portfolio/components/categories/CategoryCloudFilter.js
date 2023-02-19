@@ -33,6 +33,8 @@ export default function CategoryCloudFilter({
 		} else {
 			setActiveCategories([...activeCategories, clickedCategory]);
 		}
+
+		console.log('active categories are...', activeCategories);
 	};
 
 	return (
