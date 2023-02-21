@@ -14,6 +14,7 @@ const StyledCategory = styled.div`
 	.category {
 		font-size: 1.8rem;
 		margin-right: 1rem;
+		color: #fff;
 	}
 
 	div {
@@ -25,6 +26,7 @@ const StyledCategory = styled.div`
 		padding: 0.8rem 1.5rem;
 		letter-spacing: 1px;
 		font-family: 'Montserrat-Medium';
+		color: #fff;
 	}
 `;
 
@@ -62,7 +64,7 @@ function Category({
 			<div
 				css={css`
 					background-color: ${background
-						? 'var(--secondary)'
+						? 'var(--tertiary)'
 						: 'transparent'};
 				`}
 			>

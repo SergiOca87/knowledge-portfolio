@@ -13,6 +13,8 @@ import Hero from '../components/layout/Hero';
 import { Container, Row, Col, Card, Button } from 'react-bootstrap';
 import { supabase } from '../utils/supabaseClient';
 
+import introImage from '../public/images/intro.svg';
+
 const StyledGrid = styled.div`
 	display: grid;
 	grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -118,7 +120,7 @@ const StyledMain = styled.main`
 	}
 
 	.cards {
-		margin-top: -7rem;
+		// margin-top: -7rem;
 
 		.card {
 			.card-body {
@@ -189,6 +191,13 @@ const StyledMain = styled.main`
 	}
 `;
 
+const StyledImageWrap = styled.div`
+	text-align: center;
+	img {
+		max-height: 70rem;
+	}
+`;
+
 const ChangingWord = styled.div``;
 
 export default function Home() {
@@ -224,7 +233,7 @@ export default function Home() {
 				<Container fluid>
 					<div className="titles">
 						<Container>
-							<Row className="align-items-center">
+							<Row className="">
 								<Col lg={5}>
 									<>
 										{/* <h2>
@@ -238,7 +247,7 @@ export default function Home() {
 											Your Knowledge
 										</h2> */}
 
-										<div className="flip-card">
+										{/* <div className="flip-card">
 											<div
 												className={`flip-card-inner ${flip}`}
 											>
@@ -269,8 +278,18 @@ export default function Home() {
 													</h2>
 												</div>
 											</div>
-										</div>
-										<h2
+										</div> */}
+										<h1>
+											Your Knowledge <br></br>
+											<span className="secondary ">
+												Portfolio
+											</span>
+										</h1>
+
+										<Button variant="primary" type="button">
+											Get Started
+										</Button>
+										{/* <h2
 											css={css`
 												font-family: 'Montserrat-Bold';
 												margin: 0;
@@ -285,28 +304,14 @@ export default function Home() {
 											<span className="secondary d-block">
 												Knowledge
 											</span>
-										</h2>
+										</h2> */}
 									</>
 								</Col>
 
 								<Col lg={7}>
-									<div
-										className="d-none d-lg-block"
-										css={css`
-											position: absolute;
-											bottom: -65px;
-											right: 0;
-											max-width: 55rem;
-											width: 100%;
-											height: 100%;
-										`}
-									>
-										<Image
-											src="/images/owl.png"
-											layout={'fill'}
-											objectFit={'contain'}
-										/>
-									</div>
+									<StyledImageWrap>
+										<Image src={introImage} priority />
+									</StyledImageWrap>
 								</Col>
 							</Row>
 						</Container>

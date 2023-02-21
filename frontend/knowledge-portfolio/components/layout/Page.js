@@ -48,9 +48,9 @@ const GlobalStyles = createGlobalStyle`
   }
   html {
     --bg: #181823;
-    --primary: #537FE7;
+    --primary: #84a98c;
     --secondary: #E9F8F9;
-    --tertiary: #C0EEF2;
+    --tertiary: #051923;
     --platinum: #e5e5e5ff;
     --primary-bg-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' version='1.1' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:svgjs='http://svgjs.com/svgjs' width='1440' height='700' preserveAspectRatio='none' viewBox='0 0 1440 700'%3e%3cg mask='url(%26quot%3b%23SvgjsMask1626%26quot%3b)' fill='none'%3e%3crect width='1440' height='700' x='0' y='0' fill='url(%23SvgjsLinearGradient1627)'%3e%3c/rect%3e%3cpath d='M1440 0L1081.54 0L1440 118.52z' fill='rgba(255%2c 255%2c 255%2c .1)'%3e%3c/path%3e%3cpath d='M1081.54 0L1440 118.52L1440 171.56L900.8399999999999 0z' fill='rgba(255%2c 255%2c 255%2c .075)'%3e%3c/path%3e%3cpath d='M900.84 0L1440 171.56L1440 365.2L867.77 0z' fill='rgba(255%2c 255%2c 255%2c .05)'%3e%3c/path%3e%3cpath d='M867.77 0L1440 365.2L1440 378.55L546.27 0z' fill='rgba(255%2c 255%2c 255%2c .025)'%3e%3c/path%3e%3cpath d='M0 700L127.85 700L0 442.7z' fill='rgba(0%2c 0%2c 0%2c .1)'%3e%3c/path%3e%3cpath d='M0 442.7L127.85 700L625.46 700L0 299.87z' fill='rgba(0%2c 0%2c 0%2c .075)'%3e%3c/path%3e%3cpath d='M0 299.87L625.46 700L893.75 700L0 252.52z' fill='rgba(0%2c 0%2c 0%2c .05)'%3e%3c/path%3e%3cpath d='M0 252.51999999999998L893.75 700L1065.99 700L0 87.92999999999998z' fill='rgba(0%2c 0%2c 0%2c .025)'%3e%3c/path%3e%3c/g%3e%3cdefs%3e%3cmask id='SvgjsMask1626'%3e%3crect width='1440' height='700' fill='white'%3e%3c/rect%3e%3c/mask%3e%3clinearGradient x1='0%25' y1='50%25' x2='100%25' y2='50%25' gradientUnits='userSpaceOnUse' id='SvgjsLinearGradient1627'%3e%3cstop stop-color='%230e2a47' offset='0'%3e%3c/stop%3e%3cstop stop-color='rgba(20%2c 33%2c 61%2c 1)' offset='1'%3e%3c/stop%3e%3c/linearGradient%3e%3c/defs%3e%3c/svg%3e");
     --wave: url('data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='%2328cfb2' fill-opacity='0.6' d='M0,224L48,229.3C96,235,192,245,288,224C384,203,480,149,576,106.7C672,64,768,32,864,64C960,96,1056,192,1152,197.3C1248,203,1344,117,1392,74.7L1440,32L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z'%3E%3C/path%3E%3C/svg%3E');

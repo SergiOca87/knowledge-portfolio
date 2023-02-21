@@ -77,10 +77,10 @@ export default function Nav() {
 		<div>
 			<StyledNav>
 				<div>
-					<h1 className="primary">
-						Owl
-						<span className="secondary">it</span>
-					</h1>
+					{/* <h1 className="primary">
+						K<span className="secondary">P</span>
+					</h1> */}
+					<h2>Logo</h2>
 				</div>
 
 				<div
