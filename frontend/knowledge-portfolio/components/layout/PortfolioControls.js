@@ -29,30 +29,45 @@ const StyledPortfolioControls = styled.div`
 		background-color: transparent;
 		transition: all 300ms;
 		cursor: pointer;
+		padding: 0;
 		border-bottom: transparent !important;
-		border-right: 1px solid var(--secondary);
-		border-top: 4px solid var(--secondary);
+		border-right: 1px solid var(--primary);
+		border-top: 4px solid var(--primary);
+		border-radius: 0;
+		margin-left -1px;
+		color: #fff;
+		z-index: 10;
 
 		svg {
 			transition: all 300ms;
 			margin-top: -3px;
 		}
 
+		a {
+			display: flex;
+			width: 100%;
+			height: 100%;
+			align-items: center;
+			justify-content: center;
+		}
+
 		&:hover,
 		&:active,
 		&:focus {
+			border-bottom: transparent !important;
+			border-right: 1px solid var(--secondary);
 			border-top: 4px solid var(--secondary);
 			background-color: var(--secondary);
 
 			svg {
-				stroke: #fff;
-				fill: #fff;
+				stroke: var(--black);
+				fill: var(--black);
 			}
 		}
 	}
 `;
 
-function PortfolioControls() {
+function PortfolioControls({ user }) {
 	return (
 		<StyledPortfolioControls>
 			<div>
@@ -65,8 +80,10 @@ function PortfolioControls() {
 					}
 				>
 					<Button>
-						<Link href={'/add-item'}>
-							<FaPlus />
+						<Link href={'/add-item'} className="link">
+							<a>
+								<FaPlus />
+							</a>
 						</Link>
 					</Button>
 				</OverlayTrigger>
@@ -81,9 +98,11 @@ function PortfolioControls() {
 					}
 				>
 					<Button>
-						{/* <Link href={`/public-portfolio/${id}`}>
-							<FaEye />
-						</Link> */}
+						<Link href={`/public-portfolio/${user.id}`}>
+							<a>
+								<FaEye />
+							</a>
+						</Link>
 					</Button>
 				</OverlayTrigger>
 			</div>
@@ -105,7 +124,9 @@ function PortfolioControls() {
 				>
 					<Button>
 						<Link href={'/'}>
-							<FaFileDownload />
+							<a>
+								<FaFileDownload />
+							</a>
 						</Link>
 					</Button>
 				</OverlayTrigger>

@@ -30,6 +30,23 @@ const StyledCategory = styled.div`
 	}
 `;
 
+const StyledCategoryButton = styled(Button)`
+	padding: 0.5rem 1.6rem;
+	height: 4rem;
+	height: 4rem;
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+
+	span {
+		font-size: 1.2rem;
+	}
+
+	svg {
+		margin-top: -2px;
+	}
+`;
+
 function Category({
 	category,
 	background,
@@ -44,8 +61,9 @@ function Category({
 	}
 
 	return asButtons ? (
-		<Button
+		<StyledCategoryButton
 			size="sm"
+			variant="primary btn-outlined btn-small"
 			key={category.id}
 			data-category={`${category.id}`}
 			className={activeCategories?.includes(category.id) ? 'active' : ''}
@@ -58,7 +76,7 @@ function Category({
 			)}
 
 			<span>{category.name}</span>
-		</Button>
+		</StyledCategoryButton>
 	) : (
 		<StyledCategory>
 			<div

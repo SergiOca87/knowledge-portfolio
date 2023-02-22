@@ -40,7 +40,7 @@ import PortfolioControls from '../../components/layout/PortfolioControls';
 const StyledUserCard = styled.div`
 	display: flex;
 	align-items: center;
-	margin-bottom: 6rem;
+	margin-bottom: 4rem;
 
 	.avatar {
 		width: 10rem;
@@ -56,7 +56,7 @@ const StyledUserCard = styled.div`
 		flex-shrink: 0;
 	}
 	h1 {
-		font-size: 4rem;
+		font-size: 3.5rem;
 	}
 `;
 
@@ -114,19 +114,26 @@ export default function UserPortfolioPage({ items, categories }) {
 									<FaUser />
 								</div>
 							)} */}
+
+							{console.log('user', user)}
 							<h1>
-								Welcome to your portfolio,{' '}
-								{/* <span className="secondary">{user?.name}</span> */}
+								Welcome to your portfolio,
+								<br />
+								<span className="secondary">
+									{user?.username}
+								</span>
 							</h1>
 						</StyledUserCard>
 
+						<PortfolioControls user={user} />
 						<StyledGridWrap>
-							<PortfolioControls />
-							<CategoryCloudFilter
-								activeCategories={activeCategories}
-								setActiveCategories={setActiveCategories}
-								all={true}
-							/>
+							{activeCategories && (
+								<CategoryCloudFilter
+									activeCategories={activeCategories}
+									setActiveCategories={setActiveCategories}
+									all={true}
+								/>
+							)}
 							<ItemGrid
 								items={items}
 								categories={categories}

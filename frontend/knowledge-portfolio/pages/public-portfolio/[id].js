@@ -20,8 +20,8 @@ import {
 } from 'react-icons/fa';
 import Link from 'next/link';
 // import { USER_CATEGORIES_QUERY } from '../../components/UserCategories';
-import ItemGrid from '../../components/ItemGrid';
-import Main from '../../components/Main';
+import ItemGrid from '../../components/items/ItemGrid';
+import Main from '../../components/layout/Main';
 import PortfolioOptionsContext, {
 	OptionsProvider,
 } from '../../context/PortfolioOptionsContext';

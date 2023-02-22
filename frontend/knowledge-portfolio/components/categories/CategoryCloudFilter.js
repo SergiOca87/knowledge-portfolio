@@ -3,7 +3,32 @@ import UserContext, { useUserState } from '../../context/userContext';
 import { Button } from 'react-bootstrap';
 import * as FontAwesome from 'react-icons/fa';
 import Category from './Category';
+import styled from 'styled-components';
 // import { USER_CATEGORIES_QUERY, getCategories } from '../user/UserCategories';
+
+const StyledCategoryCloudFilter = styled.div`
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.3rem;
+	margin-bottom: 4rem;
+`;
+
+const StyledCategoryButton = styled(Button)`
+	padding: 0.5rem 1.6rem;
+	height: 4rem;
+	height: 4rem;
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+
+	span {
+		font-size: 1.2rem;
+	}
+
+	svg {
+		margin-top: -2px;
+	}
+`;
 
 export default function CategoryCloudFilter({
 	activeCategories,
@@ -39,33 +64,36 @@ export default function CategoryCloudFilter({
 
 	return (
 		<>
-			{all && (
-				<Button
-					size="sm"
-					className={
-						activeCategories?.includes('All') ? 'active' : ''
-					}
-					data-category="All"
-					onClick={(e) => setActiveCategories([])}
-				>
-					<span>All</span>
-				</Button>
-			)}
-			{userCategories?.map((category) => {
-				let IconName = '';
+			<p>Categories</p>
+			<StyledCategoryCloudFilter>
+				{all && (
+					<StyledCategoryButton
+						size="sm"
+						variant="outlined"
+						className={
+							activeCategories?.includes('All') ? 'active' : ''
+						}
+						data-category="All"
+						onClick={(e) => setActiveCategories([])}
+					>
+						<span>All</span>
+					</StyledCategoryButton>
+				)}
+				{userCategories?.map((category) => {
+					let IconName = '';
 
-				if (category.icon) {
-					IconName = FontAwesome[category.icon];
-				}
-				return (
-					<>
-						<Category
-							category={category}
-							asButtons={true}
-							activeCategories={activeCategories}
-							handleButtonClick={handleButtonClick}
-						/>
-						{/* <Button
+					if (category.icon) {
+						IconName = FontAwesome[category.icon];
+					}
+					return (
+						<>
+							<Category
+								category={category}
+								asButtons={true}
+								activeCategories={activeCategories}
+								handleButtonClick={handleButtonClick}
+							/>
+							{/* <Button
 							size="sm"
 							key={category.id}
 							data-category={`${category.id}`}
@@ -84,9 +112,10 @@ export default function CategoryCloudFilter({
 
 							<span>{category.name}</span>
 						</Button> */}
-					</>
-				);
-			})}
+						</>
+					);
+				})}
+			</StyledCategoryCloudFilter>
 		</>
 	);
 }

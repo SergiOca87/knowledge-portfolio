@@ -14,7 +14,7 @@ import styled, { css } from 'styled-components';
 import Item from './Item';
 // import NotLoggedIn from './NotLoggedIn';
 
-const StyledItemGrid = styled.ul`
+const StyledItemGrid = styled.section`
 	display: grid;
 	list-style: none;
 `;
@@ -177,69 +177,67 @@ export default function ItemGrid({
 
 	return (
 		<>
-			<>
-				<StyledItemGrid
-					css={css`
-						grid-template-columns: repeat(2, 1fr);
-						gap: 2rem;
-					`}
-				>
-					{filteredItems &&
-						filteredItems.map((item, index) => {
-							let itemCategories = '';
+			<StyledItemGrid
+				css={css`
+					grid-template-columns: repeat(2, 1fr);
+					gap: 2rem;
+				`}
+			>
+				{filteredItems &&
+					filteredItems.map((item, index) => {
+						let itemCategories = '';
 
-							// If the item has categories and they match a category ID from the user categories, pass it to the item
-							// Maybe this logic should not be here in the Component
-							if (item.categories && item.categories.length) {
-								itemCategories = categories.filter((category) =>
-									item.categories.includes(category.id)
-								);
-							}
-
-							// if (images && images.length) {
-							// 	setItemImage(
-							// 		...images.filter(
-							// 			(image) => image.item === item.id
-							// 		)
-							// 	);
-							// }
-
-							return (
-								<>
-									<li key={item.id}>
-										<Item
-											item={item}
-											categories={itemCategories}
-											isPublic={isPublic}
-											setHasBeenDeletedId={
-												setHasBeenDeletedId
-											}
-											hasBeenDeletedId={hasBeenDeletedId}
-										/>
-									</li>
-								</>
+						// If the item has categories and they match a category ID from the user categories, pass it to the item
+						// Maybe this logic should not be here in the Component
+						if (item.categories && item.categories.length) {
+							itemCategories = categories.filter((category) =>
+								item.categories.includes(category.id)
 							);
-						})}
+						}
 
-					{isPublicPage && visibleItems <= 0 && (
-						<h3>No results match your search criteria</h3>
-					)}
+						// if (images && images.length) {
+						// 	setItemImage(
+						// 		...images.filter(
+						// 			(image) => image.item === item.id
+						// 		)
+						// 	);
+						// }
 
-					{!isPublicPage && visibleItems <= 0 && (
-						<p>
-							You can now start adding items to your portfolio or
-							create a few categories first{' '}
-							<Link href="/add-category">Here</Link>
-						</p>
-					)}
+						return (
+							<>
+								<div key={item.id}>
+									<Item
+										item={item}
+										categories={itemCategories}
+										isPublic={isPublic}
+										setHasBeenDeletedId={
+											setHasBeenDeletedId
+										}
+										hasBeenDeletedId={hasBeenDeletedId}
+									/>
+								</div>
+							</>
+						);
+					})}
 
-					{/* {!isPublicPage && (
+				{isPublicPage && visibleItems <= 0 && (
+					<h3>No results match your search criteria</h3>
+				)}
+
+				{!isPublicPage && visibleItems <= 0 && (
+					<p>
+						You can now start adding items to your portfolio or
+						create a few categories first{' '}
+						<Link href="/add-category">Here</Link>
+					</p>
+				)}
+
+				{/* {!isPublicPage && (
 							<li lg={user?.options?.options?.cols}>
 								<StyledEmptyCard>Add</StyledEmptyCard>
 							</li>
 						)} */}
-				</StyledItemGrid>
-			</>
+			</StyledItemGrid>
 		</>
 	);
 }
