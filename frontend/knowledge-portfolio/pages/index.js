@@ -4,8 +4,10 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 
 import { FaRegEdit } from 'react-icons/fa';
-import { FaEthereum } from 'react-icons/fa';
+import { FaRegLightbulb } from 'react-icons/fa';
 import { FaRegShareSquare } from 'react-icons/fa';
+import { BiEdit } from 'react-icons/bi';
+import { BsShare } from 'react-icons/bs';
 
 import styled, { css } from 'styled-components';
 import Link from 'next/link';
@@ -47,6 +49,7 @@ const StyledMain = styled.main`
 			font-size: 6rem;
 			margin-bottom: 2rem;
 			color: var(--primary);
+			margin-top: 6rem;
 		}
 
 		h2 {
@@ -120,7 +123,7 @@ const StyledMain = styled.main`
 	}
 
 	.cards {
-		// margin-top: -7rem;
+		margin-top: -7rem;
 
 		.card {
 			.card-body {
@@ -194,7 +197,7 @@ const StyledMain = styled.main`
 const StyledImageWrap = styled.div`
 	text-align: center;
 	img {
-		max-height: 70rem;
+		max-height: 60rem;
 	}
 `;
 
@@ -234,7 +237,7 @@ export default function Home() {
 					<div className="titles">
 						<Container>
 							<Row className="">
-								<Col lg={5}>
+								<Col lg={6}>
 									<>
 										{/* <h2>
 											<ChangingWord
@@ -279,6 +282,7 @@ export default function Home() {
 												</div>
 											</div>
 										</div> */}
+
 										<h1>
 											Your Knowledge <br></br>
 											<span className="secondary ">
@@ -286,7 +290,10 @@ export default function Home() {
 											</span>
 										</h1>
 
-										<Button variant="primary" type="button">
+										<Button
+											variant="primary btn-round btn-big"
+											type="button"
+										>
 											Get Started
 										</Button>
 										{/* <h2
@@ -308,7 +315,7 @@ export default function Home() {
 									</>
 								</Col>
 
-								<Col lg={7}>
+								<Col lg={6}>
 									<StyledImageWrap>
 										<Image src={introImage} priority />
 									</StyledImageWrap>
@@ -322,33 +329,46 @@ export default function Home() {
 					<Row>
 						<Col lg="4">
 							<Card>
-								<Card.Header as="h3">Create</Card.Header>
+								<Card.Header as="h3">Inspiration</Card.Header>
 								<Card.Body>
 									<div
 										className="text-center"
 										css={css`
-											padding: 2rem 0;
+											padding: 3rem 0 2rem 0;
 											svg {
 												fill: var(--secondary);
-												font-size: 8rem;
+												font-size: 6rem;
 											}
 										`}
 									>
-										<FaRegEdit />
+										<FaRegLightbulb />
 									</div>
 									<Card.Text>
-										Lorem ipsum dolor sit amet, consectetuer
-										adipiscing elit. Donec odio. Quisque
-										volutpat mattis eros. Nullam malesuada
-										erat ut turpis. Suspendisse urna nibh,
-										viverra non, semper suscipit, posuere a,
-										pede.
+										Mention Pragmatic programmer
 									</Card.Text>
-									<div className="card-footer text-center">
-										<Button variant="primary">
-											Add Items
-										</Button>{' '}
+								</Card.Body>
+							</Card>
+						</Col>
+
+						<Col lg="4">
+							<Card>
+								<Card.Header as="h3">Invest</Card.Header>
+								<Card.Body>
+									<div
+										className="text-center"
+										css={css`
+											padding: 3rem 0 2rem 0;
+											svg {
+												fill: var(--secondary);
+												font-size: 7rem;
+											}
+										`}
+									>
+										<BiEdit />
 									</div>
+									<Card.Text>
+										The habit of investing in your knowledge
+									</Card.Text>
 								</Card.Body>
 							</Card>
 						</Col>
@@ -360,59 +380,16 @@ export default function Home() {
 									<div
 										className="text-center"
 										css={css`
-											padding: 2rem 0;
+											padding: 3rem 0 2rem 0;
 											svg {
 												fill: var(--secondary);
-												font-size: 8rem;
+												font-size: 6rem;
 											}
 										`}
 									>
-										<FaRegShareSquare />
+										<BsShare />
 									</div>
-									<Card.Text>
-										Lorem ipsum dolor sit amet, consectetuer
-										adipiscing elit. Donec odio. Quisque
-										volutpat mattis eros. Nullam malesuada
-										erat ut turpis. Suspendisse urna nibh,
-										viverra non, semper suscipit, posuere a,
-										pede.
-									</Card.Text>
-									<div className="card-footer text-center">
-										<Button variant="primary">
-											Public Portfolios
-										</Button>{' '}
-									</div>
-								</Card.Body>
-							</Card>
-						</Col>
-
-						<Col lg="4">
-							<Card>
-								<Card.Header as="h3">Earn</Card.Header>
-								<Card.Body>
-									<div
-										className="text-center"
-										css={css`
-											padding: 2rem 0;
-											svg {
-												fill: var(--secondary);
-												font-size: 8rem;
-											}
-										`}
-									>
-										<FaEthereum />
-									</div>
-									<Card.Text>
-										Lorem ipsum dolor sit amet, consectetuer
-										adipiscing elit. Donec odio. Quisque
-										volutpat mattis eros. Nullam malesuada
-										erat ut turpis. Suspendisse urna nibh,
-										viverra non, semper suscipit, posuere a,
-										pede.
-									</Card.Text>
-									<div className="card-footer text-center">
-										<Button variant="primary">Web3</Button>{' '}
-									</div>
+									<Card.Text>Take the rewards.</Card.Text>
 								</Card.Body>
 							</Card>
 						</Col>
