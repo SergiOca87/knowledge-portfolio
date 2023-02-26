@@ -3,7 +3,14 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import DeleteItem from './DeleteItem';
-import { Button, Card, ListGroup, ListGroupItem } from 'react-bootstrap';
+import {
+	Button,
+	Card,
+	ListGroup,
+	ListGroupItem,
+	OverlayTrigger,
+	Tooltip,
+} from 'react-bootstrap';
 import Categories from '../categories/Categories';
 import { FaPencilAlt } from 'react-icons/fa';
 import { FaTrashAlt } from 'react-icons/fa';
@@ -21,7 +28,69 @@ const StyledCard = styled(Card)`
 	}
 `;
 
-//TODO: Add Date
+const StyledButtons = styled.div`
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+	z-index: 0;
+	position: relative;
+	transition: all 300ms;
+
+	div {
+		&:first-child {
+			button {
+				border-left: 1px solid var(--secondary);
+			}
+		}
+	}
+
+	button {
+		width: 7rem;
+		height: 5rem;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background-color: transparent;
+		transition: all 300ms;
+		cursor: pointer;
+		padding: 0;
+		border-bottom: transparent !important;
+		border-right: 1px solid var(--primary);
+		border-top: 4px solid var(--primary);
+		border-radius: 0;
+		margin-left -1px;
+		color: #fff;
+		z-index: 10;
+
+		svg {
+			transition: all 300ms;
+			margin-top: -3px;
+		}
+
+		a {
+			display: flex;
+			width: 100%;
+			height: 100%;
+			align-items: center;
+			justify-content: center;
+		}
+
+		&:hover,
+		&:active,
+		&:focus {
+			border-bottom: transparent !important;
+			border-right: 1px solid var(--secondary);
+			border-top: 4px solid var(--secondary);
+			background-color: var(--secondary);
+
+			svg {
+				stroke: var(--black);
+				fill: var(--black);
+			}
+		}
+	}
+`;
+
 export default function Item({
 	item,
 	categories,
@@ -32,7 +101,7 @@ export default function Item({
 	return (
 		<StyledCard className={item.id}>
 			<Card.Header as="h4" className="mb-3">
-				<h3>{item.title}</h3>
+				{item.title}
 
 				{item.date && <p>{item.date}</p>}
 			</Card.Header>
@@ -90,26 +159,46 @@ export default function Item({
 				</ListGroup>
 			</Card.Body>
 			{!isPublic && (
-				<div className="buttons">
-					<Link
-						href={{
-							pathname: `/update/${item.id}`,
-						}}
+				<StyledButtons>
+					<OverlayTrigger
+						placement={'top'}
+						overlay={
+							<Tooltip id={`tooltip-top}`}>
+								Edit Portfolio Item
+							</Tooltip>
+						}
 					>
 						<Button variant="secondary">
-							<FaPencilAlt />
+							<Link
+								href={{
+									pathname: `/update/${item.id}`,
+								}}
+							>
+								<FaPencilAlt />
+							</Link>
 						</Button>
-					</Link>
-					<DeleteItem
-						id={item.id}
-						setHasBeenDeletedId={setHasBeenDeletedId}
-						hasBeenDeletedId={hasBeenDeletedId}
-						className="btn"
+					</OverlayTrigger>
+					<OverlayTrigger
+						placement={'top'}
+						overlay={
+							<Tooltip id={`tooltip-top}`}>
+								Delete Portfolio Item
+							</Tooltip>
+						}
 					>
-						{' '}
-						<FaTrashAlt />
-					</DeleteItem>
-				</div>
+						<Button variant="secondary">
+							<DeleteItem
+								id={item.id}
+								setHasBeenDeletedId={setHasBeenDeletedId}
+								hasBeenDeletedId={hasBeenDeletedId}
+								className="btn"
+							>
+								{' '}
+								<FaTrashAlt />
+							</DeleteItem>
+						</Button>
+					</OverlayTrigger>
+				</StyledButtons>
 			)}
 		</StyledCard>
 	);

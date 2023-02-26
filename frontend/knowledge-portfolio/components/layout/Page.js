@@ -230,7 +230,14 @@ const GlobalStyles = createGlobalStyle`
       letter-spacing: 1px;
       font-size: 2.2rem;
       text-transform: uppercase;
-   
+    }
+
+    .card-body {
+      background-color: transparent;
+
+      .list-group-item {
+        background-color: transparent;
+      }
     }
 
     .card-text {

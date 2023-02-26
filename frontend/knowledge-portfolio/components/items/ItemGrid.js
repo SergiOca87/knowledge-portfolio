@@ -11,6 +11,8 @@ import { Col, Row } from 'react-bootstrap';
 import styled, { css } from 'styled-components';
 // import PortfolioOptionsContext from '../context/PortfolioOptionsContext';
 
+import { animated, useSpring } from '@react-spring/web';
+
 import Item from './Item';
 // import NotLoggedIn from './NotLoggedIn';
 
@@ -41,7 +43,14 @@ export default function ItemGrid({
 	//Number of items that are rendered
 	const [visibleItems, setVisibleItems] = useState(0);
 	// const isAll = activeCategories?.includes('All') ? true : false;
-
+	const [springs, api] = useSpring(
+		() => ({
+			from: { opacity: 0 },
+			to: { opacity: 1 },
+			delay: 300,
+		}),
+		[]
+	);
 	// const { options, setOptions } = useContext(PortfolioOptionsContext);
 
 	// let sortedArray = [...user?.items];
@@ -205,7 +214,10 @@ export default function ItemGrid({
 
 						return (
 							<>
-								<div key={item.id}>
+								<animated.div
+									style={{ ...springs }}
+									key={item.id}
+								>
 									<Item
 										item={item}
 										categories={itemCategories}
@@ -215,7 +227,7 @@ export default function ItemGrid({
 										}
 										hasBeenDeletedId={hasBeenDeletedId}
 									/>
-								</div>
+								</animated.div>
 							</>
 						);
 					})}

@@ -69,6 +69,8 @@ const StyledGridWrap = styled.div`
 
 export default function UserPortfolioPage({ items, categories }) {
 	const { user } = useUserState();
+
+	console.log('useeer', user);
 	// const [filteredCategories, setFilteredCategories] = useState('');
 	const [activeCategories, setActiveCategories] = useState([]);
 	// const [items, setItems] = useState();
@@ -115,7 +117,6 @@ export default function UserPortfolioPage({ items, categories }) {
 								</div>
 							)} */}
 
-							{console.log('user', user)}
 							<h1>
 								Welcome to your portfolio,
 								<br />

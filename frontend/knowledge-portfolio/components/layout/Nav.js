@@ -24,7 +24,7 @@ const StyledNav = styled.nav`
 	gap: 5rem;
 	z-index: 10;
 	position: relative;
-	background-color: var(--bg);
+	background-color: var(--black);
 	border-bottom: 1px solid var(--secondary);
 
 	h1 {

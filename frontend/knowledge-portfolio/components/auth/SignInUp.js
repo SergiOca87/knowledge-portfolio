@@ -5,12 +5,6 @@ import { useRouter } from 'next/router';
 import { Card } from 'react-bootstrap';
 import styled from 'styled-components';
 
-import { createBrowserSupabaseClient } from '@supabase/auth-helpers-nextjs';
-import UserContext, { useUserState } from '../../context/userContext';
-import { useState, createContext, useContext, useEffect } from 'react';
-import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react';
-import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
-
 import { useSpring, animated } from '@react-spring/web';
 
 const StyledCard = styled(Card)`
