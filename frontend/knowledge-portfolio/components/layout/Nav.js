@@ -22,6 +22,8 @@ const StyledNav = styled.nav`
 	padding: 1rem 2rem;
 	width: 100%;
 	gap: 5rem;
+	z-index: 10;
+	position: relative;
 	background-color: var(--bg);
 	border-bottom: 1px solid var(--secondary);
 

@@ -1,18 +1,22 @@
 import Layout from '../components/layout/Layout';
-import React, { useContext } from 'react';
 import NProgress from 'nprogress';
 import '../components/styles/nprogress.css';
 import Router, { useRouter } from 'next/router';
 import Page from '../components/layout/Page';
 
-import { UserProvider } from '../context/userContext';
 import { supabase } from '../utils/supabaseClient';
+import { useState } from 'react';
+import { createBrowserSupabaseClient } from '@supabase/auth-helpers-nextjs';
+import { UserProvider } from '../context/userContext';
+import { SessionContextProvider } from '@supabase/auth-helpers-react';
 
 Router.events.on('routeChangeStart', () => NProgress.start());
 Router.events.on('routeChangeComplete', () => NProgress.done());
 Router.events.on('routeChangeError', () => NProgress.done());
 
-function MyApp({ Component, pageProps }) {
+function MyApp({ Component, pageProps, serverUser }) {
+	const [supabaseClient] = useState(() => createBrowserSupabaseClient());
+
 	const router = useRouter();
 	// Listen to auth events:
 	// https://supabase.com/docs/reference/javascript/next/auth-onauthstatechange
@@ -29,9 +33,14 @@ function MyApp({ Component, pageProps }) {
 	return (
 		<>
 			<UserProvider>
-				<Page>
-					<Component {...pageProps} />
-				</Page>
+				<SessionContextProvider
+					supabaseClient={supabaseClient}
+					initialSession={pageProps.initialSession}
+				>
+					<Page>
+						<Component {...pageProps} />
+					</Page>
+				</SessionContextProvider>
 			</UserProvider>
 		</>
 	);

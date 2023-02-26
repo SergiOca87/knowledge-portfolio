@@ -17,6 +17,11 @@ import { supabase } from '../utils/supabaseClient';
 
 import introImage from '../public/images/intro.svg';
 
+import { useScroll, animated, useSpring } from '@react-spring/web';
+
+//TODO: Figure out the parallax
+import { Parallax, ParallaxLayer } from '@react-spring/parallax';
+
 const StyledGrid = styled.div`
 	display: grid;
 	grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -204,11 +209,23 @@ const StyledImageWrap = styled.div`
 const ChangingWord = styled.div``;
 
 export default function Home() {
+	//TODO: Clean up after definite style
+
 	const words = ['Share', 'Own', 'Use'];
 	const [currentIndex, setCurrentIndex] = useState(0);
 	const [flip, setFlip] = useState(false);
-
 	const router = useRouter();
+
+	const [springs, api] = useSpring(
+		() => ({
+			from: { x: 50, opacity: 0 },
+			to: { x: 0, opacity: 1 },
+			delay: 300,
+		}),
+		[]
+	);
+
+	const { scrollYProgress } = useScroll();
 
 	useEffect(() => {
 		const interval = setInterval(() => {
@@ -316,9 +333,11 @@ export default function Home() {
 								</Col>
 
 								<Col lg={6}>
-									<StyledImageWrap>
-										<Image src={introImage} priority />
-									</StyledImageWrap>
+									<animated.div style={{ ...springs }}>
+										<StyledImageWrap>
+											<Image src={introImage} priority />
+										</StyledImageWrap>
+									</animated.div>
 								</Col>
 							</Row>
 						</Container>
@@ -503,4 +522,16 @@ export default function Home() {
 			</StyledMain>
 		</>
 	);
+}
+export async function getServerSideProps(context) {
+	console.log('serversideprops');
+	const {
+		data: { user },
+	} = await supabase.auth.getUser();
+
+	console.log(user);
+
+	return {
+		props: { user },
+	};
 }

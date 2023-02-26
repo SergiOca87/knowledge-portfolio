@@ -7,6 +7,9 @@ import { useContext, useEffect, useState } from 'react';
 // import { LOGGED_IN_USER } from './User';
 import { useQuery } from '@apollo/client';
 
+import bgImage from '../../public/images/noise.png';
+import Image from 'next/image';
+
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -81,6 +84,8 @@ const GlobalStyles = createGlobalStyle`
     color: #fff;
     font-weight: 400;
     background-color: var(--bg);
+    position: relative;
+
   }
   a {
     text-decoration: none;
@@ -289,13 +294,23 @@ const InnerStyles = styled.div`
 	// padding: 2rem;
 `;
 
+const StyledBgImage = styled(Image)`
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	z-index: -1;
+`;
+
 export default function Page({ children }) {
 	return (
 		<div>
 			<GlobalStyles />
 			<Nav />
 			<ToastContainer />
-			<InnerStyles>{children}</InnerStyles>
+			<InnerStyles>
+				<StyledBgImage src={bgImage} alt="" layout="fill" />
+				{children}
+			</InnerStyles>
 			<Footer />
 		</div>
 	);
