@@ -1,7 +1,6 @@
 //TODO: USer options should be selected by default (access user options JSON).
 
 import { useMutation, useQuery } from '@apollo/client';
-import gql from 'graphql-tag';
 import React, { useContext, useState, useEffect } from 'react';
 
 import {

@@ -1,17 +1,12 @@
 /* eslint-disable react/react-in-jsx-scope */
 //TODO: On the grid, description should be an excerpt
 //TODO: The items should be user specific!
-
-import { useQuery } from '@apollo/client';
-import gql from 'graphql-tag';
 import Link from 'next/link';
 import { useContext, useEffect, useState } from 'react';
 // import { LOGGED_IN_USER } from './User';
 import { Col, Row } from 'react-bootstrap';
 import styled, { css } from 'styled-components';
 // import PortfolioOptionsContext from '../context/PortfolioOptionsContext';
-
-import { animated, useSpring } from '@react-spring/web';
 
 import Item from './Item';
 // import NotLoggedIn from './NotLoggedIn';
@@ -43,14 +38,7 @@ export default function ItemGrid({
 	//Number of items that are rendered
 	const [visibleItems, setVisibleItems] = useState(0);
 	// const isAll = activeCategories?.includes('All') ? true : false;
-	const [springs, api] = useSpring(
-		() => ({
-			from: { opacity: 0 },
-			to: { opacity: 1 },
-			delay: 300,
-		}),
-		[]
-	);
+
 	// const { options, setOptions } = useContext(PortfolioOptionsContext);
 
 	// let sortedArray = [...user?.items];
@@ -214,20 +202,13 @@ export default function ItemGrid({
 
 						return (
 							<>
-								<animated.div
-									style={{ ...springs }}
-									key={item.id}
-								>
-									<Item
-										item={item}
-										categories={itemCategories}
-										isPublic={isPublic}
-										setHasBeenDeletedId={
-											setHasBeenDeletedId
-										}
-										hasBeenDeletedId={hasBeenDeletedId}
-									/>
-								</animated.div>
+								<Item
+									item={item}
+									categories={itemCategories}
+									isPublic={isPublic}
+									setHasBeenDeletedId={setHasBeenDeletedId}
+									hasBeenDeletedId={hasBeenDeletedId}
+								/>
 							</>
 						);
 					})}

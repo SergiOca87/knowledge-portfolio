@@ -2,10 +2,8 @@ import PropTypes from 'prop-types';
 import styled, { createGlobalStyle } from 'styled-components';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Nav from './Nav';
-import gql from 'graphql-tag';
 import { useContext, useEffect, useState } from 'react';
 // import { LOGGED_IN_USER } from './User';
-import { useQuery } from '@apollo/client';
 
 import bgImage from '../../public/images/noise.png';
 import Image from 'next/image';
@@ -216,12 +214,26 @@ const GlobalStyles = createGlobalStyle`
     word-wrap: break-word;
     background-color: var(--black);
     background-clip: border-box;
-    border: 1px solid var(--primary);
     border-radius: 10px;
-    overflow: hidden;
+    border: 0;
     margin: 0;
     height: 100%;
     color: #fff;
+
+    &:before {
+      content: "";
+      background: rgb(132,169,140);
+      background: linear-gradient(180deg, rgba(132,169,140,1) 55%, rgba(0,20,20,0.34) 100%);
+      width: calc(100% + 2px);
+      height: calc(100% + 2px);
+      position: absolute;
+      top: 0;
+      left: 0;
+      border-radius: 10px;
+      z-index: -1;
+      transform: translate(-1px,-1px);
+
+    }
 
     .card-header {
       background-color: var(--primary);
@@ -230,6 +242,8 @@ const GlobalStyles = createGlobalStyle`
       letter-spacing: 1px;
       font-size: 2.2rem;
       text-transform: uppercase;
+      border-top-right-radius: 10px;
+      border-top-left-radius: 10px;
     }
 
     .card-body {

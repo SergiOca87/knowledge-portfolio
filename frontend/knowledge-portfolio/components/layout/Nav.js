@@ -13,7 +13,7 @@ import {
 	FaUser,
 } from 'react-icons/fa';
 import { useRouter } from 'next/router';
-import { useUserState } from '../../context/userContext';
+import { useSessionContext, useUser } from '@supabase/auth-helpers-react';
 
 const StyledNav = styled.nav`
 	display: flex;
@@ -71,9 +71,11 @@ const StyledMail = styled.div`
 `;
 
 export default function Nav() {
-	const { user } = useUserState();
+	const user = useUser();
 	const router = useRouter();
 	const userId = user ? user.id : null;
+
+	const { isLoading, session, error } = useSessionContext();
 
 	return (
 		<div>
@@ -91,7 +93,7 @@ export default function Nav() {
 						gap: 3rem;
 					`}
 				>
-					{user ? (
+					{session ? (
 						<>
 							<Link href={`/portfolio/${userId}`}>
 								<a

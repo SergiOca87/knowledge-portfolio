@@ -11,6 +11,8 @@ import {
 	Tooltip,
 } from 'react-bootstrap';
 
+import { useSessionContext, useUser } from '@supabase/auth-helpers-react';
+
 import {
 	FaUser,
 	FaPlus,
@@ -35,7 +37,7 @@ import QrModal from '../../components/QrModal';
 import UserContext, { useUserState } from '../../context/userContext';
 import NotLoggedIn from '../../components/auth/NotLoggedIn';
 import { supabase } from '../../utils/supabaseClient';
-import PortfolioControls from '../../components/layout/PortfolioControls';
+import PortfolioControls from '../../components/ui/PortfolioControls';
 
 const StyledUserCard = styled.div`
 	display: flex;
@@ -68,13 +70,13 @@ const StyledGridWrap = styled.div`
 `;
 
 export default function UserPortfolioPage({ items, categories }) {
-	const { user } = useUserState();
-
-	console.log('useeer', user);
+	const user = useUser();
+	const { isLoading, session, error } = useSessionContext();
 	// const [filteredCategories, setFilteredCategories] = useState('');
 	const [activeCategories, setActiveCategories] = useState([]);
 	// const [items, setItems] = useState();
 	//TODO: Add some toast error
+
 	// useEffect(() => {
 	// 	const fetchItems = async () => {
 	// 		let { data: items, error } = await supabase
@@ -101,10 +103,13 @@ export default function UserPortfolioPage({ items, categories }) {
 	return (
 		<Main>
 			<Container>
-				{user ? (
-					<>
-						<StyledUserCard>
-							{/* {user.options?.userImage !== 'undefined' ? (
+				{session ? (
+					isLoading ? (
+						<p>Loading...</p>
+					) : (
+						<>
+							<StyledUserCard>
+								{/* {user.options?.userImage !== 'undefined' ? (
 								<div
 									className="avatar"
 									css={`
@@ -117,31 +122,36 @@ export default function UserPortfolioPage({ items, categories }) {
 								</div>
 							)} */}
 
-							<h1>
-								Welcome to your portfolio,
-								<br />
-								<span className="secondary">
-									{user?.username}
-								</span>
-							</h1>
-						</StyledUserCard>
-
-						<PortfolioControls user={user} />
-						<StyledGridWrap>
-							{activeCategories && (
-								<CategoryCloudFilter
+								<h1>
+									Welcome to your portfolio,
+									<br />
+									<span className="secondary">
+										{user?.user_metadata.name
+											? user.user_metadata.name
+											: user.email}
+									</span>
+								</h1>
+							</StyledUserCard>
+							<PortfolioControls user={user} />
+							<StyledGridWrap>
+								{activeCategories && (
+									<CategoryCloudFilter
+										activeCategories={activeCategories}
+										setActiveCategories={
+											setActiveCategories
+										}
+										userCategories={categories}
+										all={true}
+									/>
+								)}
+								<ItemGrid
+									items={items}
+									categories={categories}
 									activeCategories={activeCategories}
-									setActiveCategories={setActiveCategories}
-									all={true}
 								/>
-							)}
-							<ItemGrid
-								items={items}
-								categories={categories}
-								activeCategories={activeCategories}
-							/>
-						</StyledGridWrap>
-					</>
+							</StyledGridWrap>
+						</>
+					)
 				) : (
 					<NotLoggedIn />
 				)}

@@ -3,11 +3,18 @@ import NotLoggedIn from '../../components/auth/NotLoggedIn';
 import Main from '../../components/layout/Main';
 import { useUserState } from '../../context/userContext';
 import { supabase } from '../../utils/supabaseClient';
+import {
+	VerticalTimeline,
+	VerticalTimelineElement,
+} from 'react-vertical-timeline-component';
+import { motion } from 'framer-motion';
+
+import 'react-vertical-timeline-component/style.min.css';
 
 // TODO: What about uncategorized items? Maybe that should be returned at the end on its own list?
 
 function YearInReview({ items, categories }) {
-	const { user } = useUserState();
+	const user = useUser();
 
 	// Extract only the year from the database column "created_at" of a given item
 	const yearItemIsCreated = (item) => new Date(item.created_at).getFullYear();

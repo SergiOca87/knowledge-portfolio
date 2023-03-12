@@ -3,8 +3,8 @@ import { useRouter } from 'next/router';
 import { Button } from 'react-bootstrap';
 import { supabase } from '../../utils/supabaseClient';
 import { toast } from 'react-toastify';
-import { useUserState } from '../../context/userContext';
 
+//TODO: Not working: https://www.linen.dev/d/839993398554656828/t/8512880/using-next-and-react-auth-helpers-signout-not-working
 export default function SignOut() {
 	const router = useRouter();
 
@@ -14,7 +14,8 @@ export default function SignOut() {
 		if (error) {
 			toast.error(error);
 		} else {
-			router.push('/');
+			console.log('trying to log out');
+			// router.push('/');
 		}
 	};
 

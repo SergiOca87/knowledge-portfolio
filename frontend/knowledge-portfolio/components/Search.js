@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useCombobox, resetIdCounter } from 'downshift';
-import gql from 'graphql-tag';
 import debounce from 'lodash.debounce';
 import { useLazyQuery } from '@apollo/client';
 

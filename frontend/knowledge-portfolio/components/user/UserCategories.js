@@ -1,20 +1,7 @@
 import { CURRENT_USER_QUERY, useUser } from './User';
 import { useQuery } from '@apollo/client';
-import gql from 'graphql-tag';
 
 import { useContext } from 'react';
-
-//TODO: Do We even need this? We have it all on the user...
-
-export const USER_CATEGORIES_QUERY = gql`
-	query USER_CATEGORIES_QUERY($id: ID!) {
-		allCategories(where: { author: { id: $id } }) {
-			id
-			name
-			icon
-		}
-	}
-`;
 
 export function getCategories(userId) {
 	//

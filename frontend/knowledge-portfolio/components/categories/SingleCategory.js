@@ -1,23 +1,10 @@
 //TODO: Add a "back to all items"
 //TODO: Add the rest of the fields to the single item component
 
-import { useQuery } from '@apollo/client';
-import gql from 'graphql-tag';
 import styled from 'styled-components';
 import Head from 'next/head';
 import Layout from '../Layout';
 import { useUser } from '../user/User';
-
-const SINGLE_CATEGORY_QUERY = gql`
-	query SINGLE_CATEGORY_QUERY($id: ID!) {
-		Category(where: { id: $id }) {
-			name
-			items {
-				title
-			}
-		}
-	}
-`;
 
 export default function SingleCategory({ id }) {
 	const user = useUser();

@@ -1,8 +1,6 @@
 /* eslint-disable react/react-in-jsx-scope */
 // import { CURRENT_USER_QUERY, useUser } from './User';
-import { USER_CATEGORIES_QUERY, getCategories } from '../user/UserCategories';
-import { useMutation, useQuery } from '@apollo/client';
-import gql from 'graphql-tag';
+
 import Link from 'next/link';
 import { useContext, useEffect, useState } from 'react';
 

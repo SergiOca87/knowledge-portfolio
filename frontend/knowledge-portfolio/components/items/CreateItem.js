@@ -43,6 +43,24 @@ const StyledForm = styled(Form)`
 	.single-page-editor {
 		color: #000;
 	}
+
+	input {
+		height: 5rem !important;
+		font-size: 1.6rem !important;
+		background-color: transparent !important;
+		border: 1px solid var(--primary);
+		color: #fff !important;
+
+		&:placeholder-shown {
+			color: #fff;
+		}
+	}
+
+	label {
+		font-size: 1.6rem;
+		padding: 1.5rem 0.75rem;
+		color: #fff;
+	}
 `;
 
 const StyleEditor = styled(Editor)`
@@ -143,10 +161,8 @@ export default function CreateItem() {
 				mainImageUrl: mainImage.imageUrl,
 			};
 
-			//TODO: Should this be handled in an API route?
-			//TODO: We need some extra validation here, if API route, serverside validation:
 			if (!user || !title || title.trim() === '') {
-				toast.message('There was a problem creating your item');
+				toast.error('There was a problem creating your item');
 				return;
 			}
 
@@ -167,8 +183,6 @@ export default function CreateItem() {
 			// 		mainImageUrl: mainImage.imageUrl,
 			// 	})
 			// 	.select();
-
-			console.log('new item is', newItem);
 
 			try {
 				fetch('api/createItem', {

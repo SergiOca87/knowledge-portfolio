@@ -5,8 +5,6 @@ import { useRouter } from 'next/router';
 import { Card } from 'react-bootstrap';
 import styled from 'styled-components';
 
-import { useSpring, animated } from '@react-spring/web';
-
 const StyledCard = styled(Card)`
 	padding: 4rem;
 	max-width: 50rem;
@@ -36,34 +34,25 @@ const StyledCard = styled(Card)`
 //TODO: Change styles: https://supabase.com/docs/guides/auth/auth-helpers/auth-ui
 
 export default function SignInUp({ serverUser, session }) {
-	const springs = useSpring({
-		from: { y: 50, opacity: 0 },
-		to: { y: 0, opacity: 1 },
-		delay: 300,
-		duration: 1000,
-	});
-
 	const App = () => (
-		<animated.div style={{ ...springs }}>
-			<StyledCard>
-				<Auth
-					supabaseClient={supabase}
-					appearance={{
-						theme: ThemeSupa,
-						variables: {
-							default: {
-								colors: {
-									brand: 'var(--primary)',
-									brandAccent: 'none',
-								},
+		<StyledCard>
+			<Auth
+				supabaseClient={supabase}
+				appearance={{
+					theme: ThemeSupa,
+					variables: {
+						default: {
+							colors: {
+								brand: 'var(--primary)',
+								brandAccent: 'none',
 							},
 						},
-					}}
-					theme="dark"
-					providers={['google', 'github']}
-				/>
-			</StyledCard>
-		</animated.div>
+					},
+				}}
+				theme="dark"
+				providers={['google', 'github']}
+			/>
+		</StyledCard>
 	);
 
 	return <App />;

@@ -14,6 +14,7 @@ import {
 import Categories from '../categories/Categories';
 import { FaPencilAlt } from 'react-icons/fa';
 import { FaTrashAlt } from 'react-icons/fa';
+import TooltipButton from '../ui/TooltipButton';
 
 const StyledCard = styled(Card)`
 	.list-group-item {
@@ -160,24 +161,12 @@ export default function Item({
 			</Card.Body>
 			{!isPublic && (
 				<StyledButtons>
-					<OverlayTrigger
-						placement={'top'}
-						overlay={
-							<Tooltip id={`tooltip-top}`}>
-								Edit Portfolio Item
-							</Tooltip>
-						}
-					>
-						<Button variant="secondary">
-							<Link
-								href={{
-									pathname: `/update/${item.id}`,
-								}}
-							>
-								<FaPencilAlt />
-							</Link>
-						</Button>
-					</OverlayTrigger>
+					<TooltipButton
+						tooltipText="Edit Portfolio Item"
+						link={`/update/${item.id}`}
+						icon={<FaPencilAlt />}
+					/>
+
 					<OverlayTrigger
 						placement={'top'}
 						overlay={

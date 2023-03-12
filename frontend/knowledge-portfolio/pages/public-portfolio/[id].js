@@ -1,6 +1,6 @@
 import React, { useContext, useRef, useState } from 'react';
 import { Router, useRouter } from 'next/router';
-import gql from 'graphql-tag';
+
 import styled, { css } from 'styled-components';
 import {
 	Container,

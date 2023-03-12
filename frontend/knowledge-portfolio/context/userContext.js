@@ -61,7 +61,6 @@ export const UserProvider = ({ children }) => {
 							.eq('userId', user.id);
 						setUserCategories(categories);
 
-						console.log(userCategories);
 						if (error) {
 							throw error;
 						}

@@ -13,7 +13,6 @@ import {
 import { FaUser } from 'react-icons/fa';
 import Link from 'next/link';
 import UserCard from '../../components/user/UserCard';
-import gql from 'graphql-tag';
 import { useUserState } from '../../context/userContext';
 import NotLoggedIn from '../../components/auth/NotLoggedIn';
 
@@ -62,7 +61,7 @@ const UserControls = styled.div`
 export default function UserPage() {
 	const router = useRouter();
 	// const { id } = router.query;
-	const { user } = useUserState();
+	const user = useUser();
 
 	return (
 		<StyledMain>

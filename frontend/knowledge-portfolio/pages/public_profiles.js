@@ -1,5 +1,4 @@
 import React, { useContext, useState } from 'react';
-import gql from 'graphql-tag';
 import styled, { css } from 'styled-components';
 import { useQuery } from '@apollo/client';
 import Main from '../components/layout/Main';
@@ -8,26 +7,6 @@ import Link from 'next/link';
 import Categories from '../components/categories/Categories';
 import UserCard from '../components/user/UserCard';
 import MessageModal from '../components/MessageModal';
-
-const ALL_USER_QUERY = gql`
-	query {
-		users(where: { public: { equals: true } }) {
-			id
-			name
-			email
-			public
-			publicEmail
-			items {
-				id
-			}
-			categories {
-				id
-				name
-				icon
-			}
-		}
-	}
-`;
 
 const StyledUserCard = styled.div`
 	width: 100%;

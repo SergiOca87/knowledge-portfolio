@@ -8,9 +8,6 @@ import Link from 'next/link';
 import { LOGGED_IN_USER } from '../../components/User';
 import Main from '../../components/Main';
 import UserCard from '../../components/UserCard';
-import gql from 'graphql-tag';
-import { useMutation, useQuery } from '@apollo/client';
-import { CURRENT_USER_QUERY, useUser } from '../../components/User';
 import DeleteMessage from '../../components/DeleteMessage';
 
 // const DELETE_MESSAGE_MUTATION = gql`

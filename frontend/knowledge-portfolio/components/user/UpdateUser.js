@@ -5,7 +5,7 @@ import { Button, Form } from 'react-bootstrap';
 import { supabase } from '../../utils/supabaseClient';
 
 function updateUser() {
-	const { user } = useUserState();
+	const user = useUser();
 	const [inputs, setInputs] = useState({
 		email: '',
 		password: '',

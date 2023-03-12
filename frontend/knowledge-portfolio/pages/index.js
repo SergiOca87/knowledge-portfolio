@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+
 import Head from 'next/head';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
@@ -12,15 +13,14 @@ import { BsShare } from 'react-icons/bs';
 import styled, { css } from 'styled-components';
 import Link from 'next/link';
 import Hero from '../components/layout/Hero';
+import Tilt from 'react-tilt';
 import { Container, Row, Col, Card, Button } from 'react-bootstrap';
 import { supabase } from '../utils/supabaseClient';
 
 import introImage from '../public/images/intro.svg';
-
-import { useScroll, animated, useSpring } from '@react-spring/web';
-
-//TODO: Figure out the parallax
-import { Parallax, ParallaxLayer } from '@react-spring/parallax';
+import AnimateWrapper from '../components/layout/AnimateWrapper';
+import { motion } from 'framer-motion';
+import { fadeInContainer, fadeInItem } from '../utils/motion';
 
 const StyledGrid = styled.div`
 	display: grid;
@@ -216,17 +216,6 @@ export default function Home() {
 	const [flip, setFlip] = useState(false);
 	const router = useRouter();
 
-	const [springs, api] = useSpring(
-		() => ({
-			from: { x: 50, opacity: 0 },
-			to: { x: 0, opacity: 1 },
-			delay: 300,
-		}),
-		[]
-	);
-
-	const { scrollYProgress } = useScroll();
-
 	useEffect(() => {
 		const interval = setInterval(() => {
 			//Flip the card
@@ -307,12 +296,19 @@ export default function Home() {
 											</span>
 										</h1>
 
-										<Button
-											variant="primary btn-round btn-big"
-											type="button"
-										>
-											Get Started
-										</Button>
+										<p>
+											Get up and running with a portfolio
+											in no time
+										</p>
+
+										<Link href="/login">
+											<Button
+												variant="primary btn-round btn-big"
+												type="button"
+											>
+												Get Started
+											</Button>
+										</Link>
 										{/* <h2
 											css={css`
 												font-family: 'Montserrat-Bold';
@@ -333,87 +329,122 @@ export default function Home() {
 								</Col>
 
 								<Col lg={6}>
-									<animated.div style={{ ...springs }}>
+									<motion.div
+										initial={{ opacity: 0, x: '50px' }}
+										whileInView={{ opacity: 1, x: '0' }}
+										viewport={{ once: true }}
+										transition={{ duration: 0.5 }}
+									>
+										{' '}
 										<StyledImageWrap>
 											<Image src={introImage} priority />
 										</StyledImageWrap>
-									</animated.div>
+									</motion.div>
 								</Col>
 							</Row>
 						</Container>
 					</div>
 				</Container>
 
-				<Container className="cards">
-					<Row>
-						<Col lg="4">
-							<Card>
-								<Card.Header as="h3">Inspiration</Card.Header>
-								<Card.Body>
-									<div
-										className="text-center"
-										css={css`
-											padding: 3rem 0 2rem 0;
-											svg {
-												fill: var(--secondary);
-												font-size: 6rem;
-											}
-										`}
-									>
-										<FaRegLightbulb />
-									</div>
-									<Card.Text>
-										Mention Pragmatic programmer
-									</Card.Text>
-								</Card.Body>
-							</Card>
-						</Col>
+				<motion.section
+					variants={fadeInContainer}
+					initial="hidden"
+					whileInView="show"
+					viewport={{ once: true }}
+				>
+					<Container>
+						<Row>
+							<Col lg="4">
+								<motion.div
+									variants={fadeInItem}
+									transition={{ duration: 0.5 }}
+								>
+									<Card>
+										<Card.Header as="h3">
+											Inspiration
+										</Card.Header>
+										<Card.Body>
+											<div
+												className="text-center"
+												css={css`
+													padding: 3rem 0 2rem 0;
+													svg {
+														fill: var(--secondary);
+														font-size: 6rem;
+													}
+												`}
+											>
+												<FaRegLightbulb />
+											</div>
+											<Card.Text>
+												Mention Pragmatic programmer
+											</Card.Text>
+										</Card.Body>
+									</Card>
+								</motion.div>
+							</Col>
 
-						<Col lg="4">
-							<Card>
-								<Card.Header as="h3">Invest</Card.Header>
-								<Card.Body>
-									<div
-										className="text-center"
-										css={css`
-											padding: 3rem 0 2rem 0;
-											svg {
-												fill: var(--secondary);
-												font-size: 7rem;
-											}
-										`}
-									>
-										<BiEdit />
-									</div>
-									<Card.Text>
-										The habit of investing in your knowledge
-									</Card.Text>
-								</Card.Body>
-							</Card>
-						</Col>
+							<Col lg="4">
+								<motion.div
+									variants={fadeInItem}
+									transition={{ duration: 0.5 }}
+								>
+									<Card>
+										<Card.Header as="h3">
+											Invest
+										</Card.Header>
+										<Card.Body>
+											<div
+												className="text-center"
+												css={css`
+													padding: 3rem 0 2rem 0;
+													svg {
+														fill: var(--secondary);
+														font-size: 7rem;
+													}
+												`}
+											>
+												<BiEdit />
+											</div>
+											<Card.Text>
+												The habit of investing in your
+												knowledge
+											</Card.Text>
+										</Card.Body>
+									</Card>
+								</motion.div>
+							</Col>
 
-						<Col lg="4">
-							<Card>
-								<Card.Header as="h3">Share</Card.Header>
-								<Card.Body>
-									<div
-										className="text-center"
-										css={css`
-											padding: 3rem 0 2rem 0;
-											svg {
-												fill: var(--secondary);
-												font-size: 6rem;
-											}
-										`}
-									>
-										<BsShare />
-									</div>
-									<Card.Text>Take the rewards.</Card.Text>
-								</Card.Body>
-							</Card>
-						</Col>
-					</Row>
-				</Container>
+							<Col lg="4">
+								<motion.div
+									variants={fadeInItem}
+									transition={{ duration: 0.5 }}
+								>
+									<Card>
+										<Card.Header as="h3">Share</Card.Header>
+										<Card.Body>
+											<div
+												className="text-center"
+												css={css`
+													padding: 3rem 0 2rem 0;
+													svg {
+														fill: var(--secondary);
+														font-size: 6rem;
+													}
+												`}
+											>
+												<BsShare />
+											</div>
+											<Card.Text>
+												Take the rewards.
+											</Card.Text>
+										</Card.Body>
+									</Card>
+								</motion.div>
+							</Col>
+						</Row>
+					</Container>
+				</motion.section>
 
 				{/* <Container>
 					<div className="inner-grid">

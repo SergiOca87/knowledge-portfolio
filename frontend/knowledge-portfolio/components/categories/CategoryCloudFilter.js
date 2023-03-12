@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from 'react';
-import UserContext, { useUserState } from '../../context/userContext';
 import { Button } from 'react-bootstrap';
 import * as FontAwesome from 'react-icons/fa';
 import Category from './Category';
@@ -31,11 +30,12 @@ const StyledCategoryButton = styled(Button)`
 `;
 
 export default function CategoryCloudFilter({
+	userCategories,
 	activeCategories,
 	setActiveCategories,
 	all = false,
 }) {
-	const { userCategories } = useUserState();
+	// const { userCategories } = useUserState();
 
 	const handleButtonClick = (target) => {
 		// Handle a click outside of any button
