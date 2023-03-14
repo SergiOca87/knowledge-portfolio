@@ -5,6 +5,7 @@ import { supabase } from '../../utils/supabaseClient';
 import { toast } from 'react-toastify';
 
 //TODO: Not working: https://www.linen.dev/d/839993398554656828/t/8512880/using-next-and-react-auth-helpers-signout-not-working
+//TODO: Not clearing
 export default function SignOut() {
 	const router = useRouter();
 
@@ -14,8 +15,12 @@ export default function SignOut() {
 		if (error) {
 			toast.error(error);
 		} else {
-			console.log('trying to log out');
-			// router.push('/');
+			fetch('/api/logout', {
+				method: 'GET',
+				headers: {
+					'Content-Type': 'application.json',
+				},
+			});
 		}
 	};
 

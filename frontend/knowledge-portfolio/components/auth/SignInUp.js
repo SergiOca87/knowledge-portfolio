@@ -49,7 +49,7 @@ export default function SignInUp({ serverUser, session }) {
 						},
 					},
 				}}
-				theme="dark"
+				// theme="dark"
 				providers={['google', 'github']}
 			/>
 		</StyledCard>

@@ -26,6 +26,8 @@ function MyApp({ Component, pageProps, serverUser }) {
 		console.log(event);
 		if (event === 'PASSWORD_RECOVERY') {
 			router.push('/update-user');
+		} else if (event === 'SIGNED_IN') {
+			console.log('signed in');
 		}
 	});
 

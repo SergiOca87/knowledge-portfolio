@@ -10,6 +10,7 @@ import {
 import { motion } from 'framer-motion';
 
 import 'react-vertical-timeline-component/style.min.css';
+import { useUser } from '@supabase/auth-helpers-react';
 
 // TODO: What about uncategorized items? Maybe that should be returned at the end on its own list?
 

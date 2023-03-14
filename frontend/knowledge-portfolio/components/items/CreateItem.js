@@ -8,7 +8,6 @@
 import { useContext, useEffect, useState } from 'react';
 import Link from 'next/link';
 import Router from 'next/router';
-import Categories from '../categories/Categories';
 import { EditorState, convertFromRaw } from 'draft-js';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -25,11 +24,12 @@ import {
 } from 'react-bootstrap';
 
 import Editor from '../Editor';
-import { useUserState } from '../../context/userContext';
+// import { useUserState } from '../../context/userContext';
 // import { supabase } from '../../utils/supabaseClient';
 import CategoryCloudFilter from '../categories/CategoryCloudFilter';
 import DragDropFile from '../DragDropFile';
 import UploadImageWidget from './UploadImageWidget';
+import { useUser } from '@supabase/auth-helpers-react';
 
 const StyledForm = styled(Form)`
 	max-width: 70rem;
@@ -67,8 +67,10 @@ const StyleEditor = styled(Editor)`
 	color: #000;
 `;
 
-export default function CreateItem() {
-	const { user, userCategories } = useUserState();
+export default function CreateItem({ categories }) {
+	// const { user, userCategories } = useUserState();
+	const user = useUser();
+
 	const [activeCategories, setActiveCategories] = useState([]);
 	const [mainImage, setMainImage] = useState('');
 
@@ -285,7 +287,7 @@ export default function CreateItem() {
 							/>
 						</FloatingLabel>
 					</Form.Group>
-					{userCategories && (
+					{categories && (
 						<Form.Group className="mb-5">
 							<Form.Label htmlFor="category">Category</Form.Label>
 							<p className="tip">
@@ -294,6 +296,7 @@ export default function CreateItem() {
 							</p>
 
 							<CategoryCloudFilter
+								userCategories={categories}
 								activeCategories={activeCategories}
 								setActiveCategories={setActiveCategories}
 							/>

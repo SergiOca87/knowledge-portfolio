@@ -132,7 +132,10 @@ export default function UserPortfolioPage({ items, categories }) {
 									</span>
 								</h1>
 							</StyledUserCard>
-							<PortfolioControls user={user} />
+							<PortfolioControls
+								user={user}
+								categories={categories}
+							/>
 							<StyledGridWrap>
 								{activeCategories && (
 									<CategoryCloudFilter

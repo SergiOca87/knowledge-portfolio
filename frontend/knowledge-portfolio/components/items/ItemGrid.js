@@ -143,8 +143,6 @@ export default function ItemGrid({
 
 	const [hasBeenDeletedId, setHasBeenDeletedId] = useState([]);
 
-	console.log('deltedId', hasBeenDeletedId);
-
 	// On Page load, fill up the filteredItems Array with items
 	// Filter the items if an item has been deleted (so that the item is hidden and we don't need to reload the page)
 

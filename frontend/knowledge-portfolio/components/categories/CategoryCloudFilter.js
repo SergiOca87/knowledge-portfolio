@@ -36,6 +36,7 @@ export default function CategoryCloudFilter({
 	all = false,
 }) {
 	// const { userCategories } = useUserState();
+	console.log('userCategories', userCategories);
 
 	const handleButtonClick = (target) => {
 		// Handle a click outside of any button

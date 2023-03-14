@@ -73,7 +73,7 @@ function PortfolioControls({ user }) {
 		<StyledPortfolioControls>
 			<TooltipButton
 				tooltipText="Add New Portfolio Item"
-				link="/add-item"
+				link={`/add-item/${user.id}`}
 				icon={<FaPlus />}
 			/>
 			<TooltipButton

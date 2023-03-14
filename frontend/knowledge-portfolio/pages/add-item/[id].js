@@ -1,17 +1,17 @@
-import CreateItem from '../components/items/CreateItem';
+import CreateItem from '../../components/items/CreateItem';
 import Link from 'next/link';
-import Main from '../components/layout/Main';
+import Main from '../../components/layout/Main';
 import { Container } from 'react-bootstrap';
 import { css } from 'styled-components';
 import Script from 'next/script';
-import UpdateItem from '../components/items/UpdateItem';
+
 import {
 	useSession,
 	useSessionContext,
 	useUser,
 } from '@supabase/auth-helpers-react';
-import NotLoggedIn from '../components/auth/NotLoggedIn';
-import { supabase } from '../utils/supabaseClient';
+import NotLoggedIn from '../../components/auth/NotLoggedIn';
+import { supabase } from '../../utils/supabaseClient';
 
 //TODO: If user create item, else use sign in
 
