@@ -6,12 +6,13 @@
 //TODO: At the moment we can connect existing categories, but may be useful to be able to create them ehre as well
 //TODO: Refetch the logged in user (the only poissible user that should be able to create items)
 import { useContext, useEffect, useState } from 'react';
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import Router from 'next/router';
 import { EditorState, convertFromRaw } from 'draft-js';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import EditorJS from '@editorjs/editorjs';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 
 import styled, { css } from 'styled-components';
@@ -23,13 +24,16 @@ import {
 	useAccordionButton,
 } from 'react-bootstrap';
 
-import Editor from '../Editor';
 // import { useUserState } from '../../context/userContext';
 // import { supabase } from '../../utils/supabaseClient';
 import CategoryCloudFilter from '../categories/CategoryCloudFilter';
 import DragDropFile from '../DragDropFile';
 import UploadImageWidget from './UploadImageWidget';
 import { useUser } from '@supabase/auth-helpers-react';
+
+import { OutputData } from '@editorjs/editorjs';
+
+const EditorBlock = dynamic(() => import('../ui/editor/Editor'));
 
 const StyledForm = styled(Form)`
 	max-width: 70rem;
@@ -63,9 +67,9 @@ const StyledForm = styled(Form)`
 	}
 `;
 
-const StyleEditor = styled(Editor)`
-	color: #000;
-`;
+// const StyleEditor = styled(Editor)`
+// 	color: #000;
+// `;
 
 export default function CreateItem({ categories }) {
 	// const { user, userCategories } = useUserState();
@@ -86,6 +90,8 @@ export default function CreateItem({ categories }) {
 		// url: '',
 	});
 
+	const [data, setData] = useState(OutputData);
+
 	useEffect(() => {
 		setInputs({
 			...inputs,
@@ -94,31 +100,31 @@ export default function CreateItem({ categories }) {
 
 	// Single page content
 	//TODO: Maybe we should extract this
-	const content = {
-		entityMap: {},
-		blocks: [
-			{
-				key: '637gr',
-				text: 'Initialized from content state.',
-				type: 'unstyled',
-				depth: 0,
-				inlineStyleRanges: [],
-				entityRanges: [],
-				data: {},
-			},
-		],
-	};
+	// const content = {
+	// 	entityMap: {},
+	// 	blocks: [
+	// 		{
+	// 			key: '637gr',
+	// 			text: 'Initialized from content state.',
+	// 			type: 'unstyled',
+	// 			depth: 0,
+	// 			inlineStyleRanges: [],
+	// 			entityRanges: [],
+	// 			data: {},
+	// 		},
+	// 	],
+	// };
 
-	const [contentState, setContentState] = useState(convertFromRaw(content));
+	// const [contentState, setContentState] = useState(convertFromRaw(content));
 
 	//WYSYWYG State
-	const onContentStateChange = (contentState) => {
-		setContentState(contentState);
-		setInputs({
-			...inputs,
-			singlePageContent: JSON.stringify(contentState, null, 4),
-		});
-	};
+	// const onContentStateChange = (contentState) => {
+	// 	setContentState(contentState);
+	// 	setInputs({
+	// 		...inputs,
+	// 		singlePageContent: JSON.stringify(contentState, null, 4),
+	// 	});
+	// };
 
 	// Add input changes to state
 	const handleChange = (e) => {
@@ -210,7 +216,7 @@ export default function CreateItem({ categories }) {
 				setActiveCategories([]);
 
 				//TODO: This is not working (to clear the wysywyg), may have to reload the page on submit
-				setContentState(convertFromRaw(singlePageContent));
+				// setContentState(convertFromRaw(singlePageContent));
 			} catch (err) {
 				toast.error(err);
 			}
@@ -373,14 +379,16 @@ export default function CreateItem({ categories }) {
 								Single Page Content
 							</Accordion.Header>
 							<Accordion.Body>
-								<StyleEditor
+								<EditorBlock />
+
+								{/* <StyleEditor
 									wrapperClassName="single-page-editor-wrap"
 									editorClassName="single-page-editor"
 									onContentStateChange={onContentStateChange}
 									toolbar={{
 										image: { enableUpload: true },
 									}}
-								/>
+								/> */}
 								{/* <textarea
 									value={inputs.singlePageContent}
 									css={css`
