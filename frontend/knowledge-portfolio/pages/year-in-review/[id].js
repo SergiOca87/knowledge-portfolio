@@ -10,6 +10,67 @@ import * as FontAwesome from 'react-icons/fa';
 import { motion } from 'framer-motion';
 import 'react-vertical-timeline-component/style.min.css';
 import { useUser } from '@supabase/auth-helpers-react';
+import React from 'react';
+import styled from 'styled-components';
+
+const StyledYearInReview = styled.section`
+	.timeline-wrap {
+		&:before {
+			left: 20px;
+			height: 100%;
+			width: 2px;
+		}
+	}
+
+	.icon {
+		width: 40px;
+		height: 40px;
+		border-radius: 50%;
+		box-shadow: 0 0 0 2px var(--primary), inset 0 2px 0 rgba(0, 0, 0, 0.08),
+			0 3px 0 4px rgba(0, 0, 0, 0.05);
+
+		svg {
+			max-height: 15px;
+			margin-top: -7px;
+		}
+	}
+
+	.timeline-element {
+		.vertical-timeline-element-content {
+			box-shadow: none;
+			position: relative;
+			border-radius: 4px;
+			background-color: var(--black);
+
+			&:before {
+				content: '';
+				background: rgb(132, 169, 140);
+				background: linear-gradient(
+					180deg,
+					rgba(132, 169, 140, 1) 55%,
+					rgba(0, 20, 20, 0.34) 100%
+				);
+				width: calc(100% + 2px);
+				height: calc(100% + 2px);
+				position: absolute;
+				top: 0;
+				left: 0;
+				border-radius: 4px;
+				z-index: -1;
+				transform: translate(-1px, -1px);
+				opacity: 0;
+				transition: opacity 300ms;
+				transition-delay: 600ms;
+			}
+
+			&.bounce-in {
+				&:before {
+					opacity: 1;
+				}
+			}
+		}
+	}
+`;
 
 // TODO: What about uncategorized items? Maybe that should be returned at the end on its own list?
 
@@ -65,24 +126,40 @@ function YearInReview({ items, categories }) {
 		);
 	};
 
+	const Icon = ({ iconName, size, color }) => {
+		const icon = React.createElement(FontAwesome[iconName]);
+		return <div style={{ fontSize: size, color: color }}>{icon}</div>;
+	};
+
 	const renderYearBasedList = () => {
 		return yearsInUserPortfolio.map((year) => (
-			<div>
+			<StyledYearInReview>
 				<h2>{year}</h2>
-				<ul>
+
+				<VerticalTimeline
+					layout="1-column-left"
+					lineColor="var(--secondary)"
+					className="timeline-wrap"
+				>
 					{listCategoriesByYear(items).map((categoryId) => {
+						// const iconString = "FaBeer";
+						// const beer = React.createElement(FontAwesome[iconString]);
+
 						let IconName = '';
 
 						const categoryIcon = categories.find(
 							(categoryObj) => categoryObj.id === categoryId
 						).icon;
 
-						if (categoryIcon) {
-							IconName = FontAwesome[categoryIcon];
-						}
+						console.log('categoryIcon', typeof categoryIcon);
+
+						IconName = categoryIcon
+							? React.createElement(FontAwesome[categoryIcon])
+							: '';
 
 						return (
 							<VerticalTimelineElement
+								className="timeline-element"
 								contentStyle={{
 									background: 'var(--black)',
 									color: '#fff',
@@ -90,22 +167,15 @@ function YearInReview({ items, categories }) {
 								contentArrowStyle={{
 									borderRight: '7px solid  var(--primary)',
 								}}
+								iconStyle={{
+									fontSize: '1rem',
+									backgroundColor: 'var(--black)',
+								}}
 								// date={year}
 								// iconStyle={{ background: experience.iconBg }}
 								//TODO How to add <IconName/> here...
-								icon={
-									<svg
-										stroke="currentColor"
-										fill="currentColor"
-										stroke-width="0"
-										viewBox="0 0 448 512"
-										height="1em"
-										width="1em"
-										xmlns="http://www.w3.org/2000/svg"
-									>
-										<path d="M448 360V24c0-13.3-10.7-24-24-24H96C43 0 0 43 0 96v320c0 53 43 96 96 96h328c13.3 0 24-10.7 24-24v-16c0-7.5-3.5-14.3-8.9-18.7-4.2-15.4-4.2-59.3 0-74.7 5.4-4.3 8.9-11.1 8.9-18.6zM128 134c0-3.3 2.7-6 6-6h212c3.3 0 6 2.7 6 6v20c0 3.3-2.7 6-6 6H134c-3.3 0-6-2.7-6-6v-20zm0 64c0-3.3 2.7-6 6-6h212c3.3 0 6 2.7 6 6v20c0 3.3-2.7 6-6 6H134c-3.3 0-6-2.7-6-6v-20zm253.4 250H96c-17.7 0-32-14.3-32-32 0-17.6 14.4-32 32-32h285.4c-1.9 17.1-1.9 46.9 0 64z"></path>
-									</svg>
-								}
+								icon={IconName}
+								iconClassName="icon"
 							>
 								<div>
 									<h3 className="text-white text-[24px] font-bold">
@@ -141,8 +211,8 @@ function YearInReview({ items, categories }) {
 							)}
 						</ul>
 					</li>
-				</ul>
-			</div>
+				</VerticalTimeline>
+			</StyledYearInReview>
 		));
 	};
 
