@@ -1,14 +1,13 @@
 import { Container } from 'react-bootstrap';
 import NotLoggedIn from '../../components/auth/NotLoggedIn';
 import Main from '../../components/layout/Main';
-import { useUserState } from '../../context/userContext';
 import { supabase } from '../../utils/supabaseClient';
 import {
 	VerticalTimeline,
 	VerticalTimelineElement,
 } from 'react-vertical-timeline-component';
+import * as FontAwesome from 'react-icons/fa';
 import { motion } from 'framer-motion';
-
 import 'react-vertical-timeline-component/style.min.css';
 import { useUser } from '@supabase/auth-helpers-react';
 
@@ -29,8 +28,8 @@ function YearInReview({ items, categories }) {
 		...new Set(items.map((item) => yearItemIsCreated(item))),
 	];
 
-	//Return a list of categories present on a given year
-	const listCategoriesByYear = (items, year) => {
+	//Return a list of categories
+	const listCategoriesByYear = (items) => {
 		// Flatten, remove duplicates and return as an array
 		const categoriesByYear = [
 			...new Set(
@@ -38,6 +37,8 @@ function YearInReview({ items, categories }) {
 					.map((item) => item.categories)
 					.filter((category) => category !== null && category.length)
 					.flat()
+					.sort()
+					.reverse()
 			),
 		];
 
@@ -56,8 +57,8 @@ function YearInReview({ items, categories }) {
 	};
 
 	// Return a list of items present on a given year without a category
+	//TODO: Maybe we should create the uncategorized or force a category
 	const listItemsByYearWithoutCategory = (items, year) => {
-		console.log(items);
 		return itemsByYear(items).filter(
 			(item) =>
 				yearItemIsCreated(item) === year && item.categories === null
@@ -69,28 +70,65 @@ function YearInReview({ items, categories }) {
 			<div>
 				<h2>{year}</h2>
 				<ul>
-					{listCategoriesByYear(items, year).map((categoryId) => {
-						return (
-							<>
-								<li>
-									{
-										categories.find(
-											(categoryObj) =>
-												categoryObj.id === categoryId
-										).name
-									}
+					{listCategoriesByYear(items).map((categoryId) => {
+						let IconName = '';
 
-									<ul>
-										{listItemsByYearAndCategory(
-											items,
-											year,
-											categoryId
-										).map((item) => (
-											<li>{item.title}</li>
-										))}
-									</ul>
-								</li>
-							</>
+						const categoryIcon = categories.find(
+							(categoryObj) => categoryObj.id === categoryId
+						).icon;
+
+						if (categoryIcon) {
+							IconName = FontAwesome[categoryIcon];
+						}
+
+						return (
+							<VerticalTimelineElement
+								contentStyle={{
+									background: 'var(--black)',
+									color: '#fff',
+								}}
+								contentArrowStyle={{
+									borderRight: '7px solid  var(--primary)',
+								}}
+								// date={year}
+								// iconStyle={{ background: experience.iconBg }}
+								//TODO How to add <IconName/> here...
+								icon={
+									<svg
+										stroke="currentColor"
+										fill="currentColor"
+										stroke-width="0"
+										viewBox="0 0 448 512"
+										height="1em"
+										width="1em"
+										xmlns="http://www.w3.org/2000/svg"
+									>
+										<path d="M448 360V24c0-13.3-10.7-24-24-24H96C43 0 0 43 0 96v320c0 53 43 96 96 96h328c13.3 0 24-10.7 24-24v-16c0-7.5-3.5-14.3-8.9-18.7-4.2-15.4-4.2-59.3 0-74.7 5.4-4.3 8.9-11.1 8.9-18.6zM128 134c0-3.3 2.7-6 6-6h212c3.3 0 6 2.7 6 6v20c0 3.3-2.7 6-6 6H134c-3.3 0-6-2.7-6-6v-20zm0 64c0-3.3 2.7-6 6-6h212c3.3 0 6 2.7 6 6v20c0 3.3-2.7 6-6 6H134c-3.3 0-6-2.7-6-6v-20zm253.4 250H96c-17.7 0-32-14.3-32-32 0-17.6 14.4-32 32-32h285.4c-1.9 17.1-1.9 46.9 0 64z"></path>
+									</svg>
+								}
+							>
+								<div>
+									<h3 className="text-white text-[24px] font-bold">
+										{
+											categories.find(
+												(categoryObj) =>
+													categoryObj.id ===
+													categoryId
+											).name
+										}
+									</h3>
+								</div>
+
+								<ul>
+									{listItemsByYearAndCategory(
+										items,
+										year,
+										categoryId
+									).map((item) => (
+										<li>{item.title}</li>
+									))}
+								</ul>
+							</VerticalTimelineElement>
 						);
 					})}
 					<li>
