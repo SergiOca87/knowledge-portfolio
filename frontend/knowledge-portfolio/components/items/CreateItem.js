@@ -150,7 +150,7 @@ export default function CreateItem({ categories }) {
 			} = inputs;
 
 			const newItem = {
-				user: user.username,
+				user: user.email,
 				title,
 				description,
 				categories: activeCategories,
@@ -163,7 +163,12 @@ export default function CreateItem({ categories }) {
 				mainImageUrl: mainImage.imageUrl,
 			};
 
-			if (!user || !title || title.trim() === '') {
+			// Basic Client side validation
+			if (
+				!newItem.user ||
+				!newItem.title ||
+				newItem.title.trim() === ''
+			) {
 				toast.error('There was a problem creating your item');
 				return;
 			}
@@ -187,7 +192,7 @@ export default function CreateItem({ categories }) {
 			// 	.select();
 
 			try {
-				fetch('api/createItem', {
+				fetch('/api/createItem', {
 					method: 'POST',
 					body: JSON.stringify(newItem),
 					headers: {
@@ -195,7 +200,8 @@ export default function CreateItem({ categories }) {
 					},
 				})
 					.then((response) => response.json())
-					.then((data) => console.log(data));
+					.then((data) => toast.success(data.message))
+					.catch((error) => toast.error(error));
 
 				// Clear form on submit
 				setInputs({
@@ -235,7 +241,6 @@ export default function CreateItem({ categories }) {
 							<Form.Control
 								type="text"
 								name="title"
-								id="title"
 								placeholder="Title"
 								required
 								value={inputs.title}
@@ -280,7 +285,6 @@ export default function CreateItem({ categories }) {
 								rows={3}
 								name="description"
 								placeholder="Description"
-								id="description"
 								maxLength="300"
 								value={inputs.description}
 								onChange={handleChange}
@@ -336,7 +340,6 @@ export default function CreateItem({ categories }) {
 						<Form.Select
 							aria-label="Status"
 							name="status"
-							id="status"
 							onChange={handleChange}
 						>
 							<option value={true}>Finished</option>
@@ -401,7 +404,6 @@ export default function CreateItem({ categories }) {
 						<Form.Control
 							type="text"
 							name="urlTitle"
-							id="title"
 							value={inputs.urlTitle}
 							onChange={handleChange}
 						/>
@@ -411,7 +413,6 @@ export default function CreateItem({ categories }) {
 						<Form.Control
 							type="url"
 							name="url"
-							id="url"
 							value={inputs.url}
 							onChange={handleChange}
 						/>

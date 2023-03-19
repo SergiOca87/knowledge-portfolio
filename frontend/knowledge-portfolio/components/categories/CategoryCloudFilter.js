@@ -59,8 +59,6 @@ export default function CategoryCloudFilter({
 		} else {
 			setActiveCategories([...activeCategories, clickedCategory]);
 		}
-
-		console.log('active categories are...', activeCategories);
 	};
 
 	return (
@@ -87,33 +85,13 @@ export default function CategoryCloudFilter({
 						IconName = FontAwesome[category.icon];
 					}
 					return (
-						<>
-							<Category
-								category={category}
-								asButtons={true}
-								activeCategories={activeCategories}
-								handleButtonClick={handleButtonClick}
-							/>
-							{/* <Button
-							size="sm"
-							key={category.id}
-							data-category={`${category.id}`}
-							className={
-								activeCategories?.includes(category.id)
-									? 'active'
-									: ''
-							}
-							onClick={(e) => handleButtonClick(e.target)}
-						>
-							{IconName && (
-								<span className="category">
-									<IconName />
-								</span>
-							)}
-
-							<span>{category.name}</span>
-						</Button> */}
-						</>
+						<Category
+							category={category}
+							asButtons={true}
+							activeCategories={activeCategories}
+							handleButtonClick={handleButtonClick}
+							key={category.name}
+						/>
 					);
 				})}
 			</StyledCategoryCloudFilter>

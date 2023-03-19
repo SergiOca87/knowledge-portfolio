@@ -27,6 +27,7 @@ import { useUserState } from '../../context/userContext';
 import { supabase } from '../../utils/supabaseClient';
 import CategoryCloudFilter from '../categories/CategoryCloudFilter';
 import UploadImageWidget from './UploadImageWidget';
+import { useUser } from '@supabase/auth-helpers-react';
 
 const StyledForm = styled(Form)`
 	max-width: 70rem;
@@ -47,7 +48,7 @@ const StyleEditor = styled(Editor)`
 `;
 
 export default function UpdateItem({ item }) {
-	const { user, userCategories } = useUserState();
+	const user = useUser();
 	const [activeCategories, setActiveCategories] = useState([]);
 	const [mainImage, setMainImage] = useState('');
 

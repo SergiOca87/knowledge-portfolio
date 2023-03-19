@@ -2,13 +2,12 @@ import { supabase } from '../../utils/supabaseClient';
 
 export default async function handler(req, res) {
 	if (req.method === 'POST') {
-		console.log('create item api', req);
 		// Extract values
 		const newItem = {
 			username: req.body.user,
 			title: req.body.title,
 			description: req.body.description,
-			categories: req.body.activeCategories,
+			categories: req.body.categories,
 			singlePageContent: req.body.singlePageContent,
 			urlTitle: req.body.urlTitle,
 			url: req.body.url,
@@ -33,7 +32,8 @@ export default async function handler(req, res) {
 			.from('items')
 			.insert(newItem)
 			.select();
-		// Send error code otherwise
+
+		console.log('serveside itemData', itemData);
 
 		if (newItem.mainImageName) {
 			const { data: imageData, error: imageError } = await supabase
@@ -58,6 +58,13 @@ export default async function handler(req, res) {
 					.eq('id', itemData[0].id);
 		}
 
-		// Send ok code
+		if (error) {
+			res.status(500).json({ error: 'Failed to create item' });
+		} else {
+			res.status(200).json({
+				message: 'Item created successfully',
+				data: itemData[0],
+			});
+		}
 	}
 }

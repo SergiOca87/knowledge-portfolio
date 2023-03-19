@@ -57,8 +57,8 @@ export default function DeleteItem({
 	};
 
 	return (
-		<Button variant="secondary" onClick={handleDelete}>
+		<span onClick={handleDelete}>
 			{deleteConfirm.counter === 0 ? children : deleteConfirm.message}
-		</Button>
+		</span>
 	);
 }

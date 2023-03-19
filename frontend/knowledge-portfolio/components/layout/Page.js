@@ -232,7 +232,6 @@ const GlobalStyles = createGlobalStyle`
       border-radius: 10px;
       z-index: -1;
       transform: translate(-1px,-1px);
-
     }
 
     .card-header {

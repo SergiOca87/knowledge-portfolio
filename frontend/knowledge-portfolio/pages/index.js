@@ -21,6 +21,7 @@ import introImage from '../public/images/intro.svg';
 import AnimateWrapper from '../components/layout/AnimateWrapper';
 import { motion } from 'framer-motion';
 import { fadeInContainer, fadeInItem } from '../utils/motion';
+import { useUser } from '@supabase/auth-helpers-react';
 
 const StyledGrid = styled.div`
 	display: grid;
@@ -210,7 +211,7 @@ const ChangingWord = styled.div``;
 
 export default function Home() {
 	//TODO: Clean up after definite style
-
+	const user = useUser();
 	const words = ['Share', 'Own', 'Use'];
 	const [currentIndex, setCurrentIndex] = useState(0);
 	const [flip, setFlip] = useState(false);
@@ -301,7 +302,13 @@ export default function Home() {
 											in no time
 										</p>
 
-										<Link href="/login">
+										<Link
+											href={
+												user
+													? `/portfolio/${user.id}`
+													: '/login'
+											}
+										>
 											<Button
 												variant="primary btn-round btn-big"
 												type="button"
