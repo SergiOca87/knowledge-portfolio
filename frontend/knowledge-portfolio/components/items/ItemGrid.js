@@ -199,15 +199,14 @@ export default function ItemGrid({
 						// }
 
 						return (
-							<>
-								<Item
-									item={item}
-									categories={itemCategories}
-									isPublic={isPublic}
-									setHasBeenDeletedId={setHasBeenDeletedId}
-									hasBeenDeletedId={hasBeenDeletedId}
-								/>
-							</>
+							<Item
+								item={item}
+								categories={itemCategories}
+								isPublic={isPublic}
+								setHasBeenDeletedId={setHasBeenDeletedId}
+								hasBeenDeletedId={hasBeenDeletedId}
+								key={`${item.name}-${item.id}`}
+							/>
 						);
 					})}
 
@@ -215,7 +214,7 @@ export default function ItemGrid({
 					<h3>No results match your search criteria</h3>
 				)}
 
-				{!isPublicPage && visibleItems <= 0 && (
+				{!isPublicPage && items.length === 0 && (
 					<p>
 						You can now start adding items to your portfolio or
 						create a few categories first{' '}

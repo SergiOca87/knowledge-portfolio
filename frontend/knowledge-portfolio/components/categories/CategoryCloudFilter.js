@@ -9,7 +9,6 @@ const StyledCategoryCloudFilter = styled.div`
 	display: flex;
 	flex-wrap: wrap;
 	gap: 0.3rem;
-	margin-bottom: 4rem;
 `;
 
 const StyledCategoryButton = styled(Button)`
@@ -63,7 +62,6 @@ export default function CategoryCloudFilter({
 
 	return (
 		<>
-			<p>Categories</p>
 			<StyledCategoryCloudFilter>
 				{all && (
 					<StyledCategoryButton

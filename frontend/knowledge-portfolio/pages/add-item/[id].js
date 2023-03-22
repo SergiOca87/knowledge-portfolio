@@ -46,15 +46,12 @@ export default function createItems({ categories }) {
 								>
 									<h1>Add a Portfolio Item</h1>
 									<p>
-										If you haven't done so, before ading an
-										item you may want to create a few
-										categories for this item first, you can
-										do so{' '}
+										You can create categories for your item{' '}
 										<Link href="add-category">here</Link>{' '}
 									</p>
 								</div>
-								//TODO: Can proobably send down the tree a
-								//TODO: createCategory
+								{/* //TODO: Can proobably send down the tree a
+								//TODO: createCategory */}
 								<CreateItem categories={categories} />
 							</>
 						)}

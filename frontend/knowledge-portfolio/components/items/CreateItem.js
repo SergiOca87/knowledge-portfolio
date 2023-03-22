@@ -19,7 +19,9 @@ import {
 	Accordion,
 	Button,
 	Card,
+	Col,
 	Form,
+	Row,
 	useAccordionButton,
 } from 'react-bootstrap';
 
@@ -32,19 +34,21 @@ import UploadImageWidget from './UploadImageWidget';
 import { useUser } from '@supabase/auth-helpers-react';
 
 const StyledForm = styled(Form)`
-	max-width: 70rem;
-	margin: 4rem auto;
 	padding: 2rem;
 
 	.tip {
 		font-size: 1.4rem;
+		color: rgba(255, 255, 255, 0.5);
+		margin-top: 2rem;
 	}
 
 	.single-page-editor {
 		color: #000;
 	}
 
-	input {
+	input,
+	textarea,
+	select {
 		height: 5rem !important;
 		font-size: 1.6rem !important;
 		background-color: transparent !important;
@@ -56,10 +60,47 @@ const StyledForm = styled(Form)`
 		}
 	}
 
+	select {
+		option {
+			color: #000 !important;
+		}
+	}
+
+	textarea {
+		height: 12rem !important;
+	}
+
+	.accordion {
+		font-size: 1.6rem !important;
+		background-color: transparent !important;
+		border: 1px solid var(--primary);
+		border-radius: 0.375rem;
+		color: #fff !important;
+
+		.accordion-item {
+			background-color: transparent !important;
+		}
+
+		button {
+			height: 5rem !important;
+			font-size: 1.6rem !important;
+			background-color: transparent !important;
+			border: none;
+			color: #fff !important;
+		}
+
+		&:placeholder-shown {
+			color: #fff;
+		}
+	}
+
 	label {
-		font-size: 1.6rem;
-		padding: 1.5rem 0.75rem;
-		color: #fff;
+		font-size: 1.4rem;
+		text-transform: uppercase;
+		font-family: 'Montserrat-Bold';
+		margin-bottom: 1rem;
+		letter-spacing: 1px;
+		color: var(--secondary);
 	}
 `;
 
@@ -77,7 +118,7 @@ export default function CreateItem({ categories }) {
 	const [inputs, setInputs] = useState({
 		title: '',
 		description: '',
-		// status: 'finished',
+		status: true,
 		// visibility: 'true',
 		singlePageContent: '',
 		mainImage: '',
@@ -93,7 +134,7 @@ export default function CreateItem({ categories }) {
 	}, [user]);
 
 	// Single page content
-	//TODO: Maybe we should extract this
+	//Maybe we should extract this
 	const content = {
 		entityMap: {},
 		blocks: [
@@ -210,7 +251,7 @@ export default function CreateItem({ categories }) {
 					singlePageContent: '',
 					urlTitle: '',
 					url: '',
-					status: 'true',
+					status: true,
 				});
 
 				setActiveCategories([]);
@@ -231,24 +272,22 @@ export default function CreateItem({ categories }) {
 		>
 			<Card.Body
 				css={css`
-					padding: 4rem 2rem;
+					padding: 2rem;
 				`}
 			>
 				{/* TODO: Should be its own component */}
 				<StyledForm method="POST" onSubmit={handleSubmit}>
-					<Form.Group className="mb-5">
-						<FloatingLabel controlId="floatingInput" label="Title">
-							<Form.Control
-								type="text"
-								name="title"
-								placeholder="Title"
-								required
-								value={inputs.title}
-								onChange={handleChange}
-							/>
-						</FloatingLabel>
+					<Form.Group className="mb-5" controlId="formTitle">
+						<Form.Label>Title</Form.Label>
+						<Form.Control
+							type="text"
+							placeholder="Title"
+							required
+							name="title"
+							value={inputs.title}
+							onChange={handleChange}
+						/>
 					</Form.Group>
-
 					{/* <Form.Group className="mb-5">
 						<Form.Label htmlFor="title">Main Image</Form.Label>
 						<Form.Control
@@ -259,11 +298,10 @@ export default function CreateItem({ categories }) {
 							onChange={handleChange}
 						/>
 					</Form.Group> */}
-
-					<UploadImageWidget setMainImage={setMainImage} />
+					{/* //TODO: Keep image capabilities or not */}
+					{/* <UploadImageWidget setMainImage={setMainImage} /> */}
 					{/* <DragDropFile setMainImage={setMainImage} /> */}
-					<p>{mainImage && mainImage.imageName}</p>
-
+					{/* <p>{mainImage && mainImage.imageName}</p> */}
 					{/* <Form.Group className="mb-5">
 						<Form.Label htmlFor="date">Date</Form.Label>
 						<Form.Control
@@ -275,35 +313,31 @@ export default function CreateItem({ categories }) {
 						/>
 					</Form.Group>
 						*/}
-					<Form.Group className="mb-5">
-						<FloatingLabel
-							controlId="floatingInput"
-							label="Description"
-						>
-							<Form.Control
-								as="textarea"
-								rows={3}
-								name="description"
-								placeholder="Description"
-								maxLength="300"
-								value={inputs.description}
-								onChange={handleChange}
-							/>
-						</FloatingLabel>
+					<Form.Group className="mb-5" controlId="formDescription">
+						<Form.Label>Description</Form.Label>
+						<Form.Control
+							as="textarea"
+							rows={3}
+							name="description"
+							maxLength="300"
+							value={inputs.description}
+							onChange={handleChange}
+						/>
 					</Form.Group>
-					{categories && (
+					{categories.length ? (
 						<Form.Group className="mb-5">
-							<Form.Label htmlFor="category">Category</Form.Label>
-							<p className="tip">
-								If you need a new category you can create it{' '}
-								<Link href="/add-category"> here</Link>
-							</p>
-
+							<Form.Label>Categories</Form.Label>
 							<CategoryCloudFilter
 								userCategories={categories}
 								activeCategories={activeCategories}
 								setActiveCategories={setActiveCategories}
 							/>
+							<Form.Text>
+								<p className="tip">
+									If you need a new category you can create it{' '}
+									<Link href="/add-category"> here</Link>
+								</p>
+							</Form.Text>
 							{/* <Categories
 								title={false}
 								categories={userCategories}
@@ -333,10 +367,14 @@ export default function CreateItem({ categories }) {
 								})}
 							</Form.Select> */}
 						</Form.Group>
+					) : (
+						<p className="tip">
+							If you need a new category you can create it{' '}
+							<Link href="/add-category"> here</Link>
+						</p>
 					)}
-
-					<Form.Group className="mb-5">
-						<Form.Label htmlFor="status">status</Form.Label>
+					<Form.Group className="mb-5" controlId="formStatus">
+						<Form.Label>Status</Form.Label>
 						<Form.Select
 							aria-label="Status"
 							name="status"
@@ -360,64 +398,68 @@ export default function CreateItem({ categories }) {
 							<option value="false">Private</option>
 						</Form.Select>
 					</Form.Group> */}
-					<label>
-						<p className="tip">
-							Adding single page content will enable a "More
-							Details" button on your portfolio item. This button
-							will redirect the user to a page with the content
-							that you add on the WYSYWYG below. Use this feature
-							if you need to create a detailed view of your item
-							with a longer description text, images or video.
-						</p>
-					</label>
-					<Accordion>
-						<Accordion.Item eventKey="0">
-							<Accordion.Header>
-								Single Page Content
-							</Accordion.Header>
-							<Accordion.Body>
-								<StyleEditor
-									wrapperClassName="single-page-editor-wrap"
-									editorClassName="single-page-editor"
-									onContentStateChange={onContentStateChange}
-									toolbar={{
-										image: { enableUpload: true },
-									}}
-								/>
-								{/* <textarea
+					<Form.Group className="mb-5">
+						<Form.Label>Single Page Content</Form.Label>
+						<Accordion flush>
+							<Accordion.Item eventKey="0">
+								<Accordion.Header>
+									Single Page Content
+								</Accordion.Header>
+								<Accordion.Body>
+									<StyleEditor
+										wrapperClassName="single-page-editor-wrap"
+										editorClassName="single-page-editor"
+										onContentStateChange={
+											onContentStateChange
+										}
+										toolbar={{
+											image: { enableUpload: true },
+										}}
+									/>
+									{/* <textarea
 									value={inputs.singlePageContent}
 									css={css`
 										display: none;
 									`}
 								/> */}
-							</Accordion.Body>
-						</Accordion.Item>
-					</Accordion>
-					<Form.Group className="mb-5">
-						<p className="tip">
-							Use the URL field to direct the user to an external
-							URL where you can show more of your portfolio item.
-							URL Title is the clickable text that the user will
-							see.
-						</p>
-						<Form.Label htmlFor="urlTitle">URL Title</Form.Label>
-						<Form.Control
-							type="text"
-							name="urlTitle"
-							value={inputs.urlTitle}
-							onChange={handleChange}
-						/>
+								</Accordion.Body>
+							</Accordion.Item>
+						</Accordion>
+						<Form.Text>
+							<p className="tip">
+								Adding single page content will enable a "More
+								Details" button on your portfolio item.
+							</p>
+						</Form.Text>
 					</Form.Group>
-					<Form.Group className="mb-5">
-						<Form.Label htmlFor="url">URL</Form.Label>
-						<Form.Control
-							type="url"
-							name="url"
-							value={inputs.url}
-							onChange={handleChange}
-						/>
-					</Form.Group>
-
+					<Row>
+						<Col>
+							<Form.Group
+								className="mb-2"
+								controlId="formUrlTitle"
+							>
+								<Form.Label>URL Title</Form.Label>
+								<Form.Control
+									type="text"
+									name="urlTitle"
+									value={inputs.urlTitle}
+									onChange={handleChange}
+								/>
+							</Form.Group>
+						</Col>
+						<Col>
+							<Form.Group className="mb-5">
+								<Form.Label htmlFor="url">URL</Form.Label>
+								<Form.Control
+									type="url"
+									name="url"
+									value={inputs.url}
+									onChange={handleChange}
+								/>
+							</Form.Group>
+						</Col>
+					</Row>
+					<Form.Text></Form.Text>
 					<Button
 						onClick={handleSubmit}
 						value="submit"

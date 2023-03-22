@@ -89,9 +89,7 @@ const GlobalStyles = createGlobalStyle`
     text-decoration: none;
     transition: all 200ms;
   }
-  a:hover {
-    text-decoration: underline;
-  }
+ 
   button {
     font-family: 'Montserrat-Medium', --apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     font-weight: 500;
@@ -122,12 +120,11 @@ const GlobalStyles = createGlobalStyle`
    
   }
   a{
-    color: var(--secondary);
+    color: var(--primary);
     font-family: 'Montserrat-Medium';
 
-
     &:hover {
-      color: var(--primary);
+      color: var(--secondary);
       text-decoration: none;
     }
 
