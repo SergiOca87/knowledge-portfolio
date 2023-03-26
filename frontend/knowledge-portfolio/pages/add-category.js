@@ -5,14 +5,15 @@ import CreateCategory from '../components/categories/CreateCategory';
 import Main from '../components/layout/Main';
 import NotLoggedIn from '../components/auth/NotLoggedIn';
 // import { getCategories } from '../components/UserCategories';
-import { useUserState } from '../context/userContext';
+// import { useUserState } from '../context/userContext';
+import { useUser } from '@supabase/auth-helpers-react';
+import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
 
 // const StyledContainer = styled.Container`
 
 // `
-export default function createItems() {
+export default function createCategory({ user, categories }) {
 	// const userCategories = getCategories();
-	const { user, userCategories } = useUserState();
 
 	return (
 		<Main>
@@ -37,12 +38,12 @@ export default function createItems() {
 								allow visitors to filter your items.
 							</p>
 
-							{userCategories?.length ? (
+							{categories ? (
 								<>
 									<p>Your current existing Categories:</p>
 									<Categories
 										title={false}
-										categories={userCategories}
+										categories={categories}
 										background={true}
 									/>
 								</>
@@ -51,7 +52,7 @@ export default function createItems() {
 							)}
 						</div>
 
-						<CreateCategory />
+						<CreateCategory userCategories={categories} />
 					</div>
 				) : (
 					<NotLoggedIn />
@@ -59,4 +60,34 @@ export default function createItems() {
 			</Container>
 		</Main>
 	);
+}
+
+export async function getServerSideProps(context) {
+	// Create authenticated Supabase Client
+	const supabase = createServerSupabaseClient(context);
+	// Check if we have a session
+	const {
+		data: { session },
+	} = await supabase.auth.getSession();
+
+	if (!session)
+		return {
+			redirect: {
+				destination: '/login',
+				permanent: false,
+			},
+		};
+
+	const { data: categories } = await supabase
+		.from('categories')
+		.select('*')
+		.eq('userId', session.user.id);
+
+	return {
+		props: {
+			initialSession: session,
+			user: session.user,
+			categories,
+		},
+	};
 }

@@ -133,7 +133,9 @@ export default function Item({
 									text-transform: capitalize;
 								`}
 							>
-								{item.status}
+								{item.status === true
+									? 'Finished'
+									: 'Unfinished'}
 							</p>
 						</ListGroupItem>
 					)}

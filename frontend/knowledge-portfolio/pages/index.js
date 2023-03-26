@@ -21,7 +21,8 @@ import introImage from '../public/images/intro.svg';
 import AnimateWrapper from '../components/layout/AnimateWrapper';
 import { motion } from 'framer-motion';
 import { fadeInContainer, fadeInItem } from '../utils/motion';
-import { useUser } from '@supabase/auth-helpers-react';
+// import { useUser } from '@supabase/auth-helpers-react';
+import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
 
 const StyledGrid = styled.div`
 	display: grid;
@@ -211,7 +212,7 @@ const ChangingWord = styled.div``;
 
 export default function Home() {
 	//TODO: Clean up after definite style
-	const user = useUser();
+	// const user = useUser();
 	const words = ['Share', 'Own', 'Use'];
 	const [currentIndex, setCurrentIndex] = useState(0);
 	const [flip, setFlip] = useState(false);
@@ -302,13 +303,7 @@ export default function Home() {
 											in no time
 										</p>
 
-										<Link
-											href={
-												user
-													? `/portfolio/${user.id}`
-													: '/login'
-											}
-										>
+										<Link href="/portfolio">
 											<Button
 												variant="primary btn-round btn-big"
 												type="button"
@@ -561,15 +556,26 @@ export default function Home() {
 		</>
 	);
 }
-export async function getServerSideProps(context) {
-	console.log('serversideprops');
-	const {
-		data: { user },
-	} = await supabase.auth.getUser();
+// export async function getServerSideProps(context) {
+// 	// Create authenticated Supabase Client
+// 	const supabase = createServerSupabaseClient(context);
+// 	// Check if we have a session
+// 	const {
+// 		data: { session },
+// 	} = await supabase.auth.getSession();
 
-	console.log(user);
+// 	// if (!session)
+// 	// 	return {
+// 	// 		redirect: {
+// 	// 			destination: '/',
+// 	// 			permanent: false,
+// 	// 		},
+// 	// 	};
 
-	return {
-		props: { user },
-	};
-}
+// 	return {
+// 		props: {
+// 			initialSession: session,
+// 			user: session.user,
+// 		},
+// 	};
+// }

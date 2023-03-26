@@ -29,6 +29,19 @@ const StyledCard = styled(Card)`
 			color: var(--primary);
 		}
 	}
+
+	label {
+		text-transform: uppercase;
+	}
+
+	input {
+		height: 5rem !important;
+
+		&[type='email'],
+		&[type='password'] {
+			margin-bottom: 1.5rem !important;
+		}
+	}
 `;
 
 //TODO: Change styles: https://supabase.com/docs/guides/auth/auth-helpers/auth-ui
@@ -45,6 +58,27 @@ export default function SignInUp({ serverUser, session }) {
 							colors: {
 								brand: 'var(--primary)',
 								brandAccent: 'none',
+								defaultButtonBackground: 'var(--black)',
+								defaultButtonBackgroundHover: 'transparent',
+								defaultButtonBorder: 'var(--primary)',
+								defaultButtonText: '#fff',
+								inputBorder: 'var(--primary)',
+								inputText: '#fff',
+								dividerBackground: 'var(--primary)',
+								inputLabelText: 'var(--secondary)',
+								labelBottomMargin: '10px',
+							},
+							fontSizes: {
+								baseBodySize: '13px',
+								baseInputSize: '16px',
+								baseLabelSize: '14px',
+								baseButtonSize: '14px',
+							},
+							fonts: {
+								bodyFontFamily: `Montserrat-Regular`,
+								buttonFontFamily: `Montserrat-Regular`,
+								inputFontFamily: `Montserrat-Regular`,
+								labelFontFamily: 'Montserrat-Bold',
 							},
 						},
 					},

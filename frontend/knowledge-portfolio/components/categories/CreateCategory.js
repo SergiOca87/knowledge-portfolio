@@ -8,40 +8,40 @@ import styled from 'styled-components';
 import { Button, Card, Col, Container, Form, Row } from 'react-bootstrap';
 import * as FontAwesome from 'react-icons/fa';
 import CategoryIcons from './CategoryIcons';
-import { ToastContainer, toast } from 'react-toastify';
+
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-// import { LOGGED_IN_USER } from './User';
 import { useRouter } from 'next/router';
-import UserContext, { useUserState } from '../../context/userContext';
 import { supabase } from '../../utils/supabaseClient';
+import { useUser } from '@supabase/auth-helpers-react';
 
-const StyledForm = styled.form`
-	max-width: 70rem;
-	margin: 4rem auto;
+const StyledForm = styled(Form)`
 	padding: 2rem;
-	background-color: var(--tertiary);
 
-	.tip {
+	input {
+		height: 5rem !important;
+		font-size: 1.6rem !important;
+		background-color: transparent !important;
+		border: 1px solid var(--primary);
+		color: #fff !important;
+
+		&:placeholder-shown {
+			color: #fff;
+		}
+	}
+
+	label {
 		font-size: 1.4rem;
-	}
-
-	.icons-wrap {
-		display: flex;
-		flex-wrap: wrap;
-	}
-
-	.icon {
-		font-size: 3rem;
-		width: 5rem;
-		height: 5rem;
-		display: flex;
-		justify-content: center;
-		align-items: center;
+		text-transform: uppercase;
+		font-family: 'Montserrat-Bold';
+		margin-bottom: 1rem;
+		letter-spacing: 1px;
+		color: var(--secondary);
 	}
 `;
 
-export default function CreateCategory() {
-	const { user, userCategories } = useUserState();
+export default function CreateCategory(userCategories) {
+	const user = useUser();
 	const [iconSearch, setIconSearch] = useState('');
 	const router = useRouter();
 
@@ -92,39 +92,71 @@ export default function CreateCategory() {
 
 		const { name, icon } = inputs;
 
+		const newCategory = { name, icon, userId: user.id };
+
 		if (
+			!newCategory.userId ||
+			!newCategory.name ||
+			newCategory.name.trim() === ''
+		) {
+			toast.error('There was a problem creating your category');
+			return;
+		}
+
+		if (
+			//TODO: We are here
 			userCategories.filter(
 				(category) => category.name.toLowerCase() === name.toLowerCase()
 			).length > 0
 		) {
 			toast.error(`The category ${name} already exists`);
 		} else {
-			const { error } = await supabase.from('categories').insert({
-				name,
-				icon,
-				userId: user.id,
-			});
+			try {
+				fetch('api/createCategory', {
+					method: 'POST',
+					body: JSON.stringify(newCategory),
+					headers: {
+						'Content-Type': 'application/json',
+					},
+				})
+					.then((response) => response.json())
+					.then((data) => {
+						toast.success(`Category created, reloading page...`);
 
-			if (error) {
-				toast.error(error);
-			} else {
-				setInputs({
-					name: '',
-					icon: '',
-				});
+						// Clear form on submit
+						setInputs({
+							name: '',
+							icon: '',
+						});
+
+						setTimeout(() => {
+							router.reload(window.location.pathname);
+						}, 3000);
+					})
+					.catch((error) => toast.error(error));
+			} catch (err) {
+				toast.error;
 			}
 
-			toast.success(`Category created, reloading page...`);
+			// const { error } = await supabase.from('categories').insert({
+			// 	name,
+			// 	icon,
+			// 	userId: user.id,
+			// });
 
-			setTimeout(() => {
-				router.reload(window.location.pathname);
-			}, 3000);
+			// if (error) {
+			// 	toast.error(error);
+			// } else {
+			// 	setInputs({
+			// 		name: '',
+			// 		icon: '',
+			// 	});
+			// }
 		}
 	};
 
 	return (
 		<>
-			<ToastContainer />
 			<Card
 				css={css`
 					margin-bottom: 3rem;
@@ -132,32 +164,26 @@ export default function CreateCategory() {
 			>
 				<Card.Body
 					css={css`
-						padding: 4rem 2rem;
+						padding: 2rem;
 					`}
 				>
-					<Form method="POST" onSubmit={handleSubmit}>
-						<Form.Group className="mb-5">
-							<Form.Label htmlFor="email">
-								Category Name
-							</Form.Label>
+					<StyledForm method="POST" onSubmit={handleSubmit}>
+						<Form.Group className="mb-5" controlId="categoryName">
+							<Form.Label>Category Name</Form.Label>
 							<Form.Control
 								type="text"
 								name="name"
-								id="name"
 								value={inputs.name}
 								required
 								onChange={handleChange}
 							/>
 						</Form.Group>
-						<Form.Group className="mb-5">
-							<Form.Label htmlFor="icon">
-								Search for an Icon
-							</Form.Label>
+						<Form.Group className="mb-5" controlId="categoryIcon">
+							<Form.Label>Search for an Icon</Form.Label>
 							<Form.Control
 								type="text"
 								value={iconSearch}
 								name="icon"
-								id="icon"
 								onChange={(e) => setIconSearch(e.target.value)}
 							/>
 						</Form.Group>
@@ -186,7 +212,7 @@ export default function CreateCategory() {
 						>
 							Create Category
 						</Button>
-					</Form>
+					</StyledForm>
 				</Card.Body>
 			</Card>
 		</>

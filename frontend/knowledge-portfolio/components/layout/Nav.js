@@ -95,7 +95,7 @@ export default function Nav() {
 				>
 					{session ? (
 						<>
-							<Link href={`/portfolio/${userId}`}>
+							<Link href="/portfolio">
 								<a
 									className={
 										router.pathname.includes('/portfolio/')
@@ -106,7 +106,7 @@ export default function Nav() {
 									Portfolio
 								</a>
 							</Link>
-							<Link href={`/year-in-review/${userId}`}>
+							<Link href="/year-in-review">
 								<a
 									className={
 										router.pathname.includes(
@@ -119,7 +119,7 @@ export default function Nav() {
 									Year In Review
 								</a>
 							</Link>
-							<Link href={`/user/${userId}`}>
+							<Link href="user">
 								<FaUser />
 							</Link>
 

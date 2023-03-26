@@ -7,7 +7,7 @@ import { useContext, useEffect, useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
 import styled, { css } from 'styled-components';
 // import PortfolioOptionsContext from '../context/PortfolioOptionsContext';
-
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import Item from './Item';
 // import NotLoggedIn from './NotLoggedIn';
 
@@ -37,6 +37,31 @@ export default function ItemGrid({
 }) {
 	//Number of items that are rendered
 	const [visibleItems, setVisibleItems] = useState(0);
+
+	const [filteredItems, setFilteredItems] = useState([]);
+
+	const [itemImage, setItemImage] = useState();
+
+	const [hasBeenDeletedId, setHasBeenDeletedId] = useState([]);
+
+	const [orderedItems, setOrderedItems] = useState([...items]);
+
+	//TODO: Drag and Drop - does not work with filtered items, figure out
+	const handleDrop = (droppedItem) => {
+		// Dropped outside of the container
+		if (!droppedItem.destination) return;
+
+		let updatedList = [...orderedItems];
+
+		// Remove dragged item
+		const [reorderedItem] = updatedList.splice(droppedItem.source.index);
+
+		// Add dropped item
+		updatedList.splice(droppedItem.destination.index, 0, reorderedItem);
+
+		// Update State
+		setOrderedItems(updatedList);
+	};
 	// const isAll = activeCategories?.includes('All') ? true : false;
 
 	// const { options, setOptions } = useContext(PortfolioOptionsContext);
@@ -137,11 +162,6 @@ export default function ItemGrid({
 	// useEffect(() => {
 	// 	setVisibleItems(itemsToRender().length);
 	// }, [chosenCategory, chosenText, activeCategories]);
-	const [filteredItems, setFilteredItems] = useState([]);
-
-	const [itemImage, setItemImage] = useState();
-
-	const [hasBeenDeletedId, setHasBeenDeletedId] = useState([]);
 
 	// On Page load, fill up the filteredItems Array with items
 	// Filter the items if an item has been deleted (so that the item is hidden and we don't need to reload the page)
@@ -153,6 +173,17 @@ export default function ItemGrid({
 			items.filter((item) => !hasBeenDeletedId.includes(item.id))
 		);
 	}, [hasBeenDeletedId]);
+
+	//TODO: Why isn't this triggering are-render
+	// const handleItemDelete = (id) => {
+	// 	const shallowCopy = [...items];
+
+	// 	const filteredCopy = shallowCopy.filter(
+	// 		(item) => !hasBeenDeletedId.includes(id)
+	// 	);
+
+	// 	return setFilteredItems(filteredCopy);
+	// };
 
 	useEffect(() => {
 		if (activeCategories.length === 0) {
@@ -172,62 +203,96 @@ export default function ItemGrid({
 
 	return (
 		<>
-			<StyledItemGrid
-				css={css`
-					grid-template-columns: repeat(2, 1fr);
-					gap: 2rem;
-				`}
-			>
-				{filteredItems &&
-					filteredItems.map((item, index) => {
-						let itemCategories = '';
+			<DragDropContext onDragEnd={handleDrop}>
+				<Droppable droppableId="list-container">
+					{(provided) => (
+						<StyledItemGrid
+							css={css`
+								grid-template-columns: repeat(2, 1fr);
+								gap: 2rem;
+							`}
+							{...provided.droppableProps}
+							ref={provided.innerRef}
+						>
+							{filteredItems &&
+								filteredItems.map((item, index) => {
+									let itemCategories = '';
 
-						// If the item has categories and they match a category ID from the user categories, pass it to the item
-						// Maybe this logic should not be here in the Component
-						if (item.categories && item.categories.length) {
-							itemCategories = categories.filter((category) =>
-								item.categories.includes(category.id)
-							);
-						}
+									// If the item has categories and they match a category ID from the user categories, pass it to the item
+									// Maybe this logic should not be here in the Component
+									if (
+										item.categories &&
+										item.categories.length
+									) {
+										itemCategories = categories.filter(
+											(category) =>
+												item.categories.includes(
+													category.id
+												)
+										);
+									}
 
-						// if (images && images.length) {
-						// 	setItemImage(
-						// 		...images.filter(
-						// 			(image) => image.item === item.id
-						// 		)
-						// 	);
-						// }
+									// if (images && images.length) {
+									// 	setItemImage(
+									// 		...images.filter(
+									// 			(image) => image.item === item.id
+									// 		)
+									// 	);
+									// }
 
-						return (
-							<Item
-								item={item}
-								categories={itemCategories}
-								isPublic={isPublic}
-								setHasBeenDeletedId={setHasBeenDeletedId}
-								hasBeenDeletedId={hasBeenDeletedId}
-								key={`${item.name}-${item.id}`}
-							/>
-						);
-					})}
+									return (
+										<Draggable
+											key={`${item.name}-${item.id}`}
+											draggableId={`${item.name}-${item.id}`}
+											index={index}
+										>
+											{(provided) => (
+												<div
+													ref={provided.innerRef}
+													{...provided.dragHandleProps}
+													{...provided.draggableProps}
+												>
+													<Item
+														item={item}
+														categories={
+															itemCategories
+														}
+														isPublic={isPublic}
+														setHasBeenDeletedId={
+															setHasBeenDeletedId
+														}
+														hasBeenDeletedId={
+															hasBeenDeletedId
+														}
+														key={`${item.name}-${item.id}`}
+													/>
+												</div>
+											)}
+										</Draggable>
+									);
+								})}
 
-				{isPublicPage && visibleItems <= 0 && (
-					<h3>No results match your search criteria</h3>
-				)}
+							{isPublicPage && items <= 0 && (
+								<h3>No results match your search criteria</h3>
+							)}
 
-				{!isPublicPage && items.length === 0 && (
-					<p>
-						You can now start adding items to your portfolio or
-						create a few categories first{' '}
-						<Link href="/add-category">Here</Link>
-					</p>
-				)}
+							{!isPublicPage && items.length === 0 && (
+								<p>
+									You can now start adding items to your
+									portfolio or create a few categories first{' '}
+									<Link href="/add-category">Here</Link>
+								</p>
+							)}
 
-				{/* {!isPublicPage && (
+							{/* {!isPublicPage && (
 							<li lg={user?.options?.options?.cols}>
 								<StyledEmptyCard>Add</StyledEmptyCard>
 							</li>
 						)} */}
-			</StyledItemGrid>
+						</StyledItemGrid>
+					)}
+				</Droppable>
+			</DragDropContext>
 		</>
 	);
 }
