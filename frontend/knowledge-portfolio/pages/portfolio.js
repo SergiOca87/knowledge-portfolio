@@ -39,6 +39,20 @@ import NotLoggedIn from '../components/auth/NotLoggedIn';
 // import { supabase } from '../utils/supabaseClient';
 import PortfolioControls from '../components/ui/PortfolioControls';
 import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
+import { ListManager } from 'react-beautiful-dnd-grid';
+import Item from '../components/items/Item';
+
+const StyledListManager = styled.div`
+	& > div {
+		gap: 2rem;
+		align-items: stretch !important;
+
+		& > div {
+			width: 100%;
+			min-height: 100%;
+		}
+	}
+`;
 
 const StyledUserCard = styled.div`
 	display: flex;
@@ -101,6 +115,7 @@ export default function UserPortfolioPage({ user, items, categories }) {
 	// const handleClose = () => {
 	// 	setShow(false);
 	// };
+	const reorderList = () => console.log('reordering...');
 
 	return (
 		<Main>
@@ -149,11 +164,20 @@ export default function UserPortfolioPage({ user, items, categories }) {
 										all={true}
 									/>
 								)}
-								<ItemGrid
+								<StyledListManager>
+									<ListManager
+										items={items}
+										direction="horizontal"
+										maxItems={2}
+										render={(item) => <Item item={item} />}
+										onDragEnd={reorderList}
+									/>
+								</StyledListManager>
+								{/* <ItemGrid
 									items={items}
 									categories={categories}
 									activeCategories={activeCategories}
-								/>
+								/> */}
 							</StyledGridWrap>
 						</>
 					)

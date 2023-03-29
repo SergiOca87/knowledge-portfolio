@@ -4,13 +4,25 @@ export default async function handler(req, res) {
 	if (req.method === 'DELETE') {
 		const itemId = req.body;
 
+		// Auth protected API route
+		const supabase = createServerSupabaseClient(context);
+
+		const {
+			data: { session },
+		} = await supabase.auth.getSession();
+
+		if (!session) {
+			res.status(401).json({ message: 'Authentication required' });
+			return;
+		}
+
 		const { error } = await supabase
 			.from('items')
 			.delete()
 			.eq('id', itemId);
 
 		if (error) {
-			console.log(error);
+			res.status(500).json({ error: 'Failed to delete item' });
 		} else {
 			res.status(200).json({
 				message: 'The item has been deleted',

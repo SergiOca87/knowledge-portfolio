@@ -10,6 +10,7 @@ import styled, { css } from 'styled-components';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import Item from './Item';
 // import NotLoggedIn from './NotLoggedIn';
+import { ListManager } from 'react-beautiful-dnd-grid';
 
 const StyledItemGrid = styled.section`
 	display: grid;

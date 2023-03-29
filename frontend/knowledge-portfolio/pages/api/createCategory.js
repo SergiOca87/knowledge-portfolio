@@ -1,3 +1,4 @@
+import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { supabase } from '../../utils/supabaseClient';
 
 export default async function handler(req, res) {
@@ -8,6 +9,18 @@ export default async function handler(req, res) {
 			icon: req.body.icon,
 			userId: req.body.userId,
 		};
+
+		// Auth protected API route
+		const supabase = createServerSupabaseClient(context);
+
+		const {
+			data: { session },
+		} = await supabase.auth.getSession();
+
+		if (!session) {
+			res.status(401).json({ message: 'Authentication required' });
+			return;
+		}
 
 		// Serverside validation
 		if (!req.body.name || req.body.name.trim() === '' || !req.body.userId) {

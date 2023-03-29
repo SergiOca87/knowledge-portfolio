@@ -17,6 +17,8 @@ import { FaTrashAlt } from 'react-icons/fa';
 import TooltipButton from '../ui/TooltipButton';
 
 const StyledCard = styled(Card)`
+	width: 100%;
+
 	.list-group-item {
 		&:not(:last-child) {
 			margin-bottom: 2rem;

@@ -4,7 +4,18 @@ export default async function handler(req, res) {
 	if (req.method === 'PUT') {
 		// Serverside validation
 
-		console.log('we made it to the api route?');
+		// Auth protected API route
+		const supabase = createServerSupabaseClient(context);
+
+		const {
+			data: { session },
+		} = await supabase.auth.getSession();
+
+		if (!session) {
+			res.status(401).json({ message: 'Authentication required' });
+			return;
+		}
+
 		if (
 			!req.body.title ||
 			req.body.title.trim() === '' ||
@@ -13,8 +24,6 @@ export default async function handler(req, res) {
 			console.log('server side validation failed');
 			return;
 		}
-
-		console.log('update', req.body.title);
 
 		const { error } = await supabase
 			.from('items')
