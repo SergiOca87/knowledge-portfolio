@@ -16,10 +16,14 @@ export default async function handler(req, res) {
 			userId: req.body.userId,
 			mainImageName: req.body.mainImageName,
 			mainImageUrl: req.body.mainImageUrl,
+			order: req.body.order,
 		};
 
 		// Auth protected API route
-		const supabase = createServerSupabaseClient(context);
+		const supabase = createServerSupabaseClient({
+			req,
+			res,
+		});
 
 		const {
 			data: { session },
@@ -45,8 +49,6 @@ export default async function handler(req, res) {
 			.from('items')
 			.insert(newItem)
 			.select();
-
-		console.log('serveside itemData', itemData);
 
 		if (newItem.mainImageName) {
 			const { data: imageData, error: imageError } = await supabase

@@ -187,6 +187,7 @@ export default function ItemGrid({
 	// };
 
 	useEffect(() => {
+		console.log('useEffect running', filteredItems);
 		if (activeCategories.length === 0) {
 			setFilteredItems(items);
 		} else {
@@ -204,96 +205,84 @@ export default function ItemGrid({
 
 	return (
 		<>
-			<DragDropContext onDragEnd={handleDrop}>
+			{/* <DragDropContext onDragEnd={handleDrop}>
 				<Droppable droppableId="list-container">
-					{(provided) => (
-						<StyledItemGrid
-							css={css`
-								grid-template-columns: repeat(2, 1fr);
-								gap: 2rem;
-							`}
-							{...provided.droppableProps}
-							ref={provided.innerRef}
-						>
-							{filteredItems &&
-								filteredItems.map((item, index) => {
-									let itemCategories = '';
+					{(provided) => ( */}
+			<StyledItemGrid
+				css={css`
+					grid-template-columns: repeat(2, 1fr);
+					gap: 2rem;
+				`}
+				{...provided.droppableProps}
+				ref={provided.innerRef}
+			>
+				{filteredItems &&
+					filteredItems.map((item, index) => {
+						let itemCategories = '';
 
-									// If the item has categories and they match a category ID from the user categories, pass it to the item
-									// Maybe this logic should not be here in the Component
-									if (
-										item.categories &&
-										item.categories.length
-									) {
-										itemCategories = categories.filter(
-											(category) =>
-												item.categories.includes(
-													category.id
-												)
-										);
-									}
+						// If the item has categories and they match a category ID from the user categories, pass it to the item
+						// Maybe this logic should not be here in the Component
+						if (item.categories && item.categories.length) {
+							itemCategories = categories.filter((category) =>
+								item.categories.includes(category.id)
+							);
+						}
 
-									// if (images && images.length) {
-									// 	setItemImage(
-									// 		...images.filter(
-									// 			(image) => image.item === item.id
-									// 		)
-									// 	);
-									// }
+						// if (images && images.length) {
+						// 	setItemImage(
+						// 		...images.filter(
+						// 			(image) => image.item === item.id
+						// 		)
+						// 	);
+						// }
 
-									return (
-										<Draggable
-											key={`${item.name}-${item.id}`}
-											draggableId={`${item.name}-${item.id}`}
-											index={index}
-										>
-											{(provided) => (
-												<div
-													ref={provided.innerRef}
-													{...provided.dragHandleProps}
-													{...provided.draggableProps}
-												>
-													<Item
-														item={item}
-														categories={
-															itemCategories
-														}
-														isPublic={isPublic}
-														setHasBeenDeletedId={
-															setHasBeenDeletedId
-														}
-														hasBeenDeletedId={
-															hasBeenDeletedId
-														}
-														key={`${item.name}-${item.id}`}
-													/>
-												</div>
-											)}
-										</Draggable>
-									);
-								})}
+						return (
+							// <Draggable
+							// 	key={`${item.name}-${item.id}`}
+							// 	draggableId={`${item.name}-${item.id}`}
+							// 	index={index}
+							// >
+							// 	{(provided) => (
+							// 		<div
+							// 			ref={provided.innerRef}
+							// 			{...provided.dragHandleProps}
+							// 			{...provided.draggableProps}
+							// 		>
+							<Item
+								item={item}
+								categories={itemCategories}
+								isPublic={isPublic}
+								setHasBeenDeletedId={setHasBeenDeletedId}
+								hasBeenDeletedId={hasBeenDeletedId}
+								key={`${item.name}-${item.id}`}
+							/>
+							// 		</div>
+							// 	)}
+							// </Draggable>
+						);
+					})}
 
-							{isPublicPage && items <= 0 && (
-								<h3>No results match your search criteria</h3>
-							)}
+				{isPublicPage && items <= 0 && (
+					<h3>No results match your search criteria</h3>
+				)}
 
-							{!isPublicPage && items.length === 0 && (
-								<p>
-									You can now start adding items to your
-									portfolio or create a few categories first{' '}
-									<Link href="/add-category">Here</Link>
-								</p>
-							)}
+				{!isPublicPage && items.length === 0 && (
+					<p>
+						You can now start adding items to your portfolio or
+						create a few categories first{' '}
+						<Link href="/add-category">Here</Link>
+					</p>
+				)}
 
-							{/* {!isPublicPage && (
+				{/* {!isPublicPage && (
 							<li lg={user?.options?.options?.cols}>
 								<StyledEmptyCard>Add</StyledEmptyCard>
 							</li>
 						)} */}
-						</StyledItemGrid>
-					)}
+			</StyledItemGrid>
+			{/* )}
 				</Droppable>
-			</DragDropContext>
+			</DragDropContext> */}
 		</>
 	);
 }

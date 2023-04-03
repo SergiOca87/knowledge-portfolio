@@ -5,7 +5,10 @@ export default async function handler(req, res) {
 		// Serverside validation
 
 		// Auth protected API route
-		const supabase = createServerSupabaseClient(context);
+		const supabase = createServerSupabaseClient({
+			req,
+			res,
+		});
 
 		const {
 			data: { session },

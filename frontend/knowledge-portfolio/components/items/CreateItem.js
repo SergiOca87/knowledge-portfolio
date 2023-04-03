@@ -108,9 +108,11 @@ const StyleEditor = styled(Editor)`
 	color: #000;
 `;
 
-export default function CreateItem({ categories }) {
+export default function CreateItem({ categories, itemsLength }) {
 	// const { user, userCategories } = useUserState();
 	const user = useUser();
+
+	console.log('length', itemsLength);
 
 	const [activeCategories, setActiveCategories] = useState([]);
 	const [mainImage, setMainImage] = useState('');
@@ -200,6 +202,7 @@ export default function CreateItem({ categories }) {
 				url,
 				status,
 				userId: user.id,
+				order: itemsLength + 1,
 				mainImageName: mainImage.imageName,
 				mainImageUrl: mainImage.imageUrl,
 			};

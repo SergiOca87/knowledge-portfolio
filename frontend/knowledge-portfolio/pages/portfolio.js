@@ -85,13 +85,72 @@ const StyledGridWrap = styled.div`
 `;
 
 export default function UserPortfolioPage({ user, items, categories }) {
-	console.log(user);
-	// const user = useUser();
 	const { isLoading, session, error } = useSessionContext();
-	// const [filteredCategories, setFilteredCategories] = useState('');
+
 	const [activeCategories, setActiveCategories] = useState([]);
-	// const [items, setItems] = useState();
-	//TODO: Add some toast error
+
+	const [hasBeenDeletedId, setHasBeenDeletedId] = useState([]);
+
+	const [filteredItems, setFilteredItems] = useState([]);
+
+	const [order, setOrder] = useState(filteredItems);
+
+	// TODO: Csan this be regular functions and not useEffect()?
+	//TODO: Is this working?
+	useEffect(() => {
+		setFilteredItems(
+			items.filter((item) => !hasBeenDeletedId.includes(item.id))
+		);
+	}, [hasBeenDeletedId]);
+
+	useEffect(() => {
+		if (activeCategories.length === 0) {
+			setFilteredItems(items);
+		} else {
+			setFilteredItems(
+				items.filter(
+					(item) =>
+						item.categories !== null &&
+						activeCategories.every((category) =>
+							item.categories.includes(category)
+						)
+				)
+			);
+		}
+	}, [activeCategories]);
+
+	// A useEffect simply to trigger a rerender when fitleredItems change (reorder function).
+	useEffect(() => {
+		//TODO: trigger a re-render here
+	}, [filteredItems]);
+
+	const reorderList = (sourceIndex, destinationIndex) => {
+		setOrder(filteredItems.filter((item) => item.order));
+		console.log(order);
+		setFilteredItems(filteredItems.sort((a, b) => b.id - a.id));
+
+		if (destinationIndex === sourceIndex) {
+			return;
+		}
+
+		// set the item.order (sourceIndex item) to be equal to the destination index, API route
+		// Fire a setFilteredItems event following this new order
+		const reorderObj = {
+			itemId: filteredItems[sourceIndex].id,
+			newItemOrder: destinationIndex,
+		};
+		// try {
+		// 	fetch('/api/reorderItems', {
+		// 		method: 'PUT',
+		// 		body: JSON.stringify(reorderObj),
+		// 		headers: {
+		// 			'Content-Type': 'application/json',
+		// 		},
+		// 	});
+		// } catch (err) {
+		// 	toast.error(err);
+		// }
+	};
 
 	// useEffect(() => {
 	// 	const fetchItems = async () => {
@@ -115,7 +174,6 @@ export default function UserPortfolioPage({ user, items, categories }) {
 	// const handleClose = () => {
 	// 	setShow(false);
 	// };
-	const reorderList = () => console.log('reordering...');
 
 	return (
 		<Main>
@@ -166,7 +224,7 @@ export default function UserPortfolioPage({ user, items, categories }) {
 								)}
 								<StyledListManager>
 									<ListManager
-										items={items}
+										items={filteredItems}
 										direction="horizontal"
 										maxItems={2}
 										render={(item) => <Item item={item} />}
@@ -213,7 +271,8 @@ export async function getServerSideProps(context) {
 	const { data: items } = await supabase
 		.from('items')
 		.select('*')
-		.eq('userId', session.user.id);
+		.eq('userId', session.user.id)
+		.order('order', { ascending: true });
 
 	const { data: categories } = await supabase
 		.from('categories')

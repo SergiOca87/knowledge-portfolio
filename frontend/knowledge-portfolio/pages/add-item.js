@@ -12,13 +12,11 @@ import {
 } from '@supabase/auth-helpers-react';
 import NotLoggedIn from '../components/auth/NotLoggedIn';
 import { supabase } from '../utils/supabaseClient';
+import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
 
 //TODO: If user create item, else use sign in
 
-export default function createItems({ categories }) {
-	const user = useUser();
-	const { session } = useSessionContext();
-
+export default function createItems({ categories, items }) {
 	return (
 		<>
 			<Script
@@ -33,28 +31,25 @@ export default function createItems({ categories }) {
 							margin: 0 auto;
 						`}
 					>
-						{!session ? (
-							<NotLoggedIn />
-						) : (
-							<>
-								<div
-									className="titles"
-									css={css`
-										max-width: 60rem;
-										margin-bottom: 4rem;
-									`}
-								>
-									<h1>Add a Portfolio Item</h1>
-									<p>
-										You can create categories for your item{' '}
-										<Link href="add-category">here</Link>{' '}
-									</p>
-								</div>
-								//TODO: Can proobably send down the tree a
-								//TODO: createCategory
-								<CreateItem categories={categories} />
-							</>
-						)}
+						<div
+							className="titles"
+							css={css`
+								max-width: 60rem;
+								margin-bottom: 4rem;
+							`}
+						>
+							<h1>Add a Portfolio Item</h1>
+							<p>
+								You can create categories for your item{' '}
+								<Link href="add-category">here</Link>{' '}
+							</p>
+						</div>
+						//TODO: Can proobably send down the tree a //TODO:
+						createCategory
+						<CreateItem
+							categories={categories}
+							itemsLength={items.length}
+						/>
 					</div>
 				</Container>
 			</Main>
@@ -63,20 +58,36 @@ export default function createItems({ categories }) {
 }
 
 export async function getServerSideProps(context) {
-	// Get params from URL
-	const { params } = context;
+	// Create authenticated Supabase Client
+	const supabase = createServerSupabaseClient(context);
+	// Check if we have a session
+	const {
+		data: { session },
+	} = await supabase.auth.getSession();
 
-	// Get User ID
-	const userId = params.id;
+	if (!session) {
+		return {
+			redirect: {
+				destination: '/login',
+				permanent: false,
+			},
+		};
+	}
 
-	let { data: categories } = await supabase
+	const { data: items } = await supabase
+		.from('items')
+		.select('*')
+		.eq('userId', session.user.id);
+
+	const { data: categories } = await supabase
 		.from('categories')
 		.select('*')
-		.eq('userId', userId);
+		.eq('userId', session.user.id);
 
 	return {
 		props: {
 			categories,
+			items,
 		},
 	};
 }

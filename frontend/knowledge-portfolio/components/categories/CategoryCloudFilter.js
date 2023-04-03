@@ -34,9 +34,6 @@ export default function CategoryCloudFilter({
 	setActiveCategories,
 	all = false,
 }) {
-	// const { userCategories } = useUserState();
-	console.log('userCategories', userCategories);
-
 	const handleButtonClick = (target) => {
 		// Handle a click outside of any button
 		if (target.classList.contains('categories')) {

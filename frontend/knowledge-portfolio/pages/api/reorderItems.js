@@ -1,8 +1,10 @@
-import { supabase } from '../../utils/supabaseClient';
+import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
+// import { supabase } from '../../utils/supabaseClient';
 
 export default async function handler(req, res) {
-	if (req.method === 'DELETE') {
-		const itemId = req.body;
+	if (req.method === 'PUT') {
+		const itemId = req.body.itemId;
+		const newItemOrder = req.body.newItemOrder;
 
 		// Auth protected API route
 		const supabase = createServerSupabaseClient({
@@ -19,9 +21,11 @@ export default async function handler(req, res) {
 			return;
 		}
 
+		// Edit the item order
+		//TODO: The problem is that we actually need to update 2 items...
 		const { error } = await supabase
 			.from('items')
-			.delete()
+			.update({ order: newItemOrder })
 			.eq('id', itemId);
 
 		if (error) {
