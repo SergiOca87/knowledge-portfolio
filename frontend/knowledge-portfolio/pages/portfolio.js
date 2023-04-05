@@ -86,17 +86,11 @@ const StyledGridWrap = styled.div`
 
 export default function UserPortfolioPage({ user, items, categories }) {
 	const { isLoading, session, error } = useSessionContext();
-
 	const [activeCategories, setActiveCategories] = useState([]);
-
 	const [hasBeenDeletedId, setHasBeenDeletedId] = useState([]);
-
 	const [filteredItems, setFilteredItems] = useState([]);
-
 	const [order, setOrder] = useState(filteredItems);
 
-	// TODO: Csan this be regular functions and not useEffect()?
-	//TODO: Is this working?
 	useEffect(() => {
 		setFilteredItems(
 			items.filter((item) => !hasBeenDeletedId.includes(item.id))
@@ -119,61 +113,42 @@ export default function UserPortfolioPage({ user, items, categories }) {
 		}
 	}, [activeCategories]);
 
-	// A useEffect simply to trigger a rerender when fitleredItems change (reorder function).
-	useEffect(() => {
-		//TODO: trigger a re-render here
-	}, [filteredItems]);
-
 	const reorderList = (sourceIndex, destinationIndex) => {
-		setOrder(filteredItems.filter((item) => item.order));
-		console.log(order);
-		setFilteredItems(filteredItems.sort((a, b) => b.id - a.id));
-
 		if (destinationIndex === sourceIndex) {
 			return;
 		}
 
-		// set the item.order (sourceIndex item) to be equal to the destination index, API route
-		// Fire a setFilteredItems event following this new order
-		const reorderObj = {
-			itemId: filteredItems[sourceIndex].id,
-			newItemOrder: destinationIndex,
-		};
-		// try {
-		// 	fetch('/api/reorderItems', {
-		// 		method: 'PUT',
-		// 		body: JSON.stringify(reorderObj),
-		// 		headers: {
-		// 			'Content-Type': 'application/json',
-		// 		},
-		// 	});
-		// } catch (err) {
-		// 	toast.error(err);
-		// }
+		const newItems = Array.from(filteredItems);
+		const [movingItem] = newItems.splice(sourceIndex, 1);
+		newItems.splice(destinationIndex, 0, movingItem);
+
+		const updatedItems = newItems.map((item, index) => ({
+			...item,
+			order: index,
+		}));
+
+		setFilteredItems(updatedItems);
+
+		// Order is just an Array of ids with the new order, not sure if it's needed yet
+		setOrder(updatedItems.map((item) => item.id));
+
+		//TODO: Use supabase.upsert to update several items
+		try {
+			fetch('/api/reorderItems', {
+				method: 'PUT',
+				body: JSON.stringify({
+					updatedItems,
+				}),
+				headers: {
+					'Content-Type': 'application/json',
+				},
+			});
+		} catch (error) {
+			console.log(error);
+		}
+
+		return updatedItems;
 	};
-
-	// useEffect(() => {
-	// 	const fetchItems = async () => {
-	// 		let { data: items, error } = await supabase
-	// 			.from('items')
-	// 			.select('*')
-	// 			.eq('username', user.username);
-
-	// 		if (error) {
-	// 			throw error;
-	// 		}
-
-	// 		if (items) {
-	// 			setItems(items);
-	// 		}
-	// 	};
-
-	// 	fetchItems().catch(console.error);
-	// }, [user]);
-
-	// const handleClose = () => {
-	// 	setShow(false);
-	// };
 
 	return (
 		<Main>
@@ -184,19 +159,6 @@ export default function UserPortfolioPage({ user, items, categories }) {
 					) : (
 						<>
 							<StyledUserCard>
-								{/* {user.options?.userImage !== 'undefined' ? (
-								<div
-									className="avatar"
-									css={`
-										background-image: ${user.image};
-									`}
-								></div>
-							) : (
-								<div className="avatar">
-									<FaUser />
-								</div>
-							)} */}
-
 								<h1>
 									Welcome to your portfolio,
 									<br />
@@ -231,11 +193,6 @@ export default function UserPortfolioPage({ user, items, categories }) {
 										onDragEnd={reorderList}
 									/>
 								</StyledListManager>
-								{/* <ItemGrid
-									items={items}
-									categories={categories}
-									activeCategories={activeCategories}
-								/> */}
 							</StyledGridWrap>
 						</>
 					)
