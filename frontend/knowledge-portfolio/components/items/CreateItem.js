@@ -196,7 +196,9 @@ export default function CreateItem({ categories, itemsLength }) {
 				user: user.email,
 				title,
 				description,
-				categories: activeCategories,
+				categories: activeCategories.length
+					? activeCategories
+					: 'Uncategorized',
 				singlePageContent,
 				urlTitle,
 				url,
@@ -284,7 +286,6 @@ export default function CreateItem({ categories, itemsLength }) {
 						<Form.Label>Title</Form.Label>
 						<Form.Control
 							type="text"
-							placeholder="Title"
 							required
 							name="title"
 							value={inputs.title}

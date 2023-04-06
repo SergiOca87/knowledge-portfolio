@@ -119,7 +119,7 @@ export default function Nav() {
 									Year In Review
 								</a>
 							</Link>
-							<Link href="user">
+							<Link href="/profile">
 								<FaUser />
 							</Link>
 

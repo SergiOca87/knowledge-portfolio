@@ -45,6 +45,45 @@ export default async function handler(req, res) {
 			return;
 		}
 
+		// Check if the categories field is set to Uncategorized
+		if (req.body.categories === 'Uncategorized') {
+			// Check if an Uncategorized category with this userId already exists
+			const { data: uncategorizedData, error: uncategorizedError } =
+				await supabase
+					.from('categories')
+					.select('*')
+					.eq('name', 'Uncategorized')
+					.eq('userId', req.body.userId);
+
+			if (uncategorizedData && uncategorizedData.length > 0) {
+				// If the Uncategorized category already exists, add the uncategorized category to the newItem categories
+				newItem.categories = [uncategorizedData[0].id];
+			} else {
+				// If the Uncategorized category doesn't exist, create it and add the item to it
+				const { data: newCategoryData, error: newCategoryError } =
+					await supabase
+						.from('categories')
+						.insert([
+							{
+								name: 'Uncategorized',
+								userId: req.body.userId,
+								icon: 'FaQuestion',
+							},
+						])
+						.select('*');
+
+				if (newCategoryData && newCategoryData.length > 0) {
+					// add the uncategorized category to the newItem categories
+					newItem.categories = [newCategoryData[0].id];
+				} else {
+					res.status(500).json({
+						error: 'Failed to create category',
+					});
+					return;
+				}
+			}
+		}
+
 		const { data: itemData, error } = await supabase
 			.from('items')
 			.insert(newItem)
