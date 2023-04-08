@@ -112,8 +112,6 @@ export default function CreateItem({ categories, itemsLength }) {
 	// const { user, userCategories } = useUserState();
 	const user = useUser();
 
-	console.log('length', itemsLength);
-
 	const [activeCategories, setActiveCategories] = useState([]);
 	const [mainImage, setMainImage] = useState('');
 

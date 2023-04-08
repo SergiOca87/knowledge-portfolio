@@ -208,6 +208,12 @@ const StyledImageWrap = styled.div`
 	}
 `;
 
+const StyledCard = styled(Card)`
+	text-align: center;
+	padding-bottom: 4rem;
+	height: 100%;
+`;
+
 const ChangingWord = styled.div``;
 
 export default function Home() {
@@ -360,10 +366,13 @@ export default function Home() {
 								<motion.div
 									variants={fadeInItem}
 									transition={{ duration: 0.5 }}
+									css={css`
+										height: 100%;
+									`}
 								>
-									<Card>
+									<StyledCard>
 										<Card.Header as="h3">
-											Inspiration
+											Origin
 										</Card.Header>
 										<Card.Body>
 											<div
@@ -379,10 +388,20 @@ export default function Home() {
 												<FaRegLightbulb />
 											</div>
 											<Card.Text>
-												Mention Pragmatic programmer
+												Historical perspective on the
+												concept of a knowledge
+												portfolio.
 											</Card.Text>
+											<Link href="/about">
+												<Button
+													variant="primary"
+													type="button"
+												>
+													Learn More
+												</Button>
+											</Link>
 										</Card.Body>
-									</Card>
+									</StyledCard>
 								</motion.div>
 							</Col>
 
@@ -390,10 +409,13 @@ export default function Home() {
 								<motion.div
 									variants={fadeInItem}
 									transition={{ duration: 0.5 }}
+									css={css`
+										height: 100%;
+									`}
 								>
-									<Card>
+									<StyledCard>
 										<Card.Header as="h3">
-											Invest
+											Benefits
 										</Card.Header>
 										<Card.Body>
 											<div
@@ -408,12 +430,23 @@ export default function Home() {
 											>
 												<BiEdit />
 											</div>
+
 											<Card.Text>
-												The habit of investing in your
-												knowledge
+												Explore the many benefits of
+												creating and maintaining a
+												knowledge portfolio.
 											</Card.Text>
+
+											<Link href="/about/#benefits">
+												<Button
+													variant="primary"
+													type="button"
+												>
+													Learn More
+												</Button>
+											</Link>
 										</Card.Body>
-									</Card>
+									</StyledCard>
 								</motion.div>
 							</Col>
 
@@ -421,9 +454,14 @@ export default function Home() {
 								<motion.div
 									variants={fadeInItem}
 									transition={{ duration: 0.5 }}
+									css={css`
+										height: 100%;
+									`}
 								>
-									<Card>
-										<Card.Header as="h3">Share</Card.Header>
+									<StyledCard>
+										<Card.Header as="h3">
+											Invest / Share
+										</Card.Header>
 										<Card.Body>
 											<div
 												className="text-center"
@@ -438,10 +476,20 @@ export default function Home() {
 												<BsShare />
 											</div>
 											<Card.Text>
-												Take the rewards.
+												Practical advice on how to
+												create and maintain a knowledge
+												portfolio.
 											</Card.Text>
+											<Link href="/about/#benefits">
+												<Button
+													variant="primary"
+													type="button"
+												>
+													Learn More
+												</Button>
+											</Link>
 										</Card.Body>
-									</Card>
+									</StyledCard>
 								</motion.div>
 							</Col>
 						</Row>

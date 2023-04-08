@@ -54,6 +54,17 @@ const StyledUserCard = styled(Card)`
 // amr: [ { method: 'oauth', timestamp: 1679646779 } ],
 // session_id: 'ce6e7433-5e6b-43be-a90f-ef95ff16ddd8'
 
+const resetPassword = () => {
+	try {
+		fetch('/api/resetPassword', {
+			method: 'GET',
+			headers: { 'Content-Type': 'application.json' },
+		});
+	} catch (err) {
+		toast.error(err);
+	}
+};
+
 function profile({ user }) {
 	return (
 		<Main>

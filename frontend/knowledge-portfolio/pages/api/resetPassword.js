@@ -17,14 +17,14 @@ export default async function handler(req, res) {
 			return;
 		}
 
-		const { error } = await supabase.auth.signOut();
+		console.log(session);
 
 		if (error) {
-			res.status(500).json({ error: 'Failed to Log Out User' });
+			res.status(500).json({ error: 'Failed to create item' });
 		} else {
 			res.status(200).json({
-				message: 'User Logged Out',
-				status: 200,
+				message: 'Item created successfully',
+				data: itemData[0],
 			});
 		}
 	}
