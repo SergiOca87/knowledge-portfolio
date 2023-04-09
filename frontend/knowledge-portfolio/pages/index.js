@@ -212,6 +212,13 @@ const StyledCard = styled(Card)`
 	text-align: center;
 	padding-bottom: 4rem;
 	height: 100%;
+
+	.card-body {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: space-between;
+	}
 `;
 
 const ChangingWord = styled.div``;
@@ -392,7 +399,7 @@ export default function Home() {
 												concept of a knowledge
 												portfolio.
 											</Card.Text>
-											<Link href="/about">
+											<Link href="/about/#origin">
 												<Button
 													variant="primary"
 													type="button"
@@ -460,7 +467,7 @@ export default function Home() {
 								>
 									<StyledCard>
 										<Card.Header as="h3">
-											Invest / Share
+											Investing
 										</Card.Header>
 										<Card.Body>
 											<div
@@ -480,7 +487,7 @@ export default function Home() {
 												create and maintain a knowledge
 												portfolio.
 											</Card.Text>
-											<Link href="/about/#benefits">
+											<Link href="/about/#investing">
 												<Button
 													variant="primary"
 													type="button"

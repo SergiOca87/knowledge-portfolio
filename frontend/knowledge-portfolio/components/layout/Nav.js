@@ -126,7 +126,20 @@ export default function Nav() {
 							<SignOut />
 						</>
 					) : (
-						<Link href="/login">Sign In</Link>
+						<>
+							<Link href="/about">
+								<a
+									className={
+										router.pathname.includes('/about/')
+											? 'active'
+											: ''
+									}
+								>
+									About
+								</a>
+							</Link>
+							<Link href="/login">Sign In</Link>
+						</>
 					)}
 				</div>
 			</StyledNav>
