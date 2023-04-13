@@ -15,6 +15,10 @@ import { ListManager } from 'react-beautiful-dnd-grid';
 const StyledItemGrid = styled.section`
 	display: grid;
 	list-style: none;
+
+	.hidden {
+		display: none;
+	}
 `;
 
 const StyledEmptyCard = styled.div`
@@ -255,6 +259,14 @@ export default function ItemGrid({
 								setHasBeenDeletedId={setHasBeenDeletedId}
 								hasBeenDeletedId={hasBeenDeletedId}
 								key={`${item.name}-${item.id}`}
+								className={
+									(`${item.id}`,
+									`${
+										item.id === Number(hasBeenDeletedId)
+											? 'hidden'
+											: ''
+									}`)
+								}
 							/>
 							// 		</div>
 							// 	)}

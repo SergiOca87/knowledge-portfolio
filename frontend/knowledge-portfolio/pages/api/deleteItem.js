@@ -1,4 +1,5 @@
 import { supabase } from '../../utils/supabaseClient';
+import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
 
 export default async function handler(req, res) {
 	if (req.method === 'DELETE') {

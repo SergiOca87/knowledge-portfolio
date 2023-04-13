@@ -29,6 +29,13 @@ const StyledCard = styled(Card)`
 		display: flex;
 		justify-content: flex-end;
 	}
+
+	&.hidden {
+		filter: grayscale(1);
+		opacity: 0.5;
+		cursor: no-drop !important;
+		pointer-events: none !important;
+	}
 `;
 
 const StyledButtons = styled.div`
@@ -98,11 +105,18 @@ export default function Item({
 	item,
 	categories,
 	isPublic,
-	setHasBeenDeletedId,
-	hasBeenDeletedId,
+	// setHasBeenDeletedId,
+	// hasBeenDeletedId,
 }) {
+	const [hasBeenDeletedId, setHasBeenDeletedId] = useState([]);
+
 	return (
-		<StyledCard className={item.id}>
+		<StyledCard
+			className={
+				(`${item.id}`,
+				`${item.id === Number(hasBeenDeletedId) ? 'hidden' : ''}`)
+			}
+		>
 			<Card.Header as="h4" className="mb-3">
 				{item.title}
 

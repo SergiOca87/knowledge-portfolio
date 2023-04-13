@@ -42,7 +42,7 @@ export default function DeleteItem({
 							toast.success(data.message);
 							//TODO: Actually hide the item, maybe using ref?
 
-							setHasBeenDeletedId((hasBeenDeletedId) => [
+							setHasBeenDeletedId(() => [
 								...hasBeenDeletedId,
 								id,
 							]);

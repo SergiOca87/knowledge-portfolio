@@ -93,6 +93,17 @@ export default function Nav() {
 						gap: 3rem;
 					`}
 				>
+					<Link href="/about">
+						<a
+							className={
+								router.pathname.includes('/about/')
+									? 'active'
+									: ''
+							}
+						>
+							About
+						</a>
+					</Link>
 					{session ? (
 						<>
 							<Link href="/portfolio">
@@ -126,20 +137,7 @@ export default function Nav() {
 							<SignOut />
 						</>
 					) : (
-						<>
-							<Link href="/about">
-								<a
-									className={
-										router.pathname.includes('/about/')
-											? 'active'
-											: ''
-									}
-								>
-									About
-								</a>
-							</Link>
-							<Link href="/login">Sign In</Link>
-						</>
+						<Link href="/login">Sign In</Link>
 					)}
 				</div>
 			</StyledNav>

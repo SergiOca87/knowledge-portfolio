@@ -23,7 +23,7 @@ import {
 } from 'react-icons/fa';
 import Link from 'next/link';
 
-import ItemGrid from '../components/items/ItemGrid';
+// import ItemGrid from '../components/items/_ItemGrid';
 import CategoryCloudFilter from '../components/categories/CategoryCloudFilter';
 import Main from '../components/layout/Main';
 // import PortfolioEdit from '../components/PortfolioEdit';
@@ -87,15 +87,15 @@ const StyledGridWrap = styled.div`
 export default function UserPortfolioPage({ user, items, categories }) {
 	const { isLoading, session, error } = useSessionContext();
 	const [activeCategories, setActiveCategories] = useState([]);
-	const [hasBeenDeletedId, setHasBeenDeletedId] = useState([]);
+
 	const [filteredItems, setFilteredItems] = useState([]);
 	const [order, setOrder] = useState(filteredItems);
 
-	useEffect(() => {
-		setFilteredItems(
-			items.filter((item) => !hasBeenDeletedId.includes(item.id))
-		);
-	}, [hasBeenDeletedId]);
+	// useEffect(() => {
+	// 	setFilteredItems(
+	// 		items.filter((item) => !hasBeenDeletedId.includes(item.id))
+	// 	);
+	// }, [hasBeenDeletedId]);
 
 	useEffect(() => {
 		if (activeCategories.length === 0) {
