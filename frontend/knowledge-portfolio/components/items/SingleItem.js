@@ -7,8 +7,9 @@ import Layout from '../layout/Layout';
 import Categories from '../categories/Categories';
 import draftToHtml from 'draftjs-to-html';
 import parse from 'html-react-parser';
+import { Card } from 'react-bootstrap';
 
-const StyledSingleItem = styled.div`
+const StyledSingleItem = styled(Card)`
 	background-color: var(--tertiary);
 	padding: 4rem 2rem;
 	height: 100%;
@@ -63,6 +64,8 @@ export default function SingleItem({ item }) {
 	// if (loading) return <p>Loading...</p>;
 	const singleItem = item[0];
 
+	console.log(singleItem);
+
 	//TODO: Toast
 	// if (error) return <p>error {error.message}</p>;
 
@@ -83,7 +86,15 @@ export default function SingleItem({ item }) {
 			<StyledSingleItem>
 				<h1>{singleItem.title}</h1>
 				<div className="meta">
-					<p>By: {singleItem.username}</p>
+					{singleItem.userAlias ||
+						(singleItem.userName && (
+							<p>
+								By:{' '}
+								{singleItem.userAlias
+									? singleItem.userAlias
+									: singleItem.userName}
+							</p>
+						))}
 					{singleItem.categories && (
 						<Categories categories={singleItem.categories} />
 					)}

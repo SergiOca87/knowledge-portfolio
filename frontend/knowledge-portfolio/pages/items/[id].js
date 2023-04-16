@@ -15,7 +15,6 @@ export default function SingleItemPage({ item }) {
 	);
 }
 
-//TODO: I don't think this need revalidation?
 export async function getStaticProps(context) {
 	const { params } = context;
 
@@ -36,8 +35,6 @@ export async function getStaticProps(context) {
 export async function getStaticPaths() {
 	// Get all users from supabase
 	let { data, error } = await supabase.from('items').select('id');
-
-	console.log('data', data);
 
 	// Let Next.js know how many pages (user ids) are there
 	const paths = data.map((itemId) => ({

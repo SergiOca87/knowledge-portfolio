@@ -14,6 +14,7 @@ import { useSessionContext } from '@supabase/auth-helpers-react';
 import React from 'react';
 import styled from 'styled-components';
 import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
+import Link from 'next/link';
 
 const StyledYearInReview = styled.section`
 	.timeline-wrap {
@@ -117,8 +118,6 @@ function YearInReview({ user, items, categories }) {
 		);
 	};
 
-	// Return a list of items present on a given year without a category
-	//TODO: Maybe we should create the uncategorized or force a category
 	const listItemsByYearWithoutCategory = (items, year) => {
 		return itemsByYear(items).filter(
 			(item) =>
@@ -233,11 +232,11 @@ function YearInReview({ user, items, categories }) {
 				) : (
 					<NotLoggedIn />
 				)}
-				{user && !items && (
-					<h2>
-						PLease add some items to your portfolio first{' '}
-						<Link href="/portfolio">here</Link>
-					</h2>
+				{user && !items.length && (
+					<p>
+						Please add some items to your portfolio first{' '}
+						<Link href="/add-item">here</Link>
+					</p>
 				)}
 			</Container>
 		</Main>

@@ -92,6 +92,10 @@ const StyledForm = styled(Form)`
 		&:placeholder-shown {
 			color: #fff;
 		}
+
+		.accordion-body {
+			background-color: #fff;
+		}
 	}
 
 	label {
@@ -192,6 +196,7 @@ export default function CreateItem({ categories, itemsLength }) {
 
 			const newItem = {
 				user: user.email,
+				userAlias: user.user_metadata.name,
 				title,
 				description,
 				categories: activeCategories.length

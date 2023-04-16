@@ -44,8 +44,6 @@ export default function createItems({ categories, items }) {
 								<Link href="add-category">here</Link>{' '}
 							</p>
 						</div>
-						//TODO: Can proobably send down the tree a //TODO:
-						createCategory
 						<CreateItem
 							categories={categories}
 							itemsLength={items.length}

@@ -6,6 +6,7 @@ export default async function handler(req, res) {
 		// Extract values
 		const newItem = {
 			username: req.body.user,
+			userAlias: req.body.userAlias,
 			title: req.body.title,
 			description: req.body.description,
 			categories: req.body.categories,
