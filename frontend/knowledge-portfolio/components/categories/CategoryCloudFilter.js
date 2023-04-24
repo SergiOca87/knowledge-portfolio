@@ -44,12 +44,20 @@ export default function CategoryCloudFilter({
 		const button = target.closest('.btn-primary');
 
 		// Get the category id (number) stored in the data attr
-		const clickedCategory = Number(button.dataset.category);
+		const clickedCategory = {
+			categoryId: Number(button.dataset.category),
+			categoryName: button.dataset.categoryname,
+		};
 
-		if (activeCategories?.includes(clickedCategory)) {
+		if (
+			activeCategories.find(
+				(category) => category.categoryId === clickedCategory.categoryId
+			)
+		) {
 			setActiveCategories(
 				activeCategories.filter(
-					(category) => category !== clickedCategory
+					(category) =>
+						category.categoryId !== clickedCategory.categoryId
 				)
 			);
 		} else {

@@ -181,6 +181,8 @@ export default function CreateItem({ categories, itemsLength }) {
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 
+		console.log(activeCategories);
+
 		// This is to prevent cloudinary form to submit the item
 		if (e.target.id !== 'main-submit') {
 			return;

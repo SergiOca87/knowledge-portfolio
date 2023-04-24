@@ -108,7 +108,7 @@ export default function UserPortfolioPage({ user, items, categories }) {
 					(item) =>
 						item.categories !== null &&
 						activeCategories.every((category) =>
-							item.categories.includes(category)
+							item.categories.includes(category.categoryId)
 						)
 				)
 			);
@@ -191,7 +191,12 @@ export default function UserPortfolioPage({ user, items, categories }) {
 										items={filteredItems}
 										direction="horizontal"
 										maxItems={2}
-										render={(item) => <Item item={item} />}
+										render={(item) => (
+											<Item
+												item={item}
+												categories={categories}
+											/>
+										)}
 										onDragEnd={reorderList}
 									/>
 								</StyledListManager>

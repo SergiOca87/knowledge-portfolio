@@ -110,6 +110,10 @@ export default function Item({
 }) {
 	const [hasBeenDeletedId, setHasBeenDeletedId] = useState([]);
 
+	const itemCategories = categories.filter((category) =>
+		item.categories.includes(category.id)
+	);
+
 	return (
 		<StyledCard
 			className={
@@ -156,11 +160,11 @@ export default function Item({
 						</ListGroupItem>
 					)}
 
-					{categories && (
+					{item.categories && (
 						<ListGroupItem>
 							<Categories
 								title={false}
-								categories={categories}
+								categories={itemCategories}
 								background={true}
 							/>
 						</ListGroupItem>

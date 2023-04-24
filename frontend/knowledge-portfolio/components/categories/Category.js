@@ -61,30 +61,22 @@ function Category({
 	}
 
 	return asButtons ? (
-		<StyledCategoryButton
-			size="sm"
-			variant="primary btn-outlined btn-small"
-			key={category.id}
-			data-category={`${category.id}`}
-			className={activeCategories?.includes(category.id) ? 'active' : ''}
-			onClick={(e) => handleButtonClick(e.target)}
-		>
-			{IconName && (
-				<span className="category">
-					<IconName />
-				</span>
-			)}
-
-			<span>{category.name}</span>
-		</StyledCategoryButton>
-	) : (
-		<StyledCategory>
-			<div
-				css={css`
-					background-color: ${background
-						? 'var(--tertiary)'
-						: 'transparent'};
-				`}
+		<>
+			<StyledCategoryButton
+				size="sm"
+				variant="primary btn-outlined btn-small"
+				key={category.id}
+				data-category={`${category.id}`}
+				data-categoryname={`${category.name}`}
+				className={
+					//TODO: This is not working now
+					!!activeCategories?.find(
+						(category) => category.categoryId === category
+					)
+						? 'active'
+						: ''
+				}
+				onClick={(e) => handleButtonClick(e.target)}
 			>
 				{IconName && (
 					<span className="category">
@@ -93,8 +85,29 @@ function Category({
 				)}
 
 				<span>{category.name}</span>
-			</div>
-		</StyledCategory>
+			</StyledCategoryButton>
+		</>
+	) : (
+		<>
+			{console.log('in category', category)}
+			<StyledCategory>
+				<div
+					css={css`
+						background-color: ${background
+							? 'var(--tertiary)'
+							: 'transparent'};
+					`}
+				>
+					{IconName && (
+						<span className="category">
+							<IconName />
+						</span>
+					)}
+
+					<span>{category.name}</span>
+				</div>
+			</StyledCategory>
+		</>
 	);
 }
 
