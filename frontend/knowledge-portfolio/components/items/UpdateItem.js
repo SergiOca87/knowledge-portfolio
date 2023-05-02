@@ -18,7 +18,9 @@ import {
 	Accordion,
 	Button,
 	Card,
+	Col,
 	Form,
+	Row,
 	useAccordionButton,
 } from 'react-bootstrap';
 
@@ -48,7 +50,7 @@ const StyleEditor = styled(Editor)`
 `;
 
 export default function UpdateItem({ item }) {
-	const user = useUser();
+	// const user = useUser();
 	const [activeCategories, setActiveCategories] = useState([]);
 	const [mainImage, setMainImage] = useState('');
 
@@ -57,8 +59,9 @@ export default function UpdateItem({ item }) {
 	const [inputs, setInputs] = useState({
 		title: item.title,
 		description: item.description,
-		// status: 'finished',
+		status: item.status,
 		// visibility: 'true',
+		categories: item.categories,
 		singlePageContent: item.singlePageContent,
 		mainImage,
 		// urlTitle: '',
@@ -69,10 +72,10 @@ export default function UpdateItem({ item }) {
 	// These useEffects seem necessary as what they do require a mounted component?
 	// Make sure these are necessary
 	useEffect(() => {
-		setMainImage({
-			imageName: item.mainImageName ? item.mainImageName : '',
-			imageUrl: item.mainImageUrl ? item.mainImageUrl : '',
-		});
+		// setMainImage({
+		// 	imageName: item.mainImageName ? item.mainImageName : '',
+		// 	imageUrl: item.mainImageUrl ? item.mainImageUrl : '',
+		// });
 
 		setActiveCategories(item.categories);
 	}, []);
@@ -81,7 +84,7 @@ export default function UpdateItem({ item }) {
 		setInputs({
 			...inputs,
 		});
-	}, [user]);
+	}, []);
 
 	// Single page content
 	//TODO: Maybe we should extract this
@@ -148,13 +151,15 @@ export default function UpdateItem({ item }) {
 				userId: user.id,
 				title,
 				description,
-				categories: activeCategories,
+				categories: activeCategories.length
+					? activeCategories
+					: 'Uncategorized',
 				singlePageContent,
 				urlTitle,
 				url,
 				status,
-				mainImageName: mainImage.imageName,
-				mainImageUrl: mainImage.imageUrl,
+				// mainImageName: mainImage.imageName,
+				// mainImageUrl: mainImage.imageUrl,
 				itemId: item.id,
 			};
 
@@ -294,8 +299,8 @@ export default function UpdateItem({ item }) {
 					</Form.Group>
 
 					{/* This is part of a form */}
-					<UploadImageWidget setMainImage={setMainImage} />
-					<p>{mainImage && mainImage.imageName}</p>
+					{/* <UploadImageWidget setMainImage={setMainImage} />
+					<p>{mainImage && mainImage.imageName}</p> */}
 
 					{/* <Form.Group className="mb-5">
 						<Form.Label htmlFor="date">Date</Form.Label>
@@ -325,7 +330,7 @@ export default function UpdateItem({ item }) {
 							/>
 						</FloatingLabel>
 					</Form.Group>
-					{userCategories && (
+					{/* {userCategories && (
 						<Form.Group className="mb-5">
 							<Form.Label htmlFor="category">Category</Form.Label>
 							<p className="tip">
@@ -344,7 +349,7 @@ export default function UpdateItem({ item }) {
 								asButtons={true}
 							/> */}
 
-							{/* <Form.Select
+					{/* <Form.Select
 								aria-label="Categories"
 								name="categories"
 								id="category"
@@ -365,8 +370,8 @@ export default function UpdateItem({ item }) {
 									);
 								})}
 							</Form.Select> */}
-						</Form.Group>
-					)}
+					{/* </Form.Group> */}
+					{/* )} */}
 
 					<Form.Group className="mb-5">
 						<Form.Label htmlFor="status">status</Form.Label>
@@ -376,8 +381,20 @@ export default function UpdateItem({ item }) {
 							id="status"
 							onChange={handleChange}
 						>
-							<option value={true}>Finished</option>
-							<option value={false}>Unfinished</option>
+							<option
+								value={
+									item.status === 'Finished' ? true : false
+								}
+							>
+								Finished
+							</option>
+							<option
+								value={
+									item.status === 'Unfinished' ? true : false
+								}
+							>
+								Unfinished
+							</option>
 						</Form.Select>
 					</Form.Group>
 					{/* <Form.Group className="mb-5">
@@ -394,66 +411,68 @@ export default function UpdateItem({ item }) {
 							<option value="false">Private</option>
 						</Form.Select>
 					</Form.Group> */}
-					<label>
-						<p className="tip">
-							Adding single page content will enable a "More
-							Details" button on your portfolio item. This button
-							will redirect the user to a page with the content
-							that you add on the WYSYWYG below. Use this feature
-							if you need to create a detailed view of your item
-							with a longer description text, images or video.
-						</p>
-					</label>
-					<Accordion>
-						<Accordion.Item eventKey="0">
-							<Accordion.Header>
-								Single Page Content
-							</Accordion.Header>
-							<Accordion.Body>
-								<StyleEditor
-									wrapperClassName="single-page-editor-wrap"
-									editorClassName="single-page-editor"
-									onContentStateChange={onContentStateChange}
-									toolbar={{
-										image: { enableUpload: true },
-									}}
-								/>
-								{/* <textarea
+					<Form.Group className="mb-5">
+						<Form.Label>Single Page Content</Form.Label>
+						<Accordion flush>
+							<Accordion.Item eventKey="0">
+								<Accordion.Header>
+									Single Page Content
+								</Accordion.Header>
+								<Accordion.Body>
+									<StyleEditor
+										wrapperClassName="single-page-editor-wrap"
+										editorClassName="single-page-editor"
+										onContentStateChange={
+											onContentStateChange
+										}
+										toolbar={{
+											image: { enableUpload: true },
+										}}
+									/>
+									{/* <textarea
 									value={inputs.singlePageContent}
 									css={css`
 										display: none;
 									`}
 								/> */}
-							</Accordion.Body>
-						</Accordion.Item>
-					</Accordion>
-					<Form.Group className="mb-5">
-						<p className="tip">
-							Use the URL field to direct the user to an external
-							URL where you can show more of your portfolio item.
-							URL Title is the clickable text that the user will
-							see.
-						</p>
-						<Form.Label htmlFor="urlTitle">URL Title</Form.Label>
-						<Form.Control
-							type="text"
-							name="urlTitle"
-							id="title"
-							value={inputs.urlTitle}
-							onChange={handleChange}
-						/>
+								</Accordion.Body>
+							</Accordion.Item>
+						</Accordion>
+						<Form.Text>
+							<p className="tip">
+								Adding single page content will enable a "More
+								Details" button on your portfolio item.
+							</p>
+						</Form.Text>
 					</Form.Group>
-					<Form.Group className="mb-5">
-						<Form.Label htmlFor="url">URL</Form.Label>
-						<Form.Control
-							type="url"
-							name="url"
-							id="url"
-							value={inputs.url}
-							onChange={handleChange}
-						/>
-					</Form.Group>
-
+					<Row>
+						<Col>
+							<Form.Group
+								className="mb-2"
+								controlId="formUrlTitle"
+							>
+								<Form.Label>URL Title</Form.Label>
+								<Form.Control
+									type="text"
+									name="urlTitle"
+									value={inputs.urlTitle}
+									onChange={handleChange}
+								/>
+							</Form.Group>
+						</Col>
+						<Col>
+							<Form.Group className="mb-5">
+								<Form.Label htmlFor="url">URL</Form.Label>
+								<Form.Control
+									type="url"
+									name="url"
+									value={inputs.url}
+									onChange={handleChange}
+								/>
+							</Form.Group>
+						</Col>
+					</Row>
+					<Form.Text></Form.Text>
 					<Button
 						onClick={handleSubmit}
 						value="submit"
