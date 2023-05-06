@@ -2,7 +2,6 @@ import React from 'react';
 import UpdateItem from '../../components/items/UpdateItem';
 import { supabase } from '../../utils/supabaseClient';
 import Script from 'next/script';
-import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
 
 export default function UpdatePage({ item }) {
 	return (
@@ -17,7 +16,7 @@ export default function UpdatePage({ item }) {
 }
 
 export async function getStaticProps(context) {
-	const { params } = context;
+	const { params, req } = context;
 
 	const itemId = params.id;
 

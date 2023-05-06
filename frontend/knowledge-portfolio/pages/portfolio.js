@@ -238,6 +238,8 @@ export async function getServerSideProps(context) {
 		.eq('userId', session.user.id)
 		.order('order', { ascending: true });
 
+	console.log(session.user.id, typeof session.user.id);
+
 	const { data: categories } = await supabase
 		.from('categories')
 		.select('*')

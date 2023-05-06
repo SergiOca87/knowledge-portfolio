@@ -32,16 +32,77 @@ import UploadImageWidget from './UploadImageWidget';
 import { useUser } from '@supabase/auth-helpers-react';
 
 const StyledForm = styled(Form)`
-	max-width: 70rem;
-	margin: 4rem auto;
 	padding: 2rem;
 
 	.tip {
 		font-size: 1.4rem;
+		color: rgba(255, 255, 255, 0.5);
+		margin-top: 2rem;
 	}
 
 	.single-page-editor {
 		color: #000;
+	}
+
+	input,
+	textarea,
+	select {
+		height: 5rem !important;
+		font-size: 1.6rem !important;
+		background-color: transparent !important;
+		border: 1px solid var(--primary);
+		color: #fff !important;
+
+		&:placeholder-shown {
+			color: #fff;
+		}
+	}
+
+	select {
+		option {
+			color: #000 !important;
+		}
+	}
+
+	textarea {
+		height: 12rem !important;
+	}
+
+	.accordion {
+		font-size: 1.6rem !important;
+		background-color: transparent !important;
+		border: 1px solid var(--primary);
+		border-radius: 0.375rem;
+		color: #fff !important;
+
+		.accordion-item {
+			background-color: transparent !important;
+		}
+
+		button {
+			height: 5rem !important;
+			font-size: 1.6rem !important;
+			background-color: transparent !important;
+			border: none;
+			color: #fff !important;
+		}
+
+		&:placeholder-shown {
+			color: #fff;
+		}
+
+		.accordion-body {
+			background-color: #fff;
+		}
+	}
+
+	label {
+		font-size: 1.4rem;
+		text-transform: uppercase;
+		font-family: 'Montserrat-Bold';
+		margin-bottom: 1rem;
+		letter-spacing: 1px;
+		color: var(--secondary);
 	}
 `;
 
@@ -49,9 +110,26 @@ const StyleEditor = styled(Editor)`
 	color: #000;
 `;
 
-export default function UpdateItem({ item }) {
-	// const user = useUser();
+export default function UpdateItem({ item, categories }) {
 	const [activeCategories, setActiveCategories] = useState([]);
+	const [userCategories, setUserCategories] = useState([]);
+	const user = useUser();
+
+	useEffect(() => {
+		if (user) {
+			fetch('/api/userCategories', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application.json',
+				},
+				body: user.id,
+			})
+				.then((response) => response.json())
+				.then((data) => setUserCategories(data.data))
+				.catch((error) => toast.error(error));
+		}
+	}, [user]);
+
 	const [mainImage, setMainImage] = useState('');
 
 	item = item[0];
@@ -129,11 +207,6 @@ export default function UpdateItem({ item }) {
 	//https://nextjs.org/learn/basics/api-routes/api-routes-details
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-
-		console.log(
-			'when submitting, the active categories are',
-			activeCategories
-		);
 
 		if (e.target.id !== 'main-submit') {
 			return;
@@ -330,26 +403,33 @@ export default function UpdateItem({ item }) {
 							/>
 						</FloatingLabel>
 					</Form.Group>
-					{/* {userCategories && (
+					{userCategories && (
 						<Form.Group className="mb-5">
-							<Form.Label htmlFor="category">Category</Form.Label>
-							<p className="tip">
-								If you need a new category you can create it{' '}
-								<Link href="/add-category"> here</Link>
-							</p>
-
+							<Form.Label>Categories</Form.Label>
+							<CategoryCloudFilter
+								userCategories={userCategories}
+								activeCategories={activeCategories}
+								setActiveCategories={setActiveCategories}
+							/>
+							<Form.Text>
+								<p className="tip">
+									If you need a new category you can create it{' '}
+									<Link href="/add-category"> here</Link>
+								</p>
+							</Form.Text>
+							{/* 
 							<CategoryCloudFilter
 								activeCategories={activeCategories}
 								setActiveCategories={setActiveCategories}
 							/>
-							{/* <Categories
+							<Categories
 								title={false}
 								categories={userCategories}
 								background={true}
 								asButtons={true}
 							/> */}
 
-					{/* <Form.Select
+							{/* <Form.Select
 								aria-label="Categories"
 								name="categories"
 								id="category"
@@ -370,8 +450,8 @@ export default function UpdateItem({ item }) {
 									);
 								})}
 							</Form.Select> */}
-					{/* </Form.Group> */}
-					{/* )} */}
+						</Form.Group>
+					)}
 
 					<Form.Group className="mb-5">
 						<Form.Label htmlFor="status">status</Form.Label>

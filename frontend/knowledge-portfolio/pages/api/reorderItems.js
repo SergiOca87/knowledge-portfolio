@@ -26,8 +26,6 @@ export default async function handler(req, res) {
 			return { id: item.id, order: item.order };
 		});
 
-		console.log('to upsert', itemsToUpsert);
-
 		const { error } = await supabase.from('items').upsert(itemsToUpsert);
 
 		if (error) {
