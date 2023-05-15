@@ -69,9 +69,9 @@ function Category({
 				data-category={`${category.id}`}
 				data-categoryname={`${category.name}`}
 				className={
-					//TODO: This is not working now
 					!!activeCategories?.find(
-						(category) => category.categoryId === category
+						(activeCategory) =>
+							activeCategory.categoryId === category.id
 					)
 						? 'active'
 						: ''
@@ -89,7 +89,6 @@ function Category({
 		</>
 	) : (
 		<>
-			{console.log('in category', category)}
 			<StyledCategory>
 				<div
 					css={css`

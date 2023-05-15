@@ -95,6 +95,7 @@ export default function CreateCategory(userCategories) {
 		const newCategory = { name, icon, userId: user.id };
 
 		if (
+			!user ||
 			!newCategory.userId ||
 			!newCategory.name ||
 			newCategory.name.trim() === ''
@@ -103,25 +104,24 @@ export default function CreateCategory(userCategories) {
 			return;
 		}
 
-		if (
-			//TODO: We are here
-			userCategories.filter(
-				(category) => category.name.toLowerCase() === name.toLowerCase()
-			).length > 0
-		) {
-			toast.error(`The category ${name} already exists`);
-		} else {
-			try {
-				fetch('api/createCategory', {
-					method: 'POST',
-					body: JSON.stringify(newCategory),
-					headers: {
-						'Content-Type': 'application/json',
-					},
-				})
-					.then((response) => response.json())
-					.then((data) => {
-						toast.success(`Category created, reloading page...`);
+		try {
+			fetch('/api/createCategory', {
+				method: 'POST',
+				body: JSON.stringify(newCategory),
+				headers: {
+					'Content-Type': 'application/json',
+				},
+			})
+				.then((response) => response.json())
+				.then((data) => {
+					if (data.code === 303) {
+						toast.error(`The category already exists`);
+					}
+
+					if (data.code === 200) {
+						toast.success(
+							'Category created, reloading the page...'
+						);
 
 						// Clear form on submit
 						setInputs({
@@ -132,27 +132,27 @@ export default function CreateCategory(userCategories) {
 						setTimeout(() => {
 							router.reload(window.location.pathname);
 						}, 3000);
-					})
-					.catch((error) => toast.error(error));
-			} catch (err) {
-				toast.error;
-			}
-
-			// const { error } = await supabase.from('categories').insert({
-			// 	name,
-			// 	icon,
-			// 	userId: user.id,
-			// });
-
-			// if (error) {
-			// 	toast.error(error);
-			// } else {
-			// 	setInputs({
-			// 		name: '',
-			// 		icon: '',
-			// 	});
-			// }
+					}
+				})
+				.catch((error) => toast.error(error));
+		} catch (err) {
+			toast.error;
 		}
+
+		// const { error } = await supabase.from('categories').insert({
+		// 	name,
+		// 	icon,
+		// 	userId: user.id,
+		// });
+
+		// if (error) {
+		// 	toast.error(error);
+		// } else {
+		// 	setInputs({
+		// 		name: '',
+		// 		icon: '',
+		// 	});
+		// }
 	};
 
 	return (

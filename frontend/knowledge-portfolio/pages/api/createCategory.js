@@ -10,6 +10,8 @@ export default async function handler(req, res) {
 			userId: req.body.userId,
 		};
 
+		console.log('trying to create', newCategory);
+
 		// Auth protected API route
 		const supabase = createServerSupabaseClient({
 			req,
@@ -30,17 +32,34 @@ export default async function handler(req, res) {
 			return;
 		}
 
-		const { data: categoryData, error } = await supabase
+		//TODO: Check if it already exists, same userId and same category name
+		const { data: countData, error: countError } = await supabase
 			.from('categories')
-			.insert(newCategory);
+			.select('*')
+			.match({ name: newCategory.name, userId: newCategory.userId });
 
-		if (error) {
-			res.status(500).json({ error: 'Failed to create category' });
+		if (countData.length) {
+			if (countError) {
+				res.status(500).json({ error: 'Something went wrong' });
+			} else {
+				console.log('the category does exist');
+				res.status(303).json({
+					code: 303,
+					countData,
+				});
+			}
 		} else {
-			res.status(200).json({
-				message: 'Category created successfully',
-				data: categoryData[0],
-			});
+			const { data, error } = await supabase
+				.from('categories')
+				.insert(newCategory);
+			if (error) {
+				res.status(500).json({ error: 'Failed to create category' });
+			} else {
+				res.status(200).json({
+					code: 200,
+					data,
+				});
+			}
 		}
 	}
 }

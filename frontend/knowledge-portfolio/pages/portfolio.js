@@ -91,7 +91,7 @@ export default function UserPortfolioPage({ user, items, categories }) {
 	const [filteredItems, setFilteredItems] = useState([]);
 	const [order, setOrder] = useState(filteredItems);
 
-	console.log(user);
+	console.log(activeCategories);
 
 	// useEffect(() => {
 	// 	setFilteredItems(
