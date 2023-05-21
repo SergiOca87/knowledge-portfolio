@@ -50,6 +50,7 @@ export default function CreateCategory(userCategories) {
 		icon: '',
 	});
 
+	//TODO: Not really sure this is necessary
 	useEffect(() => {
 		setInputs({
 			...inputs,
@@ -59,9 +60,11 @@ export default function CreateCategory(userCategories) {
 	const handleChange = (e) => {
 		let { value, name } = e.target;
 
-		setInputs({
-			...inputs,
-			[name]: value,
+		setInputs((prevData) => {
+			return {
+				...prevData,
+				[name]: value,
+			};
 		});
 	};
 
@@ -70,14 +73,18 @@ export default function CreateCategory(userCategories) {
 
 		// If the icon is already selected, remove it, else add it
 		if (inputs.icon === iconName) {
-			setInputs({
-				...inputs,
-				icon: '',
+			setInputs((prevData) => {
+				return {
+					...prevData,
+					icon: '',
+				};
 			});
 		} else {
-			setInputs({
-				...inputs,
-				icon: iconName,
+			setInputs((prevData) => {
+				return {
+					...prevData,
+					icon: iconName,
+				};
 			});
 		}
 	};

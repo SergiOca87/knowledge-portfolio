@@ -61,10 +61,10 @@ export default function CategoryCloudFilter({
 				)
 			);
 		} else {
-			setActiveCategories([...activeCategories, clickedCategory]);
+			setActiveCategories((prevData) => {
+				return [...prevData, clickedCategory];
+			});
 		}
-
-		console.log(activeCategories);
 	};
 
 	return (

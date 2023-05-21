@@ -91,14 +91,6 @@ export default function UserPortfolioPage({ user, items, categories }) {
 	const [filteredItems, setFilteredItems] = useState([]);
 	const [order, setOrder] = useState(filteredItems);
 
-	console.log(activeCategories);
-
-	// useEffect(() => {
-	// 	setFilteredItems(
-	// 		items.filter((item) => !hasBeenDeletedId.includes(item.id))
-	// 	);
-	// }, [hasBeenDeletedId]);
-
 	useEffect(() => {
 		if (activeCategories.length === 0) {
 			setFilteredItems(items);

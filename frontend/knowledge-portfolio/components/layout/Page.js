@@ -2,8 +2,6 @@ import PropTypes from 'prop-types';
 import styled, { createGlobalStyle } from 'styled-components';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Nav from './Nav';
-import { useContext, useEffect, useState } from 'react';
-// import { LOGGED_IN_USER } from './User';
 
 import bgImage from '../../public/images/noise.png';
 import Image from 'next/image';
@@ -12,7 +10,6 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import Footer from './Footer';
-import { useUserState } from '../../context/userContext';
 
 const GlobalStyles = createGlobalStyle`
   @font-face {

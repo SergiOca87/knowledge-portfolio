@@ -1,7 +1,9 @@
 import { supabase } from '../../utils/supabaseClient';
+import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
 
 export default async function handler(req, res) {
 	if (req.method === 'PUT') {
+		console.log('on API, item to update', req.body);
 		// Serverside validation
 
 		// Auth protected API route
@@ -37,7 +39,7 @@ export default async function handler(req, res) {
 				singlePageContent: req.body.singlePageContent,
 				urlTitle: req.body.urlTitle,
 				url: req.body.url,
-				status: req.body.status,
+				status: req.body.status === 'true' ? true : false,
 				userId: req.body.userId,
 				mainImageName: req.body.mainImageName,
 				mainImageUrl: req.body.mainImageUrl,

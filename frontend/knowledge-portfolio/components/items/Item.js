@@ -145,20 +145,16 @@ export default function Item({
 						</ListGroupItem>
 					)}
 
-					{item.status && (
-						<ListGroupItem>
-							<h5 className="secondary">Status:</h5>
-							<p
-								css={css`
-									text-transform: capitalize;
-								`}
-							>
-								{item.status === true
-									? 'Finished'
-									: 'Unfinished'}
-							</p>
-						</ListGroupItem>
-					)}
+					<ListGroupItem>
+						<h5 className="secondary">Status:</h5>
+						<p
+							css={css`
+								text-transform: capitalize;
+							`}
+						>
+							{item.status === true ? 'Finished' : 'Unfinished'}
+						</p>
+					</ListGroupItem>
 
 					{item.categories && (
 						<ListGroupItem>

@@ -14,18 +14,18 @@ function updateUser() {
 	// If there is a logged in user, set the e-mail
 	useEffect(() => {
 		if (user) {
-			console.log('yes, there is a user', user);
 			setInputs({ email: user.username, password: '' });
 		}
 	}, [user]);
 
-	// Add input changes to state
 	const handleChange = (e) => {
 		let { value, name, selectedOptions } = e.target;
 
-		setInputs({
-			...inputs,
-			[name]: value,
+		setInputs((prevData) => {
+			return {
+				...prevData,
+				[name]: value,
+			};
 		});
 	};
 

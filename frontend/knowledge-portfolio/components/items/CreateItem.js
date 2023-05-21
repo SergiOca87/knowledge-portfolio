@@ -159,9 +159,12 @@ export default function CreateItem({ categories, itemsLength }) {
 	//WYSYWYG State
 	const onContentStateChange = (contentState) => {
 		setContentState(contentState);
-		setInputs({
-			...inputs,
-			singlePageContent: JSON.stringify(contentState, null, 4),
+
+		setInputs((prevData) => {
+			return {
+				...prevData,
+				singlePageContent: JSON.stringify(contentState, null, 4),
+			};
 		});
 	};
 
@@ -169,19 +172,17 @@ export default function CreateItem({ categories, itemsLength }) {
 	const handleChange = (e) => {
 		let { value, name, selectedOptions } = e.target;
 
-		setInputs({
-			...inputs,
-			[name]: value,
+		setInputs((prevData) => {
+			return {
+				...prevData,
+				[name]: value,
+			};
 		});
 	};
-
-	// Submit current state to create a new Item
 
 	//https://nextjs.org/learn/basics/api-routes/api-routes-details
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-
-		console.log(activeCategories);
 
 		// This is to prevent cloudinary form to submit the item
 		if (e.target.id !== 'main-submit') {

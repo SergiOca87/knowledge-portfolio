@@ -23,7 +23,6 @@ function MyApp({ Component, pageProps, serverUser }) {
 	// Listen to auth events:
 	// https://supabase.com/docs/reference/javascript/next/auth-onauthstatechange
 	supabase.auth.onAuthStateChange((event, session) => {
-		console.log(event);
 		if (event === 'PASSWORD_RECOVERY') {
 			router.push('/update-user');
 		} else if (event === 'SIGNED_IN') {

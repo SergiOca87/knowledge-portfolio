@@ -115,6 +115,8 @@ export default function UpdateItem({ item, categories }) {
 	const [userCategories, setUserCategories] = useState([]);
 	const user = useUser();
 
+	console.log('item to update', item);
+
 	useEffect(() => {
 		if (user) {
 			fetch('/api/userCategories', {
@@ -147,6 +149,8 @@ export default function UpdateItem({ item, categories }) {
 		// url: '',
 	});
 
+	const selected = item.status === true ? true : false;
+
 	// These useEffects seem necessary as what they do require a mounted component?
 	// Make sure these are necessary
 	useEffect(() => {
@@ -158,6 +162,7 @@ export default function UpdateItem({ item, categories }) {
 		setActiveCategories(item.categories);
 	}, []);
 
+	// Not based on previous state so no need to use the functional form of setInputs or to access the previous state
 	useEffect(() => {
 		setInputs({
 			...inputs,
@@ -186,9 +191,12 @@ export default function UpdateItem({ item, categories }) {
 	//WYSYWYG State
 	const onContentStateChange = (contentState) => {
 		setContentState(contentState);
-		setInputs({
-			...inputs,
-			singlePageContent: JSON.stringify(contentState, null, 4),
+
+		setInputs((prevData) => {
+			return {
+				...prevData,
+				singlePageContent: JSON.stringify(contentState, null, 4),
+			};
 		});
 	};
 
@@ -196,9 +204,11 @@ export default function UpdateItem({ item, categories }) {
 	const handleChange = (e) => {
 		let { value, name, selectedOptions } = e.target;
 
-		setInputs({
-			...inputs,
-			[name]: value,
+		setInputs((prevData) => {
+			return {
+				...prevData,
+				[name]: value,
+			};
 		});
 	};
 
@@ -461,18 +471,10 @@ export default function UpdateItem({ item, categories }) {
 							id="status"
 							onChange={handleChange}
 						>
-							<option
-								value={
-									item.status === 'Finished' ? true : false
-								}
-							>
+							<option value={true} selected={selected}>
 								Finished
 							</option>
-							<option
-								value={
-									item.status === 'Unfinished' ? true : false
-								}
-							>
+							<option value={false} selected={!selected}>
 								Unfinished
 							</option>
 						</Form.Select>

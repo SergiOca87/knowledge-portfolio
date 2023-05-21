@@ -22,9 +22,11 @@ export default function DeleteItem({
 	const handleDelete = async (e) => {
 		e.preventDefault();
 
-		setDeleteConfirm({
-			counter: (deleteConfirm.counter += 1),
-			message: 'Are You Sure?',
+		setDeleteConfirm((prevData) => {
+			return {
+				counter: (prevData.counter += 1),
+				message: 'Are You Sure?',
+			};
 		});
 
 		if (deleteConfirm.counter >= 2) {
