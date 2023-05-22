@@ -5,11 +5,11 @@ import Main from '../../components/layout/Main';
 import { Container } from 'react-bootstrap';
 import { supabase } from '../../utils/supabaseClient';
 
-export default function SingleItemPage({ item }) {
+export default function SingleItemPage({ item, categories }) {
 	return (
 		<Main>
 			<Container>
-				<SingleItem item={item} />
+				<SingleItem item={item} categories={categories} />
 			</Container>
 		</Main>
 	);
@@ -25,9 +25,15 @@ export async function getStaticProps(context) {
 		.select('*')
 		.eq('id', itemId);
 
+	const { data: categories } = await supabase
+		.from('categories')
+		.select('*')
+		.in('id', item[0].categories);
+
 	return {
 		props: {
 			item,
+			categories,
 		},
 	};
 }

@@ -18,56 +18,25 @@ const StyledSingleItem = styled(Card)`
 		max-width: 80rem;
 		margin: 0 auto;
 		padding: 2rem 0;
+
+		p,
+		li,
+		span {
+			color: #fff;
+			font-size: 1.8rem;
+			background-color: transparent;
+		}
 	}
 
 	iframe,
 	img {
 		width: 100% !important;
 	}
-
-	p,
-	li,
-	span {
-		color: #fff;
-		font-size: 1.8rem;
-		background-color: transparent;
-	}
 `;
 
-// const SINGLE_ITEM_QUERY = gql`
-// 	query SINGLE_ITEM_QUERY($id: ID!) {
-// 		Item(where: { id: $id }) {
-// 			title
-// 			description
-// 			status
-// 			singlePageContent
-// 			author {
-// 				name
-// 				# image
-// 			}
-// 			categories {
-// 				id
-// 				name
-// 				icon
-// 			}
-// 		}
-// 	}
-// `;
-
-export default function SingleItem({ item }) {
-	// const { data, loading, error } = useQuery(SINGLE_ITEM_QUERY, {
-	// 	variables: {
-	// 		id,
-	// 	},
-	// });
-
+export default function SingleItem({ item, categories }) {
 	// if (loading) return <p>Loading...</p>;
 	const singleItem = item[0];
-
-	console.log(singleItem);
-
-	//TODO: Toast
-	// if (error) return <p>error {error.message}</p>;
 
 	const markup = singleItem.singlePageContent
 		? draftToHtml(JSON.parse(singleItem.singlePageContent))
@@ -95,8 +64,8 @@ export default function SingleItem({ item }) {
 									: singleItem.userName}
 							</p>
 						))}
-					{singleItem.categories && (
-						<Categories categories={singleItem.categories} />
+					{categories && (
+						<Categories categories={categories} background={true} />
 					)}
 				</div>
 				<hr />
