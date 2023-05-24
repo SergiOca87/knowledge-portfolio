@@ -162,7 +162,6 @@ export default function UpdateItem({ item, categories }) {
 		setActiveCategories(item.categories);
 	}, []);
 
-	// Not based on previous state so no need to use the functional form of setInputs or to access the previous state
 	useEffect(() => {
 		setInputs({
 			...inputs,
@@ -192,11 +191,9 @@ export default function UpdateItem({ item, categories }) {
 	const onContentStateChange = (contentState) => {
 		setContentState(contentState);
 
-		setInputs((prevData) => {
-			return {
-				...prevData,
-				singlePageContent: JSON.stringify(contentState, null, 4),
-			};
+		setInputs({
+			...inputs,
+			singlePageContent: JSON.stringify(contentState, null, 4),
 		});
 	};
 
@@ -204,11 +201,9 @@ export default function UpdateItem({ item, categories }) {
 	const handleChange = (e) => {
 		let { value, name, selectedOptions } = e.target;
 
-		setInputs((prevData) => {
-			return {
-				...prevData,
-				[name]: value,
-			};
+		setInputs({
+			...inputs,
+			[name]: value,
 		});
 	};
 

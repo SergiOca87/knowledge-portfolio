@@ -160,11 +160,9 @@ export default function CreateItem({ categories, itemsLength }) {
 	const onContentStateChange = (contentState) => {
 		setContentState(contentState);
 
-		setInputs((prevData) => {
-			return {
-				...prevData,
-				singlePageContent: JSON.stringify(contentState, null, 4),
-			};
+		setInputs({
+			...inputs,
+			singlePageContent: JSON.stringify(contentState, null, 4),
 		});
 	};
 
@@ -172,11 +170,9 @@ export default function CreateItem({ categories, itemsLength }) {
 	const handleChange = (e) => {
 		let { value, name, selectedOptions } = e.target;
 
-		setInputs((prevData) => {
-			return {
-				...prevData,
-				[name]: value,
-			};
+		setInputs({
+			...inputs,
+			[name]: value,
 		});
 	};
 
