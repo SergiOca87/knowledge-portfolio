@@ -57,10 +57,10 @@ function Category({
 	handleButtonClick,
 }) {
 	// So that the user has to click twice to delete an Item
-	const [deleteConfirm, setDeleteConfirm] = useState({
-		counter: 0,
-		message: 'Delete',
-	});
+	// const [deleteConfirm, setDeleteConfirm] = useState({
+	// 	counter: 0,
+	// 	message: 'Delete',
+	// });
 
 	let IconName = '';
 
@@ -69,23 +69,10 @@ function Category({
 	}
 
 	const deleteCategoryHandler = (id) => {
-		if (deleteConfirm.counter === 0) {
-			const confirm = window.confirm('Are You Sure?');
+		const confirm = window.confirm('Are You Sure?');
 
-			if (confirm) {
-				console.log('confirm was true');
-				setDeleteConfirm((prevData) => {
-					return {
-						counter: (prevData.counter += 1),
-					};
-				});
-			}
-		}
-
-		if (deleteConfirm.counter >= 1) {
-			console.log('delete counter went up');
-
-			//TODO: Create API route
+		if (confirm) {
+			console.log('delete category');
 			try {
 				fetch('/api/deleteCategory', {
 					method: 'DELETE',

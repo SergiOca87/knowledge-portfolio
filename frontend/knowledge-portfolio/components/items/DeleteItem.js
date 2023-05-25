@@ -1,9 +1,3 @@
-import router from 'next/router';
-import React, { useContext, useEffect } from 'react';
-import { supabase } from '../../utils/supabaseClient';
-import { useState } from 'react';
-
-import { Button } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -14,23 +8,18 @@ export default function DeleteItem({
 	hasBeenDeletedId,
 }) {
 	// So that the user has to click twice to delete an Item
-	const [deleteConfirm, setDeleteConfirm] = useState({
-		counter: 0,
-		message: 'Delete',
-	});
+	// const [deleteConfirm, setDeleteConfirm] = useState({
+	// 	counter: 0,
+	// 	message: 'Delete',
+	// });
 
 	//TODO: Why is this async?
 	const handleDelete = async (e) => {
 		e.preventDefault();
 
-		setDeleteConfirm((prevData) => {
-			return {
-				counter: (prevData.counter += 1),
-				message: 'Are You Sure?',
-			};
-		});
+		const confirm = window.confirm('Are You Sure?');
 
-		if (deleteConfirm.counter >= 2) {
+		if (confirm) {
 			try {
 				fetch('/api/deleteItem', {
 					method: 'DELETE',
@@ -59,9 +48,5 @@ export default function DeleteItem({
 		}
 	};
 
-	return (
-		<span onClick={handleDelete}>
-			{deleteConfirm.counter === 0 ? children : deleteConfirm.message}
-		</span>
-	);
+	return <span onClick={handleDelete}>{children}</span>;
 }
