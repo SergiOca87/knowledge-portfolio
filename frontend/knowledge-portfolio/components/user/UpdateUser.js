@@ -21,15 +21,15 @@ function updateUser() {
 	const handleChange = (e) => {
 		let { value, name, selectedOptions } = e.target;
 
-		setInputs((prevData) => {
-			return {
-				...prevData,
-				[name]: value,
-			};
+		setInputs({
+			...inputs,
+			[name]: value,
 		});
 	};
 
 	const handleSubmit = async () => {
+
+		//TODO: API
 		try {
 			const { data, error } = await supabase.auth.updateUser(inputs);
 			if (error) {
@@ -40,7 +40,6 @@ function updateUser() {
 		}
 	};
 
-	//TODO: Have to be logged in to see
 	return (
 		<>
 			<form onSubmit={handleSubmit}>

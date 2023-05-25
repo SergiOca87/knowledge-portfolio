@@ -60,11 +60,9 @@ export default function CreateCategory() {
 	const handleChange = (e) => {
 		let { value, name } = e.target;
 
-		setInputs((prevData) => {
-			return {
-				...prevData,
-				[name]: value,
-			};
+		setInputs({
+			...inputs,
+			[name]: value,
 		});
 	};
 
@@ -73,18 +71,16 @@ export default function CreateCategory() {
 
 		// If the icon is already selected, remove it, else add it
 		if (inputs.icon === iconName) {
-			setInputs((prevData) => {
-				return {
-					...prevData,
-					icon: '',
-				};
+
+			setInputs({
+				...inputs,
+				icon: '',
 			});
 		} else {
-			setInputs((prevData) => {
-				return {
-					...prevData,
-					icon: iconName,
-				};
+
+			setInputs({
+				...inputs,
+				icon: iconName,
 			});
 		}
 	};
