@@ -40,7 +40,7 @@ const StyledForm = styled(Form)`
 	}
 `;
 
-export default function CreateCategory(userCategories) {
+export default function CreateCategory() {
 	const user = useUser();
 	const [iconSearch, setIconSearch] = useState('');
 	const router = useRouter();

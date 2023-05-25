@@ -19,6 +19,7 @@ export default function DeleteItem({
 		message: 'Delete',
 	});
 
+	//TODO: Why is this async?
 	const handleDelete = async (e) => {
 		e.preventDefault();
 

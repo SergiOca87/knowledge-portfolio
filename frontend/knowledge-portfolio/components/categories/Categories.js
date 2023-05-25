@@ -28,6 +28,7 @@ export default function Categories({
 	asButtons = false,
 	title = true,
 	background = false,
+	editMode = false,
 	activeCategories,
 	setClickedCategories,
 }) {
@@ -42,6 +43,7 @@ export default function Categories({
 						category={category}
 						background={background}
 						asButtons={asButtons}
+						editMode={editMode}
 					/>
 				);
 			})}

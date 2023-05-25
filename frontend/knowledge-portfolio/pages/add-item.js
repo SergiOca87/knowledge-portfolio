@@ -82,6 +82,8 @@ export async function getServerSideProps(context) {
 		.select('*')
 		.eq('userId', session.user.id);
 
+	console.log(categories);
+
 	return {
 		props: {
 			categories,

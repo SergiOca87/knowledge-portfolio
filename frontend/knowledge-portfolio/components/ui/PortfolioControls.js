@@ -1,7 +1,13 @@
 import Link from 'next/link';
 import React from 'react';
 import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
-import { FaEye, FaFileDownload, FaPlus, FaQrcode } from 'react-icons/fa';
+import {
+	FaEye,
+	FaFileDownload,
+	FaPlus,
+	FaFolder,
+	FaQrcode,
+} from 'react-icons/fa';
 import styled from 'styled-components';
 import TooltipButton from './TooltipButton';
 
@@ -73,8 +79,13 @@ function PortfolioControls({ user }) {
 		<StyledPortfolioControls>
 			<TooltipButton
 				tooltipText="Add New Portfolio Item"
-				link={`/add-item/${user.id}`}
+				link={`/add-item`}
 				icon={<FaPlus />}
+			/>
+			<TooltipButton
+				tooltipText="Add Or Edit Categories"
+				link={`/add-category`}
+				icon={<FaFolder />}
 			/>
 			<TooltipButton
 				tooltipText="Toggle Public View"

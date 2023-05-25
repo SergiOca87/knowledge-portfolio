@@ -38,21 +38,20 @@ export default function createCategory({ user, categories }) {
 								allow visitors to filter your items.
 							</p>
 
-							{categories ? (
+							{categories && (
 								<>
 									<p>Your current existing Categories:</p>
 									<Categories
 										title={false}
 										categories={categories}
 										background={true}
+										editMode={true}
 									/>
 								</>
-							) : (
-								''
 							)}
 						</div>
 
-						<CreateCategory userCategories={categories} />
+						<CreateCategory />
 					</div>
 				) : (
 					<NotLoggedIn />

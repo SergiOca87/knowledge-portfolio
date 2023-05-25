@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import * as FontAwesome from 'react-icons/fa';
 import ToggleButton from 'react-bootstrap/ToggleButton';
 import styled from 'styled-components';
 import { Button } from 'react-bootstrap';
+import { toast } from 'react-toastify';
 
 const StyledCategory = styled.div`
 	display: flex;
@@ -52,13 +53,60 @@ function Category({
 	background,
 	asButtons,
 	activeCategories,
+	editMode,
 	handleButtonClick,
 }) {
+	// So that the user has to click twice to delete an Item
+	const [deleteConfirm, setDeleteConfirm] = useState({
+		counter: 0,
+		message: 'Delete',
+	});
+
 	let IconName = '';
 
 	if (category.icon) {
 		IconName = FontAwesome[category.icon];
 	}
+
+	const deleteCategoryHandler = (id) => {
+		if (deleteConfirm.counter === 0) {
+			const confirm = window.confirm('Are You Sure?');
+
+			if (confirm) {
+				console.log('confirm was true');
+				setDeleteConfirm((prevData) => {
+					return {
+						counter: (prevData.counter += 1),
+					};
+				});
+			}
+		}
+
+		if (deleteConfirm.counter >= 1) {
+			console.log('delete counter went up');
+
+			//TODO: Create API route
+			try {
+				fetch('/api/deleteCategory', {
+					method: 'DELETE',
+					body: JSON.stringify(id),
+					headers: {
+						'Content-Type': 'application-json',
+					},
+				})
+					.then((response) => response.json())
+					.then((data) => {
+						if (data.statusCode == 200) {
+							toast.success(data.message);
+
+							//TODO: Hide the category, maybe using refs?
+						}
+					});
+			} catch (err) {
+				toast.error(err);
+			}
+		}
+	};
 
 	return asButtons ? (
 		<>
@@ -104,6 +152,14 @@ function Category({
 					)}
 
 					<span>{category.name}</span>
+					{editMode && (
+						<span
+							className="delete-category"
+							onClick={() => deleteCategoryHandler(category.id)}
+						>
+							&times;
+						</span>
+					)}
 				</div>
 			</StyledCategory>
 		</>
