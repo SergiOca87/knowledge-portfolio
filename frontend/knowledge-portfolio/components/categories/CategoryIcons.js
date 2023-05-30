@@ -1,7 +1,7 @@
 //TODO: There's some DRY to do here, lot of repeated code.
 
 import React from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import * as FontAwesome from 'react-icons/fa';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
@@ -63,7 +63,12 @@ export default function CategoryIcons({ search, selectedIcon }) {
 									<OverlayTrigger
 										placement={'top'}
 										overlay={
-											<Tooltip id={`tooltip-top}`}>
+											<Tooltip
+												id={`tooltip-top}`}
+												css={css`
+													position: fixed;
+												`}
+											>
 												{icon.substring(2)}
 											</Tooltip>
 										}
@@ -89,7 +94,12 @@ export default function CategoryIcons({ search, selectedIcon }) {
 								<OverlayTrigger
 									placement={'top'}
 									overlay={
-										<Tooltip id={`tooltip-top}`}>
+										<Tooltip
+											id={`tooltip-top}`}
+											css={css`
+												position: fixed;
+											`}
+										>
 											{icon.substring(2)}
 										</Tooltip>
 									}

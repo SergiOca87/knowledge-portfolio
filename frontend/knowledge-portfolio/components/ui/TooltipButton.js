@@ -7,7 +7,16 @@ function TooltipButton({ tooltipText, link, icon }) {
 		<div>
 			<OverlayTrigger
 				placement={'top'}
-				overlay={<Tooltip id={`tooltip-top}`}>{tooltipText}</Tooltip>}
+				overlay={
+					<Tooltip
+						id={`tooltip-top}`}
+						css={css`
+							position: fixed;
+						`}
+					>
+						{tooltipText}
+					</Tooltip>
+				}
 			>
 				<Button variant="secondary">
 					<Link
