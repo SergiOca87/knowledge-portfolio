@@ -10,7 +10,7 @@ const StyledCategories = styled.div`
 	flex-wrap: wrap;
 	gap: 1rem;
 	flex-wrap: wrap;
-	align-items: baseline;
+	align-items: center;
 `;
 
 const categoriesTitle = (categories) => {

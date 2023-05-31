@@ -9,6 +9,8 @@ const StyledCategory = styled.div`
 	display: flex;
 	flex-wrap: wrap;
 	margin-top: 0.5rem;
+	height: 4rem;
+	position: relative;
 
 	gap: 0.5rem;
 
@@ -28,6 +30,22 @@ const StyledCategory = styled.div`
 		letter-spacing: 1px;
 		font-family: 'Montserrat-Medium';
 		color: #fff;
+	}
+
+	.delete-category {
+		width: 15px;
+		height: 13px;
+		background-color: gray;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		cursor: pointer;
+		font-size: 2rem;
+		position: absolute;
+		top: -0.5rem;
+		right: -0.5rem;
+		text-align: center;
+		border-radius: 1px;
 	}
 `;
 
@@ -72,7 +90,6 @@ function Category({
 		const confirm = window.confirm('Are You Sure?');
 
 		if (confirm) {
-			console.log('delete category');
 			try {
 				fetch('/api/deleteCategory', {
 					method: 'DELETE',
@@ -144,7 +161,7 @@ function Category({
 							className="delete-category"
 							onClick={() => deleteCategoryHandler(category.id)}
 						>
-							&times;
+							<FontAwesome.FaWindowClose />
 						</span>
 					)}
 				</div>
