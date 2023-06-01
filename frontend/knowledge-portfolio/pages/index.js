@@ -219,6 +219,14 @@ const StyledCard = styled(Card)`
 		align-items: center;
 		justify-content: space-between;
 	}
+
+	.separator {
+		display: block;
+		width: 5rem;
+		height: 5px;
+		background: var(--primary);
+		margin: 2rem 0px 1rem 0;
+	}
 `;
 
 const ChangingWord = styled.div``;
@@ -394,6 +402,7 @@ export default function Home() {
 											>
 												<FaRegLightbulb />
 											</div>
+											<span className="separator"></span>
 											<Card.Text>
 												Historical perspective on the
 												concept of a knowledge
@@ -437,7 +446,7 @@ export default function Home() {
 											>
 												<BiEdit />
 											</div>
-
+											<span className="separator"></span>
 											<Card.Text>
 												Explore the many benefits of
 												creating and maintaining a
@@ -482,10 +491,11 @@ export default function Home() {
 											>
 												<BsShare />
 											</div>
+											<span className="separator"></span>
 											<Card.Text>
-												Practical advice on how to
-												create and maintain a knowledge
-												portfolio.
+												Practical advice on how and why
+												to create and maintain a
+												knowledge portfolio.
 											</Card.Text>
 											<Link href="/about/#investing">
 												<Button

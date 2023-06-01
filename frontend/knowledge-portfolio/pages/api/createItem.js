@@ -3,6 +3,7 @@ import { supabase } from '../../utils/supabaseClient';
 
 export default async function handler(req, res) {
 	if (req.method === 'POST') {
+		console.log('on create item');
 		// Extract values
 		const newItem = {
 			username: req.body.user,
@@ -19,6 +20,8 @@ export default async function handler(req, res) {
 			mainImageUrl: req.body.mainImageUrl,
 			order: req.body.order,
 		};
+
+		console.log('new item', newItem);
 
 		// Auth protected API route
 		const supabase = createServerSupabaseClient({
@@ -90,31 +93,34 @@ export default async function handler(req, res) {
 			.insert(newItem)
 			.select();
 
-		if (newItem.mainImageName) {
-			const { data: imageData, error: imageError } = await supabase
-				.from('image')
-				.insert({
-					// created_at: date,
-					imageName: newItem.mainImageName,
-					userId: mainImageName.userId,
-					imageUrl: newItem.mainImageUrl,
-					item: itemData[0].id,
-				})
-				.select();
+		// if (newItem.mainImageName) {
+		// 	const { data: imageData, error: imageError } = await supabase
+		// 		.from('image')
+		// 		.insert({
+		// 			// created_at: date,
+		// 			imageName: newItem.mainImageName,
+		// 			userId: mainImageName.userId,
+		// 			imageUrl: newItem.mainImageUrl,
+		// 			item: itemData[0].id,
+		// 		})
+		// 		.select();
 
-			//TODO: May not be necessary to do this relationship at the end with the imageUrl field but may be useful down the road
-			const { data: itemDataUpdate, error: itemDataUpdateError } =
-				await supabase
-					.from('items')
-					.update({
-						// created_at: date,
-						mainImageId: imageData[0].id,
-					})
-					.eq('id', itemData[0].id);
-		}
+		// 	//TODO: May not be necessary to do this relationship at the end with the imageUrl field but may be useful down the road
+		// 	const { data: itemDataUpdate, error: itemDataUpdateError } =
+		// 		await supabase
+		// 			.from('items')
+		// 			.update({
+		// 				// created_at: date,
+		// 				mainImageId: imageData[0].id,
+		// 			})
+		// 			.eq('id', itemData[0].id);
+		// }
+
+		console.log('res', res.status);
 
 		if (error) {
 			res.status(500).json({ error: 'Failed to create item' });
+			console.log('error', error);
 		} else {
 			res.status(200).json({
 				message: 'Item created successfully',

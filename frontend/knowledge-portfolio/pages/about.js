@@ -47,23 +47,17 @@ export default function about() {
 							<p>
 								The concept of a knowledge portfolio has been
 								around for several decades, with various sources
-								contributing to its development. While Karl Wiig
-								is widely credited with introducing the term
-								"knowledge portfolio" in his 1997 book,
+								contributing to its development in books such as
 								"Knowledge Management: An Introduction and
-								Perspective," there are other references to the
-								idea of managing knowledge as a portfolio that
-								predate Wiig's work. For example, in "The
-								Pragmatic Programmer" book published in 1999,
-								authors Andrew Hunt and David Thomas discuss the
-								concept of a "skills portfolio" as a way for
-								software developers to manage and enhance their
-								professional skills over time. While they did
-								not use the term "knowledge portfolio"
-								explicitly, the idea of tracking and reflecting
-								on one's experience, knowledge, and
-								accomplishments shares similarities with the
-								concept of a knowledge portfolio.
+								Perspective," or the "Pragmatic Programmer"
+							</p>
+
+							<p>
+								A knowledge portfolio is a collection of your
+								intellectual assets, representing your learning
+								journey, experiences, and expertise. It can
+								encompasses a diverse range of knowledge and
+								skills.
 							</p>
 						</Col>
 						<Col lg="5">
@@ -100,14 +94,14 @@ export default function about() {
 						<Col lg="7">
 							<h2>Benefits</h2>
 							<p>
-								A knowledge portfolio is a valuable tool for
-								individuals and organizations seeking to manage
-								their intellectual assets over time. By
-								organizing and reflecting on their knowledge and
-								skills, individuals and organizations can
-								identify gaps in their knowledge and prioritize
-								areas for learning and development. A
-								well-managed knowledge portfolio can also help
+								It's a valuable tool for individuals and
+								organizations seeking to manage their
+								intellectual assets over time. By organizing and
+								reflecting on their knowledge and skills.
+							</p>
+
+							<p>
+								A well-managed knowledge portfolio can also help
 								to demonstrate one's expertise and value to
 								potential employers or clients. In today's
 								rapidly changing global economy, staying
@@ -116,11 +110,7 @@ export default function about() {
 								knowledge portfolio provides a structured way to
 								manage and develop one's knowledge assets,
 								ensuring that they stay relevant and valuable
-								over time. By investing in a knowledge
-								portfolio, individuals and organizations can
-								enhance their problem-solving abilities, make
-								better decisions, and create new opportunities
-								for growth and success.
+								over time.
 							</p>
 						</Col>
 					</Row>
@@ -131,26 +121,17 @@ export default function about() {
 						<Col lg="7">
 							<h2>Investing</h2>
 							<p>
-								Investing in a knowledge portfolio requires a
-								commitment to ongoing learning and development.
-								This may involve taking courses, attending
-								conferences and workshops, reading books and
-								articles, participating in professional
-								networks, and engaging in reflective practice.
-								By investing in their knowledge portfolio,
-								individuals and organizations can stay
-								up-to-date with the latest developments in their
-								field, acquire new skills and knowledge, and
-								remain competitive in a constantly evolving
-								business environment. Maintaining a knowledge
-								portfolio also requires regular reflection and
-								self-assessment. Individuals and organizations
-								should periodically review their portfolio to
-								assess their strengths and weaknesses and
-								identify areas for improvement. By setting goals
-								and tracking progress over time, they can ensure
-								that their knowledge portfolio continues to
-								evolve and remain relevant.
+								By investing in a knowledge portfolio,
+								individuals whose main capital is knowledge
+								actively nurture the habit of lifelong learning
+								and personal growth. This involves proactively
+								seeking learning opportunities, such as
+								enrolling in courses, attending workshops, and
+								engaging in reflective practice. A knowledge
+								portfolio empowers knowledge workers to stay at
+								the forefront of their field, continuously
+								acquire new skills and knowledge, and maintain a
+								competitive edge in an ever-evolving landscape.
 							</p>
 						</Col>
 						<Col lg="5">
@@ -169,31 +150,16 @@ export default function about() {
 					</Row>
 				</div>
 
-				<Card className="conclusion">
-					<p>
-						In conclusion, the idea of managing knowledge as an
-						asset has been around for many years and has been
-						described in various forms by different authors. Today,
-						a knowledge portfolio is a valuable tool for individuals
-						and organizations seeking to manage their intellectual
-						assets in a constantly changing global economy. By
-						investing in ongoing learning and development and
-						regularly reflecting on their knowledge and skills, they
-						can stay ahead of the curve and create new opportunities
-						for growth and success.
-					</p>
-
-					<div className="text-center mt-lg">
-						<Link href="/portfolio">
-							<Button
-								variant="primary btn-round btn-big"
-								type="button"
-							>
-								Get Started
-							</Button>
-						</Link>
-					</div>
-				</Card>
+				<div className="text-center mt-lg">
+					<Link href="/portfolio">
+						<Button
+							variant="primary btn-round btn-big"
+							type="button"
+						>
+							Get Started
+						</Button>
+					</Link>
+				</div>
 			</StyledContainer>
 		</Main>
 	);

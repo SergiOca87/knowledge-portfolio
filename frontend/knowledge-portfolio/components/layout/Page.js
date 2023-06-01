@@ -207,30 +207,30 @@ const GlobalStyles = createGlobalStyle`
     min-width: 0;
     word-wrap: break-word;
     background-color: var(--black);
-    background-clip: border-box;
+    // background-clip: border-box;
     border-radius: 10px;
     border: 0;
     margin: 0 auto;
     height: 100%;
     color: #fff;
 
-    &:before {
-      content: "";
-      background: rgb(132,169,140);
-      background: linear-gradient(180deg, rgba(132,169,140,1) 55%, rgba(0,20,20,0.34) 100%);
-      width: calc(100% + 2px);
-      height: calc(100% + 2px);
-      position: absolute;
-      top: 0;
-      left: 0;
-      border-radius: 10px;
-      z-index: -1;
-      transform: translate(-1px,-1px);
-    }
+    // &:before {
+    //   content: "";
+    //   background: rgb(132,169,140);
+    //   background: linear-gradient(180deg, rgba(132,169,140,1) 55%, rgba(0,20,20,0.34) 100%);
+    //   width: calc(100% + 2px);
+    //   height: calc(100% + 2px);
+    //   position: absolute;
+    //   top: 0;
+    //   left: 0;
+    //   border-radius: 10px;
+    //   z-index: -1;
+    //   transform: translate(-1px,-1px);
+    // }
 
     .card-header {
-      background-color: var(--primary);
-      color: var(--bg);
+      // background-color: var(--primary);
+      // color: var(--bg);
       padding: 1.2rem 1.5rem;
       letter-spacing: 1px;
       font-size: 2.2rem;

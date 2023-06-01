@@ -199,7 +199,7 @@ export default function CreateItem({ categories, itemsLength }) {
 				title,
 				description,
 				categories: activeCategories.length
-					? activeCategories
+					? activeCategories.map((category) => category.categoryId)
 					: 'Uncategorized',
 				singlePageContent,
 				urlTitle,
