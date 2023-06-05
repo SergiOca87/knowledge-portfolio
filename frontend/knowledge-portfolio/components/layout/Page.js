@@ -234,7 +234,7 @@ const GlobalStyles = createGlobalStyle`
       padding: 1.2rem 1.5rem;
       letter-spacing: 1px;
       font-size: 2.2rem;
-      text-transform: uppercase;
+      // text-transform: uppercase;
       border-top-right-radius: 10px;
       border-top-left-radius: 10px;
     }

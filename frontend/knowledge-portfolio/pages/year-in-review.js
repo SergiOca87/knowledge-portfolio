@@ -154,9 +154,11 @@ function YearInReview({ user, items, categories }) {
 
 						let IconName = '';
 
+						//TODO We are here after deleting a category manually
+						console.log(categories, categoryId);
 						const categoryIcon = categories.find(
 							(categoryObj) => categoryObj.id === categoryId
-						).icon;
+						)?.icon;
 
 						IconName = categoryIcon
 							? React.createElement(FontAwesome[categoryIcon])
@@ -188,7 +190,7 @@ function YearInReview({ user, items, categories }) {
 												(categoryObj) =>
 													categoryObj.id ===
 													categoryId
-											).name
+											)?.name
 										}
 									</h3>
 								</div>

@@ -4,6 +4,7 @@ import ToggleButton from 'react-bootstrap/ToggleButton';
 import styled from 'styled-components';
 import { Button } from 'react-bootstrap';
 import { toast } from 'react-toastify';
+import DeleteCategory from './DeleteCategory';
 
 const StyledCategory = styled.div`
 	display: flex;
@@ -86,32 +87,6 @@ function Category({
 		IconName = FontAwesome[category.icon];
 	}
 
-	const deleteCategoryHandler = (id) => {
-		const confirm = window.confirm('Are You Sure?');
-
-		if (confirm) {
-			try {
-				fetch('/api/deleteCategory', {
-					method: 'DELETE',
-					body: JSON.stringify(id),
-					headers: {
-						'Content-Type': 'application-json',
-					},
-				})
-					.then((response) => response.json())
-					.then((data) => {
-						if (data.statusCode == 200) {
-							toast.success(data.message);
-
-							//TODO: Hide the category, maybe using refs?
-						}
-					});
-			} catch (err) {
-				toast.error(err);
-			}
-		}
-	};
-
 	return asButtons ? (
 		<>
 			<StyledCategoryButton
@@ -156,14 +131,7 @@ function Category({
 					)}
 
 					<span>{category.name}</span>
-					{editMode && (
-						<span
-							className="delete-category"
-							onClick={() => deleteCategoryHandler(category.id)}
-						>
-							<FontAwesome.FaWindowClose />
-						</span>
-					)}
+					{editMode && <DeleteCategory categoryId={category.id} />}
 				</div>
 			</StyledCategory>
 		</>
