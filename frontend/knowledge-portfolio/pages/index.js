@@ -1,5 +1,3 @@
-import React, { useState, useEffect } from 'react';
-
 import Head from 'next/head';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
@@ -229,35 +227,8 @@ const StyledCard = styled(Card)`
 	}
 `;
 
-const ChangingWord = styled.div``;
-
 export default function Home() {
-	//TODO: Clean up after definite style
-	// const user = useUser();
-	const words = ['Share', 'Own', 'Use'];
-	const [currentIndex, setCurrentIndex] = useState(0);
-	const [flip, setFlip] = useState(false);
 	const router = useRouter();
-
-	useEffect(() => {
-		const interval = setInterval(() => {
-			//Flip the card
-
-			flip === true ? setFlip(false) : setFlip(true);
-
-			// Change the word that's on the current back
-			currentIndex >= 2
-				? setCurrentIndex(0)
-				: setCurrentIndex((currentIndex) => currentIndex + 1);
-
-			// setTimeout(() => {
-			// 	setFlip('back');
-			// }, 3500);
-
-			//TODO: Wait half a second and set a fade in class here?
-		}, 4000);
-		return () => clearInterval(interval);
-	}, [currentIndex]);
 
 	return (
 		<>
@@ -268,50 +239,6 @@ export default function Home() {
 							<Row className="">
 								<Col lg={6}>
 									<>
-										{/* <h2>
-											<ChangingWord
-												classNameName={`title-fade ${fade}`}
-											>
-												<span>
-													{words[currentIndex]}
-												</span>
-											</ChangingWord>{' '}
-											Your Knowledge
-										</h2> */}
-
-										{/* <div className="flip-card">
-											<div
-												className={`flip-card-inner ${flip}`}
-											>
-												<div className="flip-card-front">
-													<h2>
-														<ChangingWord>
-															<span>
-																{
-																	words[
-																		currentIndex
-																	]
-																}
-															</span>
-														</ChangingWord>{' '}
-													</h2>
-												</div>
-												<div className="flip-card-back">
-													<h2>
-														<ChangingWord>
-															<span>
-																{
-																	words[
-																		currentIndex
-																	]
-																}
-															</span>
-														</ChangingWord>{' '}
-													</h2>
-												</div>
-											</div>
-										</div> */}
-
 										<h1>
 											Your Knowledge <br></br>
 											<span className="secondary ">

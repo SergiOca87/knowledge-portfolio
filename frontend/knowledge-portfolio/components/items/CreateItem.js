@@ -131,6 +131,7 @@ export default function CreateItem({ categories, itemsLength }) {
 		// url: '',
 	});
 
+	// TODO: Is this necessary?
 	useEffect(() => {
 		setInputs({
 			...inputs,

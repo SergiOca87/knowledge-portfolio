@@ -92,20 +92,18 @@ export default function UserPortfolioPage({ user, items, categories }) {
 	const [order, setOrder] = useState(filteredItems);
 
 	useEffect(() => {
-		if (activeCategories.length === 0) {
-			setFilteredItems(items);
-		} else {
-			setFilteredItems(
-				items.filter(
-					(item) =>
-						item.categories !== null &&
-						activeCategories.every((category) =>
-							item.categories.includes(category.categoryId)
-						)
-				)
-			);
-		}
-	}, [activeCategories]);
+		setFilteredItems(
+			activeCategories.length === 0
+				? items
+				: items.filter(
+						(item) =>
+							item.categories !== null &&
+							activeCategories.every((category) =>
+								item.categories.includes(category.categoryId)
+							)
+				  )
+		);
+	}, [activeCategories, items]);
 
 	const reorderList = (sourceIndex, destinationIndex) => {
 		if (destinationIndex === sourceIndex) {

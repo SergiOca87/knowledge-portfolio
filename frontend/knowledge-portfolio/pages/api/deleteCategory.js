@@ -31,6 +31,7 @@ export default async function handler(req, res) {
 			.select('*')
 			.eq('userId', session.user.id);
 
+		// Also update the categories on items
 		const newItemsWithFilteredCategories = items.map((item) => ({
 			...item,
 			categories: item.categories.filter(

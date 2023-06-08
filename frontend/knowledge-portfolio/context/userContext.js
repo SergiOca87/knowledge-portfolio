@@ -8,69 +8,56 @@ export const UserProvider = ({ children }) => {
 	const [user, setUser] = useState(null);
 	const [userCategories, setUserCategories] = useState(null);
 
-	//TODO: Can we use getServerSideProps here? Try on _app.js
 	useEffect(() => {
-		let mounted = true;
-		async function getInitialUser() {
-			const {
-				data: { user },
-			} = await supabase.auth.getUser();
-			// const {
-			// 	data: { user },
-			// } = await supabase.auth.getUser();
-			// only update the react state if the component i
-			if (mounted) {
+		const getInitialUser = async () => {
+			try {
+				const { data: user } = await supabase.auth.getUser();
 				if (user) {
-					try {
-						// Create a user profile which is publicly accessible
-						const updates = {
-							id: user.id,
-							username: user.email,
-							updated_at: new Date(),
-						};
+					// Create a user profile which is publicly accessible
+					const updates = {
+						id: user.id,
+						username: user.email,
+						updated_at: new Date(),
+					};
 
-						let { error } = await supabase
-							.from('profiles')
-							.upsert(updates);
-						if (error) {
-							throw error;
-						}
-					} catch (error) {
-						alert(error.message);
+					let { error: profileError } = await supabase
+						.from('profiles')
+						.upsert(updates);
+
+					if (profileError) {
+						throw profileError;
 					}
 
-					try {
-						let { data: profile, error } = await supabase
+					let { data: profile, error: profileFetchError } =
+						await supabase
 							.from('profiles')
 							.select('*')
 							.eq('id', user.id);
 
-						profile && setUser(profile[0]);
+					profile && setUser(profile[0]);
 
-						if (error) {
-							throw error;
-						}
-					} catch (error) {
-						alert(error.message);
+					if (profileFetchError) {
+						throw profileFetchError;
 					}
 
-					try {
-						let { data: categories, error } = await supabase
+					let { data: categories, error: categoriesFetchError } =
+						await supabase
 							.from('categories')
 							.select('*')
 							.eq('userId', user.id);
-						setUserCategories(categories);
 
-						if (error) {
-							throw error;
-						}
-					} catch (error) {
-						alert(error.message);
+					setUserCategories(categories);
+
+					if (categoriesFetchError) {
+						throw categoriesFetchError;
 					}
 				}
-				// setIsLoading(false);
+			} catch (error) {
+				// Handle the error, display it on the UI, or log it
+				console.error('Error:', error.message);
 			}
-		}
+		};
+
 		getInitialUser();
 	}, []);
 

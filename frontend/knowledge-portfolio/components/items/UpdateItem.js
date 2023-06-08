@@ -162,6 +162,7 @@ export default function UpdateItem({ item, categories }) {
 		setActiveCategories(item.categories);
 	}, []);
 
+	//TODO: Is this necessary?
 	useEffect(() => {
 		setInputs({
 			...inputs,
