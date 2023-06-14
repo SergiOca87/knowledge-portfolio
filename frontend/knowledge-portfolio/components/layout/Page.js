@@ -211,7 +211,6 @@ const GlobalStyles = createGlobalStyle`
     border-radius: 10px;
     border: 0;
     margin: 0 auto;
-    height: 100%;
     color: #fff;
 
     // &:before {

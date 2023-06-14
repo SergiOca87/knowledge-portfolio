@@ -1,4 +1,10 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, {
+	useCallback,
+	useContext,
+	useEffect,
+	useRef,
+	useState,
+} from 'react';
 import { Router, useRouter } from 'next/router';
 import styled from 'styled-components';
 import {
@@ -43,6 +49,8 @@ import { ListManager } from 'react-beautiful-dnd-grid';
 import Item from '../components/items/Item';
 
 const StyledListManager = styled.div`
+	margin-top: 2rem;
+
 	& > div {
 		gap: 2rem;
 		align-items: stretch !important;
@@ -50,6 +58,7 @@ const StyledListManager = styled.div`
 		& > div {
 			width: 100%;
 			min-height: 100%;
+			margin-top: 2rem;
 		}
 	}
 `;
@@ -87,23 +96,11 @@ const StyledGridWrap = styled.div`
 export default function UserPortfolioPage({ user, items, categories }) {
 	const { isLoading, session, error } = useSessionContext();
 	const [activeCategories, setActiveCategories] = useState([]);
-
+	const [hasBeenDeletedId, setHasBeenDeletedId] = useState([]);
 	const [filteredItems, setFilteredItems] = useState([]);
 	const [order, setOrder] = useState(filteredItems);
 
-	useEffect(() => {
-		setFilteredItems(
-			activeCategories.length === 0
-				? items
-				: items.filter(
-						(item) =>
-							item.categories !== null &&
-							activeCategories.every((category) =>
-								item.categories.includes(category.categoryId)
-							)
-				  )
-		);
-	}, [activeCategories, items]);
+	//TODO: Can't manage to refresh List Manager when hasBeenDeletedId changes...
 
 	const reorderList = (sourceIndex, destinationIndex) => {
 		if (destinationIndex === sourceIndex) {
@@ -141,6 +138,25 @@ export default function UserPortfolioPage({ user, items, categories }) {
 
 		return updatedItems;
 	};
+
+	useEffect(() => {
+		setFilteredItems(
+			activeCategories.length === 0
+				? items
+				: items.filter(
+						(item) =>
+							item.categories === null ||
+							item.categories.length === 0 || // Include items with no categories
+							(item.categories !== null &&
+								activeCategories.every((category) =>
+									item.categories.includes(
+										category.categoryId
+									)
+								) &&
+								!hasBeenDeletedId.includes(item.id))
+				  )
+		);
+	}, [activeCategories, items, hasBeenDeletedId]);
 
 	return (
 		<Main>
@@ -182,6 +198,12 @@ export default function UserPortfolioPage({ user, items, categories }) {
 											<Item
 												item={item}
 												categories={categories}
+												hasBeenDeletedId={
+													hasBeenDeletedId
+												}
+												setHasBeenDeletedId={
+													setHasBeenDeletedId
+												}
 											/>
 										)}
 										onDragEnd={reorderList}

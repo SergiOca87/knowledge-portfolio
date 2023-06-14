@@ -313,9 +313,7 @@ export default function Home() {
 									`}
 								>
 									<StyledCard>
-										<Card.Header as="h3">
-											Origin
-										</Card.Header>
+										<Card.Header as="h3">What</Card.Header>
 										<Card.Body>
 											<div
 												className="text-center"
@@ -331,9 +329,8 @@ export default function Home() {
 											</div>
 											<span className="separator"></span>
 											<Card.Text>
-												Historical perspective on the
-												concept of a knowledge
-												portfolio.
+												Perspective on the concept of a
+												knowledge portfolio.
 											</Card.Text>
 											<Link href="/about/#origin">
 												<Button

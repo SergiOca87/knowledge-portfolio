@@ -7,13 +7,6 @@ export default function DeleteItem({
 	setHasBeenDeletedId,
 	hasBeenDeletedId,
 }) {
-	// So that the user has to click twice to delete an Item
-	// const [deleteConfirm, setDeleteConfirm] = useState({
-	// 	counter: 0,
-	// 	message: 'Delete',
-	// });
-
-	//TODO: Why is this async?
 	const handleDelete = async (e) => {
 		e.preventDefault();
 

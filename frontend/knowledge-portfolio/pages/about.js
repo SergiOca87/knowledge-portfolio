@@ -43,7 +43,7 @@ export default function about() {
 				<div id="origin" className="content-block">
 					<Row>
 						<Col lg="7">
-							<h2>Origin</h2>
+							<h2>What</h2>
 							<p>
 								The concept of a knowledge portfolio has been
 								around for several decades, with various sources

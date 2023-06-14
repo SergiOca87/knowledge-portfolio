@@ -18,6 +18,9 @@ import TooltipButton from '../ui/TooltipButton';
 
 const StyledCard = styled(Card)`
 	width: 100%;
+	max-width: 65rem;
+	min-height: 30rem;
+	margin: 0 auto 4rem auto;
 
 	.list-group-item {
 		&:not(:last-child) {
@@ -105,22 +108,15 @@ export default function Item({
 	item,
 	categories,
 	isPublic,
-	// setHasBeenDeletedId,
-	// hasBeenDeletedId,
+	setHasBeenDeletedId,
+	hasBeenDeletedId,
 }) {
-	const [hasBeenDeletedId, setHasBeenDeletedId] = useState([]);
-
 	const itemCategories = categories.filter((category) =>
 		item.categories.includes(category.id)
 	);
 
-	return (
-		<StyledCard
-			className={
-				(`${item.id}`,
-				`${item.id === Number(hasBeenDeletedId) ? 'hidden' : ''}`)
-			}
-		>
+	return item.id !== Number(hasBeenDeletedId) ? (
+		<StyledCard>
 			<Card.Header as="h4" className="mb-3">
 				{item.title}
 
@@ -208,5 +204,5 @@ export default function Item({
 				</StyledButtons>
 			)}
 		</StyledCard>
-	);
+	) : null;
 }
