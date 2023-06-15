@@ -1,12 +1,8 @@
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Router from 'next/router';
 
-export default function DeleteItem({
-	id,
-	children,
-	setHasBeenDeletedId,
-	hasBeenDeletedId,
-}) {
+export default function DeleteItem({ id, children }) {
 	const handleDelete = async (e) => {
 		e.preventDefault();
 
@@ -27,11 +23,12 @@ export default function DeleteItem({
 							toast.success(data.message);
 							//TODO: Actually hide the item, maybe using ref?
 
-							setHasBeenDeletedId(() => [
-								...hasBeenDeletedId,
-								id,
-							]);
-							return;
+							// setHasBeenDeletedId(() => [
+							// 	...hasBeenDeletedId,
+							// 	id,
+							// ]);
+							// return;
+							Router.reload(window.location.pathname);
 						}
 					});
 			} catch (err) {

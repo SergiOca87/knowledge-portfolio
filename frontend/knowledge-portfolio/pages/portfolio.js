@@ -54,9 +54,11 @@ const StyledListManager = styled.div`
 	& > div {
 		gap: 2rem;
 		align-items: stretch !important;
+		flex-wrap: wrap;
 
 		& > div {
 			width: 100%;
+			flex-basis: 48%;
 			min-height: 100%;
 			margin-top: 2rem;
 		}
@@ -96,7 +98,6 @@ const StyledGridWrap = styled.div`
 export default function UserPortfolioPage({ user, items, categories }) {
 	const { isLoading, session, error } = useSessionContext();
 	const [activeCategories, setActiveCategories] = useState([]);
-	const [hasBeenDeletedId, setHasBeenDeletedId] = useState([]);
 	const [filteredItems, setFilteredItems] = useState([]);
 	const [order, setOrder] = useState(filteredItems);
 
@@ -152,11 +153,10 @@ export default function UserPortfolioPage({ user, items, categories }) {
 									item.categories.includes(
 										category.categoryId
 									)
-								) &&
-								!hasBeenDeletedId.includes(item.id))
+								))
 				  )
 		);
-	}, [activeCategories, items, hasBeenDeletedId]);
+	}, [activeCategories, items]);
 
 	return (
 		<Main>
@@ -198,12 +198,6 @@ export default function UserPortfolioPage({ user, items, categories }) {
 											<Item
 												item={item}
 												categories={categories}
-												hasBeenDeletedId={
-													hasBeenDeletedId
-												}
-												setHasBeenDeletedId={
-													setHasBeenDeletedId
-												}
 											/>
 										)}
 										onDragEnd={reorderList}

@@ -207,7 +207,7 @@ function YearInReview({ user, items, categories }) {
 							</VerticalTimelineElement>
 						);
 					})}
-					<li>
+					{/* <li>
 						Uncategorized
 						<ul>
 							{listItemsByYearWithoutCategory(items, year).map(
@@ -216,7 +216,7 @@ function YearInReview({ user, items, categories }) {
 								)
 							)}
 						</ul>
-					</li>
+					</li> */}
 				</VerticalTimeline>
 			</StyledYearInReview>
 		));

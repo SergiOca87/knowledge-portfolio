@@ -19,6 +19,7 @@ import {
 	Button,
 	Card,
 	Col,
+	Container,
 	Form,
 	Row,
 	useAccordionButton,
@@ -30,6 +31,7 @@ import { supabase } from '../../utils/supabaseClient';
 import CategoryCloudFilter from '../categories/CategoryCloudFilter';
 import UploadImageWidget from './UploadImageWidget';
 import { useUser } from '@supabase/auth-helpers-react';
+import Main from '../layout/Main';
 
 const StyledForm = styled(Form)`
 	padding: 2rem;
@@ -351,37 +353,57 @@ export default function UpdateItem({ item, categories }) {
 	};
 
 	return (
-		<Card
-			css={css`
-				margin-bottom: 3rem;
-			`}
-		>
-			<Card.Body
-				css={css`
-					padding: 4rem 2rem;
-				`}
-			>
-				{/* TODO: Should be its own component */}
-				<StyledForm method="PUT" onSubmit={handleSubmit}>
-					<Form.Group className="mb-5">
-						<FloatingLabel controlId="floatingInput" label="Title">
-							<Form.Control
-								type="text"
-								name="title"
-								id="title"
-								placeholder="Title"
-								required
-								value={inputs.title}
-								onChange={handleChange}
-							/>
-						</FloatingLabel>
-					</Form.Group>
+		<Main>
+			<Container>
+				<div
+					css={css`
+						max-width: 80rem;
+						margin: 0 auto;
+					`}
+				>
+					<div
+						className="titles"
+						css={css`
+							max-width: 60rem;
+							margin-bottom: 4rem;
+						`}
+					>
+						<h1>Edit Your Item</h1>
+					</div>
+					<Card
+						css={css`
+							margin-bottom: 3rem;
+						`}
+					>
+						<Card.Body
+							css={css`
+								padding: 4rem 2rem;
+							`}
+						>
+							{/* TODO: Should be its own component */}
+							<StyledForm method="PUT" onSubmit={handleSubmit}>
+								<Form.Group className="mb-5">
+									<FloatingLabel
+										controlId="floatingInput"
+										label="Title"
+									>
+										<Form.Control
+											type="text"
+											name="title"
+											id="title"
+											placeholder="Title"
+											required
+											value={inputs.title}
+											onChange={handleChange}
+										/>
+									</FloatingLabel>
+								</Form.Group>
 
-					{/* This is part of a form */}
-					{/* <UploadImageWidget setMainImage={setMainImage} />
+								{/* This is part of a form */}
+								{/* <UploadImageWidget setMainImage={setMainImage} />
 					<p>{mainImage && mainImage.imageName}</p> */}
 
-					{/* <Form.Group className="mb-5">
+								{/* <Form.Group className="mb-5">
 						<Form.Label htmlFor="date">Date</Form.Label>
 						<Form.Control
 							type="date"
@@ -392,38 +414,43 @@ export default function UpdateItem({ item, categories }) {
 						/>
 					</Form.Group>
 						*/}
-					<Form.Group className="mb-5">
-						<FloatingLabel
-							controlId="floatingInput"
-							label="Description"
-						>
-							<Form.Control
-								as="textarea"
-								rows={3}
-								name="description"
-								placeholder="Description"
-								id="description"
-								maxLength="300"
-								value={inputs.description}
-								onChange={handleChange}
-							/>
-						</FloatingLabel>
-					</Form.Group>
-					{userCategories && (
-						<Form.Group className="mb-5">
-							<Form.Label>Categories</Form.Label>
-							<CategoryCloudFilter
-								userCategories={userCategories}
-								activeCategories={activeCategories}
-								setActiveCategories={setActiveCategories}
-							/>
-							<Form.Text>
-								<p className="tip">
-									If you need a new category you can create it{' '}
-									<Link href="/add-category"> here</Link>
-								</p>
-							</Form.Text>
-							{/* 
+								<Form.Group className="mb-5">
+									<FloatingLabel
+										controlId="floatingInput"
+										label="Description"
+									>
+										<Form.Control
+											as="textarea"
+											rows={3}
+											name="description"
+											placeholder="Description"
+											id="description"
+											maxLength="300"
+											value={inputs.description}
+											onChange={handleChange}
+										/>
+									</FloatingLabel>
+								</Form.Group>
+								{userCategories && (
+									<Form.Group className="mb-5">
+										<Form.Label>Categories</Form.Label>
+										<CategoryCloudFilter
+											userCategories={userCategories}
+											activeCategories={activeCategories}
+											setActiveCategories={
+												setActiveCategories
+											}
+										/>
+										<Form.Text>
+											<p className="tip">
+												If you need a new category you
+												can create it{' '}
+												<Link href="/add-category">
+													here
+												</Link>
+											</p>
+										</Form.Text>
+										{/* 
 							<CategoryCloudFilter
 								activeCategories={activeCategories}
 								setActiveCategories={setActiveCategories}
@@ -435,7 +462,7 @@ export default function UpdateItem({ item, categories }) {
 								asButtons={true}
 							/> */}
 
-							{/* <Form.Select
+										{/* <Form.Select
 								aria-label="Categories"
 								name="categories"
 								id="category"
@@ -456,26 +483,34 @@ export default function UpdateItem({ item, categories }) {
 									);
 								})}
 							</Form.Select> */}
-						</Form.Group>
-					)}
+									</Form.Group>
+								)}
 
-					<Form.Group className="mb-5">
-						<Form.Label htmlFor="status">status</Form.Label>
-						<Form.Select
-							aria-label="Status"
-							name="status"
-							id="status"
-							onChange={handleChange}
-						>
-							<option value={true} selected={selected}>
-								Finished
-							</option>
-							<option value={false} selected={!selected}>
-								Unfinished
-							</option>
-						</Form.Select>
-					</Form.Group>
-					{/* <Form.Group className="mb-5">
+								<Form.Group className="mb-5">
+									<Form.Label htmlFor="status">
+										status
+									</Form.Label>
+									<Form.Select
+										aria-label="Status"
+										name="status"
+										id="status"
+										onChange={handleChange}
+									>
+										<option
+											value={true}
+											selected={selected}
+										>
+											Finished
+										</option>
+										<option
+											value={false}
+											selected={!selected}
+										>
+											Unfinished
+										</option>
+									</Form.Select>
+								</Form.Group>
+								{/* <Form.Group className="mb-5">
 						<Form.Label htmlFor="status">
 							Visibility (public or private)
 						</Form.Label>
@@ -489,78 +524,86 @@ export default function UpdateItem({ item, categories }) {
 							<option value="false">Private</option>
 						</Form.Select>
 					</Form.Group> */}
-					<Form.Group className="mb-5">
-						<Form.Label>Single Page Content</Form.Label>
-						<Accordion flush>
-							<Accordion.Item eventKey="0">
-								<Accordion.Header>
-									Single Page Content
-								</Accordion.Header>
-								<Accordion.Body>
-									<StyleEditor
-										wrapperClassName="single-page-editor-wrap"
-										editorClassName="single-page-editor"
-										onContentStateChange={
-											onContentStateChange
-										}
-										toolbar={{
-											image: { enableUpload: true },
-										}}
-									/>
-									{/* <textarea
+								<Form.Group className="mb-5">
+									<Form.Label>Single Page Content</Form.Label>
+									<Accordion flush>
+										<Accordion.Item eventKey="0">
+											<Accordion.Header>
+												Single Page Content
+											</Accordion.Header>
+											<Accordion.Body>
+												<StyleEditor
+													wrapperClassName="single-page-editor-wrap"
+													editorClassName="single-page-editor"
+													onContentStateChange={
+														onContentStateChange
+													}
+													toolbar={{
+														image: {
+															enableUpload: true,
+														},
+													}}
+												/>
+												{/* <textarea
 									value={inputs.singlePageContent}
 									css={css`
 										display: none;
 									`}
 								/> */}
-								</Accordion.Body>
-							</Accordion.Item>
-						</Accordion>
-						<Form.Text>
-							<p className="tip">
-								Adding single page content will enable a "More
-								Details" button on your portfolio item.
-							</p>
-						</Form.Text>
-					</Form.Group>
-					<Row>
-						<Col>
-							<Form.Group
-								className="mb-2"
-								controlId="formUrlTitle"
-							>
-								<Form.Label>URL Title</Form.Label>
-								<Form.Control
-									type="text"
-									name="urlTitle"
-									value={inputs.urlTitle}
-									onChange={handleChange}
-								/>
-							</Form.Group>
-						</Col>
-						<Col>
-							<Form.Group className="mb-5">
-								<Form.Label htmlFor="url">URL</Form.Label>
-								<Form.Control
-									type="url"
-									name="url"
-									value={inputs.url}
-									onChange={handleChange}
-								/>
-							</Form.Group>
-						</Col>
-					</Row>
-					<Form.Text></Form.Text>
-					<Button
-						onClick={handleSubmit}
-						value="submit"
-						variant="primary"
-						id="main-submit"
-					>
-						Update
-					</Button>
-				</StyledForm>
-			</Card.Body>
-		</Card>
+											</Accordion.Body>
+										</Accordion.Item>
+									</Accordion>
+									<Form.Text>
+										<p className="tip">
+											Adding single page content will
+											enable a "More Details" button on
+											your portfolio item.
+										</p>
+									</Form.Text>
+								</Form.Group>
+								<Row>
+									<Col>
+										<Form.Group
+											className="mb-2"
+											controlId="formUrlTitle"
+										>
+											<Form.Label>URL Title</Form.Label>
+											<Form.Control
+												type="text"
+												name="urlTitle"
+												value={inputs.urlTitle}
+												onChange={handleChange}
+											/>
+										</Form.Group>
+									</Col>
+									<Col>
+										<Form.Group className="mb-5">
+											<Form.Label htmlFor="url">
+												URL
+											</Form.Label>
+											<Form.Control
+												type="url"
+												name="url"
+												value={inputs.url}
+												onChange={handleChange}
+											/>
+										</Form.Group>
+									</Col>
+								</Row>
+								<Form.Text></Form.Text>
+								<Button
+									onClick={handleSubmit}
+									value="submit"
+									variant="primary"
+									id="main-submit"
+								>
+									Update
+								</Button>
+							</StyledForm>
+						</Card.Body>
+					</Card>
+				</div>
+			</Container>
+		</Main>
 	);
 }

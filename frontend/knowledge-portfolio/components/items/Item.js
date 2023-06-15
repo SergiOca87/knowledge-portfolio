@@ -104,18 +104,12 @@ const StyledButtons = styled.div`
 	}
 `;
 
-export default function Item({
-	item,
-	categories,
-	isPublic,
-	setHasBeenDeletedId,
-	hasBeenDeletedId,
-}) {
+export default function Item({ item, categories, isPublic }) {
 	const itemCategories = categories.filter((category) =>
 		item.categories.includes(category.id)
 	);
 
-	return item.id !== Number(hasBeenDeletedId) ? (
+	return (
 		<StyledCard>
 			<Card.Header as="h4" className="mb-3">
 				{item.title}
@@ -190,12 +184,7 @@ export default function Item({
 						}
 					>
 						<Button variant="secondary">
-							<DeleteItem
-								id={item.id}
-								setHasBeenDeletedId={setHasBeenDeletedId}
-								hasBeenDeletedId={hasBeenDeletedId}
-								className="btn"
-							>
+							<DeleteItem id={item.id} className="btn">
 								{' '}
 								<FaTrashAlt />
 							</DeleteItem>
@@ -204,5 +193,5 @@ export default function Item({
 				</StyledButtons>
 			)}
 		</StyledCard>
-	) : null;
+	);
 }
