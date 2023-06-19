@@ -8,15 +8,29 @@ import Categories from '../categories/Categories';
 import draftToHtml from 'draftjs-to-html';
 import parse from 'html-react-parser';
 import { Card } from 'react-bootstrap';
+import Link from 'next/link';
 
 const StyledSingleItem = styled(Card)`
 	background-color: var(--tertiary);
-	padding: 4rem 2rem;
+	padding: 4rem 6rem;
 	height: 100%;
+	max-width: 95rem;
+	margin: 0 auto;
+
+	@media screen and (max-width: 767px) {
+		padding: 2rem;
+	}
+
+	h1 {
+		font-size: 4rem;
+		margin-bottom: 3rem;
+	}
+
+	.meta {
+		margin-bottom: 3rem;
+	}
 
 	.content {
-		max-width: 80rem;
-		margin: 0 auto;
 		padding: 2rem 0;
 
 		p,
@@ -42,28 +56,26 @@ export default function SingleItem({ item, categories }) {
 		? draftToHtml(JSON.parse(singleItem.singlePageContent))
 		: '';
 
-	console.log(
-		'markup',
-		markup,
-		'singlePageContent',
-		singleItem.singlePageContent,
-		singleItem
-	);
-
 	return (
 		<>
 			<StyledSingleItem>
 				<h1>{singleItem.title}</h1>
 				<div className="meta">
-					{singleItem.userAlias ||
-						(singleItem.userName && (
-							<p>
-								By:{' '}
-								{singleItem.userAlias
-									? singleItem.userAlias
-									: singleItem.userName}
-							</p>
-						))}
+					<p>
+						By:{' '}
+						<Link href={`/public-portfolio/${singleItem.userId}`}>
+							{singleItem.userAlias ||
+								(singleItem.userName && (
+									<p>
+										By:{' '}
+										{singleItem.userAlias
+											? singleItem.userAlias
+											: singleItem.userName}
+									</p>
+								))}
+						</Link>
+					</p>
+
 					{categories && (
 						<Categories categories={categories} background={true} />
 					)}

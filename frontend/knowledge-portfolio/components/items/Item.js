@@ -148,6 +148,7 @@ export default function Item({ item, categories, isPublic }) {
 
 					{item.categories && (
 						<ListGroupItem>
+							<h5 className="secondary">Categories:</h5>
 							<Categories
 								title={false}
 								categories={itemCategories}
@@ -159,7 +160,7 @@ export default function Item({ item, categories, isPublic }) {
 					{item.singlePageContent && (
 						<ListGroupItem>
 							<Link href={`/items/${item.id}`}>
-								<Button variant="transparent-secondary">
+								<Button variant="outlined" type="button">
 									More Details
 								</Button>
 							</Link>
