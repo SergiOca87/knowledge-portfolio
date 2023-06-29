@@ -72,8 +72,6 @@ const StyledYearInReview = styled.section`
 	}
 `;
 
-// TODO: What about uncategorized items? Maybe that should be returned at the end on its own list?
-
 function YearInReview({ items, categories }) {
 	const user = useUser();
 

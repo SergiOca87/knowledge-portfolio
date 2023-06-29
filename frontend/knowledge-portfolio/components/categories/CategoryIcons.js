@@ -1,9 +1,10 @@
 //TODO: There's some DRY to do here, lot of repeated code.
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import styled, { css } from 'styled-components';
 import * as FontAwesome from 'react-icons/fa';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
+import SingleCategoryIcon from './SingleCategoryIcon';
 
 const StyledIcons = styled.div`
 	.icons-wrap {
@@ -37,8 +38,6 @@ const StyledIcons = styled.div`
 export default function CategoryIcons({ search, selectedIcon }) {
 	let iconsArr = [];
 
-	console.log('inside icons component', selectedIcon);
-
 	// Exclude no "Fa" icons
 	for (let icon in FontAwesome) {
 		if (icon.includes('Fa')) {
@@ -46,76 +45,38 @@ export default function CategoryIcons({ search, selectedIcon }) {
 		}
 	}
 
+	// Use Memo is beneficial here as changing the category name would also trigger icon filtering, which seems to cause performance issues
+	const filterIcons = useMemo(
+		function () {
+			return iconsArr
+				.filter((icon) =>
+					icon.toLowerCase().includes(search.toLowerCase())
+				)
+				.map((icon) => {
+					return (
+						<SingleCategoryIcon
+							icon={icon}
+							selectedIcon={selectedIcon}
+							key={icon}
+						/>
+					);
+				});
+		},
+		[search]
+	);
+
 	return (
 		<StyledIcons>
 			<div className="icons-wrap">
 				{search.length
-					? iconsArr
-							.filter((icon) =>
-								icon
-									.toLowerCase()
-									.includes(search.toLowerCase())
-							)
-							.map((icon) => {
-								const IconName = FontAwesome[icon];
-
-								return (
-									<OverlayTrigger
-										placement={'top'}
-										overlay={
-											<Tooltip
-												id={`tooltip-top}`}
-												css={css`
-													position: fixed;
-												`}
-											>
-												{icon.substring(2)}
-											</Tooltip>
-										}
-									>
-										<div
-											className={`icon ${
-												icon === selectedIcon
-													? 'active'
-													: ''
-											}`}
-											data-name={icon}
-											key={icon}
-										>
-											<IconName />
-										</div>
-									</OverlayTrigger>
-								);
-							})
+					? filterIcons
 					: iconsArr.map((icon) => {
-							const IconName = FontAwesome[icon];
-
 							return (
-								<OverlayTrigger
-									placement={'top'}
-									overlay={
-										<Tooltip
-											id={`tooltip-top}`}
-											css={css`
-												position: fixed;
-											`}
-										>
-											{icon.substring(2)}
-										</Tooltip>
-									}
-								>
-									<div
-										className={`icon ${
-											icon === selectedIcon
-												? 'active'
-												: ''
-										}`}
-										data-name={icon}
-										key={icon}
-									>
-										<IconName />
-									</div>
-								</OverlayTrigger>
+								<SingleCategoryIcon
+									icon={icon}
+									selectedIcon={selectedIcon}
+									key={icon}
+								/>
 							);
 					  })}
 			</div>

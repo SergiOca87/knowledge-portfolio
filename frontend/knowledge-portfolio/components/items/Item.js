@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import React, { useState } from 'react';
+import React, { memo } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import DeleteItem from './DeleteItem';
@@ -103,12 +103,12 @@ const StyledButtons = styled.div`
 		}
 	}
 `;
-
-export default function Item({ item, categories, isPublic }) {
+const Item = ({ item, categories, isPublic }) => {
 	const itemCategories = categories.filter((category) =>
 		item.categories.includes(category.id)
 	);
 
+	console.log('single item rendering');
 	return (
 		<StyledCard>
 			<Card.Header as="h4" className="mb-3">
@@ -195,4 +195,6 @@ export default function Item({ item, categories, isPublic }) {
 			)}
 		</StyledCard>
 	);
-}
+};
+
+export default memo(Item);

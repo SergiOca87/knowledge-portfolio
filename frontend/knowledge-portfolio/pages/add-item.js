@@ -15,7 +15,6 @@ import { supabase } from '../utils/supabaseClient';
 import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
 
 //TODO: If user create item, else use sign in
-
 export default function createItems({ categories, items }) {
 	return (
 		<>

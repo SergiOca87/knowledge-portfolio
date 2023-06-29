@@ -24,7 +24,7 @@ function TooltipButton({ tooltipText, link, icon }) {
 							pathname: link,
 						}}
 					>
-						{icon}
+						<a>{icon}</a>
 					</Link>
 				</Button>
 			</OverlayTrigger>

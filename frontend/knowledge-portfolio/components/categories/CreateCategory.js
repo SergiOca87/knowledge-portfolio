@@ -71,13 +71,11 @@ export default function CreateCategory() {
 
 		// If the icon is already selected, remove it, else add it
 		if (inputs.icon === iconName) {
-
 			setInputs({
 				...inputs,
 				icon: '',
 			});
 		} else {
-
 			setInputs({
 				...inputs,
 				icon: iconName,
@@ -193,7 +191,7 @@ export default function CreateCategory() {
 						<Container>
 							<div onClick={handleIconClick}>
 								<CategoryIcons
-									search={iconSearch}
+									search={`fa${iconSearch}`}
 									selectedIcon={inputs.icon}
 								/>
 							</div>

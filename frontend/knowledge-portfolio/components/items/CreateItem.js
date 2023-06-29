@@ -1,11 +1,10 @@
 /* eslint-disable react/react-in-jsx-scope */
-
+//TODO: Look for conditionally render components and load them using lazy() and Suspense or dynamic imports.
 //TODO: For the category, load user categories or create a new one (and assign it to the current user)
-//TODO: How to assign the item to a choosen category
 //TODO: Add Toast for errors
 //TODO: At the moment we can connect existing categories, but may be useful to be able to create them ehre as well
-//TODO: Refetch the logged in user (the only poissible user that should be able to create items)
 import { useContext, useEffect, useState } from 'react';
+
 import Link from 'next/link';
 import Router from 'next/router';
 import { EditorState, convertFromRaw } from 'draft-js';
@@ -110,6 +109,11 @@ const StyledForm = styled(Form)`
 
 const StyleEditor = styled(Editor)`
 	color: #000;
+
+	.embedded,
+	.image-upload {
+		display: none;
+	}
 `;
 
 export default function CreateItem({ categories, itemsLength }) {
@@ -118,6 +122,7 @@ export default function CreateItem({ categories, itemsLength }) {
 
 	const [activeCategories, setActiveCategories] = useState([]);
 	const [mainImage, setMainImage] = useState('');
+	const [isAccordionOpen, setIsAccordionOpen] = useState(false);
 
 	const [inputs, setInputs] = useState({
 		title: '',
@@ -137,6 +142,10 @@ export default function CreateItem({ categories, itemsLength }) {
 			...inputs,
 		});
 	}, [user]);
+
+	const accordionToggleHandler = () => {
+		setIsAccordionOpen(true);
+	};
 
 	// Single page content
 	//Maybe we should extract this
@@ -409,21 +418,48 @@ export default function CreateItem({ categories, itemsLength }) {
 						<Form.Label>Single Page Content</Form.Label>
 						<Accordion flush>
 							<Accordion.Item eventKey="0">
-								<Accordion.Header>
+								<Accordion.Header
+									onClick={accordionToggleHandler}
+								>
 									Single Page Content
 								</Accordion.Header>
 								<Accordion.Body>
-									<StyleEditor
-										wrapperClassName="single-page-editor-wrap"
-										editorClassName="single-page-editor"
-										onContentStateChange={
-											onContentStateChange
-										}
-										toolbar={{
-											image: { enableUpload: true },
-										}}
-									/>
-									{/* <textarea
+									{isAccordionOpen && (
+										<StyleEditor
+											wrapperClassName="single-page-editor-wrap"
+											editorClassName="single-page-editor"
+											toolbarClassName="single-page-toolbar"
+											onContentStateChange={
+												onContentStateChange
+											}
+											// toolbar={{
+											// 	image: { enableUpload: true },
+											// }}
+											toolbar={{
+												options: [
+													'inline',
+													'blockType',
+													'fontSize',
+													'list',
+													'textAlign',
+													'history',
+												],
+												inline: { inDropdown: true },
+												list: { inDropdown: true },
+												textAlign: { inDropdown: true },
+												link: { inDropdown: true },
+												history: { inDropdown: true },
+												embedded: {
+													className: 'embedded',
+												},
+												image: {
+													enableUpload: false,
+													className: 'image-upload',
+												},
+											}}
+										/>
+									)}
+									{/* 
 									value={inputs.singlePageContent}
 									css={css`
 										display: none;

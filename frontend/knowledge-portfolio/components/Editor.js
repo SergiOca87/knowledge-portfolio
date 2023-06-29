@@ -1,13 +1,12 @@
-/* eslint-disable react/react-in-jsx-scope */
-/* eslint-disable no-unused-expressions */
 import dynamic from 'next/dynamic';
 import React, { Component } from 'react';
-// import { Editor } from 'react-draft-wysiwyg';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
-const Editor = dynamic(
+const DynamicEditor = dynamic(
 	() => import('react-draft-wysiwyg').then((mod) => mod.Editor),
-	{ ssr: false }
+	{ ssr: false, loading: () => <p>Loading...</p> }
 );
 
-export default Editor;
+export default function Editor() {
+	return <DynamicEditor />;
+}
