@@ -33,7 +33,7 @@ const StyledForm = styled(Form)`
 	label {
 		font-size: 1.4rem;
 		text-transform: uppercase;
-		font-family: 'Montserrat-Bold';
+		font-family: 'KumbhSans-Regular';;
 		margin-bottom: 1rem;
 		letter-spacing: 1px;
 		color: var(--secondary);

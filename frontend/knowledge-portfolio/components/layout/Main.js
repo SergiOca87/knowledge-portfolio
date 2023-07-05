@@ -34,7 +34,7 @@ const StyledMain = styled.main`
 export default function Main({ children }) {
 	return (
 		<StyledMain>
-			<div className="noise-overlay"> </div>
+			{/* <div className="noise-overlay"> </div> */}
 			<div className="children-wrap">{children}</div>
 		</StyledMain>
 	);

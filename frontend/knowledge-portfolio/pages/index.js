@@ -62,6 +62,10 @@ const StyledMain = styled.main`
 			align-items: center;
 		}
 
+		p {
+			margin-bottom: 3rem;
+		}
+
 		.title-fade {
 			transition: all 300ms;
 
@@ -128,75 +132,12 @@ const StyledMain = styled.main`
 	}
 
 	.cards {
-		margin-top: -7rem;
+		margin-top: -4rem;
 
-		.card {
-			.card-body {
-				display: flex;
-				flex-direction: column;
-				justify-content: space-between;
-			}
-		}
+		
 	}
 
-	.flip-card {
-		background-color: transparent;
-		width: 20rem;
-		height: 8rem;
-		perspective: 1000px;
-	}
-
-	.flip-card-inner {
-		position: relative;
-		width: 100%;
-		height: 100%;
-		text-align: center;
-		transition: transform 0.6s;
-		transform-style: preserve-3d;
-		box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-
-		&.true {
-			transform: rotateX(180deg);
-
-			h2 {
-				transform: rotate(180deg);
-			}
-		}
-	}
-
-	.flip-card-front,
-	.flip-card-back {
-		position: absolute;
-		width: 100%;
-		height: 100%;
-		-webkit-backface-visibility: hidden;
-		backface-visibility: hidden;
-	}
-
-	.flip-card-front {
-		background-color: var(--secondary);
-		display: flex;
-		justify-content: center;
-		align-items: center;
-
-		h2 {
-			color: #fff;
-			margin: 0;
-		}
-	}
-
-	.flip-card-back {
-		background-color: var(--primary);
-		transform: rotateY(180deg);
-		display: flex;
-		justify-content: center;
-		align-items: center;
-
-		h2 {
-			color: #fff;
-			margin: 0;
-		}
-	}
+	
 `;
 
 const StyledImageWrap = styled.div`
@@ -261,7 +202,7 @@ export default function Home() {
 										</Link>
 										{/* <h2
 											css={css`
-												font-family: 'Montserrat-Bold';
+												font-family: 'KumbhSans-Regular';;
 												margin: 0;
 												margin-top: 2rem;
 												margin-left: 2rem;
@@ -301,6 +242,7 @@ export default function Home() {
 					initial="hidden"
 					whileInView="show"
 					viewport={{ once: true }}
+					className="cards"
 				>
 					<Container>
 						<Row>

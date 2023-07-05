@@ -24,8 +24,8 @@ const StyledNav = styled.nav`
 	gap: 5rem;
 	z-index: 10;
 	position: relative;
-	background-color: var(--black);
-	border-bottom: 1px solid var(--secondary);
+	background-color: var(--grey);
+	
 
 	h1 {
 		margin: 0;
@@ -37,7 +37,7 @@ const StyledNav = styled.nav`
 		display: flex;
 		align-items: center;
 		text-transform: uppercase;
-		font-family: 'Montserrat-Bold';
+		font-family: 'KumbhSans-Regular';;
 		color: var(--primary);
 		text-decoration: none;
 		font-size: 1.5rem;

@@ -19,7 +19,7 @@ const StyledCard = styled(Card)`
 		color: var(--black);
 		padding: 1.8rem 3rem;
 		border-radius: 30px;
-		font-family: 'Montserrat-Bold';
+		font-family: 'KumbhSans-Regular';;
 		text-transform: uppercase;
 		font-size: 1.4rem;
 		border: 2px solid var(--primary);
@@ -78,13 +78,13 @@ export default function SignInUp({ serverUser, session }) {
 								bodyFontFamily: `Montserrat-Regular`,
 								buttonFontFamily: `Montserrat-Regular`,
 								inputFontFamily: `Montserrat-Regular`,
-								labelFontFamily: 'Montserrat-Bold',
-							},
+								labelFontFamily: 'KumbhSans-Regular';,
 						},
 					},
+				},
 				}}
-				// theme="dark"
-				providers={['google', 'github']}
+			// theme="dark"
+			providers={['google', 'github']}
 			/>
 		</StyledCard>
 	);
