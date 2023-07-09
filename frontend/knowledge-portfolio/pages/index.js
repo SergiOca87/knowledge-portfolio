@@ -126,7 +126,7 @@ const StyledMain = styled.main`
 
 	strong {
 		color: var(--primary);
-		font-family: 'Montserrat-Medium';
+		font-family: 'KumbhSans-Bold';
 		background-color: var(--secondary);
 		padding: 0 3px;
 	}
@@ -188,8 +188,7 @@ export default function Home() {
 										</h1>
 
 										<p>
-											Get up and running with a portfolio
-											in no time
+											Invest in Yourself, Showcase Your Growth
 										</p>
 
 										<Link href="/portfolio">
@@ -197,7 +196,7 @@ export default function Home() {
 												variant="primary btn-round btn-big"
 												type="button"
 											>
-												Get Started
+												Get Started for Free
 											</Button>
 										</Link>
 										{/* <h2

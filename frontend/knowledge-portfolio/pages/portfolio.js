@@ -49,7 +49,7 @@ import { ListManager } from 'react-beautiful-dnd-grid';
 import Item from '../components/items/Item';
 
 const StyledListManager = styled.div`
-	margin-top: 2rem;
+	margin-top: 6rem;
 
 	& > div {
 		gap: 2rem;
@@ -58,7 +58,7 @@ const StyledListManager = styled.div`
 
 		& > div {
 			width: 100%;
-			flex-basis: 48%;
+			flex: 1;
 			min-height: 100%;
 			margin-top: 2rem;
 		}
@@ -68,7 +68,7 @@ const StyledListManager = styled.div`
 const StyledUserCard = styled.div`
 	display: flex;
 	align-items: center;
-	margin-bottom: 4rem;
+	margin-bottom: 6rem;
 
 	.avatar {
 		width: 10rem;
@@ -89,10 +89,11 @@ const StyledUserCard = styled.div`
 `;
 
 const StyledGridWrap = styled.div`
-	border-top: 1px solid var(--secondary);
-	padding-top: 4rem;
+	border-top: 1px solid var(--primary);
+	padding: 6rem 2rem 2rem 2rem;
 	z-index: 10;
 	position: relative;
+	background-color: var(--grey);
 `;
 
 export default function UserPortfolioPage({ user, items, categories }) {
@@ -145,16 +146,16 @@ export default function UserPortfolioPage({ user, items, categories }) {
 			activeCategories.length === 0
 				? items
 				: items.filter(
-						(item) =>
-							item.categories === null ||
-							item.categories.length === 0 || // Include items with no categories
-							(item.categories !== null &&
-								activeCategories.every((category) =>
-									item.categories.includes(
-										category.categoryId
-									)
-								))
-				  )
+					(item) =>
+						item.categories === null ||
+						item.categories.length === 0 || // Include items with no categories
+						(item.categories !== null &&
+							activeCategories.every((category) =>
+								item.categories.includes(
+									category.categoryId
+								)
+							))
+				)
 		);
 	}, [activeCategories, items]);
 
@@ -180,14 +181,17 @@ export default function UserPortfolioPage({ user, items, categories }) {
 							<PortfolioControls user={user} />
 							<StyledGridWrap>
 								{activeCategories && (
-									<CategoryCloudFilter
-										activeCategories={activeCategories}
-										setActiveCategories={
-											setActiveCategories
-										}
-										userCategories={categories}
-										all={true}
-									/>
+									<>
+										<p>Filter By Category:</p>
+										<CategoryCloudFilter
+											activeCategories={activeCategories}
+											setActiveCategories={
+												setActiveCategories
+											}
+											userCategories={categories}
+											all={true}
+										/>
+									</>
 								)}
 								<StyledListManager>
 									<ListManager

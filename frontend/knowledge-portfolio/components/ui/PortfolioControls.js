@@ -22,7 +22,7 @@ const StyledPortfolioControls = styled.div`
 	div {
 		&:first-child {
 			button {
-				border-left: 1px solid var(--secondary);
+				border-left: 1px solid var(--primary);
 			}
 		}
 	}
@@ -67,8 +67,8 @@ const StyledPortfolioControls = styled.div`
 			background-color: var(--secondary);
 
 			svg {
-				stroke: var(--black);
-				fill: var(--black);
+				stroke: #fff;
+				fill: #fff;
 			}
 		}
 	}

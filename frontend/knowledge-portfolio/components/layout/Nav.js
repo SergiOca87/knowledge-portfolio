@@ -30,14 +30,13 @@ const StyledNav = styled.nav`
 	h1 {
 		margin: 0;
 		font-size: 5.5rem;
-		font-family: 'Montserrat-ExtraBold';
 	}
 
 	a {
 		display: flex;
 		align-items: center;
 		text-transform: uppercase;
-		font-family: 'KumbhSans-Regular';;
+		font-family: 'KumbhSans-Bold';
 		color: var(--primary);
 		text-decoration: none;
 		font-size: 1.5rem;

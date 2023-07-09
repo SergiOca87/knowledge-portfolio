@@ -36,7 +36,7 @@ const StyledSingleItem = styled(Card)`
 		p,
 		li,
 		span {
-			color: #fff;
+			color: var(--text);
 			font-size: 1.8rem;
 			background-color: transparent;
 		}

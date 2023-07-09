@@ -134,15 +134,16 @@ const GlobalStyles = createGlobalStyle`
     }
 
     &-outlined {
-      background-color: transparent;
+      background-color: #fff;
       border: 2px solid var(--primary);
-      color: #fff;
+      color: var(--text-color);
       border-radius: 3px;
       font-family: 'KumbhSans-Bold';
 
-      &:hover {
+
+      &:hover, &:focus, &.active {
         background-color: var(--primary);
-        color: var(--black);
+        color: #fff;
         border: 2px solid var(--primary);
       }
     }
@@ -174,14 +175,13 @@ const GlobalStyles = createGlobalStyle`
     flex-direction: column;
     min-width: 0;
     word-wrap: break-word;
-    background-color: var(--grey);
+    background-color: #fff;
+    border: 1px solid #ebebeb;
     // background-clip: border-box;
     border-radius: 10px;
-    border: 0;
+    
     margin: 0 auto;
     color: var(--text-color);
-
-
 
     .card-header {
       padding: 1.2rem 1.5rem;
@@ -191,6 +191,8 @@ const GlobalStyles = createGlobalStyle`
       border-top-right-radius: 10px;
       border-top-left-radius: 10px;
       border-bottom: none;
+      background-color: #fff;
+      border-bottom: 1px solid #ebebeb;
     }
 
     .card-body {
@@ -214,6 +216,9 @@ const GlobalStyles = createGlobalStyle`
     svg {
       max-width: 8rem;
     }
+
+    .list-group-item {  border: none;}
+  
   }
 
   label {
@@ -253,6 +258,14 @@ const GlobalStyles = createGlobalStyle`
   }
   .secondary-bg {
     background-color: var(--secondary);
+  }
+
+  .btn.btn-secondary {
+
+    &:hover {
+      background-color: var(--primary);
+      color: #fff;
+    }
   }
 `;
 

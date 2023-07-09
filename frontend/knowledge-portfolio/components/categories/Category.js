@@ -18,7 +18,7 @@ const StyledCategory = styled.div`
 	.category {
 		font-size: 1.8rem;
 		margin-right: 1rem;
-		color: #fff;
+		color: var(--text-color);
 	}
 
 	div {
@@ -29,8 +29,8 @@ const StyledCategory = styled.div`
 		text-transform: uppercase;
 		padding: 0.8rem 1.5rem;
 		letter-spacing: 1px;
-		font-family: 'Montserrat-Medium';
-		color: #fff;
+		font-family: 'KumbhSans-Bold';
+		color: var(--text-color);
 	}
 
 	.delete-category {
@@ -57,6 +57,7 @@ const StyledCategoryButton = styled(Button)`
 	display: flex;
 	align-items: center;
 	gap: 0.5rem;
+	
 
 	span {
 		font-size: 1.2rem;

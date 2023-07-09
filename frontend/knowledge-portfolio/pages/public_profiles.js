@@ -26,7 +26,7 @@ const StyledUserCard = styled.div`
 			margin: 0;
 			color: var(--primary);
 			color: #fff;
-			font-family: 'Montserrat-Medium';
+			font-family: 'KumbhSans-Bold';
 			font-size: 2.2rem;
 		}
 
@@ -93,7 +93,7 @@ const StyledUserCard = styled.div`
 				text-transform: uppercase;
 				padding: 0.8rem 1.5rem;
 				letter-spacing: 1px;
-				font-family: 'Montserrat-Medium';
+				font-family: 'KumbhSans-Bold';
 				margin-right: 0.5rem;
 			}
 		}
@@ -144,11 +144,11 @@ export default function publicProfiles() {
 													// Set a cinditional here, if user, ok, else show toast to log in
 													showMessageModal
 														? setShowMessageModal(
-																false
-														  )
+															false
+														)
 														: setShowMessageModal(
-																true
-														  );
+															true
+														);
 													setReceiverId(
 														singleUser.id
 													);

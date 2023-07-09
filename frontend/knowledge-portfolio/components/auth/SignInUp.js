@@ -61,7 +61,7 @@ export default function SignInUp({ serverUser, session }) {
 								defaultButtonBackground: 'var(--black)',
 								defaultButtonBackgroundHover: 'transparent',
 								defaultButtonBorder: 'var(--primary)',
-								defaultButtonText: '#fff',
+								defaultButtonText: 'var(--text-color)',
 								inputBorder: 'var(--primary)',
 								inputText: '#fff',
 								dividerBackground: 'var(--primary)',
@@ -74,17 +74,17 @@ export default function SignInUp({ serverUser, session }) {
 								baseLabelSize: '14px',
 								baseButtonSize: '14px',
 							},
-							fonts: {
-								bodyFontFamily: `Montserrat-Regular`,
-								buttonFontFamily: `Montserrat-Regular`,
-								inputFontFamily: `Montserrat-Regular`,
-								labelFontFamily: 'KumbhSans-Regular';,
+							// fonts: {
+							// 	bodyFontFamily: `Montserrat-Regular`,
+							// 	buttonFontFamily: `Montserrat-Regular`,
+							// 	inputFontFamily: `Montserrat-Regular`,
+							// 	labelFontFamily: 'KumbhSans-Regular',
+							// },
 						},
 					},
-				},
 				}}
-			// theme="dark"
-			providers={['google', 'github']}
+				// theme="dark"
+				providers={['google', 'github']}
 			/>
 		</StyledCard>
 	);
