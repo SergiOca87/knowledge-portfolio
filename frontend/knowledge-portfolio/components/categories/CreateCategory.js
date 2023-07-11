@@ -189,12 +189,15 @@ export default function CreateCategory() {
 							/>
 						</Form.Group>
 						<Container>
-							<div onClick={handleIconClick}>
-								<CategoryIcons
-									search={`fa${iconSearch}`}
-									selectedIcon={inputs.icon}
-								/>
-							</div>
+							{iconSearch.length > 0 &&
+								<div onClick={handleIconClick}>
+									<CategoryIcons
+										search={iconSearch}
+										selectedIcon={inputs.icon}
+										importFa={true}
+									/>
+								</div>
+							}
 						</Container>
 
 						{/* <label htmlFor="completed">

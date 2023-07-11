@@ -38,6 +38,8 @@ const StyledIcons = styled.div`
 export default function CategoryIcons({ search, selectedIcon }) {
 	let iconsArr = [];
 
+	console.log(search.length);
+
 	// Exclude no "Fa" icons
 	for (let icon in FontAwesome) {
 		if (icon.includes('Fa')) {
@@ -71,14 +73,14 @@ export default function CategoryIcons({ search, selectedIcon }) {
 				{search.length
 					? filterIcons
 					: iconsArr.map((icon) => {
-							return (
-								<SingleCategoryIcon
-									icon={icon}
-									selectedIcon={selectedIcon}
-									key={icon}
-								/>
-							);
-					  })}
+						return (
+							<SingleCategoryIcon
+								icon={icon}
+								selectedIcon={selectedIcon}
+								key={icon}
+							/>
+						);
+					})}
 			</div>
 		</StyledIcons>
 	);

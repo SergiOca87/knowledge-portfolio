@@ -82,8 +82,6 @@ export default function SingleItem({ item, categories }) {
 				</div>
 				<hr />
 				<div className="content">
-					{singleItem.singlePageContent &&
-						console.log(JSON.parse(singleItem.singlePageContent))}
 					{parse(`${markup}`)}
 				</div>
 			</StyledSingleItem>

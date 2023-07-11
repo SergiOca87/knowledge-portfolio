@@ -121,7 +121,7 @@ const GlobalStyles = createGlobalStyle`
    
     &-primary {
       background-color: var(--primary);
-      border: 2px solid var(--primary);
+      border: 1px solid var(--primary);
       color: var(--bg);
       border-radius: 3px;
       font-family: 'KumbhSans-Bold';
@@ -129,13 +129,13 @@ const GlobalStyles = createGlobalStyle`
       &:hover {
         background-color: transparent;
         color: var(--primary);
-        border: 2px solid var(--primary);
+        border: 1px solid var(--primary);
       }
     }
 
     &-outlined {
       background-color: #fff;
-      border: 2px solid var(--primary);
+      border: 1px solid var(--primary);
       color: var(--text-color);
       border-radius: 3px;
       font-family: 'KumbhSans-Bold';
@@ -144,7 +144,7 @@ const GlobalStyles = createGlobalStyle`
       &:hover, &:focus, &.active {
         background-color: var(--primary);
         color: #fff;
-        border: 2px solid var(--primary);
+        border: 1px solid var(--primary);
       }
     }
 
