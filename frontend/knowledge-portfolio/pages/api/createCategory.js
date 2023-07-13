@@ -3,11 +3,13 @@ import { supabase } from '../../utils/supabaseClient';
 
 export default async function handler(req, res) {
 	if (req.method === 'POST') {
-		// Extract values
+
+		const { name, icon, userId } = req.body;
+
 		const newCategory = {
-			name: req.body.name,
-			icon: req.body.icon,
-			userId: req.body.userId,
+			name,
+			icon,
+			userId
 		};
 
 		console.log('trying to create', newCategory);

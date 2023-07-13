@@ -4,6 +4,7 @@
 import Link from 'next/link';
 import { useContext, useEffect, useState } from 'react';
 
+import useApi from '../../hooks/useApi';
 import styled from 'styled-components';
 import { Button, Card, Col, Container, Form, Row } from 'react-bootstrap';
 import * as FontAwesome from 'react-icons/fa';
@@ -44,6 +45,9 @@ export default function CreateCategory() {
 	const user = useUser();
 	const [iconSearch, setIconSearch] = useState('');
 	const router = useRouter();
+
+	const [{ data, isLoading, error }, apiInteraction] = useApi();
+
 
 	const [inputs, setInputs] = useState({
 		name: '',
@@ -87,12 +91,21 @@ export default function CreateCategory() {
 		setIconSearch(e.target.value);
 	};
 
+
+	// Data changes by the useApi hook
+	//TODO: BUT, we should try to handle this logic inside of the UseApi hook
+	useEffect(() => {
+		console.log(data);
+
+		//TODO: Logic to handle code response here (200, 303, etc)
+	}, [data]);
+
+
 	// Submit current state to create a new Item
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 
 		const { name, icon } = inputs;
-
 		const newCategory = { name, icon, userId: user.id };
 
 		if (
@@ -104,6 +117,8 @@ export default function CreateCategory() {
 			toast.error('There was a problem creating your category');
 			return;
 		}
+
+		apiInteraction('/api/createCategory', 'POST', newCategory);
 
 		try {
 			fetch('/api/createCategory', {

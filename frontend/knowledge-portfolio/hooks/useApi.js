@@ -1,4 +1,4 @@
-import { useEffect, useReducer } from 'react';
+import { useCallback, useEffect, useReducer } from 'react';
 
 // Initial state
 const initialApiState = {
@@ -12,8 +12,7 @@ function apiReducer(state, action) {
         return {
             ...state,
             isLoading: state.data ? false : true,
-            error: null,
-            success: null
+            error: null
         }
     }
 
@@ -36,30 +35,29 @@ function apiReducer(state, action) {
     return initialApiState;
 }
 
-function useApi(url, method, body) {
+function useApi() {
     const [apiState, dispatch] = useReducer(apiReducer, initialApiState);
 
-    const apiInteraction = useCallback(async function apiInteraction() {
+    const apiInteraction = useCallback(async function apiInteraction(url, method, reqBody) {
 
         dispatch({ type: 'API_INTERACTION' });
 
         try {
-            const response = fetch(url, {
+            const response = await fetch(url, {
                 method: method,
-                body: JSON.stringify({ body }),
+                body: JSON.stringify(reqBody),
                 headers: {
                     'Content-Type': 'application/json'
                 }
             });
 
-            if (!reponse.ok) {
+            if (!response.ok) {
                 throw new Error('API Interaction Failed');
-
             }
 
             const apiInteractionResult = await response.json();
 
-            dispatch({ type: 'API_SUCCESS', payload: apiInteractionResult })
+            dispatch({ type: 'API_SUCCESS', payload: apiInteractionResult });
 
         } catch (error) {
             dispatch({ type: 'API_ERROR', payload: error });
@@ -70,5 +68,12 @@ function useApi(url, method, body) {
         apiInteraction();
     }, [apiInteraction]);
 
+    //TODO: Can we handle success and error UI display here?
+    useEffect(() => {
+        console.log('apiState', apiState);
+    }, [apiState]);
+
     return [apiState, apiInteraction];
 }
+
+export default useApi;

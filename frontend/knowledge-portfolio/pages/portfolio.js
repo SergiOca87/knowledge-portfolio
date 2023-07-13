@@ -123,7 +123,6 @@ export default function UserPortfolioPage({ user, items, categories }) {
 		// Order is just an Array of ids with the new order, not sure if it's needed yet
 		setOrder(updatedItems.map((item) => item.id));
 
-		//TODO: Use supabase.upsert to update several items
 		try {
 			fetch('/api/reorderItems', {
 				method: 'PUT',
