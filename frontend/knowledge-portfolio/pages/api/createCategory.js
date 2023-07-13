@@ -12,8 +12,6 @@ export default async function handler(req, res) {
 			userId
 		};
 
-		console.log('trying to create', newCategory);
-
 		// Auth protected API route
 		const supabase = createServerSupabaseClient({
 			req,
@@ -44,7 +42,6 @@ export default async function handler(req, res) {
 			if (countError) {
 				res.status(500).json({ error: 'Something went wrong' });
 			} else {
-				console.log('the category does exist');
 				res.status(303).json({
 					code: 303,
 					countData,

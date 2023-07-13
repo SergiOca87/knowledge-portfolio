@@ -53,7 +53,7 @@ const StyledForm = styled(Form)`
 		font-size: 1.6rem !important;
 		background-color: transparent !important;
 		border: 1px solid var(--primary);
-		color: #fff !important;
+		color: var(--text);
 
 		&:placeholder-shown {
 			color: #fff;
@@ -75,7 +75,7 @@ const StyledForm = styled(Form)`
 		background-color: transparent !important;
 		border: 1px solid var(--primary);
 		border-radius: 0.375rem;
-		color: #fff !important;
+		color: var(--text);
 
 		.accordion-item {
 			background-color: transparent !important;
@@ -86,7 +86,7 @@ const StyledForm = styled(Form)`
 			font-size: 1.6rem !important;
 			background-color: transparent !important;
 			border: none;
-			color: #fff !important;
+			color: var(--text);
 		}
 
 		&:placeholder-shown {

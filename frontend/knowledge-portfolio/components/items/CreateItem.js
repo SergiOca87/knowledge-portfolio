@@ -3,16 +3,13 @@
 //TODO: For the category, load user categories or create a new one (and assign it to the current user)
 //TODO: Add Toast for errors
 //TODO: At the moment we can connect existing categories, but may be useful to be able to create them ehre as well
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import Link from 'next/link';
-import Router from 'next/router';
-import { EditorState, convertFromRaw } from 'draft-js';
+import useApi from '../../hooks/useApi';
 import { toast } from 'react-toastify';
+import { EditorState, convertFromRaw } from 'draft-js';
 import 'react-toastify/dist/ReactToastify.css';
-
-import FloatingLabel from 'react-bootstrap/FloatingLabel';
-
 import styled, { css } from 'styled-components';
 import {
 	Accordion,
@@ -21,15 +18,10 @@ import {
 	Col,
 	Form,
 	Row,
-	useAccordionButton,
 } from 'react-bootstrap';
 
 import Editor from '../Editor';
-// import { useUserState } from '../../context/userContext';
-// import { supabase } from '../../utils/supabaseClient';
 import CategoryCloudFilter from '../categories/CategoryCloudFilter';
-import DragDropFile from '../DragDropFile';
-import UploadImageWidget from './UploadImageWidget';
 import { useUser } from '@supabase/auth-helpers-react';
 
 const StyledForm = styled(Form)`
@@ -52,7 +44,7 @@ const StyledForm = styled(Form)`
 		font-size: 1.6rem !important;
 		background-color: transparent !important;
 		border: 1px solid var(--primary);
-		color: #fff !important;
+		color: var(--text);
 
 		&:placeholder-shown {
 			color: #fff;
@@ -74,7 +66,7 @@ const StyledForm = styled(Form)`
 		background-color: transparent !important;
 		border: 1px solid var(--primary);
 		border-radius: 0.375rem;
-		color: #fff !important;
+		color: var(--text);
 
 		.accordion-item {
 			background-color: transparent !important;
@@ -85,7 +77,7 @@ const StyledForm = styled(Form)`
 			font-size: 1.6rem !important;
 			background-color: transparent !important;
 			border: none;
-			color: #fff !important;
+			color: var(--text);
 		}
 
 		&:placeholder-shown {
@@ -123,6 +115,8 @@ export default function CreateItem({ categories, itemsLength }) {
 	const [activeCategories, setActiveCategories] = useState([]);
 	const [mainImage, setMainImage] = useState('');
 	const [isAccordionOpen, setIsAccordionOpen] = useState(false);
+
+	const [{ data, error }, apiInteraction] = useApi();
 
 	const [inputs, setInputs] = useState({
 		title: '',
@@ -186,99 +180,74 @@ export default function CreateItem({ categories, itemsLength }) {
 		});
 	};
 
-	//https://nextjs.org/learn/basics/api-routes/api-routes-details
+
+	// Data changes by the useApi hook
+	useEffect(() => {
+
+		if (data) {
+			toast.success(data.message)
+
+			// Clear form on submit
+			setInputs({
+				title: '',
+				description: '',
+				singlePageContent: '',
+				urlTitle: '',
+				url: '',
+				status: true,
+			});
+			setActiveCategories([]);
+		}
+
+		if (error) {
+			toast.error(error);
+		}
+
+	}, [data, error]);
+
+
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 
-		// This is to prevent cloudinary form to submit the item
-		if (e.target.id !== 'main-submit') {
+		const {
+			title,
+			description,
+			singlePageContent,
+			urlTitle,
+			url,
+			status,
+		} = inputs;
+
+		const newItem = {
+			user: user.email,
+			userAlias: user.user_metadata.name,
+			title,
+			description,
+			categories: activeCategories.length
+				? activeCategories.map((category) => category.categoryId)
+				: 'Uncategorized',
+			singlePageContent,
+			urlTitle,
+			url,
+			status,
+			userId: user.id,
+			order: itemsLength + 1,
+			mainImageName: mainImage.imageName,
+			mainImageUrl: mainImage.imageUrl,
+		};
+
+		// Basic Client side validation
+		if (
+			!newItem.user ||
+			!newItem.title ||
+			newItem.title.trim() === ''
+		) {
+			toast.error('There was a problem creating your item');
 			return;
-		} else {
-			const {
-				title,
-				description,
-				singlePageContent,
-				urlTitle,
-				url,
-				status,
-			} = inputs;
-
-			const newItem = {
-				user: user.email,
-				userAlias: user.user_metadata.name,
-				title,
-				description,
-				categories: activeCategories.length
-					? activeCategories.map((category) => category.categoryId)
-					: 'Uncategorized',
-				singlePageContent,
-				urlTitle,
-				url,
-				status,
-				userId: user.id,
-				order: itemsLength + 1,
-				mainImageName: mainImage.imageName,
-				mainImageUrl: mainImage.imageUrl,
-			};
-
-			// Basic Client side validation
-			if (
-				!newItem.user ||
-				!newItem.title ||
-				newItem.title.trim() === ''
-			) {
-				toast.error('There was a problem creating your item');
-				return;
-			}
-
-			// const { data: itemData, error } = await supabase
-			// 	.from('items')
-			// 	.insert({
-			// 		// created_at: date,
-			// 		username: user.username,
-			// 		title,
-			// 		description,
-			// 		categories: activeCategories,
-			// 		singlePageContent,
-			// 		urlTitle,
-			// 		url,
-			// 		status,
-			// 		userId: user.id,
-			// 		mainImageName: mainImage.imageName,
-			// 		mainImageUrl: mainImage.imageUrl,
-			// 	})
-			// 	.select();
-
-			try {
-				fetch('/api/createItem', {
-					method: 'POST',
-					body: JSON.stringify(newItem),
-					headers: {
-						'Content-Type': 'application/json',
-					},
-				})
-					.then((response) => response.json())
-					.then((data) => toast.success(data.message))
-					.catch((error) => toast.error(error));
-
-				// Clear form on submit
-				setInputs({
-					title: '',
-					description: '',
-					singlePageContent: '',
-					urlTitle: '',
-					url: '',
-					status: true,
-				});
-
-				setActiveCategories([]);
-
-				//TODO: This is not working (to clear the wysywyg), may have to reload the page on submit
-				setContentState(convertFromRaw(singlePageContent));
-			} catch (err) {
-				toast.error(err);
-			}
 		}
+
+		apiInteraction('/api/createItem', 'POST', newItem);
+
 	};
 
 	return (

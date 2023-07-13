@@ -52,11 +52,11 @@ function useApi() {
             });
 
             if (!response.ok) {
-                throw new Error('API Interaction Failed');
+                console.log('firing error');
+                dispatch({ type: 'API_ERROR', payload: 'Something went wrong' });
             }
 
             const apiInteractionResult = await response.json();
-
             dispatch({ type: 'API_SUCCESS', payload: apiInteractionResult });
 
         } catch (error) {
@@ -64,14 +64,15 @@ function useApi() {
         }
     }, []);
 
-    useEffect(function () {
-        apiInteraction();
-    }, [apiInteraction]);
 
-    //TODO: Can we handle success and error UI display here?
-    useEffect(() => {
-        console.log('apiState', apiState);
-    }, [apiState]);
+    //TODO: API interaction results and frontend success/error could be handled here...
+    //TODO: But response from the API should be streamlined
+    // useEffect(() => {
+    //     // Incase of categories, for example 
+    //     if (apiState?.data?.code == 200) {
+    //         console.log('category created successfuly');
+    //     }
+    // }, [apiState]);
 
     return [apiState, apiInteraction];
 }

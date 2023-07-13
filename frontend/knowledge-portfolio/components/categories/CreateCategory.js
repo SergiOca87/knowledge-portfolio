@@ -24,7 +24,7 @@ const StyledForm = styled(Form)`
 		font-size: 1.6rem !important;
 		background-color: transparent !important;
 		border: 1px solid var(--primary);
-		color: #fff !important;
+		color: var(--text);
 
 		&:placeholder-shown {
 			color: #fff;
@@ -46,7 +46,7 @@ export default function CreateCategory() {
 	const [iconSearch, setIconSearch] = useState('');
 	const router = useRouter();
 
-	const [{ data, isLoading, error }, apiInteraction] = useApi();
+	const [{ data, error }, apiInteraction] = useApi();
 
 
 	const [inputs, setInputs] = useState({
@@ -93,12 +93,28 @@ export default function CreateCategory() {
 
 
 	// Data changes by the useApi hook
-	//TODO: BUT, we should try to handle this logic inside of the UseApi hook
 	useEffect(() => {
-		console.log(data);
 
-		//TODO: Logic to handle code response here (200, 303, etc)
-	}, [data]);
+		if (data && data.code === 303) {
+			toast.error(`The category already exists`);
+		}
+
+		if (data && data.code === 200) {
+			toast.success(
+				'Category created, reloading the page...'
+			);
+
+			// Clear form on submit
+			setInputs({
+				name: '',
+				icon: '',
+			});
+
+			setTimeout(() => {
+				router.reload(window.location.pathname);
+			}, 3000);
+		}
+	}, [data, error]);
 
 
 	// Submit current state to create a new Item
@@ -120,40 +136,41 @@ export default function CreateCategory() {
 
 		apiInteraction('/api/createCategory', 'POST', newCategory);
 
-		try {
-			fetch('/api/createCategory', {
-				method: 'POST',
-				body: JSON.stringify(newCategory),
-				headers: {
-					'Content-Type': 'application/json',
-				},
-			})
-				.then((response) => response.json())
-				.then((data) => {
-					if (data.code === 303) {
-						toast.error(`The category already exists`);
-					}
+		console.log('data is...', data);
+		// try {
+		// 	fetch('/api/createCategory', {
+		// 		method: 'POST',
+		// 		body: JSON.stringify(newCategory),
+		// 		headers: {
+		// 			'Content-Type': 'application/json',
+		// 		},
+		// 	})
+		// 		.then((response) => response.json())
+		// 		.then((data) => {
+		// 			if (data.code === 303) {
+		// 				toast.error(`The category already exists`);
+		// 			}
 
-					if (data.code === 200) {
-						toast.success(
-							'Category created, reloading the page...'
-						);
+		// 			if (data.code === 200) {
+		// 				toast.success(
+		// 					'Category created, reloading the page...'
+		// 				);
 
-						// Clear form on submit
-						setInputs({
-							name: '',
-							icon: '',
-						});
+		// 				// Clear form on submit
+		// 				setInputs({
+		// 					name: '',
+		// 					icon: '',
+		// 				});
 
-						setTimeout(() => {
-							router.reload(window.location.pathname);
-						}, 3000);
-					}
-				})
-				.catch((error) => toast.error(error));
-		} catch (err) {
-			toast.error;
-		}
+		// 				setTimeout(() => {
+		// 					router.reload(window.location.pathname);
+		// 				}, 3000);
+		// 			}
+		// 		})
+		// 		.catch((error) => toast.error(error));
+		// } catch (err) {
+		// 	toast.error;
+		// }
 
 		// const { error } = await supabase.from('categories').insert({
 		// 	name,
