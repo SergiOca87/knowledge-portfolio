@@ -1,11 +1,10 @@
 import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
-import { reorderList } from '../../utils/reorderList';
-// import { supabase } from '../../utils/supabaseClient';
 
 export default async function handler(req, res) {
 	if (req.method === 'PUT') {
 		// const itemId = req.body.itemId;
 		// const newItemOrder = req.body.newItemOrder;
+		console.log('on reorder api route', req.body);
 
 		// Auth protected API route
 		const supabase = createServerSupabaseClient({
@@ -22,7 +21,7 @@ export default async function handler(req, res) {
 			return;
 		}
 
-		const itemsToUpsert = req.body.updatedItems.map((item) => {
+		const itemsToUpsert = req.body.map((item) => {
 			return { id: item.id, order: item.order };
 		});
 

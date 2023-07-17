@@ -32,6 +32,7 @@ import CategoryCloudFilter from '../categories/CategoryCloudFilter';
 import UploadImageWidget from './UploadImageWidget';
 import { useUser } from '@supabase/auth-helpers-react';
 import Main from '../layout/Main';
+import useApi from '../../hooks/useApi';
 
 const StyledForm = styled(Form)`
 	padding: 2rem;
@@ -116,10 +117,12 @@ export default function UpdateItem({ item, categories }) {
 	const [activeCategories, setActiveCategories] = useState([]);
 	const [userCategories, setUserCategories] = useState([]);
 	const user = useUser();
+	const [{ data, error }, apiInteraction] = useApi();
 
-	console.log('item to update', item);
 
 	useEffect(() => {
+
+		//TODO: UseApi hook?
 		if (user) {
 			fetch('/api/userCategories', {
 				method: 'POST',
@@ -153,8 +156,7 @@ export default function UpdateItem({ item, categories }) {
 
 	const selected = item.status === true ? true : false;
 
-	// These useEffects seem necessary as what they do require a mounted component?
-	// Make sure these are necessary
+	// TODO: Make sure these are necessary
 	useEffect(() => {
 		// setMainImage({
 		// 	imageName: item.mainImageName ? item.mainImageName : '',
@@ -210,7 +212,30 @@ export default function UpdateItem({ item, categories }) {
 		});
 	};
 
-	// Submit current state to create a new Item
+	// Data changes by the useApi hook
+	useEffect(() => {
+
+		if (data) {
+			toast.success(data.message)
+
+			// Clear form on submit
+			setInputs({
+				title: '',
+				description: '',
+				singlePageContent: '',
+				urlTitle: '',
+				url: '',
+				status: 'true',
+			});
+
+			setActiveCategories([]);
+		}
+
+		if (error) {
+			toast.error(error);
+		}
+
+	}, [data, error]);
 
 	//https://nextjs.org/learn/basics/api-routes/api-routes-details
 	const handleSubmit = async (e) => {
@@ -244,111 +269,12 @@ export default function UpdateItem({ item, categories }) {
 				itemId: item.id,
 			};
 
-			//TODO: Should this be handled in an API route?
-			//TODO: We need some extra validation here, if API route, serverside validation:
-			// if (
-			// 	!email.includes('@') ||
-			// 	!name ||
-			// 	name.trim() === '' ||
-			// 	!text ||
-			// 	text.trim() === ''
-			// ) {
-			// 	toast.message('...');
-			// 	return;
-			// }
 			if (!user || !title || title.trim() === '') {
 				toast.message('There was a problem creating your item');
 				return;
 			}
 
-			try {
-				fetch('/api/updateItem', {
-					method: 'PUT',
-					body: JSON.stringify(updatedItem),
-					headers: {
-						'Content-Type': 'application/json',
-					},
-				})
-					.then((response) => response.json())
-					.then((data) => console.log(data));
-
-				// Clear form on submit
-				setInputs({
-					title: '',
-					description: '',
-					singlePageContent: '',
-					urlTitle: '',
-					url: '',
-					status: 'true',
-				});
-
-				setActiveCategories([]);
-
-				// 	//TODO: This is not working (to clear the wysywyg), may have to reload the page on submit
-				setContentState(convertFromRaw(singlePageContent));
-			} catch (err) {
-				toast.error(err);
-			}
-
-			// const { error } = await supabase
-			// 	.from('items')
-			// 	.update({
-			// 		// created_at: date,
-			// 		// username: user.username,
-			// 		title,
-			// 		// description,
-			// 		// categories: activeCategories,
-			// 		// singlePageContent,
-			// 		// urlTitle,
-			// 		// url,
-			// 		// status,
-			// 		// userId: user.id,
-			// 		// mainImageName: mainImage.imageName,
-			// 		// mainImageUrl: mainImage.imageUrl,
-			// 	})
-			// 	.eq('id', item.id);
-
-			// if (error) {
-			// 	toast.error(error);
-			// } else {
-			// 	// Clear form on submit
-			// 	setInputs({
-			// 		title: '',
-			// 		description: '',
-			// 		singlePageContent: '',
-			// 		urlTitle: '',
-			// 		url: '',
-			// 		status: 'true',
-			// 	});
-
-			// 	setActiveCategories([]);
-
-			// 	// 	//TODO: This is not working (to clear the wysywyg), may have to reload the page on submit
-			// 	// 	// setContentState(convertFromRaw(singlePageContent));
-
-			// 	if (mainImage) {
-			// 		const { data: imageData, error: imageError } =
-			// 			await supabase
-			// 				.from('image')
-			// 				.insert({
-			// 					// created_at: date,
-			// 					imageName: mainImage.imageName,
-			// 					userId: user.id,
-			// 					imageUrl: mainImage.imageUrl,
-			// 					item: item.id,
-			// 				})
-			// 				.select();
-
-			// 		//TODO: May not be necessary to do this relationship at the end with the imageUrl field but may be useful down the road
-			// 		const { data: itemDataUpdate, error: itemDataUpdateError } =
-			// 			await supabase
-			// 				.from('items')
-			// 				.update({
-			// 					// created_at: date,
-			// 					mainImageId: imageData[0].id,
-			// 				})
-			// 				.eq('id', item.id);
-			// 			}
+			apiInteraction('/api/updateItem', 'PUT', updatedItem);
 		}
 	};
 
@@ -399,21 +325,6 @@ export default function UpdateItem({ item, categories }) {
 									</FloatingLabel>
 								</Form.Group>
 
-								{/* This is part of a form */}
-								{/* <UploadImageWidget setMainImage={setMainImage} />
-					<p>{mainImage && mainImage.imageName}</p> */}
-
-								{/* <Form.Group className="mb-5">
-						<Form.Label htmlFor="date">Date</Form.Label>
-						<Form.Control
-							type="date"
-							name="date"
-							id="date"
-							value={inputs.date}
-							onChange={handleChange}
-						/>
-					</Form.Group>
-						*/}
 								<Form.Group className="mb-5">
 									<FloatingLabel
 										controlId="floatingInput"
@@ -450,39 +361,7 @@ export default function UpdateItem({ item, categories }) {
 												</Link>
 											</p>
 										</Form.Text>
-										{/* 
-							<CategoryCloudFilter
-								activeCategories={activeCategories}
-								setActiveCategories={setActiveCategories}
-							/>
-							<Categories
-								title={false}
-								categories={userCategories}
-								background={true}
-								asButtons={true}
-							/> */}
 
-										{/* <Form.Select
-								aria-label="Categories"
-								name="categories"
-								id="category"
-								multiple
-								onChange={handleChange}
-							>
-								<option value="Uncategorized">
-									Uncategorized
-								</option>
-								{userCategories?.map((category) => {
-									return (
-										<option
-											key={category.id}
-											value={category.id}
-										>
-											{category.name}
-										</option>
-									);
-								})}
-							</Form.Select> */}
 									</Form.Group>
 								)}
 
@@ -510,20 +389,7 @@ export default function UpdateItem({ item, categories }) {
 										</option>
 									</Form.Select>
 								</Form.Group>
-								{/* <Form.Group className="mb-5">
-						<Form.Label htmlFor="status">
-							Visibility (public or private)
-						</Form.Label>
-						<Form.Select
-							aria-label="Visibility"
-							name="visibility"
-							id="visibility"
-							onChange={handleChange}
-						>
-							<option value="true">Public</option>
-							<option value="false">Private</option>
-						</Form.Select>
-					</Form.Group> */}
+
 								<Form.Group className="mb-5">
 									<Form.Label>Single Page Content</Form.Label>
 									<Accordion flush>
@@ -544,12 +410,7 @@ export default function UpdateItem({ item, categories }) {
 														},
 													}}
 												/>
-												{/* <textarea
-									value={inputs.singlePageContent}
-									css={css`
-										display: none;
-									`}
-								/> */}
+
 											</Accordion.Body>
 										</Accordion.Item>
 									</Accordion>

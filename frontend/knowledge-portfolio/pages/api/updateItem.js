@@ -30,7 +30,7 @@ export default async function handler(req, res) {
 			return;
 		}
 
-		const { error } = await supabase
+		const { data, error } = await supabase
 			.from('items')
 			.update({
 				title: req.body.title,
@@ -46,31 +46,13 @@ export default async function handler(req, res) {
 			})
 			//TODO Probably need to provide this, what is item.id here?
 			.eq('id', req.body.itemId);
-		// Send error code otherwise
 
-		if (req.body.mainImageName) {
-			const { data: imageData, error: imageError } = await supabase
-				.from('image')
-				.insert({
-					// created_at: date,
-					imageName: req.body.mainImageName,
-					userId: req.body.userId,
-					imageUrl: req.body.mainImageUrl,
-					item: req.body.itemId,
-				})
-				.select();
-
-			//TODO: May not be necessary to do this relationship at the end with the imageUrl field but may be useful down the road
-			const { data: itemDataUpdate, error: itemDataUpdateError } =
-				await supabase
-					.from('items')
-					.update({
-						// created_at: date,
-						mainImageId: imageData[0].id,
-					})
-					.eq('id', req.body.itemId);
+		if (error) {
+			res.status(400).json({ error: 'Failed to update item' });
+		} else {
+			res.status(200).json({
+				message: 'Item updated successfully',
+			});
 		}
-
-		// Send ok code
 	}
 }

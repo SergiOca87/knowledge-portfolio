@@ -33,26 +33,7 @@ const StyledUserCard = styled(Card)`
 	}
 `;
 
-// id: 'c8ba3dcd-6e21-46a3-bc7c-c9a073190677',
-// aud: 'authenticated',
-// email: 'ocasergi@gmail.com',
-// phone: '',
-// app_metadata: { provider: 'email', providers: [ 'email', 'google' ] },
-// user_metadata: {
-//   avatar_url: 'https://lh3.googleusercontent.com/a/AGNmyxbCU7GEY4cbsyPVNtj9O5vtx_Wfq6w1U76WGw0iFw=s96-c',
-//   email: 'ocasergi@gmail.com',
-//   email_verified: true,
-//   full_name: 'Sergi',
-//   iss: 'https://www.googleapis.com/userinfo/v2/me',
-//   name: 'Sergi',
-//   picture: 'https://lh3.googleusercontent.com/a/AGNmyxbCU7GEY4cbsyPVNtj9O5vtx_Wfq6w1U76WGw0iFw=s96-c',
-//   provider_id: '115257351727131439564',
-//   sub: '115257351727131439564'
-// },
-// role: 'authenticated',
-// aal: 'aal1',
-// amr: [ { method: 'oauth', timestamp: 1679646779 } ],
-// session_id: 'ce6e7433-5e6b-43be-a90f-ef95ff16ddd8'
+// TODO: This has to be tested
 
 const resetPassword = () => {
 	try {
