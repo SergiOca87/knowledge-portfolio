@@ -13,7 +13,7 @@ import TooltipButton from './TooltipButton';
 
 const StyledPortfolioControls = styled.div`
 	display: flex;
-	justify-content: flex-end;
+
 	align-items: center;
 	z-index: 0;
 	position: relative;

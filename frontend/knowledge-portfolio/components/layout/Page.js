@@ -22,7 +22,7 @@ const GlobalStyles = createGlobalStyle`
     --bg: #fff;
     --primary: #20AD96;
     --secondary: #333461;
-    --grey: #FAF8F6;
+    --grey: #E8E8E8;
     --text-color: #4A556C;
     --offWhite: #ededed;
     --maxWidth: 1400px;
@@ -176,7 +176,7 @@ const GlobalStyles = createGlobalStyle`
     min-width: 0;
     word-wrap: break-word;
     background-color: #fff;
-    border: 1px solid #ebebeb;
+    border: 1px solid #cecece;
     // background-clip: border-box;
     border-radius: 10px;
     
@@ -192,7 +192,7 @@ const GlobalStyles = createGlobalStyle`
       border-top-left-radius: 10px;
       border-bottom: none;
       background-color: #fff;
-      border-bottom: 1px solid #ebebeb;
+      border-bottom: 1px solid #cecece;
     }
 
     .card-body {
@@ -269,21 +269,19 @@ const GlobalStyles = createGlobalStyle`
   }
 `;
 
-
-
 export default function Page({ children }) {
-  return (
-    <div>
-      <GlobalStyles />
-      <Nav />
-      <ToastContainer />
-      {children}
+	return (
+		<div>
+			<GlobalStyles />
+			<Nav />
+			<ToastContainer />
+			{children}
 
-      <Footer />
-    </div>
-  );
+			<Footer />
+		</div>
+	);
 }
 
 Page.propTypes = {
-  children: PropTypes.any,
+	children: PropTypes.any,
 };

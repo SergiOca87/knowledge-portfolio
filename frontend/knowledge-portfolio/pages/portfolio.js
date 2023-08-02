@@ -1,12 +1,6 @@
-import React, {
-	useEffect,
-	useState,
-} from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import {
-	Container
-} from 'react-bootstrap';
-
+import { Container } from 'react-bootstrap';
 
 // import ItemGrid from '../components/items/_ItemGrid';
 import CategoryCloudFilter from '../components/categories/CategoryCloudFilter';
@@ -58,6 +52,7 @@ const StyledUserCard = styled.div`
 	}
 	h1 {
 		font-size: 3.5rem;
+		margin: 2rem 0 5rem 0;
 	}
 `;
 
@@ -73,18 +68,15 @@ export default function UserPortfolioPage({ user, items, categories }) {
 	const [activeCategories, setActiveCategories] = useState([]);
 	const [filteredItems, setFilteredItems] = useState([]);
 	const [order, setOrder] = useState(filteredItems);
-
 	const [{ data, error }, apiInteraction] = useApi();
 
 	//TODO: Can't manage to refresh List Manager when hasBeenDeletedId changes...
-
 
 	// Data changes by the useApi hook
 	useEffect(() => {
 		if (error) {
 			toast.error(error);
 		}
-
 	}, [error]);
 
 	const reorderList = (sourceIndex, destinationIndex) => {
@@ -115,24 +107,24 @@ export default function UserPortfolioPage({ user, items, categories }) {
 			activeCategories.length === 0
 				? items
 				: items.filter(
-					(item) =>
-						item.categories === null ||
-						item.categories.length === 0 || // Include items with no categories
-						(item.categories !== null &&
-							activeCategories.every((category) =>
-								item.categories.includes(
-									category.categoryId
-								)
-							))
-				)
+						(item) =>
+							item.categories === null ||
+							item.categories.length === 0 || // Include items with no categories
+							(item.categories !== null &&
+								activeCategories.every((category) =>
+									item.categories.includes(
+										category.categoryId
+									)
+								))
+				  )
 		);
 	}, [activeCategories, items]);
 
 	return (
 		<Main>
-			<Container>
-				{user ? (
-					<>
+			{user ? (
+				<>
+					<Container>
 						<StyledUserCard>
 							<h1>
 								Welcome to your portfolio,
@@ -145,7 +137,10 @@ export default function UserPortfolioPage({ user, items, categories }) {
 							</h1>
 						</StyledUserCard>
 						<PortfolioControls user={user} />
-						<StyledGridWrap>
+					</Container>
+
+					<StyledGridWrap>
+						<Container>
 							{activeCategories && (
 								<>
 									<p>Filter By Category:</p>
@@ -173,19 +168,19 @@ export default function UserPortfolioPage({ user, items, categories }) {
 									onDragEnd={reorderList}
 								/>
 							</StyledListManager>
-						</StyledGridWrap>
-					</>
-				) : (
+						</Container>
+					</StyledGridWrap>
+				</>
+			) : (
+				<Container>
 					<NotLoggedIn />
-				)}
-			</Container>
-
+				</Container>
+			)}
 		</Main>
 	);
 }
 
 export async function getServerSideProps(context) {
-
 	const supabase = createServerSupabaseClient(context);
 
 	const {

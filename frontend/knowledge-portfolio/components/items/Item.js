@@ -39,6 +39,10 @@ const StyledCard = styled(Card)`
 		cursor: no-drop !important;
 		pointer-events: none !important;
 	}
+
+	p {
+		font-size: 1.6rem;
+	}
 `;
 
 const StyledButtons = styled.div`
@@ -52,7 +56,7 @@ const StyledButtons = styled.div`
 	div {
 		&:first-child {
 			button {
-				border-left: 1px solid var(--secondary);
+				border-left: 1px solid var(--primary);
 			}
 		}
 	}
@@ -78,6 +82,9 @@ const StyledButtons = styled.div`
 		svg {
 			transition: all 300ms;
 			margin-top: -3px;
+			stroke: var(--primary);
+			fill: var(--primary);
+			
 		}
 
 		a {
