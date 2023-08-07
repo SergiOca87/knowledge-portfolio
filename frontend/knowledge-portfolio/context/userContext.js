@@ -14,6 +14,8 @@ export const UserProvider = ({ children }) => {
 				const { data: user } = await supabase.auth.getUser();
 				if (user) {
 					// Create a user profile which is publicly accessible
+
+					console.log('user context', user);
 					const updates = {
 						id: user.id,
 						username: user.email,

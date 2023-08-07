@@ -1,12 +1,16 @@
 import styled from 'styled-components';
 import { supabase } from '../../utils/supabaseClient';
+import { Container } from 'react-bootstrap';
+import Main from '../../components/layout/Main';
+import CategoryCloudFilter from '../../components/categories/CategoryCloudFilter';
+
+import { ListManager } from 'react-beautiful-dnd-grid';
+import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
 
 const StyledUserCard = styled.div`
+	display: flex;
+	align-items: center;
 	margin-bottom: 6rem;
-	.flex-wrap {
-		display: flex;
-		align-items: center;
-	}
 
 	.avatar {
 		width: 10rem;
@@ -22,7 +26,8 @@ const StyledUserCard = styled.div`
 		flex-shrink: 0;
 	}
 	h1 {
-		font-size: 4rem;
+		font-size: 3.5rem;
+		margin: 2rem 0 5rem 0;
 	}
 `;
 
@@ -93,19 +98,59 @@ const UserControls = styled.div`
 
 //TODO Get the user for the name as well
 
-export default function UserPortfolioPage(items, categories) {
-	{
-		console.log(items, categories);
-	}
+export default function UserPortfolioPage({ items, categories, userName }) {
+	return (
+		<Main>
+			{userName && (
+				<Container>
+					<StyledUserCard>
+						<h1>
+							<span className="secondary">{userName}'s</span>
+							<br />
+							Knowledge Portfolio
+						</h1>
+					</StyledUserCard>
+				</Container>
+			)}
+
+			<StyledGridWrap>
+				<Container>
+					{categories && (
+						<>
+							<p>Filter By Category:</p>
+							<CategoryCloudFilter
+								userCategories={categories}
+								all={true}
+							/>
+						</>
+					)}
+				</Container>
+			</StyledGridWrap>
+		</Main>
+	);
 }
 
 export async function getServerSideProps(context) {
+	const supabase = createServerSupabaseClient(context);
+
 	// Get params from URL
-	const { params } = context;
+	const { params, query } = context;
 
 	// Get User ID
 	const userId = params.id;
 
+	const userName = context.query.name;
+	// const userName = context.query.name;
+
+	let { data: profiles } = await supabase
+		.from('profiles')
+		.select('*')
+		.eq('id', userId);
+
+	// const { data: user, error: userError } = await supabase
+	// 	.from('profiles')
+	// 	.select('*')
+	// 	.eq('userId', userId);
 	// Fetch items related to that ID (foreign key relationship)
 	// This is ok here, does not need t be an API call:
 	//It can be tempting to reach for an API Route when you want to fetch data from the server, then call that API route from getServerSideProps.
@@ -127,6 +172,7 @@ export async function getServerSideProps(context) {
 
 	return {
 		props: {
+			userName,
 			items,
 			categories,
 		},

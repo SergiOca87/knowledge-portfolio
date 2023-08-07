@@ -2,7 +2,7 @@ import Link from 'next/link';
 import React from 'react';
 import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
 
-function TooltipButton({ tooltipText, link, icon }) {
+function TooltipButton({ tooltipText, link, icon, queryName = null }) {
 	return (
 		<div>
 			<OverlayTrigger
@@ -22,6 +22,7 @@ function TooltipButton({ tooltipText, link, icon }) {
 					<Link
 						href={{
 							pathname: link,
+							query: { name: queryName },
 						}}
 					>
 						<a>{icon}</a>

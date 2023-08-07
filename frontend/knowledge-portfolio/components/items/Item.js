@@ -115,7 +115,6 @@ const Item = ({ item, categories, isPublic }) => {
 		item.categories.includes(category.id)
 	);
 
-	console.log('single item rendering');
 	return (
 		<StyledCard>
 			<Card.Header as="h4" className="mb-3">

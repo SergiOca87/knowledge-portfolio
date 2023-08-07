@@ -205,7 +205,8 @@ const GlobalStyles = createGlobalStyle`
 
     .card-text {
       padding: 2rem;
-      color: var(--text-color);;
+      color: var(--text-color);
+      
     }
 
     .card-footer {

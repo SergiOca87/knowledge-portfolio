@@ -133,11 +133,7 @@ const StyledMain = styled.main`
 
 	.cards {
 		margin-top: -4rem;
-
-		
 	}
-
-	
 `;
 
 const StyledImageWrap = styled.div`
@@ -188,7 +184,8 @@ export default function Home() {
 										</h1>
 
 										<p>
-											Invest in Yourself, Showcase Your Growth
+											Invest in Yourself, Showcase Your
+											Growth
 										</p>
 
 										<Link href="/portfolio">
@@ -196,7 +193,7 @@ export default function Home() {
 												variant="primary btn-round btn-big"
 												type="button"
 											>
-												Get Started for Free
+												Get Started
 											</Button>
 										</Link>
 										{/* <h2

@@ -13,7 +13,9 @@ import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { ListManager } from 'react-beautiful-dnd-grid';
 import Item from '../components/items/Item';
 import useApi from '../hooks/useApi';
+import { FaExclamation } from 'react-icons/fa';
 import { toast } from 'react-toastify';
+import Link from 'next/link';
 
 const StyledListManager = styled.div`
 	margin-top: 6rem;
@@ -62,9 +64,30 @@ const StyledGridWrap = styled.div`
 	z-index: 10;
 	position: relative;
 	background-color: var(--grey);
+	min-height: 40rem;
 `;
 
-export default function UserPortfolioPage({ user, items, categories }) {
+const StyledNotice = styled.div`
+	display: flex;
+	gap: 1rem;
+	align-items: center;
+	margin-top: 2rem;
+
+	svg {
+		fill: var(--primary);
+	}
+
+	p {
+		margin: 0;
+	}
+`;
+
+export default function UserPortfolioPage({
+	user,
+	databaseUser,
+	items,
+	categories,
+}) {
 	const [activeCategories, setActiveCategories] = useState([]);
 	const [filteredItems, setFilteredItems] = useState([]);
 	const [order, setOrder] = useState(filteredItems);
@@ -141,7 +164,17 @@ export default function UserPortfolioPage({ user, items, categories }) {
 
 					<StyledGridWrap>
 						<Container>
-							{activeCategories && (
+							{/* {!databaseUser.user_metadata.name && (
+								<StyledNotice>
+									<FaExclamation />{' '}
+									<p>
+										Please add your public username{' '}
+										<Link href="/add-metadata"> here</Link>
+									</p>
+								</StyledNotice>
+							)} */}
+
+							{categories.length ? (
 								<>
 									<p>Filter By Category:</p>
 									<CategoryCloudFilter
@@ -153,21 +186,39 @@ export default function UserPortfolioPage({ user, items, categories }) {
 										all={true}
 									/>
 								</>
+							) : (
+								<StyledNotice>
+									<FaExclamation />{' '}
+									<p>
+										You can add categories{' '}
+										<Link href="/add-category"> here</Link>
+									</p>
+								</StyledNotice>
 							)}
-							<StyledListManager>
-								<ListManager
-									items={filteredItems}
-									direction="horizontal"
-									maxItems={2}
-									render={(item) => (
-										<Item
-											item={item}
-											categories={categories}
-										/>
-									)}
-									onDragEnd={reorderList}
-								/>
-							</StyledListManager>
+							{filteredItems.length ? (
+								<StyledListManager>
+									<ListManager
+										items={filteredItems}
+										direction="horizontal"
+										maxItems={2}
+										render={(item) => (
+											<Item
+												item={item}
+												categories={categories}
+											/>
+										)}
+										onDragEnd={reorderList}
+									/>
+								</StyledListManager>
+							) : (
+								<StyledNotice>
+									<FaExclamation />{' '}
+									<p>
+										You can add portfolio items{' '}
+										<Link href="/add-item"> here</Link>
+									</p>
+								</StyledNotice>
+							)}
 						</Container>
 					</StyledGridWrap>
 				</>
@@ -196,6 +247,11 @@ export async function getServerSideProps(context) {
 		};
 	}
 
+	let { data: databaseUser } = await supabase
+		.from('profiles')
+		.select('*')
+		.eq('id', session.user.id);
+
 	const { data: items } = await supabase
 		.from('items')
 		.select('*')
@@ -207,10 +263,13 @@ export async function getServerSideProps(context) {
 		.select('*')
 		.eq('userId', session.user.id);
 
+	console.log('user form db', databaseUser);
+
 	return {
 		props: {
 			initialSession: session,
 			user: session.user,
+			databaseUser,
 			items,
 			categories,
 		},

@@ -20,6 +20,7 @@ function MyApp({ Component, pageProps, serverUser }) {
 	const [supabaseClient] = useState(() => createBrowserSupabaseClient());
 
 	const router = useRouter();
+
 	// Listen to auth events:
 	// https://supabase.com/docs/reference/javascript/next/auth-onauthstatechange
 	supabase.auth.onAuthStateChange((event, session) => {

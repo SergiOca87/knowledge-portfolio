@@ -90,6 +90,7 @@ function PortfolioControls({ user }) {
 			<TooltipButton
 				tooltipText="Toggle Public View"
 				link={`/public-portfolio/${user.id}`}
+				queryName={user.user_metadata.name}
 				icon={<FaEye />}
 			/>
 

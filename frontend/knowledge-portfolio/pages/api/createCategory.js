@@ -3,13 +3,12 @@ import { supabase } from '../../utils/supabaseClient';
 
 export default async function handler(req, res) {
 	if (req.method === 'POST') {
-
 		const { name, icon, userId } = req.body;
 
 		const newCategory = {
 			name,
 			icon,
-			userId
+			userId,
 		};
 
 		// Auth protected API route
@@ -31,6 +30,8 @@ export default async function handler(req, res) {
 		if (!req.body.name || req.body.name.trim() === '' || !req.body.userId) {
 			return;
 		}
+
+		console.log('creating category', newCategory, 'user', session);
 
 		//TODO: Check if it already exists, same userId and same category name
 		const { data: countData, error: countError } = await supabase

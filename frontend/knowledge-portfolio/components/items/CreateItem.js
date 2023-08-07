@@ -11,15 +11,7 @@ import { toast } from 'react-toastify';
 import { EditorState, convertFromRaw } from 'draft-js';
 import 'react-toastify/dist/ReactToastify.css';
 import styled, { css } from 'styled-components';
-import {
-	Accordion,
-	Button,
-	Card,
-	Col,
-	Form,
-	Row,
-} from 'react-bootstrap';
-
+import { Accordion, Button, Card, Col, Form, Row } from 'react-bootstrap';
 import Editor from '../Editor';
 import CategoryCloudFilter from '../categories/CategoryCloudFilter';
 import { useUser } from '@supabase/auth-helpers-react';
@@ -92,7 +84,7 @@ const StyledForm = styled(Form)`
 	label {
 		font-size: 1.4rem;
 		text-transform: uppercase;
-		font-family: 'KumbhSans-Regular';;
+		font-family: 'KumbhSans-Regular';
 		margin-bottom: 1rem;
 		letter-spacing: 1px;
 		color: var(--secondary);
@@ -140,9 +132,6 @@ export default function CreateItem({ categories, itemsLength }) {
 	const accordionToggleHandler = () => {
 		setIsAccordionOpen(true);
 	};
-
-	// Single page content
-	//Maybe we should extract this
 	const content = {
 		entityMap: {},
 		blocks: [
@@ -180,12 +169,10 @@ export default function CreateItem({ categories, itemsLength }) {
 		});
 	};
 
-
 	// Data changes by the useApi hook
 	useEffect(() => {
-
 		if (data) {
-			toast.success(data.message)
+			toast.success(data.message);
 
 			// Clear form on submit
 			setInputs({
@@ -202,21 +189,13 @@ export default function CreateItem({ categories, itemsLength }) {
 		if (error) {
 			toast.error(error);
 		}
-
 	}, [data, error]);
-
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 
-		const {
-			title,
-			description,
-			singlePageContent,
-			urlTitle,
-			url,
-			status,
-		} = inputs;
+		const { title, description, singlePageContent, urlTitle, url, status } =
+			inputs;
 
 		const newItem = {
 			user: user.email,
@@ -236,18 +215,15 @@ export default function CreateItem({ categories, itemsLength }) {
 			mainImageUrl: mainImage.imageUrl,
 		};
 
+		console.log('attempting to create', newItem);
+
 		// Basic Client side validation
-		if (
-			!newItem.user ||
-			!newItem.title ||
-			newItem.title.trim() === ''
-		) {
+		if (!newItem.user || !newItem.title || newItem.title.trim() === '') {
 			toast.error('There was a problem creating your item');
 			return;
 		}
 
 		apiInteraction('/api/createItem', 'POST', newItem);
-
 	};
 
 	return (
@@ -393,41 +369,40 @@ export default function CreateItem({ categories, itemsLength }) {
 									Single Page Content
 								</Accordion.Header>
 								<Accordion.Body>
-									{isAccordionOpen && (
-										<StyleEditor
-											wrapperClassName="single-page-editor-wrap"
-											editorClassName="single-page-editor"
-											toolbarClassName="single-page-toolbar"
-											onContentStateChange={
-												onContentStateChange
-											}
-											// toolbar={{
-											// 	image: { enableUpload: true },
-											// }}
-											toolbar={{
-												options: [
-													'inline',
-													'blockType',
-													'fontSize',
-													'list',
-													'textAlign',
-													'history',
-												],
-												inline: { inDropdown: true },
-												list: { inDropdown: true },
-												textAlign: { inDropdown: true },
-												link: { inDropdown: true },
-												history: { inDropdown: true },
-												embedded: {
-													className: 'embedded',
-												},
-												image: {
-													enableUpload: false,
-													className: 'image-upload',
-												},
-											}}
-										/>
-									)}
+									<StyleEditor
+										wrapperClassName="single-page-editor-wrap"
+										editorClassName="single-page-editor"
+										toolbarClassName="single-page-toolbar"
+										onContentStateChange={
+											onContentStateChange
+										}
+										// toolbar={{
+										// 	image: { enableUpload: true },
+										// }}
+										toolbar={{
+											options: [
+												'inline',
+												'blockType',
+												'fontSize',
+												'list',
+												'textAlign',
+												'history',
+											],
+											inline: { inDropdown: true },
+											list: { inDropdown: true },
+											textAlign: { inDropdown: true },
+											link: { inDropdown: true },
+											history: { inDropdown: true },
+											embedded: {
+												className: 'embedded',
+											},
+											image: {
+												enableUpload: false,
+												className: 'image-upload',
+											},
+										}}
+									/>
+
 									{/* 
 									value={inputs.singlePageContent}
 									css={css`
