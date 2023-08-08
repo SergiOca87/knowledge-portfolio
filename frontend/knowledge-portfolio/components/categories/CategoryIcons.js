@@ -38,7 +38,7 @@ const StyledIcons = styled.div`
 export default function CategoryIcons({ search, selectedIcon }) {
 	let iconsArr = [];
 
-	console.log(search.length);
+	console.log('inside icons component', selectedIcon);
 
 	// Exclude no "Fa" icons
 	for (let icon in FontAwesome) {
@@ -47,40 +47,68 @@ export default function CategoryIcons({ search, selectedIcon }) {
 		}
 	}
 
-	// Use Memo is beneficial here as changing the category name would also trigger icon filtering, which seems to cause performance issues
-	const filterIcons = useMemo(
-		function () {
-			return iconsArr
-				.filter((icon) =>
-					icon.toLowerCase().includes(search.toLowerCase())
-				)
-				.map((icon) => {
-					return (
-						<SingleCategoryIcon
-							icon={icon}
-							selectedIcon={selectedIcon}
-							key={icon}
-						/>
-					);
-				});
-		},
-		[search]
-	);
-
 	return (
 		<StyledIcons>
 			<div className="icons-wrap">
 				{search.length
-					? filterIcons
+					? iconsArr
+							.filter((icon) =>
+								icon
+									.toLowerCase()
+									.includes(search.toLowerCase())
+							)
+							.map((icon) => {
+								const IconName = FontAwesome[icon];
+
+								return (
+									<OverlayTrigger
+										placement={'top'}
+										overlay={
+											<Tooltip id={`tooltip-top}`}>
+												{icon.substring(2)}
+											</Tooltip>
+										}
+									>
+										<div
+											className={`icon ${
+												icon === selectedIcon
+													? 'active'
+													: ''
+											}`}
+											data-name={icon}
+											key={icon}
+										>
+											<IconName />
+										</div>
+									</OverlayTrigger>
+								);
+							})
 					: iconsArr.map((icon) => {
-						return (
-							<SingleCategoryIcon
-								icon={icon}
-								selectedIcon={selectedIcon}
-								key={icon}
-							/>
-						);
-					})}
+							const IconName = FontAwesome[icon];
+
+							return (
+								<OverlayTrigger
+									placement={'top'}
+									overlay={
+										<Tooltip id={`tooltip-top}`}>
+											{icon.substring(2)}
+										</Tooltip>
+									}
+								>
+									<div
+										className={`icon ${
+											icon === selectedIcon
+												? 'active'
+												: ''
+										}`}
+										data-name={icon}
+										key={icon}
+									>
+										<IconName />
+									</div>
+								</OverlayTrigger>
+							);
+					  })}
 			</div>
 		</StyledIcons>
 	);

@@ -369,46 +369,41 @@ export default function CreateItem({ categories, itemsLength }) {
 									Single Page Content
 								</Accordion.Header>
 								<Accordion.Body>
-									<StyleEditor
-										wrapperClassName="single-page-editor-wrap"
-										editorClassName="single-page-editor"
-										toolbarClassName="single-page-toolbar"
-										onContentStateChange={
-											onContentStateChange
-										}
-										// toolbar={{
-										// 	image: { enableUpload: true },
-										// }}
-										toolbar={{
-											options: [
-												'inline',
-												'blockType',
-												'fontSize',
-												'list',
-												'textAlign',
-												'history',
-											],
-											inline: { inDropdown: true },
-											list: { inDropdown: true },
-											textAlign: { inDropdown: true },
-											link: { inDropdown: true },
-											history: { inDropdown: true },
-											embedded: {
-												className: 'embedded',
-											},
-											image: {
-												enableUpload: false,
-												className: 'image-upload',
-											},
-										}}
-									/>
-
-									{/* 
-									value={inputs.singlePageContent}
-									css={css`
-										display: none;
-									`}
-								/> */}
+									{isAccordionOpen && (
+										<StyleEditor
+											wrapperClassName="single-page-editor-wrap"
+											editorClassName="single-page-editor"
+											toolbarClassName="single-page-toolbar"
+											onContentStateChange={
+												onContentStateChange
+											}
+											// toolbar={{
+											// 	image: { enableUpload: true },
+											// }}
+											toolbar={{
+												options: [
+													'inline',
+													'blockType',
+													'fontSize',
+													'list',
+													'textAlign',
+													'history',
+												],
+												inline: { inDropdown: true },
+												list: { inDropdown: true },
+												textAlign: { inDropdown: true },
+												link: { inDropdown: true },
+												history: { inDropdown: true },
+												embedded: {
+													className: 'embedded',
+												},
+												image: {
+													enableUpload: false,
+													className: 'image-upload',
+												},
+											}}
+										/>
+									)}
 								</Accordion.Body>
 							</Accordion.Item>
 						</Accordion>

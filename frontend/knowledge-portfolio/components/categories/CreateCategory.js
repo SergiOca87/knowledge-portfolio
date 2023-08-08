@@ -34,7 +34,7 @@ const StyledForm = styled(Form)`
 	label {
 		font-size: 1.4rem;
 		text-transform: uppercase;
-		font-family: 'KumbhSans-Regular';;
+		font-family: 'KumbhSans-Regular';
 		margin-bottom: 1rem;
 		letter-spacing: 1px;
 		color: var(--secondary);
@@ -47,7 +47,6 @@ export default function CreateCategory() {
 	const router = useRouter();
 
 	const [{ data, error }, apiInteraction] = useApi();
-
 
 	const [inputs, setInputs] = useState({
 		name: '',
@@ -85,24 +84,22 @@ export default function CreateCategory() {
 				icon: iconName,
 			});
 		}
+
+		console.log('icon click', inputs);
 	};
 
 	const handleIconSearch = (e) => {
 		setIconSearch(e.target.value);
 	};
 
-
 	// Data changes by the useApi hook
 	useEffect(() => {
-
 		if (data && data.code === 303) {
 			toast.error(`The category already exists`);
 		}
 
 		if (data && data.code === 200) {
-			toast.success(
-				'Category created, reloading the page...'
-			);
+			toast.success('Category created, reloading the page...');
 
 			// Clear form on submit
 			setInputs({
@@ -115,7 +112,6 @@ export default function CreateCategory() {
 			}, 3000);
 		}
 	}, [data, error]);
-
 
 	// Submit current state to create a new Item
 	const handleSubmit = async (e) => {
@@ -221,7 +217,7 @@ export default function CreateCategory() {
 							/>
 						</Form.Group>
 						<Container>
-							{iconSearch.length > 0 &&
+							{iconSearch.length > 0 && (
 								<div onClick={handleIconClick}>
 									<CategoryIcons
 										search={iconSearch}
@@ -229,7 +225,7 @@ export default function CreateCategory() {
 										importFa={true}
 									/>
 								</div>
-							}
+							)}
 						</Container>
 
 						{/* <label htmlFor="completed">
