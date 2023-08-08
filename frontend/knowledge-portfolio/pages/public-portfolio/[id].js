@@ -6,6 +6,9 @@ import CategoryCloudFilter from '../../components/categories/CategoryCloudFilter
 
 import { ListManager } from 'react-beautiful-dnd-grid';
 import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
+import Item from '../../components/items/Item';
+import { useEffect, useState } from 'react';
+import { FaExclamation } from 'react-icons/fa';
 
 const StyledUserCard = styled.div`
 	display: flex;
@@ -38,67 +41,61 @@ const StyledGridWrap = styled.div`
 	position: relative;
 `;
 
-const UserControls = styled.div`
+const StyledNotice = styled.div`
 	display: flex;
-	justify-content: flex-end;
+	gap: 1rem;
 	align-items: center;
-	z-index: 0;
-	position: relative;
-	transition: all 300ms;
+	margin-top: 2rem;
 
-	div {
-		&:first-child {
-			button {
-				border-right: 1px solid var(--secondary);
-				border-left: 1px solid transparent;
-			}
-		}
-
-		&:last-child {
-			button {
-				border-left: 1px solid var(--secondary);
-				border-right: 1px solid transparent;
-			}
-		}
+	svg {
+		fill: var(--primary);
 	}
 
-	button {
-		width: 7rem;
-		height: 5rem;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		background-color: var(--tertiary);
-		transition: all 300ms;
-		cursor: pointer;
-		border-top: 5px solid transparent !important;
-		border-bottom: transparent !important;
-		border-left: 1px solid transparent;
-		border-right: 1px solid transparent;
-
-		svg {
-			transition: all 300ms;
-			margin-top: -3px;
-		}
-
-		&:hover,
-		&:active,
-		&:focus {
-			border-top: 5px solid var(--secondary) !important;
-			background-color: var(--tertiary);
-			border-color: none !important;
-
-			svg {
-				stroke: var(--secondary);
-				fill: var(--secondary);
-			}
-		}
+	p {
+		margin: 0;
 	}
+`;
+
+const StyledItemsGrid = styled.div`
+	display: grid;
+	grid-template-columns: 1fr 1fr;
 `;
 
 //TODO Get the user for the name as well
 
-export default function UserPortfolioPage({ items, categories, userName }) {
+export default function UserPortfolioPage({
+	items,
+	categories,
+	userName,
+	profiles,
+}) {
+	//TODO: We get the profile but the user would need to set up a name
+	{
+		console.log(profiles);
+	}
+
+	//TODO: This is repeated on Portfolio
+	const [activeCategories, setActiveCategories] = useState([]);
+	const [filteredItems, setFilteredItems] = useState([]);
+
+	useEffect(() => {
+		setFilteredItems(
+			activeCategories.length === 0
+				? items
+				: items.filter(
+						(item) =>
+							item.categories === null ||
+							item.categories.length === 0 || // Include items with no categories
+							(item.categories !== null &&
+								activeCategories.every((category) =>
+									item.categories.includes(
+										category.categoryId
+									)
+								))
+				  )
+		);
+	}, [activeCategories, items]);
+
 	return (
 		<Main>
 			{userName && (
@@ -119,10 +116,31 @@ export default function UserPortfolioPage({ items, categories, userName }) {
 						<>
 							<p>Filter By Category:</p>
 							<CategoryCloudFilter
+								activeCategories={activeCategories}
+								setActiveCategories={setActiveCategories}
 								userCategories={categories}
 								all={true}
 							/>
 						</>
+					)}
+
+					{filteredItems.length ? (
+						<StyledItemsGrid>
+							{filteredItems.map((item) => {
+								return (
+									<Item
+										item={item}
+										categories={categories}
+										isPublic={true}
+									/>
+								);
+							})}
+						</StyledItemsGrid>
+					) : (
+						<StyledNotice>
+							<FaExclamation />{' '}
+							<p>This Portfolio has no items yet.</p>
+						</StyledNotice>
 					)}
 				</Container>
 			</StyledGridWrap>
@@ -172,6 +190,7 @@ export async function getServerSideProps(context) {
 
 	return {
 		props: {
+			profiles,
 			userName,
 			items,
 			categories,

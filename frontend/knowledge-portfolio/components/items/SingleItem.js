@@ -63,7 +63,16 @@ export default function SingleItem({ item, categories }) {
 				<div className="meta">
 					<p>
 						By:{' '}
-						<Link href={`/public-portfolio/${singleItem.userId}`}>
+						<Link
+							href={{
+								pathname: `/public-portfolio/${singleItem.userId}`,
+								query: {
+									name:
+										singleItem.userAlias ||
+										singleItem.userName,
+								},
+							}}
+						>
 							{singleItem.userAlias ||
 								(singleItem.userName && (
 									<p>
@@ -81,9 +90,7 @@ export default function SingleItem({ item, categories }) {
 					)}
 				</div>
 				<hr />
-				<div className="content">
-					{parse(`${markup}`)}
-				</div>
+				<div className="content">{parse(`${markup}`)}</div>
 			</StyledSingleItem>
 		</>
 	);
